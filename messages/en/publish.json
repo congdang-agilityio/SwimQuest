@@ -1,0 +1,16 @@
+{
+  "preview": {
+    "title": "Preview",
+    "back": "Back to tournament management",
+    "season": "Season",
+    "seasonStart": "Starts",
+    "seasonEnd": "Ends",
+    "vietnamTime": "Vietnam time, UTC+7",
+    "route": "Route",
+    "distance": "{km} km",
+    "teams": "Teams",
+    "noTeams": "No teams yet.",
+    "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+    "full": "full"
+  }
+}
