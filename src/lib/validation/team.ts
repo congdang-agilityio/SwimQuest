@@ -7,12 +7,9 @@ import { EMBLEM_KEYS } from "@/lib/emblems";
  */
 export const MAX_MEMBER_LIMIT = 2_147_483_647; // the database column is a 32-bit integer
 
+// prettier-ignore
 export const TEAM_ERROR_CODES = [
-  "NAME_REQUIRED",
-  "NAME_TOO_LONG",
-  "EMBLEM_INVALID",
-  "DESCRIPTION_TOO_LONG",
-  "LIMIT_INVALID",
+  "NAME_REQUIRED", "NAME_TOO_LONG", "EMBLEM_INVALID", "DESCRIPTION_TOO_LONG", "LIMIT_INVALID",
 ] as const;
 export type TeamErrorCode = (typeof TEAM_ERROR_CODES)[number];
 
