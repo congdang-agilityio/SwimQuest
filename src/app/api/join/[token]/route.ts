@@ -26,11 +26,8 @@ export async function POST(request: Request, { params }: Ctx) {
 
   const { token } = await params;
   try {
-    const { team } = await joinTeam(
-      auth.user.id,
-      token,
-      (json.body as { teamId?: unknown }).teamId,
-    );
+    const { teamId } = json.body as { teamId?: unknown };
+    const { team } = await joinTeam(auth.user.id, token, teamId);
     return NextResponse.json({ teamId: team.id }, { headers: noStore });
   } catch (err) {
     if (!(err instanceof JoinError)) throw err;
