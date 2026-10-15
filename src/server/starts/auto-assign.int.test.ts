@@ -1,4 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { joinTeam } from "@/server/join/join-team";
 import { db } from "@/server/db";
 import { assignMissingStarts } from "./auto-assign";
 
@@ -15,13 +16,17 @@ const SEASON_START = new Date("2099-11-01T06:00:00+07:00");
 const AT_DEADLINE = SEASON_START;
 const STARTS = ["non_nuoc", "son_thuy", "pham_van_dong", "man_thai", "hon_sup", "cu_lao_cham"];
 
-async function setupTournament(opts: { startChoiceDeadlineAt?: Date } = {}) {
+type Status = "DRAFT" | "PUBLISHED" | "COMPLETED" | "ARCHIVED";
+
+async function setupTournament(opts: { startChoiceDeadlineAt?: Date; status?: Status } = {}) {
   const organizer = await db.user.create({
     data: { email: "organizer@example.com", passwordHash: "h", displayName: "organizer" },
   });
   return db.tournament.create({
     data: {
       organizerId: organizer.id,
+      status: opts.status ?? "PUBLISHED",
+      inviteToken: "token-auto-assign",
       name: "Cup",
       description: "d",
       seasonStartAt: SEASON_START,
@@ -166,11 +171,51 @@ describe("assignMissingStarts", () => {
     expect(new Set(slugs).size).toBe(3);
   });
 
+  it("lets a join and a run that lock the same teams both finish (no deadlock)", async () => {
+    const t = await setupTournament();
+    const [first, second] = (await Promise.all([addTeam(t.id), addTeam(t.id)])).sort((a, b) =>
+      a.id < b.id ? -1 : 1,
+    );
+    const player = await db.user.create({
+      data: { email: "player@example.com", passwordHash: "h", displayName: "player" },
+    });
+
+    // Holding the first team stops the run after it has taken its locks and before it reaches
+    // the second team; the join then locks the second team and reads the tournament. Locking
+    // the tournament row in the run would make the two wait for each other (40P01).
+    let settled: Promise<PromiseSettledResult<unknown>[]> = Promise.resolve([]);
+    await db.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT "id" FROM "Team" WHERE "id" = ${first.id} FOR UPDATE`;
+      const run = assignMissingStarts(t.id, AT_DEADLINE);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      const join = joinTeam(player.id, "token-auto-assign", second.id, AT_DEADLINE);
+      settled = Promise.allSettled([run, join]);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    });
+    const [run, join] = await settled;
+
+    expect(join.status).toBe("fulfilled");
+    expect(run.status).toBe("fulfilled");
+    expect((run as PromiseFulfilledResult<unknown[]>).value).toHaveLength(2);
+    expect(await db.teamMember.count({ where: { teamId: second.id } })).toBe(1);
+  });
+
+  it("does nothing for a tournament that is not published or active", async () => {
+    for (const status of ["DRAFT", "COMPLETED", "ARCHIVED"] as const) {
+      await clean();
+      const t = await setupTournament({ status });
+      const open = await addTeam(t.id);
+      expect(await assignMissingStarts(t.id, AT_DEADLINE)).toEqual([]);
+      expect((await team(open.id)).startDestination).toBeNull();
+    }
+  });
+
   it("only touches the given tournament", async () => {
     const t = await setupTournament();
     const other = await db.tournament.create({
       data: {
         organizerId: t.organizerId,
+        status: "PUBLISHED",
         name: "Other",
         description: "d",
         seasonStartAt: SEASON_START,

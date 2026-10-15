@@ -1,19 +1,30 @@
 import { getRoute, startDestinations } from "@/lib/routes";
-import { isStartLocked, type TournamentStatus } from "@/lib/tournaments/lifecycle";
+import {
+  effectiveStatus,
+  isStartLocked,
+  type LifecycleTournament,
+} from "@/lib/tournaments/lifecycle";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { db } from "@/server/db";
 
 export type AutoAssignment = { teamId: string; slug: string };
 
-type LockedTournament = {
-  status: TournamentStatus;
-  seasonStartAt: Date;
-  seasonEndAt: Date;
-  startChoiceDeadlineAt: Date | null;
-  routeId: string;
-};
+type TournamentRow = LifecycleTournament & { routeId: string };
 
 type LockedTeam = { id: string; startDestination: string | null };
+
+type Tx = Parameters<Parameters<typeof db.$transaction>[0]>[0];
+
+/** The tournament's route when starts are due now: PUBLISHED/ACTIVE and past the deadline. */
+async function dueRoute(client: Tx | typeof db, tournamentId: string, now: Date) {
+  const [t] = await client.$queryRaw<TournamentRow[]>`
+    SELECT "status"::text, "seasonStartAt", "seasonEndAt", "startChoiceDeadlineAt", "routeId"
+    FROM "Tournament" WHERE "id" = ${tournamentId}`;
+  if (!t || !isStartLocked(t, now)) return undefined;
+  const status = effectiveStatus(t, now);
+  if (status !== "PUBLISHED" && status !== "ACTIVE") return undefined;
+  return getRoute(t.routeId);
+}
 
 /** Fisher-Yates shuffle driven by the injected `random` (values in [0, 1)). */
 function shuffle<T>(items: readonly T[], random: () => number): T[] {
@@ -35,8 +46,10 @@ function pick(n: number, random: () => number): number {
 /**
  * Gives every team of the tournament that has no start the least-chosen start (story S-94,
  * FR-84, A-28). Does nothing before the start-choice deadline (`now`, the server clock).
- * Otherwise, in one transaction with the tournament row and its teams locked (so concurrent
- * runs are serialised and a second run finds nothing to do), it counts the teams per start
+ * or when the tournament is not PUBLISHED/ACTIVE, and (lock-free) when no team lacks a start.
+ * Otherwise, in one transaction serialised per tournament by an advisory lock (so a second run
+ * finds nothing to do), it locks the teams and then reads the tournament without a lock: the
+ * same Team -> Tournament order as joinTeam/deleteTeam, so they cannot deadlock. It counts the teams per start
  * among the route's starts (never the finish, Lý Sơn), takes the teams without a start in a
  * random order and gives each one a start picked at random among those with the lowest count,
  * counting it before the next team. Teams that already have a start are never changed. Each
@@ -54,18 +67,18 @@ export async function assignMissingStarts(
     throw new TypeError("now must be a valid Date");
   }
 
+  if (!(await dueRoute(db, tournamentId, now))) return [];
+  const missing = await db.team.count({ where: { tournamentId, startDestination: null } });
+  if (missing === 0) return [];
+
   return db.$transaction(
     async (tx) => {
-      const [tournament] = await tx.$queryRaw<LockedTournament[]>`
-        SELECT "status", "seasonStartAt", "seasonEndAt", "startChoiceDeadlineAt", "routeId"
-        FROM "Tournament" WHERE "id" = ${tournamentId} FOR UPDATE`;
-      if (!tournament || !isStartLocked(tournament, now)) return [];
-      const route = getRoute(tournament.routeId);
-      if (!route) return [];
-
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${"auto-assign:" + tournamentId}))`;
       const teams = await tx.$queryRaw<LockedTeam[]>`
         SELECT "id", "startDestination" FROM "Team"
         WHERE "tournamentId" = ${tournamentId} ORDER BY "id" FOR UPDATE`;
+      const route = await dueRoute(tx, tournamentId, now);
+      if (!route) return [];
       const counts = new Map(startDestinations(route).map((d) => [d.slug, 0]));
       for (const t of teams) {
         const count = t.startDestination === null ? undefined : counts.get(t.startDestination);
@@ -103,7 +116,7 @@ export async function assignMissingStarts(
       }
       return assignments;
     },
-    // Concurrent runs wait for the tournament lock inside their transaction.
+    // Concurrent runs wait for the advisory lock inside their transaction.
     { timeout: 30_000 },
   );
 }
