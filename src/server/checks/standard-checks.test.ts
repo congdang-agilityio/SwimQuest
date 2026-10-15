@@ -96,6 +96,27 @@ describe("evaluateSwim", () => {
         reasons: ["DISTANCE_TOO_LONG"],
       });
     });
+    it("accepts a swim exactly on the slowest limit at a non-round distance (201 m in 10:03)", () => {
+      // 603 / 2.01 is 300.00000000000006 in floating point: the limit must still be inclusive.
+      expect(evaluateSwim(swimAt(300, { distanceM: 201, durationS: 603 }), tournament)).toEqual(
+        VERIFIED,
+      );
+      expect(evaluateSwim(swimAt(300, { distanceM: 201, durationS: 604 }), tournament)).toEqual({
+        status: "FLAGGED",
+        reasons: ["PACE_TOO_SLOW"],
+      });
+    });
+    it("accepts a swim exactly on the fastest limit at a non-round distance (220 m in 2:01)", () => {
+      // With a 0:55 limit, 121 / 2.2 is 54.99999999999999 in floating point.
+      const fast55 = { ...tournament, fastestPaceSecPer100m: 55 };
+      expect(evaluateSwim(swimAt(55, { distanceM: 220, durationS: 121 }), fast55)).toEqual(
+        VERIFIED,
+      );
+      expect(evaluateSwim(swimAt(55, { distanceM: 220, durationS: 120 }), fast55)).toEqual({
+        status: "FLAGGED",
+        reasons: ["PACE_TOO_FAST"],
+      });
+    });
     it("flags a zero or invalid duration as too fast (fails closed)", () => {
       for (const durationS of [0, Number.NaN]) {
         expect(evaluateSwim(swimAt(120, { durationS }), tournament).reasons).toEqual([

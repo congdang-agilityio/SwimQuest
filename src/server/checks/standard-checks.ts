@@ -42,9 +42,14 @@ export function evaluateSwim(swim: CheckedSwim, tournament: CheckTournament): St
   if (distanceM === null || !(distanceM > 0)) {
     reasons.push("NO_DISTANCE");
   } else {
-    const paceSecPer100m = swim.durationS / (distanceM / 100);
-    if (!(paceSecPer100m >= tournament.fastestPaceSecPer100m)) reasons.push("PACE_TOO_FAST");
-    else if (!(paceSecPer100m <= tournament.slowestPaceSecPer100m)) reasons.push("PACE_TOO_SLOW");
+    // Pace compared without dividing (durationS / (distanceM / 100) vs limit), so a swim exactly
+    // on a limit is not lost to floating-point rounding. NaN still fails the check.
+    const scaledDurationS = swim.durationS * 100;
+    if (!(scaledDurationS >= distanceM * tournament.fastestPaceSecPer100m)) {
+      reasons.push("PACE_TOO_FAST");
+    } else if (!(scaledDurationS <= distanceM * tournament.slowestPaceSecPer100m)) {
+      reasons.push("PACE_TOO_SLOW");
+    }
     if (!(distanceM <= tournament.longestRealisticSwimM)) reasons.push("DISTANCE_TOO_LONG");
   }
 
