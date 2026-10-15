@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextResponse } from "next/server";
+import { safeNextPath } from "@/lib/auth/public-paths";
 import { apiError } from "../http/api-error";
 import { SESSION_COOKIE } from "./cookie";
 import { findValidSession } from "./session";
@@ -18,13 +19,6 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!found) return null;
   const { id, displayName, isPlatformAdmin } = found.user;
   return { id, displayName, isPlatformAdmin };
-}
-
-/** `path` when it is a same-site absolute path, else "/" (no open redirects after login). */
-function safeNextPath(path: string): string {
-  if (typeof path !== "string" || !path.startsWith("/")) return "/";
-  if (path.startsWith("//") || path.startsWith("/\\")) return "/";
-  return path;
 }
 
 /** For pages: the signed-in user, or a redirect to `/login?next=<nextPath>`. */
