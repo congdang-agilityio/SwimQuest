@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   effectiveStatus,
   isJoiningOpen,
+  isArchivable,
+  isResultsFinal,
   isRouteEditable,
   isStartLocked,
   startLockAt,
+  uploadWindowEndsAt,
   type LifecycleTournament,
   type TournamentStatus,
 } from "./lifecycle";
@@ -98,5 +101,39 @@ describe("isRouteEditable", () => {
   it("is false once the season has started", () => {
     expect(isRouteEditable(base, at("2026-11-01T05:59:00+07:00"))).toBe(true);
     expect(isRouteEditable(base, at("2026-11-01T06:00:00+07:00"))).toBe(false);
+  });
+});
+
+describe("season end, upload window and archive", () => {
+  const end20: LifecycleTournament = {
+    ...base,
+    seasonEndAt: at("2026-11-30T20:00:00+07:00"),
+    lateUploadDays: 3,
+  };
+  it("is ACTIVE at 19:59 and COMPLETED at 20:00 on the end day", () => {
+    expect(effectiveStatus(end20, at("2026-11-30T19:59:00+07:00"))).toBe("ACTIVE");
+    expect(effectiveStatus(end20, at("2026-11-30T20:00:00+07:00"))).toBe("COMPLETED");
+    expect(effectiveStatus({ ...end20, status: "ACTIVE" }, at("2026-12-01T00:00:00+07:00"))).toBe(
+      "COMPLETED",
+    );
+  });
+  it("computes the upload window end and final results with M = 3", () => {
+    expect(uploadWindowEndsAt(end20).getTime()).toBe(at("2026-12-03T20:00:00+07:00").getTime());
+    expect(isResultsFinal(end20, at("2026-12-03T19:59:00+07:00"))).toBe(false);
+    expect(isResultsFinal(end20, at("2026-12-03T20:00:00+07:00"))).toBe(true);
+  });
+  it("archived wins over every time state", () => {
+    const archived = { ...end20, status: "ARCHIVED" as TournamentStatus };
+    for (const s of ["2026-10-01", "2026-11-15", "2026-12-10"]) {
+      expect(effectiveStatus(archived, at(`${s}T00:00:00+07:00`))).toBe("ARCHIVED");
+    }
+  });
+  it("closes joining from the end and is archivable only when COMPLETED", () => {
+    expect(isJoiningOpen(end20, at("2026-11-30T20:00:00+07:00"))).toBe(false);
+    expect(isArchivable(end20, at("2026-11-30T19:59:00+07:00"))).toBe(false);
+    expect(isArchivable(end20, at("2026-11-30T20:00:00+07:00"))).toBe(true);
+    expect(isArchivable({ ...end20, status: "ARCHIVED" }, at("2026-12-10T00:00:00+07:00"))).toBe(
+      false,
+    );
   });
 });
