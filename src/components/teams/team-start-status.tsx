@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { formatVnDateTime } from "@/lib/time/vn";
 
 type Props = {
@@ -7,14 +8,23 @@ type Props = {
   locked: boolean;
   /** When the start choice locks (ISO instant). */
   lockAtIso: string;
+  /** When it was assigned (ISO instant), if known. */
+  autoAssignedAtIso?: string | null;
 };
 
 /** Organizer view of one team's start and whether it is locked (FR-26). */
-export function TeamStartStatus({ startNameKey, locked, lockAtIso }: Props) {
+export function TeamStartStatus({ startNameKey, locked, lockAtIso, autoAssignedAtIso }: Props) {
   const t = useTranslations();
   return (
     <span>
       {startNameKey ? t("teams.start.name", { name: t(startNameKey) }) : t("teams.start.notChosen")}
+      {startNameKey && autoAssignedAtIso && (
+        <>
+          {" ("}
+          <StartOriginLabel setAtIso={autoAssignedAtIso} />
+          {")"}
+        </>
+      )}
       {locked && (
         <>
           {" "}

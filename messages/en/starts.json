@@ -25,5 +25,8 @@
       "FORBIDDEN": "Only the captain can choose the start.",
       "GENERIC": "Could not save. Please try again."
     }
+  },
+  "origin": {
+    "automaticAt": "Assigned automatically at {setAt} (Vietnam time)"
   }
 }

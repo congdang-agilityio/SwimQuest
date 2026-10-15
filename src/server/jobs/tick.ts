@@ -47,8 +47,14 @@ export async function runDueStartAssignments(now: Date): Promise<StartAssignment
  * Catch-up for pages that show starts: assigns missing starts when the deadline has passed,
  * since the scheduler runs only every few minutes. Before the deadline, or when every team has
  * a start, it is a cheap no-op (one tournament read and one count, no lock). Returns the
- * number of starts assigned.
+ * number of starts assigned. A failure (for example a lock wait timeout) is logged and returns
+ * 0, so the page still loads with the current data; the scheduler retries later.
  */
 export async function ensureStartsAssigned(tournamentId: string, now: Date): Promise<number> {
-  return (await assignMissingStarts(tournamentId, now)).length;
+  try {
+    return (await assignMissingStarts(tournamentId, now)).length;
+  } catch (error) {
+    console.error(`ensureStartsAssigned: catch-up failed for tournament ${tournamentId}`, error);
+    return 0;
+  }
 }
