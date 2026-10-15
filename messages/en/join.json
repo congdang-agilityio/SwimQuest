@@ -1,0 +1,17 @@
+{
+  "title": "Join a tournament",
+  "chooseTeam": "Choose your team",
+  "join": "Join {name}",
+  "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+  "full": "Full",
+  "fullDisabled": "Full, cannot be chosen",
+  "justFilled": "That team just filled up. Please choose another team.",
+  "closedTitle": "Joining is closed",
+  "closedBody": "This tournament is not open for joining any more.",
+  "invalidTitle": "This link is not valid",
+  "invalidBody": "Check the invite link with your organizer or captain.",
+  "alreadyIn": "You are in {team}",
+  "goToTeam": "Go to My Team",
+  "failed": "Could not join. Please try again.",
+  "eligibility": "Who can join"
+}

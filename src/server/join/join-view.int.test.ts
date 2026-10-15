@@ -35,6 +35,8 @@ describe("getJoinView", () => {
         seasonStartAt: SEASON_START,
         seasonEndAt: SEASON_END,
         eligibilityNotes: "Company staff",
+        routeId: tournament.routeId,
+        routeDistanceM: tournament.routeDistanceM,
       },
       teams: [
         {
