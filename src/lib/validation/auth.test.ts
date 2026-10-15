@@ -80,8 +80,14 @@ describe("sign-up validation", () => {
     });
   });
 
-  it("rejects input that is not an object", () => {
-    expect(errorsFor(null as unknown as Record<string, unknown>)).toEqual({
+  it.each([
+    ["null", null],
+    ["an empty array", []],
+    ["an array holding a valid object", [valid]],
+    ["a string", "user@example.com"],
+    ["a number", 42],
+  ])("rejects input that is not a plain object: %s", (_label, input) => {
+    expect(errorsFor(input as unknown as Record<string, unknown>)).toEqual({
       email: "EMAIL_REQUIRED",
       password: "PASSWORD_REQUIRED",
       displayName: "DISPLAY_NAME_REQUIRED",

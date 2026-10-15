@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { hashPassword, verifyPassword } from "./password";
+import {
+  ARGON2_MEMORY_COST_KIB,
+  ARGON2_PARALLELISM,
+  ARGON2_TIME_COST,
+  hashPassword,
+  verifyPassword,
+} from "./password";
 
 describe("password hashing", () => {
   it("hashes with argon2id and never returns the plain password", async () => {
@@ -7,6 +13,23 @@ describe("password hashing", () => {
 
     expect(hash).toMatch(/^\$argon2id\$/);
     expect(hash).not.toContain("correct horse");
+  });
+
+  it("pins the argon2id cost parameters in the hash", async () => {
+    const hash = await hashPassword("correct horse");
+
+    const params = Object.fromEntries(
+      hash
+        .split("$")[3]
+        .split(",")
+        .map((pair) => pair.split("=")),
+    );
+    expect(params).toEqual({
+      m: String(ARGON2_MEMORY_COST_KIB),
+      t: String(ARGON2_TIME_COST),
+      p: String(ARGON2_PARALLELISM),
+    });
+    expect([ARGON2_MEMORY_COST_KIB, ARGON2_TIME_COST, ARGON2_PARALLELISM]).toEqual([65536, 3, 4]);
   });
 
   it("salts every hash", async () => {

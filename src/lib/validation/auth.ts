@@ -56,11 +56,13 @@ export type SignUpErrors = Partial<Record<SignUpField, SignUpErrorCode>>;
 export function parseSignUp(
   input: unknown,
 ): { ok: true; data: SignUpInput } | { ok: false; errors: SignUpErrors } {
-  const result = signUpSchema.safeParse(input && typeof input === "object" ? input : {});
+  const isPlainObject = typeof input === "object" && input !== null && !Array.isArray(input);
+  const result = signUpSchema.safeParse(isPlainObject ? input : {});
   if (result.success) return { ok: true, data: result.data };
   const errors: SignUpErrors = {};
   for (const issue of result.error.issues) {
-    const field = issue.path[0] as SignUpField;
+    const field = issue.path[0];
+    if (field !== "email" && field !== "password" && field !== "displayName") continue;
     errors[field] ??= issue.message as SignUpErrorCode;
   }
   return { ok: false, errors };
