@@ -1,5 +1,6 @@
 import { request as httpRequest } from "node:http";
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import { db } from "@/server/db";
 
 /**
  * Upload size limits of POST /api/swims through the real server, so the request also passes
@@ -37,9 +38,36 @@ function gpxOfSize(bytes: number): Buffer {
   ]);
 }
 
+/**
+ * Email prefix of every user this file signs up, per Playwright project, so the cleanup of one
+ * project never removes the users of another project running at the same time.
+ */
+const emailPrefix = () => `upload-${test.info().project.name}-`;
+
+/**
+ * Deletes the users this file signed up, with their swims and swim results. `Swim.user` has no
+ * `onDelete`, so leftover swims would block `db.user.deleteMany()` in the integration tests
+ * that share this database.
+ */
+async function removeUploadUsers(): Promise<void> {
+  const where = { user: { email: { startsWith: emailPrefix() } } };
+  await db.swimResult.deleteMany({ where: { swim: where } });
+  await db.swim.deleteMany({ where });
+  await db.user.deleteMany({ where: where.user });
+}
+
+// The tests below only exercise the server, so one project is enough.
+test.skip(({ isMobile }) => isMobile, "API-only tests run on the desktop project only");
+
+test.beforeAll(removeUploadUsers);
+test.afterAll(async () => {
+  await removeUploadUsers();
+  await db.$disconnect();
+});
+
 /** Signs up a fresh user with `request`, which then carries the session cookie. */
 async function signUp(request: APIRequestContext, label: string): Promise<string> {
-  const email = `upload-${label}-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
+  const email = `${emailPrefix()}${label}-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
   const res = await request.post("/api/auth/signup", {
     data: { email, password: "correct-horse-battery", displayName: "Lan" },
   });
