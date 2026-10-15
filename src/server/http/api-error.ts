@@ -13,7 +13,8 @@ export type ApiErrorCode =
   | "ROUTE_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
-  | "INVALID_START";
+  | "INVALID_START"
+  | "PUBLISH_INVALID";
 
 const messages: Record<ApiErrorCode, string> = {
   VALIDATION_FAILED: "Some fields are invalid.",
@@ -28,6 +29,7 @@ const messages: Record<ApiErrorCode, string> = {
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
   INVALID_START: "Choose one of the route's start destinations.",
+  PUBLISH_INVALID: "The tournament cannot be published yet.",
 };
 
 /** A JSON error response: `{ error: { code, message, fields? } }`, never cached. */
@@ -35,7 +37,8 @@ export function apiError(
   status: number,
   code: ApiErrorCode,
   fields?: Record<string, string>,
+  issues?: readonly object[],
 ): NextResponse {
-  const error = { code, message: messages[code], ...(fields ? { fields } : {}) };
+  const error = { code, message: messages[code], fields, issues }; // undefined keys are not serialized
   return NextResponse.json({ error }, { status, headers: { "cache-control": "no-store" } });
 }
