@@ -87,4 +87,4 @@ limits:
   story_max_tasks: 5
   pr_max_lines: { XS: 50, S: 150, M: 300 }
   pr_max_files: { XS: 3, S: 6, M: 10 }
-  pr_size_exclude: ["**/*.test.*", "**/__tests__/**", "**/*.lock", "package-lock.json", "**/generated/**", "**/migration_lock.toml", "prisma/migrations/**"]
+  pr_size_exclude: ["**/*.test.*", "**/__tests__/**", "**/*.lock", "package-lock.json", "**/generated/**", "**/migration_lock.toml", "prisma/migrations/**", "public/art/**/*.svg"]

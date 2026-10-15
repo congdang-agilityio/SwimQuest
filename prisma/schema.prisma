@@ -1,7 +1,8 @@
 // SwimQuest database schema. Later schema tasks append their models to this file.
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
@@ -32,6 +33,9 @@ model User {
   updatedAt       DateTime     @updatedAt
   sessions        Session[]
   auditEvents     AuditEvent[]
+  organized       Tournament[] @relation("OrganizedTournaments")
+  captainOf       Team[]       @relation("CaptainedTeams")
+  memberships     TeamMember[]
 }
 
 model Session {
@@ -61,4 +65,99 @@ model AuditEvent {
   createdAt    DateTime  @default(now())
 
   @@index([entityType, entityId])
+}
+
+enum TournamentStatus {
+  DRAFT
+  PUBLISHED
+  /// Stored for later use; in P0 "active" is derived from the season dates.
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum StartSetBy {
+  CAPTAIN
+  ORGANIZER
+  AUTOMATIC
+}
+
+enum TeamMemberStatus {
+  ACTIVE
+  LEFT
+  REMOVED
+}
+
+model Tournament {
+  id                    String           @id @default(cuid())
+  organizerId           String
+  organizer             User             @relation("OrganizedTournaments", fields: [organizerId], references: [id])
+  name                  String
+  description           String
+  status                TournamentStatus @default(DRAFT)
+  seasonStartAt         DateTime         @db.Timestamptz(3)
+  seasonEndAt           DateTime         @db.Timestamptz(3)
+  /// Route registry id, e.g. "route01".
+  routeId               String
+  /// Entered in km in the UI, stored as whole metres.
+  routeDistanceM        Int
+  fastestPaceSecPer100m Int              @default(65)
+  slowestPaceSecPer100m Int              @default(300)
+  longestRealisticSwimM Int              @default(30000)
+  longestSwimCountedM   Int              @default(10000)
+  dailyLimitM           Int              @default(10000)
+  pointsPerKm           Int              @default(10)
+  /// Null means the season start.
+  startChoiceDeadlineAt DateTime?        @db.Timestamptz(3)
+  /// Set when the tournament is published.
+  inviteToken           String?          @unique
+  publishedAt           DateTime?        @db.Timestamptz(3)
+  createdAt             DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime         @updatedAt @db.Timestamptz(3)
+  teams                 Team[]
+  members               TeamMember[]
+
+  @@index([organizerId])
+}
+
+model Team {
+  id               String       @id @default(cuid())
+  tournamentId     String
+  tournament       Tournament   @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  name             String
+  emblemKey        String
+  description      String?
+  /// At least 1 (check constraint "Team_memberLimit_check").
+  memberLimit      Int
+  captainUserId    String?
+  captain          User?        @relation("CaptainedTeams", fields: [captainUserId], references: [id], onDelete: SetNull)
+  /// Destination slug from the tournament's route.
+  startDestination String?
+  startSetAt       DateTime?    @db.Timestamptz(3)
+  startSetBy       StartSetBy?
+  createdAt        DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime     @updatedAt @db.Timestamptz(3)
+  members          TeamMember[]
+
+  /// Target of TeamMember's (teamId, tournamentId) foreign key.
+  @@unique([id, tournamentId])
+  @@index([tournamentId])
+}
+
+model TeamMember {
+  id           String           @id @default(cuid())
+  teamId       String
+  /// Always the team's tournament (enforced by the composite foreign key).
+  tournamentId String
+  team         Team             @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
+  tournament   Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User             @relation(fields: [userId], references: [id])
+  status       TeamMemberStatus @default(ACTIVE)
+  joinedAt     DateTime         @default(now()) @db.Timestamptz(3)
+
+  /// One active team per user per tournament.
+  @@unique([tournamentId, userId], map: "TeamMember_one_active_per_tournament", where: raw("\"status\" = 'ACTIVE'"))
+  @@index([teamId, status])
+  @@index([userId])
 }
