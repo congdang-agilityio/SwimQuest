@@ -1,0 +1,18 @@
+{
+  "title": "My tournaments",
+  "card": {
+    "team": "Team: {name}",
+    "emblemAlt": "Emblem of team {name}",
+    "noTeam": "You have no team in this tournament",
+    "progress": "Progress: {pct}",
+    "progressNotStarted": "Start not chosen yet",
+    "addSwim": "Add swim",
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Open for joining",
+      "ACTIVE": "In progress",
+      "COMPLETED": "Completed",
+      "ARCHIVED": "Archived"
+    }
+  }
+}
