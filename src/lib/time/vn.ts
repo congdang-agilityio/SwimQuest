@@ -42,3 +42,30 @@ export function defaultSeasonTimes(
 
 /** The Vietnam calendar day (YYYY-MM-DD) of an instant. */
 export const vnDayKey = (instant: Date): string => utcToVnParts(instant).date;
+
+const DAY_MS = 24 * 3600_000;
+const dayToMs = (date: string): number => {
+  const [y, mo, d] = checkDate(date);
+  return Date.UTC(y, mo - 1, d);
+};
+const msToDay = (ms: number): string => new Date(ms).toISOString().slice(0, 10);
+
+/** Monday (YYYY-MM-DD, Vietnam time) of the Monday-to-Sunday week containing the instant. */
+export function vnWeekStart(instant: Date): string {
+  const ms = dayToMs(vnDayKey(instant));
+  const sinceMonday = (new Date(ms).getUTCDay() + 6) % 7;
+  return msToDay(ms - sinceMonday * DAY_MS);
+}
+
+/** UTC instants of a week: Monday 00:00 Vietnam time (inclusive) to next Monday 00:00 (exclusive). */
+export function vnWeekRange(weekStart: string): { start: Date; end: Date } {
+  if (new Date(dayToMs(weekStart)).getUTCDay() !== 1) throw new Error(`Not a Monday: ${weekStart}`);
+  const start = vnLocalToUtc(weekStart, "00:00");
+  return { start, end: new Date(start.getTime() + 7 * DAY_MS) };
+}
+
+/** The Monday one week before the given Monday. */
+export function previousWeekStart(weekStart: string): string {
+  vnWeekRange(weekStart);
+  return msToDay(dayToMs(weekStart) - 7 * DAY_MS);
+}
