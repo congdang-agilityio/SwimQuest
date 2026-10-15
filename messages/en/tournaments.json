@@ -2,7 +2,6 @@
   "create": {
     "title": "Create tournament",
     "submit": "Create draft",
-    "vietnamTime": "Vietnam time, UTC+7",
     "fields": {
       "name": "Tournament name",
       "description": "Description",

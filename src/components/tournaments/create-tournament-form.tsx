@@ -11,6 +11,22 @@ const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding
 const routes = listRoutes();
 type Season = { date: string; time: string };
 const empty: Season = { date: "", time: "" };
+/** Codes the form can translate; anything else from the server falls back to GENERIC. */
+const KNOWN_CODES = new Set([
+  "NAME_REQUIRED",
+  "NAME_TOO_LONG",
+  "DESCRIPTION_REQUIRED",
+  "DESCRIPTION_TOO_LONG",
+  "SEASON_START_INVALID",
+  "SEASON_END_INVALID",
+  "SEASON_END_NOT_AFTER_START",
+  "ROUTE_UNKNOWN",
+  "ROUTE_DISTANCE_REQUIRED",
+  "ROUTE_DISTANCE_INVALID",
+  "ROUTE_DISTANCE_NOT_POSITIVE",
+  "ROUTE_DISTANCE_TOO_PRECISE",
+  "ROUTE_DISTANCE_TOO_LARGE",
+]);
 
 export function CreateTournamentForm() {
   const t = useTranslations("tournaments");
@@ -52,8 +68,14 @@ export function CreateTournamentForm() {
         return;
       }
       const fields = res.status === 400 ? (await res.json())?.error?.fields : undefined;
-      if (fields && typeof fields === "object") setErrors(fields);
-      else setFailed(true);
+      if (fields && typeof fields === "object") {
+        const known: Record<string, string> = {};
+        for (const [k, v] of Object.entries(fields)) {
+          if (typeof v === "string" && KNOWN_CODES.has(v)) known[k] = v;
+        }
+        if (Object.keys(known).length) setErrors(known as TournamentDraftErrors);
+        else setFailed(true);
+      } else setFailed(true);
     } catch {
       setFailed(true);
     }

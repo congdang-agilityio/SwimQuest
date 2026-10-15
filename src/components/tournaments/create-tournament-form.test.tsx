@@ -86,6 +86,28 @@ describe("CreateTournamentForm", () => {
     expect((dates[0] as HTMLInputElement).value).toBe("2026-11-01");
   });
 
+  it("falls back to the generic error for an unknown server error code", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        Response.json(
+          { error: { code: "VALIDATION_FAILED", fields: { name: "SOMETHING_NEW" } } },
+          { status: 400 },
+        ),
+      ),
+    );
+    setup();
+    set(/Tournament name/, "Giải Hè");
+    set(/Description/, "Mô tả");
+    const dates = screen.getAllByLabelText("Date");
+    fireEvent.change(dates[0], { target: { value: "2026-11-01" } });
+    fireEvent.change(dates[1], { target: { value: "2026-11-30" } });
+    set(/Route distance/, "120");
+    fireEvent.submit(screen.getByRole("form"));
+    expect(await screen.findByText("Something went wrong. Please try again.")).toBeTruthy();
+    expect(screen.queryByText(/errors\.SOMETHING_NEW/)).toBeNull();
+  });
+
   it("has Vietnamese copy labelled as Vietnam time", () => {
     setup("vi");
     expect(screen.getAllByLabelText(/giờ Việt Nam/)).toHaveLength(2);

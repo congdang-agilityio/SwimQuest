@@ -2,7 +2,6 @@
   "create": {
     "title": "Tạo giải đấu",
     "submit": "Tạo bản nháp",
-    "vietnamTime": "giờ Việt Nam, UTC+7",
     "fields": {
       "name": "Tên giải đấu",
       "description": "Mô tả",
