@@ -37,7 +37,7 @@ commands:
   test: npm test
   lint: npm run lint
   build: npm run build            # QA builds and starts the app to check criteria in it
-  start: npm start                # must listen on $PORT (from .env.local)
+  start: "sh -c 'set -a; [ -f .env.local ] && . ./.env.local; set +a; exec npm start'"   # must listen on $PORT (loads .env.local first)
   e2e: npx playwright test         # e.g. npx playwright test; leave empty if none
   services: "docker start swimquest-pg || docker run -d --name swimquest-pg -e POSTGRES_PASSWORD=postgres -p 55433:5432 postgres:16"                    # idempotent command that starts local services tests need,
                                   # e.g. docker start app-pg || docker run -d --name app-pg ...
