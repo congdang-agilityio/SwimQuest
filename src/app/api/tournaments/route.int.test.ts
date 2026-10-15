@@ -38,18 +38,23 @@ async function signIn(email = "org@example.com") {
   return user;
 }
 
+async function clean() {
+  await db.teamMember.deleteMany();
+  await db.team.deleteMany();
+  await db.tournament.deleteMany();
+  await db.auditEvent.deleteMany();
+  await db.session.deleteMany();
+  await db.user.deleteMany();
+}
+
 describe("POST /api/tournaments", () => {
   beforeEach(async () => {
     jar.token = undefined;
-    await db.teamMember.deleteMany();
-    await db.team.deleteMany();
-    await db.tournament.deleteMany();
-    await db.auditEvent.deleteMany();
-    await db.session.deleteMany();
-    await db.user.deleteMany();
+    await clean();
   });
 
   afterAll(async () => {
+    await clean();
     await db.$disconnect();
   });
 
