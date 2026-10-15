@@ -22,23 +22,25 @@ enum ActorType {
 }
 
 model User {
-  id              String        @id @default(cuid())
+  id              String         @id @default(cuid())
   /// Always stored lower-cased (normalized by the client in src/server/db.ts).
-  email           String        @unique
+  email           String         @unique
   passwordHash    String
   displayName     String
-  status          UserStatus    @default(ACTIVE)
-  isPlatformAdmin Boolean       @default(false)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  status          UserStatus     @default(ACTIVE)
+  isPlatformAdmin Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   sessions        Session[]
   auditEvents     AuditEvent[]
-  organized       Tournament[]  @relation("OrganizedTournaments")
-  captainOf       Team[]        @relation("CaptainedTeams")
+  organized       Tournament[]   @relation("OrganizedTournaments")
+  captainOf       Team[]         @relation("CaptainedTeams")
   memberships     TeamMember[]
   swims           Swim[]
   swimResults     SwimResult[]
   pointsEntries   PointsEntry[]
+  seenMoments     SeenMoment[]
+  weeklyResults   WeeklyResult[]
 }
 
 model Session {
@@ -162,30 +164,39 @@ model Tournament {
   members                    TeamMember[]
   swimResults                SwimResult[]
   pointsEntries              PointsEntry[]
+  weeklyResults              WeeklyResult[]
+  weekSettlements            WeekSettlement[]
 
   @@index([organizerId])
 }
 
 model Team {
-  id               String        @id @default(cuid())
+  id               String         @id @default(cuid())
   tournamentId     String
-  tournament       Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournament       Tournament     @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   name             String
   emblemKey        String
   description      String?
   /// At least 1 (check constraint "Team_memberLimit_check").
   memberLimit      Int
   captainUserId    String?
-  captain          User?         @relation("CaptainedTeams", fields: [captainUserId], references: [id], onDelete: SetNull)
+  captain          User?          @relation("CaptainedTeams", fields: [captainUserId], references: [id], onDelete: SetNull)
   /// Destination slug from the tournament's route.
   startDestination String?
-  startSetAt       DateTime?     @db.Timestamptz(3)
+  startSetAt       DateTime?      @db.Timestamptz(3)
   startSetBy       StartSetBy?
-  createdAt        DateTime      @default(now()) @db.Timestamptz(3)
-  updatedAt        DateTime      @updatedAt @db.Timestamptz(3)
+  /// Cached route progress in basis points (10000 = finish), derived from the points ledger.
+  progressBp       Int            @default(0)
+  finishedAt       DateTime?      @db.Timestamptz(3)
+  /// Set when a correction takes the team back below the finish.
+  finishLostAt     DateTime?      @db.Timestamptz(3)
+  finishLostReason String?
+  createdAt        DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime       @updatedAt @db.Timestamptz(3)
   members          TeamMember[]
   swimResults      SwimResult[]
   pointsEntries    PointsEntry[]
+  weeklyResults    WeeklyResult[]
 
   /// Target of TeamMember's (teamId, tournamentId) foreign key.
   @@unique([id, tournamentId])
@@ -313,4 +324,63 @@ model PointsEntry {
   @@unique([swimResultId, kind])
   @@index([tournamentId, userId, vnDay])
   @@index([tournamentId, teamId, createdAt])
+}
+
+/// Append-only domain event log. Payloads never hold emails or GPS tracks.
+model DomainEvent {
+  id           String   @id @default(cuid())
+  type         String
+  /// No foreign key: events outlive the rows they mention.
+  tournamentId String?
+  payload      Json
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([tournamentId, createdAt])
+}
+
+/// A "show once" moment the user has already seen, e.g. a finish celebration.
+model SeenMoment {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key    String
+  seenAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([userId, key])
+}
+
+/// A player's weekly consistency multiplier result in one tournament.
+model WeeklyResult {
+  id             String     @id @default(cuid())
+  /// Always the team's tournament (enforced by the composite foreign key).
+  tournamentId   String
+  tournament     Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  teamId         String
+  team           Team       @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
+  /// Monday of the week in Vietnam time, "YYYY-MM-DD" (check constraint "WeeklyResult_weekStart_check").
+  weekStart      String     @db.Char(10)
+  activeDays     Int
+  /// Integer percent, 125 = x1.25.
+  multiplierPct  Int
+  distancePoints Int
+  extraPoints    Int
+  streakWeeks    Int
+  settledAt      DateTime   @db.Timestamptz(3)
+  updatedAt      DateTime   @updatedAt @db.Timestamptz(3)
+
+  @@unique([tournamentId, userId, weekStart])
+}
+
+/// Marks a week as settled so the weekly multiplier runs once per tournament and week.
+model WeekSettlement {
+  id           String     @id @default(cuid())
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  /// Monday of the week in Vietnam time, "YYYY-MM-DD" (check constraint "WeekSettlement_weekStart_check").
+  weekStart    String     @db.Char(10)
+  settledAt    DateTime   @default(now()) @db.Timestamptz(3)
+
+  @@unique([tournamentId, weekStart])
 }
