@@ -39,7 +39,7 @@ commands:
   build: npm run build            # QA builds and starts the app to check criteria in it
   start: npm start                # must listen on $PORT (from .env.local)
   e2e: npx playwright test         # e.g. npx playwright test; leave empty if none
-  services: ""                    # idempotent command that starts local services tests need,
+  services: "docker start swimquest-pg || docker run -d --name swimquest-pg -e POSTGRES_PASSWORD=postgres -p 55433:5432 postgres:16"                    # idempotent command that starts local services tests need,
                                   # e.g. docker start app-pg || docker run -d --name app-pg ...
 parallel:
   max_parallel_dev: 2             # developer slots per machine (each has its own ports and DBs)
@@ -48,7 +48,7 @@ parallel:
   max_agents: 3                   # subagents dispatched at once by the run loop (memory)
   port_base: 4100
   test_db_prefix: app_test
-  database_url_template: ""       # e.g. postgresql://postgres:postgres@localhost:5432/{db}
+  database_url_template: "postgresql://postgres:postgres@localhost:55433/{db}"       # e.g. postgresql://postgres:postgres@localhost:5432/{db}
 models:                           # model per dispatch (haiku | sonnet | opus); missing = the agent's
                                   # default. By the task's Complexity (low/medium/high, set by the
                                   # Team Lead); tasks without one use their Size (XS/S/M).
