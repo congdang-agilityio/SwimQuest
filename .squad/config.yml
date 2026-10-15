@@ -79,7 +79,7 @@ deploy:
   gate_workflow: release-gate.yml # from templates/release-gate.yml: records GATE 3 approval only
   ci_workflow: ci.yml               # must be green on main before a release
   staging_url: https://web-staging-2708.up.railway.app
-  production_url: ""
+  production_url: https://web-production-ffb58.up.railway.app
   production_environment: production   # GitHub Environment with required reviewers (GATE 3)
 limits:
   max_attempts: 3
