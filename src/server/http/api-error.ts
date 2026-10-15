@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 
 /** Stable API error codes; clients branch on `code`, never on `message`. */
 export type ApiErrorCode =
-  "VALIDATION_FAILED" | "EMAIL_TAKEN" | "INVALID_BODY" | "FORBIDDEN_ORIGIN" | "INVALID_CREDENTIALS";
+  | "VALIDATION_FAILED"
+  | "EMAIL_TAKEN"
+  | "INVALID_BODY"
+  | "FORBIDDEN_ORIGIN"
+  | "INVALID_CREDENTIALS"
+  | "UNAUTHENTICATED";
 
 const messages: Record<ApiErrorCode, string> = {
   VALIDATION_FAILED: "Some fields are invalid.",
@@ -10,6 +15,7 @@ const messages: Record<ApiErrorCode, string> = {
   INVALID_BODY: "The request body must be a JSON object.",
   FORBIDDEN_ORIGIN: "Cross-site requests are not allowed.",
   INVALID_CREDENTIALS: "The email or password is incorrect.",
+  UNAUTHENTICATED: "Please log in to continue.",
 };
 
 /** A JSON error response: `{ error: { code, message, fields? } }`, never cached. */
