@@ -60,6 +60,9 @@ const fieldsSchema = z.object({
   routeDistanceKm: routeDistance,
 });
 
+/** The per-field rules, so a partial update of a stored tournament validates like creation. */
+export const tournamentDraftFieldsSchema = fieldsSchema;
+
 export const tournamentDraftSchema = fieldsSchema
   .refine((v) => v.seasonEnd.getTime() > v.seasonStart.getTime(), {
     message: "SEASON_END_NOT_AFTER_START" satisfies TournamentDraftErrorCode,
