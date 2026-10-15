@@ -1,0 +1,14 @@
+{
+  "manage": {
+    "status": "Status",
+    "season": "Season",
+    "vietnamTime": "Vietnam time, UTC+7",
+    "statusNames": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Open for joining",
+      "ACTIVE": "In progress",
+      "COMPLETED": "Completed",
+      "ARCHIVED": "Archived"
+    }
+  }
+}
