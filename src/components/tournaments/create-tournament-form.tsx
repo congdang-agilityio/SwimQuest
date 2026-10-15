@@ -1,19 +1,13 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { listRoutes } from "@/lib/routes";
 import { defaultSeasonTimes } from "@/lib/time/vn";
-import {
-  parseTournamentDraft,
-  type TournamentDraftErrors,
-  type TournamentDraftField,
-} from "@/lib/validation/tournament";
+import { parseTournamentDraft, type TournamentDraftErrors } from "@/lib/validation/tournament";
 
 const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
-const errorColor = { color: "#b91c1c" };
 const routes = listRoutes();
-
 type Season = { date: string; time: string };
 const empty: Season = { date: "", time: "" };
 
@@ -22,39 +16,26 @@ export function CreateTournamentForm() {
   const [errors, setErrors] = useState<TournamentDraftErrors>({});
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [start, setStart] = useState<Season>(empty);
-  const [end, setEnd] = useState<Season>(empty);
+  const [season, setSeason] = useState({ seasonStart: empty, seasonEnd: empty });
   const [routeId, setRouteId] = useState(routes[0].id);
   const route = routes.find((r) => r.id === routeId) ?? routes[0];
 
   /** A picked date pre-fills the default time (00:00 / 23:59) unless a time is already there. */
-  function pick(which: "start" | "end", date: string) {
-    const set = which === "start" ? setStart : setEnd;
-    set((prev) => {
-      let time = prev.time;
-      if (date && !time) {
-        try {
-          const d = defaultSeasonTimes(date, date);
-          time = which === "start" ? d.start.time : d.end.time;
-        } catch {
-          /* an incomplete date keeps the time empty */
-        }
+  function setPart(key: keyof typeof season, patch: Partial<Season>) {
+    setSeason((s) => {
+      const next = { ...s[key], ...patch };
+      if (patch.date && !next.time) {
+        const d = defaultSeasonTimes(patch.date, patch.date);
+        next.time = (key === "seasonStart" ? d.start : d.end).time;
       }
-      return { date, time };
+      return { ...s, [key]: next };
     });
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const body = {
-      name: form.get("name"),
-      description: form.get("description"),
-      seasonStart: start,
-      seasonEnd: end,
-      routeId,
-      routeDistanceKm: form.get("routeDistanceKm"),
-    };
+    const body = { ...Object.fromEntries(form), ...season, routeId };
     const parsed = parseTournamentDraft(body);
     setFailed(false);
     setErrors(parsed.ok ? {} : parsed.errors);
@@ -67,12 +48,11 @@ export function CreateTournamentForm() {
         body: JSON.stringify(body),
       });
       if (res.status === 201) {
-        const { id } = (await res.json()) as { id: string };
-        window.location.assign(`/tournaments/${encodeURIComponent(id)}/manage`);
+        window.location.assign(`/tournaments/${encodeURIComponent((await res.json()).id)}/manage`);
         return;
       }
       const fields = res.status === 400 ? (await res.json())?.error?.fields : undefined;
-      if (fields && typeof fields === "object") setErrors(fields as TournamentDraftErrors);
+      if (fields && typeof fields === "object") setErrors(fields);
       else setFailed(true);
     } catch {
       setFailed(true);
@@ -80,97 +60,64 @@ export function CreateTournamentForm() {
     setBusy(false);
   }
 
-  const err = (field: TournamentDraftField, id: string) => {
+  /** Props tying an input to its error message (aria-invalid / aria-describedby) and the message. */
+  const a11y = (field: keyof TournamentDraftErrors, extra = "") => {
     const code = errors[field];
+    const described = [extra, code && `${field}-error`].filter(Boolean).join(" ");
     return {
-      input: {
-        "aria-invalid": code ? true : undefined,
-        "aria-describedby": code ? `${id}-error` : undefined,
-      },
-      message: code && (
-        <span id={`${id}-error`} role="alert" style={errorColor}>
-          {t(`errors.${code}`)}
-        </span>
-      ),
+      "aria-invalid": code ? true : undefined,
+      "aria-describedby": described || undefined,
+      style: control,
     };
   };
-  const name = err("name", "name");
-  const description = err("description", "description");
-  const seasonStart = err("seasonStart", "seasonStart");
-  const seasonEnd = err("seasonEnd", "seasonEnd");
-  const routeError = err("routeId", "routeId");
-  const distance = err("routeDistanceKm", "routeDistanceKm");
+  const message = (field: keyof TournamentDraftErrors): ReactNode =>
+    errors[field] && (
+      <span id={`${field}-error`} role="alert" style={{ color: "#b91c1c" }}>
+        {t(`errors.${errors[field]}`)}
+      </span>
+    );
 
   return (
     <form onSubmit={onSubmit} noValidate aria-label={t("create.title")}>
       <p>
         <label htmlFor="name">{t("create.fields.name")}</label>
-        <input id="name" name="name" type="text" style={control} {...name.input} />
-        {name.message}
+        <input id="name" name="name" type="text" {...a11y("name")} />
+        {message("name")}
       </p>
       <p>
         <label htmlFor="description">{t("create.fields.description")}</label>
-        <textarea
-          id="description"
-          name="description"
-          rows={4}
-          style={control}
-          {...description.input}
-        />
-        {description.message}
+        <textarea id="description" name="description" rows={4} {...a11y("description")} />
+        {message("description")}
       </p>
-      <fieldset aria-describedby={seasonStart.input["aria-describedby"]}>
-        <legend>{t("create.fields.seasonStart")}</legend>
-        <label htmlFor="seasonStartDate">{t("create.fields.date")}</label>
-        <input
-          id="seasonStartDate"
-          type="date"
-          value={start.date}
-          onChange={(e) => pick("start", e.target.value)}
-          style={control}
-          {...seasonStart.input}
-        />
-        <label htmlFor="seasonStartTime">{t("create.fields.timeVn")}</label>
-        <input
-          id="seasonStartTime"
-          type="time"
-          value={start.time}
-          onChange={(e) => setStart({ ...start, time: e.target.value })}
-          style={control}
-          {...seasonStart.input}
-        />
-        {seasonStart.message}
-      </fieldset>
-      <fieldset aria-describedby={seasonEnd.input["aria-describedby"]}>
-        <legend>{t("create.fields.seasonEnd")}</legend>
-        <label htmlFor="seasonEndDate">{t("create.fields.date")}</label>
-        <input
-          id="seasonEndDate"
-          type="date"
-          value={end.date}
-          onChange={(e) => pick("end", e.target.value)}
-          style={control}
-          {...seasonEnd.input}
-        />
-        <label htmlFor="seasonEndTime">{t("create.fields.timeVn")}</label>
-        <input
-          id="seasonEndTime"
-          type="time"
-          value={end.time}
-          onChange={(e) => setEnd({ ...end, time: e.target.value })}
-          style={control}
-          {...seasonEnd.input}
-        />
-        {seasonEnd.message}
-      </fieldset>
+      {(["seasonStart", "seasonEnd"] as const).map((key) => (
+        <fieldset key={key}>
+          <legend>{t(`create.fields.${key}`)}</legend>
+          <label htmlFor={`${key}Date`}>{t("create.fields.date")}</label>
+          <input
+            id={`${key}Date`}
+            type="date"
+            value={season[key].date}
+            onChange={(e) => setPart(key, { date: e.target.value })}
+            {...a11y(key)}
+          />
+          <label htmlFor={`${key}Time`}>{t("create.fields.timeVn")}</label>
+          <input
+            id={`${key}Time`}
+            type="time"
+            value={season[key].time}
+            onChange={(e) => setPart(key, { time: e.target.value })}
+            {...a11y(key)}
+          />
+          {message(key)}
+        </fieldset>
+      ))}
       <p>
         <label htmlFor="routeId">{t("create.fields.route")}</label>
         <select
           id="routeId"
           value={routeId}
           onChange={(e) => setRouteId(e.target.value)}
-          style={control}
-          {...routeError.input}
+          {...a11y("routeId")}
         >
           {routes.map((r) => (
             <option key={r.id} value={r.id}>
@@ -178,14 +125,11 @@ export function CreateTournamentForm() {
             </option>
           ))}
         </select>
-        {routeError.message}
+        {message("routeId")}
       </p>
       <ol aria-label={t("create.destinations")}>
         {route.destinations.map((d) => (
-          <li key={d.slug}>
-            {t(d.nameKey)}
-            {d.isFinish ? ` (${t("create.finish")})` : ""}
-          </li>
+          <li key={d.slug}>{t(d.nameKey) + (d.isFinish ? ` (${t("create.finish")})` : "")}</li>
         ))}
       </ol>
       <p>
@@ -195,20 +139,13 @@ export function CreateTournamentForm() {
           name="routeDistanceKm"
           type="text"
           inputMode="decimal"
-          style={control}
-          aria-describedby={
-            distance.input["aria-describedby"]
-              ? `routeDistanceKm-hint ${distance.input["aria-describedby"]}`
-              : "routeDistanceKm-hint"
-          }
-          aria-invalid={distance.input["aria-invalid"]}
+          {...a11y("routeDistanceKm", "routeDistanceKm-hint")}
         />
-        <small id="routeDistanceKm-hint">{t("create.distanceHint")}</small>
-        <br />
-        {distance.message}
+        <small id="routeDistanceKm-hint">{t("create.distanceHint")}</small>{" "}
+        {message("routeDistanceKm")}
       </p>
       {failed && (
-        <p role="alert" style={errorColor}>
+        <p role="alert" style={{ color: "#b91c1c" }}>
           {t("errors.GENERIC")}
         </p>
       )}
