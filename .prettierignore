@@ -2,6 +2,8 @@ node_modules
 .next
 .worktrees
 coverage
+test-results
+playwright-report
 package-lock.json
 docs
 requirement
