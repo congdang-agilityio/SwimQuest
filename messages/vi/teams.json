@@ -38,5 +38,10 @@
     "LIMIT_INVALID": "Nhập số thành viên tối đa từ 1 trở lên.",
     "LIMIT_BELOW_MEMBERS": "Giới hạn không được thấp hơn số thành viên hiện có.",
     "GENERIC": "Có lỗi xảy ra. Vui lòng thử lại."
+  },
+  "start": {
+    "notChosen": "Chưa chọn điểm xuất phát",
+    "name": "Điểm xuất phát: {name}",
+    "locked": "Đã khóa từ {lockedAt} (giờ Việt Nam)"
   }
 }

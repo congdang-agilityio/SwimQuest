@@ -43,8 +43,8 @@ function published(status = "PUBLISHED") {
     name: "Autumn Cup",
     status,
     inviteToken: "tok",
-    seasonStartAt: new Date("2026-10-01T00:00:00Z"),
-    seasonEndAt: new Date("2026-11-01T00:00:00Z"),
+    seasonStartAt: new Date("2099-10-01T00:00:00Z"),
+    seasonEndAt: new Date("2099-11-01T00:00:00Z"),
   };
 }
 
@@ -108,5 +108,24 @@ describe("organizer manage page invite link origin", () => {
     state.tournament = published();
     await renderPage();
     expect(screen.queryByTestId("publish-panel")).toBeNull();
+  });
+});
+
+describe("organizer manage page effective status (#158)", () => {
+  afterEach(cleanup);
+
+  it("shows Published before the season start and Active from it", async () => {
+    state.headers = new Headers({ host: "localhost:4100" });
+    state.tournament = published();
+    await renderPage();
+    expect(screen.getByText(en.manage.statusNames.PUBLISHED)).toBeTruthy();
+    cleanup();
+    state.tournament = {
+      ...published(),
+      seasonStartAt: new Date("2000-01-01T00:00:00Z"),
+      seasonEndAt: new Date("2099-11-01T00:00:00Z"),
+    };
+    await renderPage();
+    expect(screen.getByText(en.manage.statusNames.ACTIVE)).toBeTruthy();
   });
 });
