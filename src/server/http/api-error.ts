@@ -9,7 +9,8 @@ export type ApiErrorCode =
   | "INVALID_CREDENTIALS"
   | "UNAUTHENTICATED"
   | "FORBIDDEN"
-  | "NOT_FOUND";
+  | "NOT_FOUND"
+  | "ROUTE_LOCKED";
 
 const messages: Record<ApiErrorCode, string> = {
   VALIDATION_FAILED: "Some fields are invalid.",
@@ -20,6 +21,7 @@ const messages: Record<ApiErrorCode, string> = {
   UNAUTHENTICATED: "Please log in to continue.",
   FORBIDDEN: "You do not have permission to do this.",
   NOT_FOUND: "The requested item was not found.",
+  ROUTE_LOCKED: "The route cannot be changed after the season has started.",
 };
 
 /** A JSON error response: `{ error: { code, message, fields? } }`, never cached. */
