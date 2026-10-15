@@ -15,6 +15,11 @@ export type ApiErrorCode =
   | "TEAM_NOT_DELETABLE"
   | "INVALID_START"
   | "PUBLISH_INVALID"
+  | "FILE_REQUIRED"
+  | "FILE_TOO_LARGE"
+  | "UNSUPPORTED_FILE"
+  | "UNREADABLE_FILE"
+  | "NO_DISTANCE"
   | "INTERNAL_ERROR";
 
 const messages: Record<ApiErrorCode, string> = {
@@ -31,6 +36,11 @@ const messages: Record<ApiErrorCode, string> = {
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
   INVALID_START: "Choose one of the route's start destinations.",
   PUBLISH_INVALID: "The tournament cannot be published yet.",
+  FILE_REQUIRED: "Choose a GPX or FIT file to upload.",
+  FILE_TOO_LARGE: "The file is larger than 10 MB.",
+  UNSUPPORTED_FILE: "Only GPX or FIT files are supported. Export one from your watch or app.",
+  UNREADABLE_FILE: "The file has no readable activity data. Export it again as GPX or FIT.",
+  NO_DISTANCE: "The file has no swim distance. Export it as FIT or with distance from your app.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
 
