@@ -17,6 +17,7 @@ async function tournament(
   organizerId: string,
   name: string,
   status: "DRAFT" | "PUBLISHED" = "PUBLISHED",
+  startDestination: string | null = "dest01",
 ) {
   const t = await db.tournament.create({
     data: {
@@ -31,7 +32,13 @@ async function tournament(
     },
   });
   const team = await db.team.create({
-    data: { tournamentId: t.id, name: `${name}-team`, emblemKey: "dolphin", memberLimit: 5 },
+    data: {
+      tournamentId: t.id,
+      name: `${name}-team`,
+      emblemKey: "dolphin",
+      memberLimit: 5,
+      startDestination,
+    },
   });
   return { t, team };
 }
@@ -85,6 +92,18 @@ describe("my tournaments", () => {
     const current = await getCurrentMembership(me.id);
     expect(current?.tournament.id).toBe(two.t.id);
     expect(current?.team.id).toBe(two.team.id);
+  });
+
+  it("has no progress for a team without a chosen start, 0 once a start is chosen", async () => {
+    const org = await user("org");
+    const me = await user("me");
+    const none = await tournament(org.id, "NoStart", "PUBLISHED", null);
+    const chosen = await tournament(org.id, "Chosen");
+    await join(none.t.id, none.team.id, me.id, "2026-10-01T00:00:00Z");
+    await join(chosen.t.id, chosen.team.id, me.id, "2026-10-02T00:00:00Z");
+    const list = await listMyTournaments(me.id, now);
+    expect(list.find((x) => x.name === "NoStart")?.progressBp).toBeNull();
+    expect(list.find((x) => x.name === "Chosen")?.progressBp).toBe(0);
   });
 
   it("ignores left memberships", async () => {
