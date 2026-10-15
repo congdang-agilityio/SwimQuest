@@ -1,0 +1,52 @@
+{
+  "create": {
+    "title": "Create tournament",
+    "submit": "Create draft",
+    "vietnamTime": "Vietnam time, UTC+7",
+    "destinations": "Destinations in order",
+    "finish": "finish",
+    "distanceHint": "Enter kilometres. Every start has this same distance to Lý Sơn.",
+    "fields": {
+      "name": "Tournament name",
+      "description": "Description",
+      "seasonStart": "Season start",
+      "seasonEnd": "Season end",
+      "date": "Date",
+      "timeVn": "Time (Vietnam time, UTC+7)",
+      "route": "Route",
+      "routeDistanceKm": "Route distance (km)"
+    }
+  },
+  "errors": {
+    "NAME_REQUIRED": "Enter a tournament name.",
+    "NAME_TOO_LONG": "The name is too long (80 characters at most).",
+    "DESCRIPTION_REQUIRED": "Enter a description.",
+    "DESCRIPTION_TOO_LONG": "The description is too long (2000 characters at most).",
+    "SEASON_START_INVALID": "Pick a valid start date and time.",
+    "SEASON_END_INVALID": "Pick a valid end date and time.",
+    "SEASON_END_NOT_AFTER_START": "The season end must be after the season start.",
+    "ROUTE_UNKNOWN": "Choose a route from the list.",
+    "ROUTE_DISTANCE_REQUIRED": "Enter the route distance in km.",
+    "ROUTE_DISTANCE_INVALID": "The distance must be a number.",
+    "ROUTE_DISTANCE_NOT_POSITIVE": "The distance must be greater than 0.",
+    "ROUTE_DISTANCE_TOO_PRECISE": "The distance can have at most 2 decimals.",
+    "ROUTE_DISTANCE_TOO_LARGE": "The distance is too large (10,000 km at most).",
+    "GENERIC": "Something went wrong. Please try again."
+  },
+  "routes": {
+    "route01": {
+      "name": "Route 01",
+      "non_nuoc": "Non Nước beach",
+      "son_thuy": "Sơn Thủy beach",
+      "pham_van_dong": "Phạm Văn Đồng beach",
+      "man_thai": "Mân Thái beach",
+      "hon_sup": "Hòn Sụp",
+      "cu_lao_cham": "Cù Lao Chàm",
+      "ly_son": "Lý Sơn"
+    }
+  },
+  "manage": {
+    "status": "Status",
+    "season": "Season"
+  }
+}
