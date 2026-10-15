@@ -91,36 +91,77 @@ enum TeamMemberStatus {
   REMOVED
 }
 
+enum SwimTypeAllowed {
+  ANY
+  POOL_ONLY
+  OPEN_WATER_ONLY
+}
+
+enum TournamentVisibility {
+  PUBLIC
+  INVITE_ONLY
+}
+
 model Tournament {
-  id                    String           @id @default(cuid())
-  organizerId           String
-  organizer             User             @relation("OrganizedTournaments", fields: [organizerId], references: [id])
-  name                  String
-  description           String
-  status                TournamentStatus @default(DRAFT)
-  seasonStartAt         DateTime         @db.Timestamptz(3)
-  seasonEndAt           DateTime         @db.Timestamptz(3)
+  id                         String                @id @default(cuid())
+  organizerId                String
+  organizer                  User                  @relation("OrganizedTournaments", fields: [organizerId], references: [id])
+  name                       String
+  description                String
+  status                     TournamentStatus      @default(DRAFT)
+  seasonStartAt              DateTime              @db.Timestamptz(3)
+  seasonEndAt                DateTime              @db.Timestamptz(3)
   /// Route registry id, e.g. "route01".
-  routeId               String
+  routeId                    String
   /// Entered in km in the UI, stored as whole metres.
-  routeDistanceM        Int
-  fastestPaceSecPer100m Int              @default(65)
-  slowestPaceSecPer100m Int              @default(300)
-  longestRealisticSwimM Int              @default(30000)
-  longestSwimCountedM   Int              @default(10000)
-  dailyLimitM           Int              @default(10000)
-  pointsPerKm           Int              @default(10)
+  routeDistanceM             Int
+  fastestPaceSecPer100m      Int                   @default(65)
+  slowestPaceSecPer100m      Int                   @default(300)
+  longestRealisticSwimM      Int                   @default(30000)
+  longestSwimCountedM        Int                   @default(10000)
+  dailyLimitM                Int                   @default(10000)
+  pointsPerKm                Int                   @default(10)
   /// Null means the season start.
-  startChoiceDeadlineAt DateTime?        @db.Timestamptz(3)
+  startChoiceDeadlineAt      DateTime?             @db.Timestamptz(3)
   /// Set when the tournament is published.
-  inviteToken           String?          @unique
-  publishedAt           DateTime?        @db.Timestamptz(3)
-  createdAt             DateTime         @default(now()) @db.Timestamptz(3)
-  updatedAt             DateTime         @updatedAt @db.Timestamptz(3)
-  teams                 Team[]
-  members               TeamMember[]
-  swimResults           SwimResult[]
-  pointsEntries         PointsEntry[]
+  inviteToken                String?               @unique
+  publishedAt                DateTime?             @db.Timestamptz(3)
+  swimTypeAllowed            SwimTypeAllowed       @default(ANY)
+  submissionDays             Int                   @default(7)
+  lateUploadDays             Int                   @default(3)
+  firstSwimBonusPoints       Int                   @default(20)
+  longSwimTier1M             Int                   @default(1000)
+  longSwimTier1Points        Int                   @default(10)
+  longSwimTier2M             Int                   @default(3000)
+  longSwimTier2Points        Int                   @default(25)
+  /// Percent values are integers (110 = x1.10) so scoring stays integer math.
+  multiplierTwoDaysPct       Int                   @default(110)
+  multiplierThreeDaysPct     Int                   @default(120)
+  streakStepPct              Int                   @default(5)
+  multiplierMaxPct           Int                   @default(140)
+  /// Extra rules; null means the rule is off.
+  minSwimDistanceM           Int?
+  extraSlowestPaceSecPer100m Int?
+  /// Snapshot of the admin limit bounds taken when the tournament is created.
+  swimLimitBounds            Json?
+  /// Null means not chosen yet; behaves as INVITE_ONLY.
+  visibility                 TournamentVisibility?
+  inviteEnabled              Boolean               @default(true)
+  /// Image ids; no foreign key yet.
+  bannerImageId              String?
+  logoImageId                String?
+  rulesUrl                   String?
+  eligibilityNotes           String?
+  contactChannel             String?
+  rulesText                  String?
+  archivedAt                 DateTime?             @db.Timestamptz(3)
+  seasonEndProcessedAt       DateTime?             @db.Timestamptz(3)
+  createdAt                  DateTime              @default(now()) @db.Timestamptz(3)
+  updatedAt                  DateTime              @updatedAt @db.Timestamptz(3)
+  teams                      Team[]
+  members                    TeamMember[]
+  swimResults                SwimResult[]
+  pointsEntries              PointsEntry[]
 
   @@index([organizerId])
 }
