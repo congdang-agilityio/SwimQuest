@@ -47,6 +47,24 @@ describe("TournamentCard", () => {
     expect(screen.getByText("Đang mở đăng ký")).toBeTruthy();
   });
 
+  it("shows 0% as progress when a start is chosen and no start-not-chosen text", () => {
+    setup({ ...base, progressBp: 0 });
+    expect(screen.getByText("Tiến độ: 0%")).toBeTruthy();
+    expect(screen.queryByText("Chưa chọn điểm xuất phát")).toBeNull();
+  });
+
+  it("shows no progress text for a team that has not chosen a start", () => {
+    setup({ ...base, progressBp: null });
+    expect(screen.queryByText(/Tiến độ/)).toBeNull();
+  });
+
+  it("says nothing about progress or the start for a card without a team", () => {
+    setup({ ...base, team: null, progressBp: null }, "en");
+    expect(screen.getByText("You have no team in this tournament")).toBeTruthy();
+    expect(screen.queryByText(/Progress:/)).toBeNull();
+    expect(screen.queryByText("Start not chosen yet")).toBeNull();
+  });
+
   it("handles an organizer without a team and has an English mirror", () => {
     setup({ ...base, team: null, progressBp: null, effectiveStatus: "DRAFT" }, "en");
     expect(screen.getByText("You have no team in this tournament")).toBeTruthy();
