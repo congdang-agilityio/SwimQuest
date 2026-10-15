@@ -1,0 +1,58 @@
+{
+  "pack": "SwimQuest Full Platform Design Pack",
+  "version": "2.2",
+  "status": "design specification; no code implemented",
+  "route_stops": [
+    {
+      "order": 1,
+      "id": "non_nuoc",
+      "name": "Bãi biển Non Nước"
+    },
+    {
+      "order": 2,
+      "id": "son_thuy",
+      "name": "Bãi Sơn Thủy"
+    },
+    {
+      "order": 3,
+      "id": "pham_van_dong",
+      "name": "Bãi Phạm Văn Đồng"
+    },
+    {
+      "order": 4,
+      "id": "man_thai",
+      "name": "Bãi Mân Thái"
+    },
+    {
+      "order": 5,
+      "id": "hon_sup",
+      "name": "Hòn Sụp"
+    },
+    {
+      "order": 6,
+      "id": "cu_lao_cham",
+      "name": "Cù Lao Chàm"
+    },
+    {
+      "order": 7,
+      "id": "ly_son",
+      "name": "Lý Sơn",
+      "is_finish": true
+    }
+  ],
+  "reference_image": {
+    "file": "assets/reference/swimquest_full_platform_ui_concept.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2496455
+  },
+  "asset_status": "concept reference only; production sprites and implemented UI are not included",
+  "auth_options": [
+    "email/password or existing configured provider",
+    "optional Strava OAuth sign-in"
+  ],
+  "strava_note": "Strava sign-in and Strava activity import authorization are separate; verify current API policies before implementation.",
+  "features": [
+    "Dedicated player profile management page"
+  ]
+}
