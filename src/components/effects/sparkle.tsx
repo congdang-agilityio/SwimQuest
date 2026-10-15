@@ -3,11 +3,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import styles from "./sparkle.module.css";
 
-const DURATION_MS = 1200;
-
 type Props = { play: boolean; onDone?: () => void; children?: ReactNode };
 
-/** Plays a short sparkle/glow around its children once per `play`; static glow when motion is reduced. */
+/** One short sparkle/glow around its children per `play`; a static glow when motion is reduced. */
 export function Sparkle({ play, onDone, children }: Props) {
   const reduce =
     typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -15,14 +13,10 @@ export function Sparkle({ play, onDone, children }: Props) {
   useEffect(() => {
     done.current = onDone;
   });
-
   useEffect(() => {
     if (!play) return;
-    if (reduce) {
-      done.current?.();
-      return;
-    }
-    const id = setTimeout(() => done.current?.(), DURATION_MS);
+    if (reduce) return done.current?.();
+    const id = setTimeout(() => done.current?.(), 1200);
     return () => clearTimeout(id);
   }, [play, reduce]);
 
@@ -30,18 +24,6 @@ export function Sparkle({ play, onDone, children }: Props) {
   return (
     <span className={styles.root} data-testid="sparkle" data-motion={motion}>
       {children}
-      {play && (
-        <span aria-hidden="true" className={styles.fx}>
-          {!reduce && (
-            <>
-              <i className={styles.star} />
-              <i className={styles.star} />
-              <i className={styles.star} />
-              <i className={styles.star} />
-            </>
-          )}
-        </span>
-      )}
     </span>
   );
 }
