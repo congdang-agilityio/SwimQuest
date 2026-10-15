@@ -14,7 +14,8 @@ export type ApiErrorCode =
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
   | "INVALID_START"
-  | "PUBLISH_INVALID";
+  | "PUBLISH_INVALID"
+  | "INTERNAL_ERROR";
 
 const messages: Record<ApiErrorCode, string> = {
   VALIDATION_FAILED: "Some fields are invalid.",
@@ -30,6 +31,7 @@ const messages: Record<ApiErrorCode, string> = {
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
   INVALID_START: "Choose one of the route's start destinations.",
   PUBLISH_INVALID: "The tournament cannot be published yet.",
+  INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
 
 /** A JSON error response: `{ error: { code, message, fields? } }`, never cached. */

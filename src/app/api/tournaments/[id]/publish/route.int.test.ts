@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db";
 import { createSession } from "@/server/auth/session";
 
@@ -61,6 +61,10 @@ describe("POST /api/tournaments/:id/publish", () => {
     jar.token = undefined;
     await clean();
   });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
   afterAll(async () => {
     await clean();
     await db.$disconnect();
@@ -88,15 +92,35 @@ describe("POST /api/tournaments/:id/publish", () => {
     expect(await res.json()).toEqual(first);
   });
 
-  it("uses the forwarded host and protocol behind a proxy", async () => {
+  it("builds the invite URL from APP_URL, ignoring a spoofed forwarded host", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("APP_URL", "https://swim.example.com/");
     const organizer = await signIn("o@example.com");
     const t = await makeDraft(organizer.id);
     const res = await post(t.id, {
-      "x-forwarded-host": "swim.example.com",
-      "x-forwarded-proto": "https",
+      "x-forwarded-host": "evil.example",
+      "x-forwarded-proto": "http",
     });
+    expect(res.status).toBe(200);
+    const stored = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    expect((await res.json()).inviteUrl).toBe(
+      `https://swim.example.com/join/${stored.inviteToken}`,
+    );
+  });
+
+  it("returns 500 and leaves the draft untouched in production without APP_URL", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("APP_URL", "");
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const organizer = await signIn("o@example.com");
+    const t = await makeDraft(organizer.id);
+    const res = await post(t.id, { "x-forwarded-host": "evil.example" });
+    expect(res.status).toBe(500);
     const body = await res.json();
-    expect(body.inviteUrl).toMatch(/^https:\/\/swim\.example\.com\/join\/[A-Za-z0-9_-]{43}$/);
+    expect(body.error.code).toBe("INTERNAL_ERROR");
+    expect(JSON.stringify(body)).not.toContain("evil.example");
+    expect(log).toHaveBeenCalledWith(expect.stringContaining("APP_URL"));
+    expect((await db.tournament.findUniqueOrThrow({ where: { id: t.id } })).status).toBe("DRAFT");
   });
 
   it("returns 422 PUBLISH_INVALID with the issues and leaves the draft untouched", async () => {
