@@ -10,7 +10,7 @@ vi.mock("@/server/starts/auto-assign", () => ({
   assignMissingStarts: mocks.assignMissingStarts,
 }));
 
-const { runDueStartAssignments } = await import("./tick");
+const { ensureStartsAssigned, runDueStartAssignments } = await import("./tick");
 
 describe("runDueStartAssignments (failure isolation)", () => {
   afterEach(() => {
@@ -34,5 +34,26 @@ describe("runDueStartAssignments (failure isolation)", () => {
     expect(mocks.assignMissingStarts).toHaveBeenCalledTimes(3);
     expect(mocks.assignMissingStarts).toHaveBeenCalledWith("c", now);
     expect(log).toHaveBeenCalledOnce();
+  });
+});
+
+describe("ensureStartsAssigned (page catch-up never breaks the page)", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    mocks.assignMissingStarts.mockReset();
+  });
+
+  it("logs a failure and returns 0 so the page still loads", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    mocks.assignMissingStarts.mockRejectedValue(new Error("lock timeout"));
+
+    await expect(ensureStartsAssigned("t1", new Date("2099-11-01T00:00:00Z"))).resolves.toBe(0);
+    expect(log).toHaveBeenCalledOnce();
+  });
+
+  it("returns the number of starts assigned", async () => {
+    mocks.assignMissingStarts.mockResolvedValue([{ teamId: "x", slug: "non_nuoc" }]);
+
+    await expect(ensureStartsAssigned("t1", new Date("2099-11-01T00:00:00Z"))).resolves.toBe(1);
   });
 });

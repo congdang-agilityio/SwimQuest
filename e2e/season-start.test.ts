@@ -73,6 +73,8 @@ test("organizer sees Active and each team's start with a locked state", async ({
   await page.goto(`/tournaments/${tournament.id}/manage`);
   await expect(page.getByText("Đang diễn ra")).toBeVisible();
   await expect(page.getByText("Điểm xuất phát: Bãi Sơn Thủy")).toBeVisible();
-  await expect(page.getByText("Chưa chọn điểm xuất phát")).toBeVisible();
+  // The deadline (season start) has passed, so opening the page assigns the missing start.
+  await expect(page.getByText(/Được gán tự động lúc/)).toHaveCount(1);
+  await expect(page.getByText("Chưa chọn điểm xuất phát")).toHaveCount(0);
   await expect(page.getByText(/Đã khóa từ/)).toHaveCount(2);
 });
