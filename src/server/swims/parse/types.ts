@@ -15,7 +15,7 @@ export interface ParsedSwim {
 
 export class ParseError extends Error {
   constructor(
-    readonly code: "UNREADABLE_FILE" | "NO_DISTANCE",
+    readonly code: "UNREADABLE_FILE" | "NO_DISTANCE" | "UNSUPPORTED_FILE",
     message?: string,
   ) {
     super(message ?? code);
