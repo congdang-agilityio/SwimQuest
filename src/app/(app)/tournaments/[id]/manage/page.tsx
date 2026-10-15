@@ -10,6 +10,7 @@ import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/l
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { pageOrigin } from "@/server/http/request";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 
@@ -25,13 +26,16 @@ export default async function ManageTournamentPage({
     if (err instanceof ForbiddenError || err instanceof NotFoundError) notFound();
     throw err;
   });
-  const { teams, capacity } = await listTeamsWithCounts(tournament.id);
   const now = new Date();
+  await ensureStartsAssigned(tournament.id, now);
+  const { teams, capacity } = await listTeamsWithCounts(tournament.id);
   const status = effectiveStatus(tournament, now);
   const destinations = getRoute(tournament.routeId)?.destinations ?? [];
   const rows = teams.map((team) => ({
     ...team,
     startNameKey: destinations.find((d) => d.slug === team.startDestination)?.nameKey ?? null,
+    autoAssignedAtIso:
+      team.startSetBy === "AUTOMATIC" ? (team.startSetAt?.toISOString() ?? null) : null,
   }));
   const startLock =
     tournament.status === "DRAFT"

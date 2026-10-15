@@ -62,6 +62,18 @@ describe("TeamStartCard", () => {
     expect(screen.getByText(/Đã khóa từ 06:00 01\/11\/2098/)).toBeTruthy();
   });
 
+  it("labels an automatically assigned start with its time in Vietnam time", () => {
+    setup({ startNameKey: KEY, locked: true, autoAssignedAtIso: "2098-10-31T23:05:00.000Z" });
+    expect(screen.getByText("Được gán tự động lúc 06:05 01/11/2098 (giờ Việt Nam)")).toBeTruthy();
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(screen.getByText(/Đã khóa từ/)).toBeTruthy();
+  });
+
+  it("shows no automatic label for a chosen start", () => {
+    setup({ startNameKey: KEY });
+    expect(screen.queryByText(/tự động lúc/)).toBeNull();
+  });
+
   it("shows no lock note before the lock", () => {
     setup({ startNameKey: KEY });
     expect(screen.queryByText(/Đã khóa từ/)).toBeNull();

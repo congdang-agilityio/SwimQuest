@@ -17,6 +17,8 @@ export type TeamRow = {
   memberCount: number;
   /** Message key of the chosen start, or null (only used with `startLock`). */
   startNameKey?: string | null;
+  /** ISO instant the start was assigned automatically, or null (only used with `startLock`). */
+  autoAssignedAtIso?: string | null;
 };
 
 type Props = {
@@ -93,7 +95,11 @@ export function TeamList({ tournamentId, teams, capacity, isDraft, startLock }: 
                 </span>{" "}
                 {startLock && (
                   <>
-                    <TeamStartStatus startNameKey={team.startNameKey ?? null} {...startLock} />{" "}
+                    <TeamStartStatus
+                      startNameKey={team.startNameKey ?? null}
+                      autoAssignedAtIso={team.autoAssignedAtIso ?? null}
+                      {...startLock}
+                    />{" "}
                   </>
                 )}
                 <button type="button" onClick={() => setEditing(team.id)} style={touch}>

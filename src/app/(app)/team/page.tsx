@@ -7,13 +7,16 @@ import { getRoute } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { ensureStartsAssigned } from "@/server/jobs/tick";
 
 export default async function TeamPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team");
-  const [t, membership] = await Promise.all([
-    getTranslations("tabs.team"),
-    getCurrentMembership(user.id),
-  ]);
+  const t = await getTranslations("tabs.team");
+  let membership = await getCurrentMembership(user.id);
+  // Catch up the automatic assignment right after the deadline, before the scheduler runs.
+  if (membership && (await ensureStartsAssigned(membership.tournament.id, new Date())) > 0) {
+    membership = await getCurrentMembership(user.id);
+  }
   return (
     <main>
       <h1>{t("title")}</h1>
@@ -29,6 +32,11 @@ export default async function TeamPage() {
             isCaptain={membership.team.captainUserId === user.id}
             lockAtIso={startLockAt(membership.tournament).toISOString()}
             locked={isStartLocked(membership.tournament, new Date())}
+            autoAssignedAtIso={
+              membership.team.startSetBy === "AUTOMATIC"
+                ? (membership.team.startSetAt?.toISOString() ?? null)
+                : null
+            }
           />
         </>
       ) : (

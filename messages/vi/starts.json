@@ -25,5 +25,8 @@
       "FORBIDDEN": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
       "GENERIC": "Không lưu được. Vui lòng thử lại."
     }
+  },
+  "origin": {
+    "automaticAt": "Được gán tự động lúc {setAt} (giờ Việt Nam)"
   }
 }
