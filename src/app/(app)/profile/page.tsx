@@ -8,7 +8,7 @@ export default async function ProfilePage() {
     <main>
       <h1>{t("profile.title")}</h1>
       <p>
-        <Link href="/swims" style={{ display: "inline-flex", alignItems: "center", minHeight: 44 }}>
+        <Link href="/swims" style={{ display: "inline-block", padding: "12px 0" }}>
           {t("profile.mySwims")}
         </Link>
       </p>

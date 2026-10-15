@@ -1,6 +1,5 @@
 .account {
-  display: flex;
-  justify-content: flex-end;
+  text-align: right;
   padding: 4px 12px;
 }
 .account summary {

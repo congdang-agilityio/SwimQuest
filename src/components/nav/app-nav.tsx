@@ -7,11 +7,7 @@ import { LogoutButton } from "@/components/auth/logout-button";
 import { isActive, navItems } from "./nav-items";
 import styles from "./app-nav.module.css";
 
-/**
- * Bottom bar below 768 px, left navigation from 768 px. The current tab carries
- * `aria-current="page"`, which the stylesheet also shows as bold text plus a bar (not colour alone).
- * The account menu is a closed `<details>`, so its logout button is not on the page until opened.
- */
+/** Bottom bar below 768 px, left navigation from 768 px; the current tab has aria-current. */
 export function AppNav({
   displayName,
   isPlatformAdmin,
