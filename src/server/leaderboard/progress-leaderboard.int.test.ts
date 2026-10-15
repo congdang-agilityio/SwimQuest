@@ -192,21 +192,24 @@ describe("progress leaderboard", () => {
     ]);
   });
 
-  it("counts only current members' entries, whatever team they were earned for", async () => {
+  it("counts every entry for the team stored on it, whoever earned it", async () => {
     const [org, u1, u2, gone] = await Promise.all(["org", "u1", "u2", "gone"].map(user));
     const { t, teams } = await tournament(org.id, ["Alpha", "Bravo"]);
     const [alpha, bravo] = teams;
     await join(t.id, alpha.id, gone.id, "LEFT");
     await join(t.id, alpha.id, u1.id);
     await join(t.id, bravo.id, u2.id);
-    await entry(t.id, alpha.id, gone.id, 900, "2026-11-01T00:00:00Z");
-    await entry(t.id, alpha.id, u2.id, 200, "2026-11-01T00:00:00Z"); // u2 moved to Bravo
+    await entry(t.id, alpha.id, gone.id, 300, "2026-11-01T00:00:00Z"); // gone is no longer active
+    await entry(t.id, alpha.id, u2.id, 200, "2026-11-01T00:00:00Z"); // stored on Alpha
     await entry(t.id, alpha.id, u1.id, 100, "2026-11-02T00:00:00Z");
+    await entry(t.id, bravo.id, u2.id, 150, "2026-11-03T00:00:00Z");
+    const other = await tournament(org.id, ["Other"]);
+    await entry(other.t.id, other.teams[0].id, u2.id, 900, "2026-11-01T00:00:00Z");
 
     const rows = await getProgressLeaderboard(u1.id, t.id);
-    expect(rows.map((r) => [r.name, r.progressBp])).toEqual([
-      ["Bravo", 2000],
-      ["Alpha", 1000],
+    expect(rows.map((r) => [r.name, r.progressBp, r.reachedAt])).toEqual([
+      ["Alpha", 6000, new Date("2026-11-02T00:00:00Z")],
+      ["Bravo", 1500, new Date("2026-11-03T00:00:00Z")],
     ]);
   });
 

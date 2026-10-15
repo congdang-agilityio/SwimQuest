@@ -19,7 +19,7 @@ export class LeaderboardError extends Error {
   }
 }
 
-type Entry = { userId: string; points: number; createdAt: Date };
+type Entry = { teamId: string; points: number; createdAt: Date };
 
 /**
  * Fewest team points that give `progressBp` (integer math, mirrors `routeProgress`). At 100%
@@ -52,8 +52,8 @@ function reachedAtFor(entries: Entry[], threshold: number): Date | null {
 
 /**
  * Teams of a tournament ranked by route progress (S-15 / FR-50): progress desc, then who
- * reached that progress first, then team name. Points follow the member: entries of each
- * team's current ACTIVE members count, as in `getTeamsPoints`. Only the tournament's active
+ * reached that progress first, then team name. Each points entry counts for the team stored
+ * on it, as in `getTeamsPoints`. Only the tournament's active
  * members and its organizer may read it; anyone else (or an unknown id) gets FORBIDDEN.
  */
 export async function getProgressLeaderboard(
@@ -92,12 +92,12 @@ export async function getProgressLeaderboard(
   }
 
   const entries = await db.pointsEntry.findMany({
-    where: { tournamentId, userId: { in: [...teamOfUser.keys()] } },
-    select: { userId: true, points: true, createdAt: true },
+    where: { tournamentId },
+    select: { teamId: true, points: true, createdAt: true },
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
   });
   const entriesByTeam = new Map<string, Entry[]>(teams.map((t) => [t.id, []]));
-  for (const e of entries) entriesByTeam.get(teamOfUser.get(e.userId)!)!.push(e);
+  for (const e of entries) entriesByTeam.get(e.teamId)?.push(e);
 
   const { routeDistanceM, pointsPerKm } = tournament;
   const rows = teams.map((team): ProgressLeaderboardRow => {
