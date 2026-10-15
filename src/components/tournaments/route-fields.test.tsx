@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import en from "../../../messages/en/routes.json";
-import vi_ from "../../../messages/vi/routes.json";
+import viMessages from "../../../messages/vi/routes.json";
 import { RouteFields } from "./route-fields";
 
 afterEach(cleanup);
@@ -13,7 +13,10 @@ function setup(
   locale: "vi" | "en" = "vi",
 ) {
   render(
-    <NextIntlClientProvider locale={locale} messages={{ routes: locale === "vi" ? vi_ : en }}>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={{ routes: locale === "vi" ? viMessages : en }}
+    >
       <RouteFields value="route01" onChange={() => {}} errors={errors} />
     </NextIntlClientProvider>,
   );

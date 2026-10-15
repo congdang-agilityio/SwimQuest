@@ -69,7 +69,9 @@ export function RouteFields({ value, onChange, errors = {} }: Props) {
           defaultValue=""
           {...a11y("routeDistanceKm", "routeDistanceKm-hint")}
         />
-        <small id="routeDistanceKm-hint">{t("distanceHint")}</small> {message("routeDistanceKm")}
+        <small id="routeDistanceKm-hint">{t("distanceHint")}</small>
+        <br />
+        {message("routeDistanceKm")}
       </p>
     </>
   );
