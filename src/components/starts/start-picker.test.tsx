@@ -68,6 +68,14 @@ describe("StartPicker", () => {
     expect(screen.getByText(vi_.picker.readOnly)).toBeTruthy();
   });
 
+  it("when locked shows the lock time, no Confirm and nothing selectable", () => {
+    setup({ readOnly: true, locked: true, currentSlug: "man_thai" });
+    expect(screen.getByText(/đã khóa từ 06:00 01\/11\/2099/)).toBeTruthy();
+    expect(screen.queryByText(vi_.picker.readOnly)).toBeNull();
+    expect(screen.queryByRole("button", { name: vi_.picker.confirm })).toBeNull();
+    for (const slug of SLUGS) expect(radio(slug).disabled).toBe(true);
+  });
+
   it("keeps rows and the back link at least 44px high", () => {
     setup();
     for (const l of document.querySelectorAll("label"))

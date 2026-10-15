@@ -5,6 +5,7 @@
     "choose": "Choose start",
     "change": "Change start",
     "deadline": "Choose by: {deadline} (Vietnam time).",
+    "lockedSince": "Locked since {lockedAt} (Vietnam time).",
     "auto": "If your team has not chosen by then, a start is assigned automatically."
   },
   "picker": {
@@ -13,6 +14,7 @@
     "distance": "{km, number} km",
     "finish": "Finish",
     "readOnly": "Only the captain can choose the start.",
+    "lockedSince": "The start is locked since {lockedAt} (Vietnam time). It can no longer be changed.",
     "back": "Back to My Team",
     "confirm": "Confirm",
     "saved": "Start saved: {name}. You can change it until {lockAt} (Vietnam time).",

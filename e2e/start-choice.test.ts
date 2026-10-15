@@ -105,3 +105,51 @@ test("the captain chooses and changes the start; a member sees it on My Team", a
   await captain.context.close();
   await member.context.close();
 });
+
+test("after the deadline the captain sees the start locked with no way to change it", async ({
+  browser,
+}) => {
+  const captain = await signUp(browser, "locked-captain");
+  const tournament = await prisma.tournament.create({
+    data: {
+      organizerId: captain.user.id,
+      name: `${run}-locked`,
+      description: "e2e",
+      status: "PUBLISHED",
+      seasonStartAt: new Date("2020-01-01T06:00:00+07:00"),
+      seasonEndAt: new Date("2099-12-01T00:00:00+07:00"),
+      routeId: "route01",
+      routeDistanceM: 80_000,
+    },
+  });
+  const team = await prisma.team.create({
+    data: {
+      tournamentId: tournament.id,
+      name: "Cá Voi",
+      emblemKey: "dolphin",
+      memberLimit: 5,
+      captainUserId: captain.user.id,
+      startDestination: "hon_sup",
+    },
+  });
+  await prisma.teamMember.create({
+    data: {
+      teamId: team.id,
+      tournamentId: tournament.id,
+      userId: captain.user.id,
+      status: "ACTIVE",
+    },
+  });
+
+  const page = captain.page;
+  await page.goto("/team");
+  await expect(page.getByText("Hòn Sụp")).toBeVisible();
+  await expect(page.getByText(/Đã khóa từ/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /điểm xuất phát/ })).toHaveCount(0);
+  await page.goto("/team/start");
+  await expect(page.getByText(/đã khóa từ/)).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Hòn Sụp/ })).toBeChecked();
+  await expect(page.getByRole("button", { name: "Xác nhận" })).toHaveCount(0);
+
+  await captain.context.close();
+});

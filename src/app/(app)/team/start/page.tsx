@@ -25,6 +25,7 @@ export default async function TeamStartPage() {
         currentSlug={team.startDestination}
         routeDistanceKm={tournament.routeDistanceM / 1000}
         lockAtIso={startLockAt(tournament).toISOString()}
+        locked={locked}
         readOnly={team.captainUserId !== user.id || locked}
       />
     </main>

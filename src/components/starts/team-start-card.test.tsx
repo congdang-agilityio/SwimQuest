@@ -59,5 +59,11 @@ describe("TeamStartCard", () => {
     expect(screen.getByText(routesVi.route01.hon_sup)).toBeTruthy();
     expect(screen.queryByRole("link")).toBeNull();
     expect(screen.queryByText(startsVi.card.auto)).toBeNull();
+    expect(screen.getByText(/Đã khóa từ 06:00 01\/11\/2098/)).toBeTruthy();
+  });
+
+  it("shows no lock note before the lock", () => {
+    setup({ startNameKey: KEY });
+    expect(screen.queryByText(/Đã khóa từ/)).toBeNull();
   });
 });
