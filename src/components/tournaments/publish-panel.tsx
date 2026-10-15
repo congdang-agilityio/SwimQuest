@@ -48,14 +48,13 @@ export function PublishPanel({ tournamentId }: { tournamentId: string }) {
       } else if (res.status === 422) {
         const body = await res.json().catch(() => null);
         const list: unknown = body?.error?.issues;
-        setIssues(
-          Array.isArray(list)
-            ? list.filter(
-                (i): i is Issue => typeof i?.code === "string" && typeof i?.field === "string",
-              )
-            : [],
-        );
-        if (!Array.isArray(list) || list.length === 0) setError("failed");
+        const valid = Array.isArray(list)
+          ? list.filter(
+              (i): i is Issue => typeof i?.code === "string" && typeof i?.field === "string",
+            )
+          : [];
+        setIssues(valid);
+        if (valid.length === 0) setError("failed");
         setConfirming(false);
       } else {
         setError("failed");

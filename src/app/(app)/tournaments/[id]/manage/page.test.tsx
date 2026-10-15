@@ -99,4 +99,14 @@ describe("organizer manage page invite link origin", () => {
     expect(screen.queryByTestId("invite")).toBeNull();
     expect(error).not.toHaveBeenCalled();
   });
+
+  it("shows the publish panel for a draft only", async () => {
+    state.tournament = published("DRAFT");
+    await renderPage();
+    expect(screen.getByTestId("publish-panel")).toBeTruthy();
+    cleanup();
+    state.tournament = published();
+    await renderPage();
+    expect(screen.queryByTestId("publish-panel")).toBeNull();
+  });
 });

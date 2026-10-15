@@ -64,6 +64,33 @@ describe("PublishPanel", () => {
     expect(refresh).not.toHaveBeenCalled();
   });
 
+  it("shows a generic item linking to the details for an unknown issue code", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        json(422, {
+          error: { code: "PUBLISH_INVALID", issues: [{ code: "SOMETHING_NEW", field: "foo" }] },
+        }),
+      ),
+    );
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Công bố" }));
+    fireEvent.click(screen.getByRole("button", { name: "Đồng ý, công bố" }));
+    const item = await screen.findByRole("link", { name: "Có mục cần sửa." });
+    expect(item.getAttribute("href")).toBe("#season");
+  });
+
+  it("shows the failed message when a 422 holds only malformed issues", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => json(422, { error: { code: "PUBLISH_INVALID", issues: [{ code: 1 }, null] } })),
+    );
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Công bố" }));
+    fireEvent.click(screen.getByRole("button", { name: "Đồng ý, công bố" }));
+    expect(await screen.findByText("Công bố không thành công. Vui lòng thử lại sau.")).toBeTruthy();
+  });
+
   it("sends one request for a double click, disables the button, and refreshes on success", async () => {
     let resolve!: (r: Response) => void;
     const fetchMock = vi.fn(() => new Promise<Response>((r) => (resolve = r)));
