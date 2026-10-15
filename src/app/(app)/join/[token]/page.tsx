@@ -7,8 +7,16 @@ import { requireUser } from "@/server/auth/current-user";
 import { getJoinView } from "@/server/join/join-view";
 
 /** What an invite link opens: tournament summary plus the team picker, or a closed/invalid state. */
-export default async function JoinPage({ params }: { params: Promise<{ token: string }> }) {
+export default async function JoinPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ token: string }>;
+  searchParams: Promise<{ team?: string | string[] }>;
+}) {
   const { token } = await params;
+  const { team: teamParam } = await searchParams;
+  const requestedTeam = typeof teamParam === "string" ? teamParam : null;
   const user = await requireUser(
     (await headers()).get(NEXT_PATH_HEADER) ?? `/join/${encodeURIComponent(token)}`,
   );
@@ -29,6 +37,8 @@ export default async function JoinPage({ params }: { params: Promise<{ token: st
     emblemKey: x.emblemKey,
     freePlaces: Math.max(0, x.memberLimit - x.memberCount),
   }));
+  // Only a team of this tournament can be preselected; anything else is ignored.
+  const preselectedId = freeTeams.find((x) => x.id === requestedTeam)?.id ?? null;
   return (
     <main>
       <h1>{t("title")}</h1>
@@ -37,7 +47,7 @@ export default async function JoinPage({ params }: { params: Promise<{ token: st
           <strong>{t("closedTitle")}.</strong> {t("closedBody")}
         </p>
       ) : (
-        <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} />
+        <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} preselectedId={preselectedId} />
       )}
       <TournamentSummary
         name={tournament.name}

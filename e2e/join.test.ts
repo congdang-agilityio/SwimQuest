@@ -101,4 +101,22 @@ test("a new player signs up from the invite link, joins a team and sees it again
   await expect(player.getByText("Bạn đang ở đội Rùa Biển")).toBeVisible();
   await expect(player.getByRole("button", { name: /Tham gia/ })).toHaveCount(0);
   await context.close();
+
+  // A link with ?team= preselects that team; an unknown id is ignored.
+  const { id: teamId } = await prisma.team.findFirstOrThrow({
+    where: { tournamentId: id },
+    select: { id: true },
+  });
+  const ctx2 = await browser.newContext({ baseURL });
+  const second = await ctx2.newPage();
+  await second.goto("/signup");
+  await fillSignUp(second, `join-player2-${p}-${stamp}@example.com`, "Người chơi hai");
+  await second.waitForURL((url) => url.pathname === "/");
+  await second.goto(`${link}?team=nope`);
+  await expect(second.getByText("Đã chọn")).toHaveCount(0);
+  await second.goto(`${link}?team=${teamId}`);
+  await expect(second.getByText("Đã chọn")).toBeVisible();
+  await second.getByRole("button", { name: "Tham gia Rùa Biển" }).click();
+  await second.waitForURL((url) => url.pathname === "/team");
+  await ctx2.close();
 });
