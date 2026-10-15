@@ -58,8 +58,11 @@ function readPoints(trks: Node[]): TrackPoint[] {
   const points: TrackPoint[] = [];
   for (const seg of trks.flatMap((t) => arr(t.trkseg))) {
     for (const p of arr(seg.trkpt)) {
-      const lat = Number(p["@_lat"]);
-      const lon = Number(p["@_lon"]);
+      const latRaw = str(p["@_lat"]);
+      const lonRaw = str(p["@_lon"]);
+      if (!latRaw || !lonRaw) continue;
+      const lat = Number(latRaw);
+      const lon = Number(lonRaw);
       if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180)
         points.push({ lat, lon, time: date(p.time) });
     }
