@@ -15,7 +15,13 @@ export type PublishResult =
   | { ok: false; reason: "PUBLISH_INVALID"; issues: PublishIssue[] };
 
 /** The shareable invite link secret: 32 random bytes, URL-safe. Never log it. */
-const newInviteToken = () => randomBytes(32).toString("base64url");
+export const newInviteToken = () => randomBytes(32).toString("base64url");
+
+/** A tournament that is past DRAFT but has no invite token cannot be published (409). */
+export class PublishError extends Error {
+  readonly status = 409;
+  readonly code = "NOT_DRAFT";
+}
 
 type Stored = { id: string; status: string; publishedAt: Date | null; inviteToken: string | null };
 
@@ -42,6 +48,7 @@ export async function publishTournament(userId: string, id: string): Promise<Pub
   const tournament = await requireOrganizer(userId, id);
   const already = published(tournament);
   if (already) return already;
+  if (tournament.status !== "DRAFT") throw new PublishError("NOT_DRAFT");
 
   const teams = await db.team.findMany({
     where: { tournamentId: tournament.id },
@@ -59,6 +66,6 @@ export async function publishTournament(userId: string, id: string): Promise<Pub
     select: { id: true, status: true, publishedAt: true, inviteToken: true },
   });
   const result = stored && published(stored);
-  if (!result) throw new Error("Tournament was not published");
+  if (!result) throw new PublishError("NOT_DRAFT");
   return result;
 }

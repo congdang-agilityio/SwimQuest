@@ -23,6 +23,7 @@ export type ApiErrorCode =
   | "UNREADABLE_FILE"
   | "NO_DISTANCE"
   | "JOIN_CLOSED"
+  | "LINK_OFF"
   | "TEAM_FULL"
   | "ALREADY_MEMBER"
   | "SERVICE_UNAVAILABLE"
@@ -50,6 +51,7 @@ const messages: Record<ApiErrorCode, string> = {
   UNREADABLE_FILE: "The file has no readable activity data. Export it again as GPX or FIT.",
   NO_DISTANCE: "The file has no swim distance. Export it as FIT or with distance from your app.",
   JOIN_CLOSED: "Joining this tournament is closed.",
+  LINK_OFF: "This invite link has been switched off.",
   TEAM_FULL: "This team is full. Choose another team.",
   ALREADY_MEMBER: "You are already in a team of this tournament.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",

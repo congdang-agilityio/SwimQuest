@@ -124,6 +124,20 @@ describe("publishTournament", () => {
     await expect(publishTournament(organizer.id, "missing")).rejects.toBeInstanceOf(NotFoundError);
   });
 
+  it("refuses a non-draft tournament without an invite token with a typed NOT_DRAFT 409", async () => {
+    const { organizer, tournament } = await setup();
+    await db.tournament.update({
+      where: { id: tournament.id },
+      data: { status: "PUBLISHED", publishedAt: new Date() },
+    });
+
+    await expect(publishTournament(organizer.id, tournament.id)).rejects.toEqual(
+      expect.objectContaining({ code: "NOT_DRAFT", status: 409 }),
+    );
+    const stored = await db.tournament.findUniqueOrThrow({ where: { id: tournament.id } });
+    expect(stored.inviteToken).toBeNull();
+  });
+
   it("gives each tournament its own token", async () => {
     const { organizer, tournament } = await setup();
     const other = await draft(organizer.id);

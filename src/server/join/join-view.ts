@@ -17,6 +17,8 @@ export type JoinView = {
   })[];
   myTeam: JoinTeamSummary | null;
   joiningOpen: boolean;
+  /** "OFF" when the organizer switched the link off: nobody can join through it (S-34). */
+  linkState: "ON" | "OFF";
 };
 
 /** Invite tokens are 43-character base64url strings; anything far off is not looked up. */
@@ -41,7 +43,8 @@ export async function findMyTeam(userId: string, tournamentId: string, client: C
  * What an invite link opens (story S-07, FR-28): the tournament summary, its teams with active
  * member counts and full flags, the player's current team and whether joining is open (BR-33,
  * `isJoiningOpen` at `now`). Unknown or malformed tokens return null. A draft or finished
- * tournament still shows, with `joiningOpen: false`.
+ * tournament still shows, with `joiningOpen: false`. A switched-off link shows `linkState: "OFF"`
+ * and `joiningOpen: false`; a replaced (old) token is unknown.
  */
 export async function getJoinView(
   userId: string,
@@ -73,6 +76,7 @@ export async function getJoinView(
       return { id, name, emblemKey, description, memberCount, memberLimit, full };
     }),
     myTeam,
-    joiningOpen: isJoiningOpen(t, now),
+    joiningOpen: t.inviteEnabled && isJoiningOpen(t, now),
+    linkState: t.inviteEnabled ? "ON" : "OFF",
   };
 }
