@@ -75,7 +75,13 @@ export function parseGpx(buffer: Buffer): ParsedSwim {
   if (!xml.trim() || xml.includes("\u0000") || xml.includes("�")) unreadable("Not a text file");
   if (/<!DOCTYPE|<!ENTITY/i.test(xml)) unreadable("DOCTYPE and entities are not allowed");
   if (XMLValidator.validate(xml) !== true) unreadable("Malformed XML");
-  const root = (parser.parse(xml) as Node).gpx;
+  let parsed: Node;
+  try {
+    parsed = parser.parse(xml) as Node;
+  } catch {
+    return unreadable("XML cannot be read safely");
+  }
+  const root = parsed.gpx;
   if (!isNode(root)) return unreadable("Not a GPX file");
 
   const trks = arr(root.trk);
