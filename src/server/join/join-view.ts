@@ -8,15 +8,9 @@ export type JoinTeamSummary = Pick<Team, "id" | "name" | "emblemKey">;
 export type JoinView = {
   tournament: Pick<
     Tournament,
-    | "id"
-    | "name"
-    | "description"
-    | "seasonStartAt"
-    | "seasonEndAt"
-    | "eligibilityNotes"
-    | "routeId"
-    | "routeDistanceM"
-  > & { status: TournamentStatus };
+    "id" | "name" | "description" | "seasonStartAt" | "seasonEndAt" | "eligibilityNotes"
+  > &
+    Pick<Tournament, "routeId" | "routeDistanceM"> & { status: TournamentStatus };
   teams: (Pick<Team, "id" | "name" | "emblemKey" | "description" | "memberLimit"> & {
     memberCount: number;
     full: boolean;
