@@ -54,6 +54,44 @@ describe("database baseline schema", () => {
     await expect(duplicate).rejects.toMatchObject({ code: "P2002" });
   });
 
+  it("lower-cases emails written by createMany and createManyAndReturn", async () => {
+    await db.user.createMany({
+      data: [{ email: "Bulk.One@Example.com", passwordHash: "hash", displayName: "One" }],
+    });
+    const [two] = await db.user.createManyAndReturn({
+      data: [{ email: "Bulk.Two@Example.com", passwordHash: "hash", displayName: "Two" }],
+    });
+
+    expect(two.email).toBe("bulk.two@example.com");
+    const emails = (await db.user.findMany({ orderBy: { email: "asc" } })).map((u) => u.email);
+    expect(emails).toEqual(["bulk.one@example.com", "bulk.two@example.com"]);
+  });
+
+  it("lower-cases emails written by update with set and by updateMany", async () => {
+    const user = await db.user.create({
+      data: { email: "first@example.com", passwordHash: "hash", displayName: "First" },
+    });
+
+    const updated = await db.user.update({
+      where: { id: user.id },
+      data: { email: { set: "Second@Example.com" } },
+    });
+    expect(updated.email).toBe("second@example.com");
+
+    await db.user.updateMany({ where: { id: user.id }, data: { email: "Third@Example.com" } });
+    await expect(db.user.findUnique({ where: { id: user.id } })).resolves.toMatchObject({
+      email: "third@example.com",
+    });
+  });
+
+  it("rejects a mixed-case email written outside the client extension", async () => {
+    const insert = db.$executeRaw`
+      INSERT INTO "User" ("id", "email", "passwordHash", "displayName", "updatedAt")
+      VALUES ('raw-user', 'Raw@Example.com', 'hash', 'Raw', now())`;
+
+    await expect(insert).rejects.toThrow(/User_email_lowercase_check/);
+  });
+
   it("creates a session for a user and reads it back with its user", async () => {
     const user = await db.user.create({
       data: { email: "session@example.com", passwordHash: "hash", displayName: "Session" },
