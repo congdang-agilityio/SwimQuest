@@ -53,6 +53,18 @@ describe("parseGpx", () => {
     expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("NO_DISTANCE");
   });
 
+  it("skips track points with blank or missing lat/lon instead of reading them as (0,0)", () => {
+    const xml = `<gpx><trk><type>swimming</type><trkseg>
+      <trkpt lat="10" lon="106"><time>2026-06-01T07:00:00Z</time></trkpt>
+      <trkpt lat="" lon=""><time>2026-06-01T07:10:00Z</time></trkpt>
+      <trkpt lat=" " lon="106"><time>2026-06-01T07:15:00Z</time></trkpt>
+      <trkpt lon="106"><time>2026-06-01T07:20:00Z</time></trkpt>
+      <trkpt lat="10.001" lon="106"><time>2026-06-01T07:30:00Z</time></trkpt></trkseg></trk></gpx>`;
+    const s = parseGpx(Buffer.from(xml));
+    expect(s.track).toHaveLength(2);
+    expect(s.distanceM).toBeLessThan(200);
+  });
+
   it("rejects a GPX with no track (metadata only) as UNREADABLE_FILE", () => {
     const xml = `<gpx><metadata><time>2026-06-01T07:00:00Z</time></metadata></gpx>`;
     expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("UNREADABLE_FILE");
