@@ -1,10 +1,12 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { TeamList } from "@/components/teams/team-list";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { listTeamsWithCounts } from "@/server/teams/manage";
 
 /** Organizer page: only the organizer sees it; anyone else gets the not-found page (S-04 AC 5). */
 export default async function ManageTournamentPage({
@@ -18,6 +20,7 @@ export default async function ManageTournamentPage({
     if (err instanceof ForbiddenError || err instanceof NotFoundError) notFound();
     throw err;
   });
+  const { teams, capacity } = await listTeamsWithCounts(tournament.id);
   const t = await getTranslations("organizer");
   const when = (d: Date) => {
     const { date, time } = utcToVnParts(d);
@@ -33,6 +36,12 @@ export default async function ManageTournamentPage({
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
         {t("manage.vietnamTime")})
       </p>
+      <TeamList
+        tournamentId={tournament.id}
+        teams={teams}
+        capacity={capacity}
+        isDraft={tournament.status === "DRAFT"}
+      />
     </main>
   );
 }

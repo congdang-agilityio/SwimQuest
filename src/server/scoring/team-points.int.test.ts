@@ -82,7 +82,7 @@ describe("player and team points", () => {
     expect(await getPlayerTotals(t.id, [])).toEqual(new Map());
   });
 
-  it("team points are the sum of current active members, other tournaments excluded", async () => {
+  it("team points are the sum of the entries stored on the team, other tournaments excluded", async () => {
     const { t, a, b } = await scenario();
     expect(await getTeamsPoints(t.id)).toEqual(
       new Map([
@@ -94,12 +94,28 @@ describe("player and team points", () => {
     expect(await getTeamPoints(t.id, "missing")).toBe(0);
   });
 
-  it("points follow the member after a move, and left members stop counting", async () => {
+  it("entries of members who are no longer active still count for the team stored on them", async () => {
     const { t, a, b, u1, u2 } = await scenario();
     await db.teamMember.updateMany({ where: { userId: u1.id }, data: { status: "LEFT" } });
     await db.teamMember.create({ data: { teamId: b.id, tournamentId: t.id, userId: u1.id } });
     await db.teamMember.updateMany({ where: { userId: u2.id }, data: { status: "REMOVED" } });
-    expect(await getTeamPoints(t.id, a.id)).toBe(0);
+    expect(await getTeamPoints(t.id, a.id)).toBe(180);
+    expect(await getTeamPoints(t.id, b.id)).toBe(70);
+    expect(await getTeamsPoints(t.id)).toEqual(
+      new Map([
+        [a.id, 180],
+        [b.id, 70],
+      ]),
+    );
+  });
+
+  it("re-attributed entries count for their new team", async () => {
+    const { t, a, b, u1 } = await scenario();
+    await db.pointsEntry.updateMany({
+      where: { tournamentId: t.id, userId: u1.id },
+      data: { teamId: b.id },
+    });
+    expect(await getTeamPoints(t.id, a.id)).toBe(30);
     expect(await getTeamPoints(t.id, b.id)).toBe(220);
   });
 });

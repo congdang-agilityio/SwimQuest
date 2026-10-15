@@ -23,23 +23,22 @@ export async function getPlayerTotals(
 }
 
 /**
- * Points of every team in the tournament (0 for an empty team). Points follow the member:
- * summed over the team's current ACTIVE members, whatever team the entry was earned for.
+ * Points of every team in the tournament (0 for a team without entries). Each entry counts for
+ * the team stored on it (`PointsEntry.teamId`), so the swims of a member who is no longer
+ * active stay with the team, and a move re-attributes a player's entries to the new team.
  */
 export async function getTeamsPoints(tournamentId: string): Promise<Map<string, number>> {
   const rows = await db.$queryRaw<{ teamId: string; points: bigint }[]>`
     SELECT t."id" AS "teamId", COALESCE(SUM(p."points"), 0) AS "points"
     FROM "Team" t
-    LEFT JOIN "TeamMember" m
-      ON m."teamId" = t."id" AND m."tournamentId" = t."tournamentId" AND m."status" = 'ACTIVE'
     LEFT JOIN "PointsEntry" p
-      ON p."userId" = m."userId" AND p."tournamentId" = t."tournamentId"
+      ON p."teamId" = t."id" AND p."tournamentId" = t."tournamentId"
     WHERE t."tournamentId" = ${tournamentId}
     GROUP BY t."id"`;
   return new Map(rows.map((row) => [row.teamId, Number(row.points)]));
 }
 
-/** Points of one team (0 when the team has no scoring members or does not exist). */
+/** Points of one team (0 when the team has no entries or does not exist). */
 export async function getTeamPoints(tournamentId: string, teamId: string): Promise<number> {
   return (await getTeamsPoints(tournamentId)).get(teamId) ?? 0;
 }
