@@ -22,25 +22,30 @@ enum ActorType {
 }
 
 model User {
-  id              String         @id @default(cuid())
+  id               String         @id @default(cuid())
   /// Always stored lower-cased (normalized by the client in src/server/db.ts).
-  email           String         @unique
-  passwordHash    String
-  displayName     String
-  status          UserStatus     @default(ACTIVE)
-  isPlatformAdmin Boolean        @default(false)
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  sessions        Session[]
-  auditEvents     AuditEvent[]
-  organized       Tournament[]   @relation("OrganizedTournaments")
-  captainOf       Team[]         @relation("CaptainedTeams")
-  memberships     TeamMember[]
-  swims           Swim[]
-  swimResults     SwimResult[]
-  pointsEntries   PointsEntry[]
-  seenMoments     SeenMoment[]
-  weeklyResults   WeeklyResult[]
+  email            String         @unique
+  passwordHash     String
+  displayName      String
+  status           UserStatus     @default(ACTIVE)
+  isPlatformAdmin  Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  sessions         Session[]
+  auditEvents      AuditEvent[]
+  organized        Tournament[]   @relation("OrganizedTournaments")
+  captainOf        Team[]         @relation("CaptainedTeams")
+  memberships      TeamMember[]
+  swims            Swim[]
+  swimResults      SwimResult[]
+  pointsEntries    PointsEntry[]
+  seenMoments      SeenMoment[]
+  weeklyResults    WeeklyResult[]
+  decidedResults   SwimResult[]   @relation("SwimResultDecisions")
+  disputes         Dispute[]      @relation("DisputeOwner")
+  decidedDisputes  Dispute[]      @relation("DisputeDecisions")
+  helperOf         ReviewHelper[] @relation("ReviewHelperUser")
+  appointedHelpers ReviewHelper[] @relation("ReviewHelperAppointer")
 }
 
 model Session {
@@ -91,6 +96,14 @@ enum TeamMemberStatus {
   ACTIVE
   LEFT
   REMOVED
+}
+
+enum TeamMemberEndReason {
+  LEFT
+  SWITCHED
+  MOVED
+  REMOVED_BEFORE_START
+  REMOVED_AFTER_START
 }
 
 enum SwimTypeAllowed {
@@ -166,6 +179,7 @@ model Tournament {
   pointsEntries              PointsEntry[]
   weeklyResults              WeeklyResult[]
   weekSettlements            WeekSettlement[]
+  reviewHelpers              ReviewHelper[]
 
   @@index([organizerId])
 }
@@ -204,16 +218,19 @@ model Team {
 }
 
 model TeamMember {
-  id           String           @id @default(cuid())
+  id           String               @id @default(cuid())
   teamId       String
   /// Always the team's tournament (enforced by the composite foreign key).
   tournamentId String
-  team         Team             @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
-  tournament   Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  team         Team                 @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
+  tournament   Tournament           @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   userId       String
-  user         User             @relation(fields: [userId], references: [id])
-  status       TeamMemberStatus @default(ACTIVE)
-  joinedAt     DateTime         @default(now()) @db.Timestamptz(3)
+  user         User                 @relation(fields: [userId], references: [id])
+  status       TeamMemberStatus     @default(ACTIVE)
+  joinedAt     DateTime             @default(now()) @db.Timestamptz(3)
+  /// Set together with endReason when the membership stops being ACTIVE.
+  endedAt      DateTime?            @db.Timestamptz(3)
+  endReason    TeamMemberEndReason?
 
   /// One active team per user per tournament.
   @@unique([tournamentId, userId], map: "TeamMember_one_active_per_tournament", where: raw("\"status\" = 'ACTIVE'"))
@@ -294,9 +311,16 @@ model SwimResult {
   /// JSON array of reason codes.
   reasons       Json
   countedM      Int              @default(0)
+  /// Latest review decision by an organizer or review helper.
+  decidedById   String?
+  decidedBy     User?            @relation("SwimResultDecisions", fields: [decidedById], references: [id], onDelete: SetNull)
+  decidedAt     DateTime?        @db.Timestamptz(3)
+  /// Internal reason shown to the swim owner only; never public.
+  decisionNote  String?
   createdAt     DateTime         @default(now()) @db.Timestamptz(3)
   updatedAt     DateTime         @updatedAt @db.Timestamptz(3)
   pointsEntries PointsEntry[]
+  disputes      Dispute[]
 
   @@unique([swimId, tournamentId])
   @@index([tournamentId, status])
@@ -383,4 +407,50 @@ model WeekSettlement {
   settledAt    DateTime   @default(now()) @db.Timestamptz(3)
 
   @@unique([tournamentId, weekStart])
+}
+
+enum DisputeStatus {
+  OPEN
+  ACCEPTED
+  REJECTED
+}
+
+/// A player's dispute of a swim result (which is already per tournament).
+model Dispute {
+  id             String           @id @default(cuid())
+  swimResultId   String
+  swimResult     SwimResult       @relation(fields: [swimResultId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User             @relation("DisputeOwner", fields: [userId], references: [id])
+  reason         String
+  status         DisputeStatus    @default(OPEN)
+  /// The result's status before the dispute; restored when the dispute is rejected.
+  previousStatus SwimResultStatus
+  decidedById    String?
+  decidedBy      User?            @relation("DisputeDecisions", fields: [decidedById], references: [id], onDelete: SetNull)
+  decidedAt      DateTime?        @db.Timestamptz(3)
+  /// Internal reason shown to the swim owner only; never public.
+  decisionNote   String?
+  createdAt      DateTime         @default(now()) @db.Timestamptz(3)
+
+  /// One open dispute per swim result.
+  @@unique([swimResultId], map: "Dispute_one_open_per_result", where: raw("\"status\" = 'OPEN'"))
+  @@index([swimResultId])
+}
+
+/// A player appointed by the organizer to help review swims in one tournament.
+model ReviewHelper {
+  id            String     @id @default(cuid())
+  tournamentId  String
+  tournament    Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User       @relation("ReviewHelperUser", fields: [userId], references: [id])
+  appointedById String
+  appointedBy   User       @relation("ReviewHelperAppointer", fields: [appointedById], references: [id])
+  createdAt     DateTime   @default(now()) @db.Timestamptz(3)
+  removedAt     DateTime?  @db.Timestamptz(3)
+
+  /// One active helper row per player and tournament.
+  @@unique([tournamentId, userId], map: "ReviewHelper_one_active_per_tournament", where: raw("\"removedAt\" IS NULL"))
+  @@index([userId])
 }
