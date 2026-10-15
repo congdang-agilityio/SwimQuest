@@ -52,6 +52,20 @@ describe("swimSettingsSchema", () => {
     });
   });
 
+  it("refuses positive distances below 0.01 km instead of storing 0 m", () => {
+    for (const dailyLimitKm of ["0.00000001", "0.000000001", "0.0000000049", 1e-9, 0.004]) {
+      expect(errorsOf({ ...valid, dailyLimitKm })).toEqual({
+        dailyLimitKm: "DISTANCE_TOO_PRECISE",
+      });
+    }
+  });
+
+  it("accepts 0.01 km as 10 m", () => {
+    expect(swimSettingsSchema.parse({ ...valid, dailyLimitKm: "0.01" })).toMatchObject({
+      dailyLimitM: 10,
+    });
+  });
+
   it("refuses an unknown swim type and unknown fields", () => {
     expect(errorsOf({ ...valid, swimTypeAllowed: "LAKE" })).toEqual({
       swimTypeAllowed: "SWIM_TYPE_INVALID",
