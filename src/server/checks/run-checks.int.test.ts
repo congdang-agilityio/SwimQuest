@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db";
 import { createSwimFromUpload } from "@/server/swims/create-from-upload";
 import { buildFit } from "@/server/swims/parse/__tests__/fit-builder";
@@ -88,7 +88,12 @@ const resultsOf = (swimId: string) =>
   db.swimResult.findMany({ where: { swimId }, orderBy: { createdAt: "asc" } });
 
 describe("runChecks on upload", () => {
-  beforeEach(clean);
+  beforeEach(async () => {
+    // The seasons below are in 2026; pin the clock inside them so tests do not rot.
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-06-01T00:00:00+07:00") });
+    await clean();
+  });
+  afterEach(() => vi.useRealTimers());
   afterAll(async () => {
     await clean();
     await db.$disconnect();

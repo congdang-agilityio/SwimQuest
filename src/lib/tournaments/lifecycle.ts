@@ -6,12 +6,32 @@ export type LifecycleTournament = {
   seasonStartAt: Date;
   seasonEndAt: Date;
   startChoiceDeadlineAt: Date | null;
+  /** Days after seasonEndAt during which late uploads are still accepted (default 3). */
+  lateUploadDays?: number;
 };
 
 /** Status derived from time: a PUBLISHED tournament is ACTIVE from seasonStartAt (inclusive). */
 export function effectiveStatus(t: LifecycleTournament, now: Date): TournamentStatus {
+  if (t.status === "ARCHIVED") return "ARCHIVED";
+  if (t.status === "DRAFT") return "DRAFT";
+  if (now.getTime() >= t.seasonEndAt.getTime()) return "COMPLETED";
   if (t.status === "PUBLISHED" && now.getTime() >= t.seasonStartAt.getTime()) return "ACTIVE";
   return t.status;
+}
+
+/** End of the late-upload window: seasonEndAt + lateUploadDays. */
+export function uploadWindowEndsAt(t: LifecycleTournament): Date {
+  return new Date(t.seasonEndAt.getTime() + (t.lateUploadDays ?? 3) * 86_400_000);
+}
+
+/** Results are final from the end of the upload window (inclusive). */
+export function isResultsFinal(t: LifecycleTournament, now: Date): boolean {
+  return now.getTime() >= uploadWindowEndsAt(t).getTime();
+}
+
+/** A tournament can be archived only once it is COMPLETED. */
+export function isArchivable(t: LifecycleTournament, now: Date): boolean {
+  return effectiveStatus(t, now) === "COMPLETED";
 }
 
 export function startLockAt(t: LifecycleTournament): Date {
