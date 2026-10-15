@@ -1,0 +1,22 @@
+{
+  "title": "Result per tournament",
+  "noTournament": "Your swim was saved, but it does not count in any tournament yet. Join a tournament to have your swims counted.",
+  "status": {
+    "VERIFIED": "Verified",
+    "FLAGGED": "Flagged - waiting for review",
+    "DUPLICATE": "Duplicate",
+    "REJECTED": "Not counted",
+    "DISPUTED": "Under dispute",
+    "REVOKED": "Result withdrawn",
+    "RULE_MISSED": "Does not meet the tournament rules"
+  },
+  "reasons": {
+    "NOT_A_SWIM": "The file is not a swimming activity",
+    "NO_DISTANCE": "The swim has no usable distance",
+    "OUTSIDE_SEASON": "Started outside the season ({start} to {end})",
+    "PACE_TOO_FAST": "Pace faster than this tournament's fastest realistic pace ({pace} / 100 m)",
+    "PACE_TOO_SLOW": "Pace slower than this tournament's slowest realistic pace ({pace} / 100 m)",
+    "DISTANCE_TOO_LONG": "Distance above this tournament's longest realistic swim ({distance})",
+    "DUPLICATE_OF_EARLIER_SWIM": "Same as, or overlapping, a swim you uploaded earlier"
+  }
+}

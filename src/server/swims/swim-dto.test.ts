@@ -1,6 +1,22 @@
 import { describe, expect, it } from "vitest";
 import { toOwnerSwimDto, type SwimForDto } from "./swim-dto";
 
+const tournament = (name: string) => ({
+  name,
+  seasonStartAt: new Date("2026-05-31T17:00:00Z"),
+  seasonEndAt: new Date("2026-08-31T16:59:00Z"),
+  fastestPaceSecPer100m: 65,
+  slowestPaceSecPer100m: 300,
+  longestRealisticSwimM: 30000,
+});
+const rules = {
+  seasonStartAt: "2026-05-31T17:00:00.000Z",
+  seasonEndAt: "2026-08-31T16:59:00.000Z",
+  fastestPaceS: 65,
+  slowestPaceS: 300,
+  longestSwimM: 30000,
+};
+
 const swim = (over: Partial<SwimForDto> = {}): SwimForDto => ({
   id: "s1",
   userId: "u1",
@@ -40,19 +56,30 @@ describe("toOwnerSwimDto", () => {
 
   it("lists each tournament's status and reason codes, and ignores malformed reasons", () => {
     const results = [
-      { tournamentId: "t1", status: "VERIFIED" as const, reasons: [], tournament: { name: "One" } },
+      {
+        tournamentId: "t1",
+        status: "VERIFIED" as const,
+        reasons: [],
+        tournament: tournament("One"),
+      },
       {
         tournamentId: "t2",
         status: "FLAGGED" as const,
         reasons: ["PACE_TOO_SLOW", 7, null],
-        tournament: { name: "Two" },
+        tournament: tournament("Two"),
       },
-      { tournamentId: "t3", status: "FLAGGED" as const, reasons: "x", tournament: { name: "3" } },
+      { tournamentId: "t3", status: "FLAGGED" as const, reasons: "x", tournament: tournament("3") },
     ];
     expect(toOwnerSwimDto({ ...swim(), results }).results).toEqual([
-      { tournamentId: "t1", tournamentName: "One", status: "VERIFIED", reasons: [] },
-      { tournamentId: "t2", tournamentName: "Two", status: "FLAGGED", reasons: ["PACE_TOO_SLOW"] },
-      { tournamentId: "t3", tournamentName: "3", status: "FLAGGED", reasons: [] },
+      { tournamentId: "t1", tournamentName: "One", status: "VERIFIED", reasons: [], rules },
+      {
+        tournamentId: "t2",
+        tournamentName: "Two",
+        status: "FLAGGED",
+        reasons: ["PACE_TOO_SLOW"],
+        rules,
+      },
+      { tournamentId: "t3", tournamentName: "3", status: "FLAGGED", reasons: [], rules },
     ]);
   });
 

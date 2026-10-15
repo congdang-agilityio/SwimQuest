@@ -100,7 +100,13 @@ describe("runChecks on upload", () => {
       reasons: [],
     });
     expect(toOwnerSwimDto(swim).results).toEqual([
-      { tournamentId: t.id, tournamentName: "One", status: "VERIFIED", reasons: [] },
+      {
+        tournamentId: t.id,
+        tournamentName: "One",
+        status: "VERIFIED",
+        reasons: [],
+        rules: expect.any(Object),
+      },
     ]);
   });
 
@@ -187,6 +193,7 @@ describe("runChecks on upload", () => {
       tournamentName: "Four",
       status: "FLAGGED",
       reasons: ["PACE_TOO_SLOW"],
+      rules: expect.any(Object),
     });
   });
 
