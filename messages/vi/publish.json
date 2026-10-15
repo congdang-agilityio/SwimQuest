@@ -1,0 +1,16 @@
+{
+  "preview": {
+    "title": "Xem trước",
+    "back": "Quay lại quản lý giải đấu",
+    "season": "Mùa giải",
+    "seasonStart": "Bắt đầu",
+    "seasonEnd": "Kết thúc",
+    "vietnamTime": "Giờ Việt Nam, UTC+7",
+    "route": "Lộ trình",
+    "distance": "{km} km",
+    "teams": "Các đội",
+    "noTeams": "Chưa có đội nào.",
+    "placesLeft": "{count, plural, other {Còn # chỗ}}",
+    "full": "đã đầy"
+  }
+}
