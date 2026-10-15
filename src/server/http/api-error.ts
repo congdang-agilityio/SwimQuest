@@ -37,11 +37,6 @@ export function apiError(
   fields?: Record<string, string>,
   issues?: readonly object[],
 ): NextResponse {
-  const error = {
-    code,
-    message: messages[code],
-    ...(fields && { fields }),
-    ...(issues && { issues }),
-  };
+  const error = { code, message: messages[code], fields, issues }; // undefined keys are not serialized
   return NextResponse.json({ error }, { status, headers: { "cache-control": "no-store" } });
 }
