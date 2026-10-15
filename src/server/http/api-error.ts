@@ -22,6 +22,9 @@ export type ApiErrorCode =
   | "UNSUPPORTED_FILE"
   | "UNREADABLE_FILE"
   | "NO_DISTANCE"
+  | "JOIN_CLOSED"
+  | "TEAM_FULL"
+  | "ALREADY_MEMBER"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
@@ -46,6 +49,9 @@ const messages: Record<ApiErrorCode, string> = {
   UNSUPPORTED_FILE: "Only GPX or FIT files are supported. Export one from your watch or app.",
   UNREADABLE_FILE: "The file has no readable activity data. Export it again as GPX or FIT.",
   NO_DISTANCE: "The file has no swim distance. Export it as FIT or with distance from your app.",
+  JOIN_CLOSED: "Joining this tournament is closed.",
+  TEAM_FULL: "This team is full. Choose another team.",
+  ALREADY_MEMBER: "You are already in a team of this tournament.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
