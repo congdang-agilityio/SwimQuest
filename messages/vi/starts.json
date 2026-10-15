@@ -13,6 +13,15 @@
     "distance": "{km, number} km",
     "finish": "Điểm đến",
     "readOnly": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
-    "back": "Về trang Đội của tôi"
+    "back": "Về trang Đội của tôi",
+    "confirm": "Xác nhận",
+    "saved": "Đã lưu điểm xuất phát: {name}. Bạn có thể đổi đến {lockAt} (giờ Việt Nam).",
+    "errors": {
+      "NO_SELECTION": "Hãy chọn một điểm xuất phát.",
+      "INVALID_START": "Không thể chọn điểm xuất phát này.",
+      "START_LOCKED": "Đã hết hạn chọn điểm xuất phát (từ {lockedAt}).",
+      "FORBIDDEN": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
+      "GENERIC": "Không lưu được. Vui lòng thử lại."
+    }
   }
 }

@@ -3,7 +3,7 @@ import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { StartPicker } from "@/components/starts/start-picker";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute, startDestinations } from "@/lib/routes";
-import { isStartLocked } from "@/lib/tournaments/lifecycle";
+import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
 
@@ -19,10 +19,12 @@ export default async function TeamStartPage() {
   return (
     <main>
       <StartPicker
+        teamId={team.id}
         starts={startDestinations(route).map(pick)}
         finish={finish ? pick(finish) : null}
         currentSlug={team.startDestination}
         routeDistanceKm={tournament.routeDistanceM / 1000}
+        lockAtIso={startLockAt(tournament).toISOString()}
         readOnly={team.captainUserId !== user.id || locked}
       />
     </main>
