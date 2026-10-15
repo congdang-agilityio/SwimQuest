@@ -65,7 +65,7 @@ model AuditEvent {
   before       Json?
   after        Json?
   reason       String?
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime  @default(dbgenerated("CURRENT_TIMESTAMP"))
 
   @@index([entityType, entityId])
 }

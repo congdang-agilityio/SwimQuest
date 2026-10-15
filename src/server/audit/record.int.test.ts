@@ -1,4 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 import { db } from "../db";
 import { AUDIT_ACTIONS, recordAudit } from "./record";
 
@@ -46,6 +48,33 @@ describe("recordAudit (database)", () => {
       reason: "Organizer choice",
     });
     expect(rows[0].createdAt.getTime()).toBeGreaterThanOrEqual(startedAt.getTime());
+  });
+
+  it("lets the database set createdAt: the INSERT binds no createdAt value", async () => {
+    const logged = new PrismaClient({
+      adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
+      log: [{ emit: "event", level: "query" }],
+    });
+    const inserts: string[] = [];
+    logged.$on("query", (e) => {
+      if (e.query.includes('INSERT INTO "public"."AuditEvent"')) inserts.push(e.query);
+    });
+    try {
+      await logged.$transaction((tx) =>
+        recordAudit(tx, {
+          actor: { type: "SYSTEM" },
+          action: AUDIT_ACTIONS.TEAM_START_AUTO_ASSIGNED,
+          entityType: "Team",
+          entityId: "team-db-clock",
+        }),
+      );
+    } finally {
+      await logged.$disconnect();
+    }
+
+    expect(inserts).toHaveLength(1);
+    expect(inserts[0].split(" VALUES ")[0]).not.toContain('"createdAt"');
+    expect(await db.auditEvent.count()).toBe(1);
   });
 
   it("stores a system action without a user and with empty optional fields", async () => {
