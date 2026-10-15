@@ -46,8 +46,8 @@ export function TeamPicker({ token, teams, myTeam }: Props) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ teamId }),
     }).catch(() => null);
-    setBusy(false);
     if (res?.ok) return router.push("/team");
+    setBusy(false);
     const body = res ? await res.json().catch(() => null) : null;
     if (res?.status === 409 && body?.error?.code === "TEAM_FULL") setMessage("justFilled");
     else setMessage("failed");

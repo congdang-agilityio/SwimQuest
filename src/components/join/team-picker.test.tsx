@@ -11,6 +11,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push, refresh }) }));
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   push.mockClear();
   refresh.mockClear();
 });
@@ -48,6 +49,8 @@ describe("TeamPicker", () => {
     await waitFor(() => expect(push).toHaveBeenCalledWith("/team"));
     expect(fetchMock.mock.calls[0][0]).toBe("/api/join/tok");
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ teamId: "a" });
+    const join = screen.getByRole("button", { name: "Join Turtles" }) as HTMLButtonElement;
+    expect(join.disabled).toBe(true);
   });
 
   it("refreshes and explains when the team just filled up", async () => {
