@@ -8,7 +8,14 @@ export type JoinTeamSummary = Pick<Team, "id" | "name" | "emblemKey">;
 export type JoinView = {
   tournament: Pick<
     Tournament,
-    "id" | "name" | "description" | "seasonStartAt" | "seasonEndAt" | "eligibilityNotes"
+    | "id"
+    | "name"
+    | "description"
+    | "seasonStartAt"
+    | "seasonEndAt"
+    | "eligibilityNotes"
+    | "routeId"
+    | "routeDistanceM"
   > & { status: TournamentStatus };
   teams: (Pick<Team, "id" | "name" | "emblemKey" | "description" | "memberLimit"> & {
     memberCount: number;
@@ -64,6 +71,8 @@ export async function getJoinView(
       seasonStartAt: t.seasonStartAt,
       seasonEndAt: t.seasonEndAt,
       eligibilityNotes: t.eligibilityNotes,
+      routeId: t.routeId,
+      routeDistanceM: t.routeDistanceM,
     },
     teams: teams.map(({ id, name, emblemKey, description, memberCount, memberLimit }) => {
       const full = memberCount >= memberLimit;

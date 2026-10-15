@@ -1,0 +1,17 @@
+{
+  "title": "Tham gia giải đấu",
+  "chooseTeam": "Chọn đội của bạn",
+  "join": "Tham gia {name}",
+  "placesLeft": "{count, plural, other {Còn # chỗ}}",
+  "full": "Đã đầy",
+  "fullDisabled": "Đã đầy, không thể chọn",
+  "justFilled": "Đội đó vừa đầy chỗ. Vui lòng chọn đội khác.",
+  "closedTitle": "Đã đóng đăng ký tham gia",
+  "closedBody": "Giải đấu này không còn nhận người tham gia.",
+  "invalidTitle": "Liên kết không hợp lệ",
+  "invalidBody": "Hãy kiểm tra lại liên kết mời với ban tổ chức hoặc đội trưởng.",
+  "alreadyIn": "Bạn đang ở đội {team}",
+  "goToTeam": "Đến Đội của tôi",
+  "failed": "Không thể tham gia. Vui lòng thử lại.",
+  "eligibility": "Ai có thể tham gia"
+}
