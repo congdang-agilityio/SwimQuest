@@ -1,0 +1,90 @@
+# squad configuration. Copied to .squad/config.yml by the setup skill.
+owner: congdang-agilityio                      # GitHub user or organization
+repo: SwimQuest
+project_number: 2              # filled in by setup
+ids:                              # filled in by setup; do not edit by hand
+  project_id: "PVT_kwHOABo_g84BnGuS"
+  status_field_id: "PVTSSF_lAHOABo_g84BnGuSzhls3SM"
+  status_options:
+    "Backlog": "40f03300"
+    "Todo": "f75ad846"
+    "In Progress": "47fc9ee4"
+    "In Review": "7a2245af"
+    "QA": "8085930e"
+    "Done": "98236657"
+    "Released": "39d4da93"
+  priority_field_id: "PVTSSF_lAHOABo_g84BnGuSzhls3W0"
+  priority_options:
+    "P0": "a61786c4"
+    "P1": "0189bfe5"
+    "P2": "d1ef4758"
+    "P3": "cc2f2d7f"
+  size_field_id: "PVTSSF_lAHOABo_g84BnGuSzhls3XI"
+  size_options:
+    "XS": "ebbf3277"
+    "S": "6777b525"
+    "M": "eeca06ab"
+  wave_field_id: "PVTF_lAHOABo_g84BnGuSzhls3X4"
+  agent_field_id: "PVTF_lAHOABo_g84BnGuSzhls3ZE"
+  attempts_field_id: "PVTF_lAHOABo_g84BnGuSzhls3ZI"
+stack: ""                         # e.g. "Node 20, Next.js 14, PostgreSQL + Prisma, Vitest, Playwright";
+                                  # empty in a new repo: the Team Lead proposes one, the stakeholder decides
+language:
+  artifacts: en                   # fixed: every document, issue and PR is in English
+  chat: auto                      # reply to the stakeholder in their language (vi/en)
+commands:
+  install: npm ci
+  test: npm test
+  lint: npm run lint
+  build: npm run build            # QA builds and starts the app to check criteria in it
+  start: npm start                # must listen on $PORT (from .env.local)
+  e2e: npx playwright test         # e.g. npx playwright test; leave empty if none
+  services: ""                    # idempotent command that starts local services tests need,
+                                  # e.g. docker start app-pg || docker run -d --name app-pg ...
+parallel:
+  max_parallel_dev: 2             # developer slots per machine (each has its own ports and DBs)
+  claim_ttl_minutes: 120          # a claim older than this (crashed machine) is reported as stale
+  max_open_prs: 4
+  max_agents: 3                   # subagents dispatched at once by the run loop (memory)
+  port_base: 4100
+  test_db_prefix: app_test
+  database_url_template: ""       # e.g. postgresql://postgres:postgres@localhost:5432/{db}
+models:                           # model per dispatch (haiku | sonnet | opus); missing = the agent's
+                                  # default. By the task's Complexity (low/medium/high, set by the
+                                  # Team Lead); tasks without one use their Size (XS/S/M).
+  dev: { low: sonnet, medium: sonnet, high: opus, XS: sonnet, S: sonnet, M: opus }
+  review: { low: sonnet, medium: opus, high: opus, XS: sonnet, S: opus, M: opus }
+  qa: { low: sonnet, medium: sonnet, high: opus, XS: sonnet, S: sonnet, M: opus, story: opus }
+  escalate_on_retry: true         # a task sent back by review or QA runs one tier higher
+  rebase: sonnet
+  merge: sonnet
+  deploy: sonnet
+  infra: opus                     # DevOps changing infrastructure (infra tasks, rollbacks)
+  quick: sonnet                   # Team Lead's quick-lane decision (/squad:fix): 10/10 like Opus
+                                  # at ~1/4 of the cost (tests/model-eval/quick-mode)
+budget:
+  max_tokens_per_run: 2000000     # /squad:run dispatches nothing new once the subagents of this
+                                  # run reported this many tokens in total (~40 dispatches);
+                                  # empty = no limit. Hard USD cap: claude -p --max-budget-usd
+merge:
+  require_ci: true                # Team Lead merges only with green CI checks
+deploy:
+  platform: railway               # railway | none (no deploys: Done is the end of the flow;
+                                  # /squad:setup quick sets none, setup can add deploys later)
+  railway:                        # DevOps deploys and manages Railway with the Railway CLI,
+                                  # logged in as the stakeholder (`railway login`): no tokens
+    project: "ae77db8c-85fd-4804-b48d-09cf275586b1"   # Railway project id (setup fills it)
+    service: web                  # the app's service
+    environments: { staging: staging, production: production }   # squad env -> Railway env
+  gate_workflow: release-gate.yml # from templates/release-gate.yml: records GATE 3 approval only
+  ci_workflow: ci.yml               # must be green on main before a release
+  staging_url: https://web-staging-2708.up.railway.app
+  production_url: ""
+  production_environment: production   # GitHub Environment with required reviewers (GATE 3)
+limits:
+  max_attempts: 3
+  story_max_ac: 5
+  story_max_tasks: 5
+  pr_max_lines: { XS: 50, S: 150, M: 300 }
+  pr_max_files: { XS: 3, S: 6, M: 10 }
+  pr_size_exclude: ["**/*.test.*", "**/__tests__/**", "**/*.lock", "package-lock.json", "**/generated/**", "**/migration_lock.toml"]
