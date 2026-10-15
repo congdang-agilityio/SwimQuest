@@ -20,6 +20,9 @@ export function TeamStartCard({ startNameKey, isCaptain, lockAtIso, locked }: Pr
     <section aria-labelledby="team-start-title">
       <h2 id="team-start-title">{t("starts.card.title")}</h2>
       <p>{startNameKey ? t(startNameKey) : t("starts.card.notChosen")}</p>
+      {locked && (
+        <p>{t("starts.card.lockedSince", { lockedAt: formatVnDateTime(new Date(lockAtIso)) })}</p>
+      )}
       {canChoose && (
         <>
           <p>{t("starts.card.deadline", { deadline: formatVnDateTime(new Date(lockAtIso)) })}</p>

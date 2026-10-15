@@ -5,6 +5,7 @@
     "choose": "Chọn điểm xuất phát",
     "change": "Đổi điểm xuất phát",
     "deadline": "Hạn chọn: {deadline} (giờ Việt Nam).",
+    "lockedSince": "Đã khóa từ {lockedAt} (giờ Việt Nam).",
     "auto": "Nếu đến hạn đội chưa chọn, hệ thống sẽ tự gán một điểm xuất phát."
   },
   "picker": {
@@ -13,6 +14,7 @@
     "distance": "{km, number} km",
     "finish": "Điểm đến",
     "readOnly": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
+    "lockedSince": "Điểm xuất phát đã khóa từ {lockedAt} (giờ Việt Nam). Không thể đổi nữa.",
     "back": "Về trang Đội của tôi",
     "confirm": "Xác nhận",
     "saved": "Đã lưu điểm xuất phát: {name}. Bạn có thể đổi đến {lockAt} (giờ Việt Nam).",

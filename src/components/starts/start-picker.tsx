@@ -22,6 +22,8 @@ type Props = {
   lockAtIso: string;
   /** Members, and everyone after the lock, see the start without choosing. */
   readOnly: boolean;
+  /** The start choice is locked: show the lock time instead of the captain-only note. */
+  locked?: boolean;
 };
 
 export function StartPicker({
@@ -32,6 +34,7 @@ export function StartPicker({
   routeDistanceKm,
   lockAtIso,
   readOnly,
+  locked = false,
 }: Props) {
   const t = useTranslations();
   const [selected, setSelected] = useState<string | null>(currentSlug);
@@ -83,7 +86,11 @@ export function StartPicker({
   return (
     <form onSubmit={onSubmit} noValidate aria-labelledby="start-picker-title">
       <h1 id="start-picker-title">{t("starts.picker.title")}</h1>
-      {readOnly && <p>{t("starts.picker.readOnly")}</p>}
+      {locked ? (
+        <p>{t("starts.picker.lockedSince", { lockedAt: formatVnDateTime(new Date(lockAtIso)) })}</p>
+      ) : (
+        readOnly && <p>{t("starts.picker.readOnly")}</p>
+      )}
       <fieldset
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? "start-error" : undefined}
@@ -120,7 +127,7 @@ export function StartPicker({
         </p>
       )}
       {saved && <p role="status">{saved}</p>}
-      {!readOnly && (
+      {!readOnly && !locked && (
         <button type="submit" disabled={busy} style={control}>
           {t("starts.picker.confirm")}
         </button>
