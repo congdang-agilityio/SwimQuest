@@ -1,0 +1,50 @@
+{
+  "name": "swimquest",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev -p ${PORT:-3000}",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint": "eslint . && prettier --check .",
+    "test": "vitest run",
+    "e2e": "playwright test"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": false
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "argon2": "^0.45.1",
+    "fast-xml-parser": "^5.11.2",
+    "fit-file-parser": "^6.2.2",
+    "next": "^15.5.28",
+    "next-intl": "^4.14.9",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@playwright/test": "^1.64.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.28",
+    "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^30.1.2",
+    "prettier": "^3.9.10",
+    "prisma": "^8.0.0-rc.22",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.4"
+  }
+}
