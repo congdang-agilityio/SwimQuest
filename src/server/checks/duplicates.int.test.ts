@@ -120,4 +120,37 @@ describe("findDuplicateOf", () => {
     expect(await findDuplicateOf(db, user.id, input, original.id)).toBeNull();
     expect(await findDuplicateOf(db, user.id, input, copy.id)).toBe(original.id);
   });
+
+  it("never returns a swim created after the excluded candidate", async () => {
+    const user = await makeUser("a@example.com");
+    const a = await makeSwim(user.id, "b".repeat(64), "06:00", "06:30");
+    const b = await makeSwim(user.id, "c".repeat(64), "06:10", "06:40");
+    await db.swim.update({
+      where: { id: a.id },
+      data: { createdAt: new Date("2026-10-01T00:00:00Z") },
+    });
+    await db.swim.update({
+      where: { id: b.id },
+      data: { createdAt: new Date("2026-11-01T00:00:00Z") },
+    });
+    const inputA = { fileSha256: a.fileSha256, startedAt: a.startedAt, endedAt: a.endedAt };
+    expect(await findDuplicateOf(db, user.id, inputA, a.id)).toBeNull();
+    const inputB = { fileSha256: b.fileSha256, startedAt: b.startedAt, endedAt: b.endedAt };
+    expect(await findDuplicateOf(db, user.id, inputB, b.id)).toBe(a.id);
+  });
+
+  it("breaks a createdAt tie by id so two swims never match each other", async () => {
+    const user = await makeUser("a@example.com");
+    await makeSwim(user.id, HASH, "06:00", "06:30");
+    await makeSwim(user.id, HASH, "06:00", "06:30");
+    const sameTime = new Date("2026-10-01T00:00:00Z");
+    await db.swim.updateMany({ where: { userId: user.id }, data: { createdAt: sameTime } });
+    const [lower, higher] = await db.swim.findMany({
+      where: { userId: user.id },
+      orderBy: { id: "asc" },
+    });
+    const input = { fileSha256: HASH, startedAt: at("06:00"), endedAt: at("06:30") };
+    expect(await findDuplicateOf(db, user.id, input, lower.id)).toBeNull();
+    expect(await findDuplicateOf(db, user.id, input, higher.id)).toBe(lower.id);
+  });
 });
