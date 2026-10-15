@@ -1,5 +1,11 @@
-import { describe, expect, it } from "vitest";
-import { parseTournamentDraft, tournamentDraftSchema } from "./tournament";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import {
+  parseTournamentDraft,
+  TOURNAMENT_DRAFT_ERROR_CODES,
+  tournamentDraftSchema,
+  type TournamentDraftErrorCode,
+  type TournamentDraftErrors,
+} from "./tournament";
 
 const valid = {
   name: "  Autumn Expedition ",
@@ -105,5 +111,27 @@ describe("tournament draft validation", () => {
 
     expect(result.ok).toBe(false);
     expect(!result.ok && result.errors.name).toBe("NAME_REQUIRED");
+  });
+
+  it("returns only declared error codes, typed as TournamentDraftErrorCode", () => {
+    const inputs: Record<string, unknown>[] = [
+      { name: undefined, description: "a".repeat(2001), seasonStart: undefined },
+      { name: "a".repeat(81), description: "", seasonEnd: { date: "x", time: "y" } },
+      { routeId: "route99", routeDistanceKm: "" },
+      { routeDistanceKm: "abc" },
+      { routeDistanceKm: "-5" },
+      { routeDistanceKm: "1.234" },
+      { routeDistanceKm: 10000.01 },
+      {
+        seasonStart: { date: "2026-11-01", time: "07:00" },
+        seasonEnd: { date: "2026-11-01", time: "06:00" },
+      },
+    ];
+    const seen = new Set(inputs.flatMap((patch) => Object.values(errorsFor(patch))));
+
+    expect([...seen].sort()).toEqual([...TOURNAMENT_DRAFT_ERROR_CODES].sort());
+    expectTypeOf<TournamentDraftErrors[keyof TournamentDraftErrors]>().toEqualTypeOf<
+      TournamentDraftErrorCode | undefined
+    >();
   });
 });

@@ -4,21 +4,25 @@ import { vnLocalToUtc } from "@/lib/time/vn";
 
 /**
  * Tournament draft rules (FR-21, FR-22, FR-40, Q-58), shared by the create form and the server.
- * Every issue message is an error code (`NAME_REQUIRED`, `SEASON_END_NOT_AFTER_START`, …);
- * the UI translates codes into labelled messages.
+ * Every issue message is one of TOURNAMENT_DRAFT_ERROR_CODES; the UI maps each to a vi/en message.
  */
 export const MAX_ROUTE_DISTANCE_KM = 10_000; // keeps metres far inside a 32-bit integer
 
-const code = (error: string) => ({ error, abort: true });
-const text = (max: number, field: string) =>
-  z
-    .string(code(`${field}_REQUIRED`))
-    .trim()
-    .min(1, code(`${field}_REQUIRED`))
-    .max(max, code(`${field}_TOO_LONG`));
+// prettier-ignore
+export const TOURNAMENT_DRAFT_ERROR_CODES = [
+  "NAME_REQUIRED", "NAME_TOO_LONG", "DESCRIPTION_REQUIRED", "DESCRIPTION_TOO_LONG",
+  "SEASON_START_INVALID", "SEASON_END_INVALID", "SEASON_END_NOT_AFTER_START", "ROUTE_UNKNOWN",
+  "ROUTE_DISTANCE_REQUIRED", "ROUTE_DISTANCE_INVALID", "ROUTE_DISTANCE_NOT_POSITIVE",
+  "ROUTE_DISTANCE_TOO_PRECISE", "ROUTE_DISTANCE_TOO_LARGE",
+] as const;
+export type TournamentDraftErrorCode = (typeof TOURNAMENT_DRAFT_ERROR_CODES)[number];
+
+const code = (error: TournamentDraftErrorCode) => ({ error, abort: true });
+const text = (max: number, required: TournamentDraftErrorCode, tooLong: TournamentDraftErrorCode) =>
+  z.string(code(required)).trim().min(1, code(required)).max(max, code(tooLong));
 
 /** A Vietnam local date (YYYY-MM-DD) and time (HH:mm), converted to a UTC instant. */
-const vnInstant = (invalid: string) =>
+const vnInstant = (invalid: TournamentDraftErrorCode) =>
   z
     .object({ date: z.string(code(invalid)), time: z.string(code(invalid)) }, code(invalid))
     .transform((v, ctx) => {
@@ -34,7 +38,7 @@ const vnInstant = (invalid: string) =>
 const routeDistance = z.unknown().transform((value, ctx) => {
   const raw = typeof value === "string" ? value.trim() : value;
   const km = typeof raw === "string" && /^[+-]?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
-  let error: string | null = null;
+  let error: TournamentDraftErrorCode | null = null;
   if (raw === undefined || raw === null || raw === "") error = "ROUTE_DISTANCE_REQUIRED";
   else if (typeof km !== "number" || !Number.isFinite(km)) error = "ROUTE_DISTANCE_INVALID";
   else if (km <= 0) error = "ROUTE_DISTANCE_NOT_POSITIVE";
@@ -46,8 +50,8 @@ const routeDistance = z.unknown().transform((value, ctx) => {
 });
 
 const fieldsSchema = z.object({
-  name: text(80, "NAME"),
-  description: text(2000, "DESCRIPTION"),
+  name: text(80, "NAME_REQUIRED", "NAME_TOO_LONG"),
+  description: text(2000, "DESCRIPTION_REQUIRED", "DESCRIPTION_TOO_LONG"),
   seasonStart: vnInstant("SEASON_START_INVALID"),
   seasonEnd: vnInstant("SEASON_END_INVALID"),
   routeId: z
@@ -58,7 +62,7 @@ const fieldsSchema = z.object({
 
 export const tournamentDraftSchema = fieldsSchema
   .refine((v) => v.seasonEnd.getTime() > v.seasonStart.getTime(), {
-    message: "SEASON_END_NOT_AFTER_START",
+    message: "SEASON_END_NOT_AFTER_START" satisfies TournamentDraftErrorCode,
     path: ["seasonEnd"],
   })
   .transform(({ seasonStart, seasonEnd, routeDistanceKm, ...rest }) => ({
@@ -70,7 +74,7 @@ export const tournamentDraftSchema = fieldsSchema
 
 export type TournamentDraft = z.output<typeof tournamentDraftSchema>;
 export type TournamentDraftField = keyof typeof fieldsSchema.shape;
-export type TournamentDraftErrors = Partial<Record<TournamentDraftField, string>>;
+export type TournamentDraftErrors = Partial<Record<TournamentDraftField, TournamentDraftErrorCode>>;
 
 /** Validates a tournament draft and returns the first error code of each invalid field. */
 export function parseTournamentDraft(
@@ -82,7 +86,7 @@ export function parseTournamentDraft(
   const errors: TournamentDraftErrors = {};
   for (const issue of result.error.issues) {
     const field = issue.path[0] as TournamentDraftField;
-    if (field in fieldsSchema.shape) errors[field] ??= issue.message;
+    if (field in fieldsSchema.shape) errors[field] ??= issue.message as TournamentDraftErrorCode;
   }
   return { ok: false, errors };
 }
