@@ -13,6 +13,7 @@ export type ApiErrorCode =
   | "ROUTE_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
+  | "INVALID_START"
   | "PUBLISH_INVALID";
 
 const messages: Record<ApiErrorCode, string> = {
@@ -27,6 +28,7 @@ const messages: Record<ApiErrorCode, string> = {
   ROUTE_LOCKED: "The route cannot be changed after the season has started.",
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
+  INVALID_START: "Choose one of the route's start destinations.",
   PUBLISH_INVALID: "The tournament cannot be published yet.",
 };
 
