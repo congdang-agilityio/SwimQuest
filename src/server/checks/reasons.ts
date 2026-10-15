@@ -15,6 +15,8 @@ export const REASON_CODES = [
   "PACE_TOO_SLOW",
   /** Distance is above the tournament's longest realistic swim. */
   "DISTANCE_TOO_LONG",
+  /** The same file or a time-overlapping swim of the player was uploaded earlier. */
+  "DUPLICATE_OF_EARLIER_SWIM",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];

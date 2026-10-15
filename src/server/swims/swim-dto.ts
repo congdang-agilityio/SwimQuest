@@ -1,7 +1,32 @@
-import type { Swim } from "@prisma/client";
+import type { Prisma, Swim, SwimResult } from "@prisma/client";
 import { utcToVnParts } from "@/lib/time/vn";
 
-export type SwimForDto = Swim;
+/** Prisma `include` that loads what the DTO shows of each per-tournament result. */
+export const swimDtoInclude = {
+  results: {
+    select: {
+      tournamentId: true,
+      status: true,
+      reasons: true,
+      tournament: { select: { name: true } },
+    },
+    orderBy: { createdAt: "asc" },
+  },
+} satisfies Prisma.SwimInclude;
+
+type ResultForDto = Pick<SwimResult, "tournamentId" | "status"> & {
+  reasons: unknown;
+  tournament: { name: string };
+};
+export type SwimForDto = Swim & { results?: ResultForDto[] };
+
+/** The swim's outcome in one tournament; `reasons` are codes the UI turns into words. */
+export type SwimResultDto = {
+  tournamentId: string;
+  tournamentName: string;
+  status: SwimResult["status"];
+  reasons: string[];
+};
 
 /** What the owner sees of a swim: never the track, the file hash or raw points. */
 export type OwnerSwimDto = {
@@ -19,7 +44,20 @@ export type OwnerSwimDto = {
   swimType: Swim["swimType"];
   isSwim: boolean;
   isDuplicate: boolean;
+  results: SwimResultDto[];
 };
+
+function toResultDto(r: ResultForDto): SwimResultDto {
+  const reasons = Array.isArray(r.reasons)
+    ? r.reasons.filter((x): x is string => typeof x === "string")
+    : [];
+  return {
+    tournamentId: r.tournamentId,
+    tournamentName: r.tournament.name,
+    status: r.status,
+    reasons,
+  };
+}
 
 export function toOwnerSwimDto(swim: SwimForDto): OwnerSwimDto {
   const { date, time } = utcToVnParts(swim.startedAt);
@@ -35,5 +73,6 @@ export function toOwnerSwimDto(swim: SwimForDto): OwnerSwimDto {
     swimType: swim.swimType,
     isSwim: swim.isSwim,
     isDuplicate: swim.duplicateOfId !== null,
+    results: (swim.results ?? []).map(toResultDto),
   };
 }

@@ -34,7 +34,26 @@ describe("toOwnerSwimDto", () => {
       swimType: "OPEN_WATER",
       isSwim: true,
       isDuplicate: false,
+      results: [],
     });
+  });
+
+  it("lists each tournament's status and reason codes, and ignores malformed reasons", () => {
+    const results = [
+      { tournamentId: "t1", status: "VERIFIED" as const, reasons: [], tournament: { name: "One" } },
+      {
+        tournamentId: "t2",
+        status: "FLAGGED" as const,
+        reasons: ["PACE_TOO_SLOW", 7, null],
+        tournament: { name: "Two" },
+      },
+      { tournamentId: "t3", status: "FLAGGED" as const, reasons: "x", tournament: { name: "3" } },
+    ];
+    expect(toOwnerSwimDto({ ...swim(), results }).results).toEqual([
+      { tournamentId: "t1", tournamentName: "One", status: "VERIFIED", reasons: [] },
+      { tournamentId: "t2", tournamentName: "Two", status: "FLAGGED", reasons: ["PACE_TOO_SLOW"] },
+      { tournamentId: "t3", tournamentName: "3", status: "FLAGGED", reasons: [] },
+    ]);
   });
 
   it("never exposes the track, the file hash, the owner or the file name", () => {

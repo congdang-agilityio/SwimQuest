@@ -57,6 +57,7 @@ describe("POST /api/swims", () => {
     expect(res.status).toBe(201);
     const { swim } = await res.json();
     expect(swim).toMatchObject({ source: "GPX", swimType: "OPEN_WATER", durationS: 150 });
+    expect(swim.results).toEqual([]); // the player is in no tournament
     expect(swim).not.toHaveProperty("track");
     expect(swim).not.toHaveProperty("userId");
     const stored = await db.swim.findUniqueOrThrow({ where: { id: swim.id } });

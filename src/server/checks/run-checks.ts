@@ -1,0 +1,72 @@
+import type { Swim, SwimResult } from "@prisma/client";
+import { effectiveStatus } from "@/lib/tournaments/lifecycle";
+import type { db } from "@/server/db";
+import { findDuplicateOf } from "./duplicates";
+import type { ReasonCode } from "./reasons";
+import { evaluateSwim } from "./standard-checks";
+
+/** Interactive transaction client of the shared Prisma client. */
+export type Tx = Parameters<
+  Extract<Parameters<typeof db.$transaction>[0], (tx: never) => unknown>
+>[0];
+
+export type RunChecksHooks = {
+  /** Called inside the transaction for each VERIFIED result (S-13 awards points here). */
+  onVerified?: (tx: Tx, result: SwimResult) => Promise<void>;
+};
+
+const noHooks: Required<RunChecksHooks> = { onVerified: async () => {} };
+
+/**
+ * Serializes the uploads of one player until the transaction ends, so two uploads at the same
+ * time cannot both miss each other in the duplicate check. Take it before inserting the swim.
+ */
+export async function lockPlayerSwims(tx: Tx, userId: string): Promise<void> {
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`swims:${userId}`}))`;
+}
+
+/**
+ * Checks a stored swim in every tournament where its player has an ACTIVE membership and the
+ * tournament is PUBLISHED or ACTIVE at `now` (S-12). A duplicate of an earlier swim gets
+ * `duplicateOfId` and a DUPLICATE result per tournament; the original is never touched.
+ * Otherwise each tournament gets VERIFIED or FLAGGED from its own standard checks.
+ */
+export async function runChecks(
+  tx: Tx,
+  swim: Swim,
+  hooks: RunChecksHooks = {},
+  now: Date = new Date(),
+): Promise<void> {
+  const { onVerified } = { ...noHooks, ...hooks };
+  const memberships = await tx.teamMember.findMany({
+    where: { userId: swim.userId, status: "ACTIVE" },
+    include: { tournament: true },
+    orderBy: { joinedAt: "asc" },
+  });
+  const active = memberships.filter((m) => {
+    const status = effectiveStatus(m.tournament, now);
+    return status === "PUBLISHED" || status === "ACTIVE";
+  });
+
+  const duplicateOfId = await findDuplicateOf(tx, swim.userId, swim, swim.id);
+  if (duplicateOfId) {
+    await tx.swim.update({ where: { id: swim.id }, data: { duplicateOfId } });
+  }
+
+  for (const m of active) {
+    const { status, reasons } = duplicateOfId
+      ? { status: "DUPLICATE" as const, reasons: ["DUPLICATE_OF_EARLIER_SWIM"] as ReasonCode[] }
+      : evaluateSwim(swim, m.tournament);
+    const result = await tx.swimResult.create({
+      data: {
+        swimId: swim.id,
+        tournamentId: m.tournamentId,
+        teamId: m.teamId,
+        userId: swim.userId,
+        status,
+        reasons,
+      },
+    });
+    if (status === "VERIFIED") await onVerified(tx, result);
+  }
+}
