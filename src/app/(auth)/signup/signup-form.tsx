@@ -11,6 +11,8 @@ const FIELDS: { name: SignUpField; type: string; autoComplete: string }[] = [
 ];
 const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
 const errorColor = { color: "#b91c1c" };
+/** NFR-10: links are touch targets too, at least 44x44 CSS px. */
+const link = { display: "inline-flex", alignItems: "center", minHeight: 44, minWidth: 44 } as const;
 
 /** A same-site relative path (one leading slash, no scheme or backslash), else `/home`. */
 export function safeNext(next: string | undefined): string {
@@ -76,14 +78,21 @@ export function SignUpForm({ next }: { next?: string }) {
       {problem && (
         <p role="alert" style={errorColor}>
           {problem === "taken" ? t("errors.EMAIL_TAKEN") : t("errors.GENERIC")}{" "}
-          {problem === "taken" && <a href="/login">{t("signup.loginCta")}</a>}
+          {problem === "taken" && (
+            <a href="/login" style={link}>
+              {t("signup.loginCta")}
+            </a>
+          )}
         </p>
       )}
       <button type="submit" disabled={busy} style={control}>
         {t("signup.submit")}
       </button>
       <p>
-        {t("signup.haveAccount")} <a href="/login">{t("signup.loginCta")}</a>
+        {t("signup.haveAccount")}{" "}
+        <a href="/login" style={link}>
+          {t("signup.loginCta")}
+        </a>
       </p>
     </form>
   );

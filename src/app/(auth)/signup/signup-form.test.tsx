@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../../messages/en/auth.json";
 import vi_ from "../../../../messages/vi/auth.json";
+import SignUpPage from "./page";
 import { SignUpForm, safeNext } from "./signup-form";
 
 afterEach(() => {
@@ -11,10 +12,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function setup(messages: object = vi_) {
+function setup(messages: object = vi_, next?: string) {
   render(
     <NextIntlClientProvider locale="vi" messages={{ auth: messages }}>
-      <SignUpForm />
+      <SignUpForm next={next} />
     </NextIntlClientProvider>,
   );
 }
@@ -73,6 +74,55 @@ describe("SignUpForm validation", () => {
     );
     const link = within(screen.getByRole("alert")).getByRole("link", { name: en.signup.loginCta });
     expect(link.getAttribute("href")).toBe("/login");
+  });
+});
+
+describe("SignUpForm redirect on 201", () => {
+  async function signUpWith(next: string) {
+    const assign = vi.fn();
+    vi.stubGlobal("location", { ...window.location, assign });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 201 }));
+    setup(vi_, next);
+    fill(vi_.fields.email, "a@b.vn");
+    fill(vi_.fields.password, "password123");
+    fill(vi_.fields.displayName, "Lan");
+    submit();
+    await waitFor(() => expect(assign).toHaveBeenCalledTimes(1));
+    return assign;
+  }
+
+  it("sends the user to a safe next path", async () => {
+    expect(await signUpWith("/teams/3")).toHaveBeenCalledWith("/teams/3");
+  });
+
+  it("falls back to /home for an unsafe next", async () => {
+    expect(await signUpWith("//evil.com")).toHaveBeenCalledWith("/home");
+  });
+
+  it("passes the next query parameter from the page to the form", async () => {
+    const page = await SignUpPage({ searchParams: Promise.resolve({ next: "/teams/3" }) });
+    expect(page.props.next).toBe("/teams/3");
+    const many = await SignUpPage({ searchParams: Promise.resolve({ next: ["/a", "/b"] }) });
+    expect(many.props.next).toBeUndefined();
+  });
+});
+
+describe("SignUpForm touch targets (NFR-10)", () => {
+  it("makes both /login links at least 44x44 CSS px", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 409 }));
+    setup();
+    fill(vi_.fields.email, "a@b.vn");
+    fill(vi_.fields.password, "password123");
+    fill(vi_.fields.displayName, "Lan");
+    submit();
+    await waitFor(() =>
+      expect(screen.getAllByRole("link", { name: vi_.signup.loginCta })).toHaveLength(2),
+    );
+    for (const link of screen.getAllByRole("link", { name: vi_.signup.loginCta })) {
+      expect(link.style.minHeight).toBe("44px");
+      expect(link.style.minWidth).toBe("44px");
+      expect(link.style.display).toBe("inline-flex");
+    }
   });
 });
 
