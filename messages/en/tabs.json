@@ -1,0 +1,27 @@
+{
+  "joinGuidance": {
+    "title": "You are not in a tournament yet",
+    "body": "To join, open the invite link your organizer sent you. Or create a tournament of your own.",
+    "create": "Create tournament"
+  },
+  "tournaments": {
+    "title": "Tournaments",
+    "empty": "You have no tournaments yet.",
+    "organizer": "Organizer",
+    "create": "Create tournament",
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Open for joining",
+      "ACTIVE": "In progress",
+      "COMPLETED": "Completed",
+      "ARCHIVED": "Archived"
+    }
+  },
+  "team": {
+    "title": "My Team"
+  },
+  "voyage": {
+    "title": "Voyage",
+    "tournament": "Tournament: {name}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "joinGuidance": {
+    "title": "Bạn chưa tham gia giải đấu nào",
+    "body": "Để tham gia, hãy mở liên kết mời mà ban tổ chức đã gửi cho bạn. Hoặc tự tạo một giải đấu.",
+    "create": "Tạo giải đấu"
+  },
+  "tournaments": {
+    "title": "Giải đấu",
+    "empty": "Bạn chưa có giải đấu nào.",
+    "organizer": "Ban tổ chức",
+    "create": "Tạo giải đấu",
+    "status": {
+      "DRAFT": "Bản nháp",
+      "PUBLISHED": "Đang mở đăng ký",
+      "ACTIVE": "Đang diễn ra",
+      "COMPLETED": "Đã kết thúc",
+      "ARCHIVED": "Đã lưu trữ"
+    }
+  },
+  "team": {
+    "title": "Đội của tôi"
+  },
+  "voyage": {
+    "title": "Hành trình",
+    "tournament": "Giải đấu: {name}"
+  }
+}
