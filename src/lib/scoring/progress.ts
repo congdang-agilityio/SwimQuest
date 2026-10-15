@@ -1,68 +1,40 @@
-// Route progress from team points (FR-41, BR-34). Integer math only (NFR-08).
-// Route length in points = route km x points per km. Distances are metres.
-
-export type RouteProgressInput = {
-  teamPoints: number;
-  routeDistanceM: number;
-  pointsPerKm: number;
-};
-
+// Route progress from team points (FR-41, BR-34): integer math only (NFR-08).
 export type RouteProgress = {
-  /** Basis points, 0..10000, floored and capped at the end of the route. */
-  progressBp: number;
-  /** Route km reached, truncated to 0.1 km, capped at routeKmTotal. */
-  routeKmReached: number;
-  /** Whole route length in km (routeDistanceM / 1000). */
-  routeKmTotal: number;
+  progressBp: number; // basis points 0..10000, floored, capped at the route end
+  routeKmReached: number; // truncated to 0.1 km, capped at routeKmTotal
+  routeKmTotal: number; // routeDistanceM / 1000
   finished: boolean;
 };
 
-function assertNonNegativeInt(name: string, value: number): void {
-  if (!Number.isSafeInteger(value) || value < 0) {
-    throw new RangeError(`${name} must be a non-negative integer`);
+const bad = (v: number, min: number) => !Number.isSafeInteger(v) || v < min;
+
+export function routeProgress(i: {
+  teamPoints: number;
+  routeDistanceM: number;
+  pointsPerKm: number;
+}): RouteProgress {
+  const { teamPoints, routeDistanceM, pointsPerKm } = i;
+  if (bad(teamPoints, 0) || bad(routeDistanceM, 1) || bad(pointsPerKm, 1)) {
+    throw new RangeError("points must be >= 0 and route values positive integers");
   }
-}
-
-export function routeProgress(input: RouteProgressInput): RouteProgress {
-  const { teamPoints, routeDistanceM, pointsPerKm } = input;
-  assertNonNegativeInt("teamPoints", teamPoints);
-  assertNonNegativeInt("routeDistanceM", routeDistanceM);
-  assertNonNegativeInt("pointsPerKm", pointsPerKm);
-  if (routeDistanceM === 0 || pointsPerKm === 0) {
-    throw new RangeError("routeDistanceM and pointsPerKm must be positive");
-  }
-
-  // Route length in points, scaled by 1000 (points x 1000 = metres x pointsPerKm).
-  const routeScaled = routeDistanceM * pointsPerKm;
-  const pointsScaled = teamPoints * 1000;
-  const finished = pointsScaled >= routeScaled;
-
-  const progressBp = finished ? 10000 : Math.floor((pointsScaled * 10000) / routeScaled);
-  const reachedM = finished ? routeDistanceM : Math.floor(pointsScaled / pointsPerKm);
-
+  const total = routeDistanceM * pointsPerKm; // route length in points x 1000
+  const done = teamPoints * 1000;
+  const finished = done >= total;
+  const reachedM = finished ? routeDistanceM : Math.floor(done / pointsPerKm);
   return {
-    progressBp,
+    progressBp: finished ? 10000 : Math.floor((done * 10000) / total),
     routeKmReached: Math.floor(reachedM / 100) / 10,
     routeKmTotal: routeDistanceM / 1000,
     finished,
   };
 }
 
-/**
- * Display rule: round half up to one decimal of a percent; drop a ".0".
- * 6800 -> "68%", 6849 -> "68.5%", 10000 -> "100%", 9999 -> "99.9%".
- */
+/** Round half up to 0.1%, drop ".0", never "100%" before finished: 6849 -> "68.5%". */
 export function formatProgressPct(bp: number): string {
-  assertNonNegativeInt("bp", bp);
-  const capped = Math.min(bp, 10000);
-  // Never show 100% before the route is finished.
-  const tenths = capped < 10000 ? Math.min(999, Math.round(capped / 10)) : 1000;
-  const whole = Math.floor(tenths / 10);
-  const frac = tenths % 10;
-  return frac === 0 ? `${whole}%` : `${whole}.${frac}%`;
+  if (bad(bp, 0)) throw new RangeError("bp must be a non-negative integer");
+  const t = bp >= 10000 ? 1000 : Math.min(999, Math.round(bp / 10));
+  return t % 10 === 0 ? `${t / 10}%` : `${Math.floor(t / 10)}.${t % 10}%`;
 }
 
-/** "68 / 100 route km" (km shown with at most one decimal). */
-export function formatRouteKmLabel(progress: RouteProgress): string {
-  return `${progress.routeKmReached} / ${progress.routeKmTotal} route km`;
-}
+export const formatRouteKmLabel = (p: RouteProgress) =>
+  `${p.routeKmReached} / ${p.routeKmTotal} route km`;
