@@ -1,0 +1,36 @@
+{
+  "names": {
+    "non_nuoc": "Non Nuoc Beach",
+    "son_thuy": "Son Thuy Beach",
+    "pham_van_dong": "Pham Van Dong Beach",
+    "man_thai": "Man Thai Beach",
+    "hon_sup": "Hon Sup",
+    "cu_lao_cham": "Cu Lao Cham",
+    "ly_son": "Ly Son"
+  },
+  "card": {
+    "title": "Starting point",
+    "notChosen": "No start chosen yet",
+    "choose": "Choose start",
+    "change": "Change start",
+    "deadline": "Choose by: {deadline} (Vietnam time).",
+    "auto": "If your team has not chosen by then, a start is assigned automatically."
+  },
+  "picker": {
+    "title": "Choose start",
+    "legend": "Your team's start",
+    "distance": "{km, number} km",
+    "finish": "Finish",
+    "readOnly": "Only the captain can choose the start.",
+    "confirm": "Confirm",
+    "back": "Back to My Team",
+    "saved": "Start saved: {name}. You can change it until {lockAt} (Vietnam time).",
+    "errors": {
+      "NO_SELECTION": "Pick a start.",
+      "INVALID_START": "This start cannot be chosen.",
+      "START_LOCKED": "The start choice is locked (since {lockedAt}).",
+      "FORBIDDEN": "Only the captain can choose the start.",
+      "GENERIC": "Could not save. Please try again."
+    }
+  }
+}

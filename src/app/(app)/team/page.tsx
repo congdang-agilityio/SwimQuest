@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { TeamStartCard } from "@/components/starts/team-start-card";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
+import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
 
@@ -14,7 +16,19 @@ export default async function TeamPage() {
   return (
     <main>
       <h1>{t("title")}</h1>
-      {membership ? <p>{membership.team.name}</p> : <JoinGuidance />}
+      {membership ? (
+        <>
+          <p>{membership.team.name}</p>
+          <TeamStartCard
+            startSlug={membership.team.startDestination}
+            isCaptain={membership.team.captainUserId === user.id}
+            lockAtIso={startLockAt(membership.tournament).toISOString()}
+            locked={isStartLocked(membership.tournament, new Date())}
+          />
+        </>
+      ) : (
+        <JoinGuidance />
+      )}
     </main>
   );
 }
