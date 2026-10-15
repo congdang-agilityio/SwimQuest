@@ -1,0 +1,14 @@
+{
+  "manage": {
+    "status": "Trạng thái",
+    "season": "Mùa giải",
+    "vietnamTime": "giờ Việt Nam, UTC+7",
+    "statusNames": {
+      "DRAFT": "Bản nháp",
+      "PUBLISHED": "Đang mở đăng ký",
+      "ACTIVE": "Đang diễn ra",
+      "COMPLETED": "Đã kết thúc",
+      "ARCHIVED": "Đã lưu trữ"
+    }
+  }
+}
