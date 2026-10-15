@@ -12,5 +12,15 @@
     "noTeams": "Chưa có đội nào.",
     "placesLeft": "{count, plural, other {Còn # chỗ}}",
     "full": "đã đầy"
+  },
+  "invite": {
+    "title": "Liên kết mời",
+    "hint": "Gửi liên kết này cho người chơi để họ tham gia.",
+    "label": "Liên kết mời",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "copyFailed": "Không sao chép được. Hãy chọn liên kết và sao chép thủ công.",
+    "share": "Chia sẻ",
+    "shareText": "Tham gia giải SwimQuest của tôi: {name}"
   }
 }
