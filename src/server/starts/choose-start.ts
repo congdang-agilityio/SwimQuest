@@ -1,5 +1,6 @@
 import type { StartSetBy } from "@prisma/client";
 import { getRoute, startDestinations } from "@/lib/routes";
+import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { ForbiddenError, NotFoundError, requireCaptain } from "@/server/auth/roles";
 import { db } from "@/server/db";
 
@@ -7,6 +8,15 @@ import { db } from "@/server/db";
 export class InvalidStartError extends Error {
   readonly status = 422;
   readonly code = "INVALID_START";
+}
+
+/** A different start after the start-choice deadline (story S-10, FR-39); `lockedAt` is when it locked. */
+export class StartLockedError extends Error {
+  readonly status = 409;
+  readonly code = "START_LOCKED";
+  constructor(readonly lockedAt: Date) {
+    super("START_LOCKED");
+  }
 }
 
 export type TeamStart = { slug: string | null; setAt: Date | null; setBy: StartSetBy | null };
@@ -43,12 +53,14 @@ export async function getTeamStart(teamId: string): Promise<TeamStart> {
  * changes scenery and path, never the distance (BR-17). Throws the role errors of
  * `requireCaptain` and `InvalidStartError` for the finish or an unknown slug. The team row is
  * locked for the read and write, so concurrent choices are applied one after the other; the
- * same slug as now writes nothing and returns `changed: false`.
+ * same slug as now writes nothing and returns `changed: false`. From the start-choice deadline
+ * (`now`, the server clock) any other slug throws `StartLockedError` and nothing is written.
  */
 export async function chooseStart(
   userId: string,
   teamId: string,
   slug: unknown,
+  now: Date = new Date(),
 ): Promise<ChooseStartResult> {
   const team = await requireCaptain(userId, teamId);
   const tournament = await db.tournament.findUniqueOrThrow({
@@ -67,6 +79,11 @@ export async function chooseStart(
     // The captain may have changed between the guard and the lock.
     if (locked.captainUserId !== userId) throw new ForbiddenError();
     if (locked.startDestination === slug) return { changed: false, start: toStart(locked) };
+    const lifecycle = await tx.tournament.findUniqueOrThrow({
+      where: { id: team.tournamentId },
+      select: { status: true, seasonStartAt: true, seasonEndAt: true, startChoiceDeadlineAt: true },
+    });
+    if (isStartLocked(lifecycle, now)) throw new StartLockedError(startLockAt(lifecycle));
 
     const updated = await tx.team.update({
       where: { id: team.id },
