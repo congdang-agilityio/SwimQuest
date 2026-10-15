@@ -12,5 +12,15 @@
     "noTeams": "No teams yet.",
     "placesLeft": "{count, plural, one {# place left} other {# places left}}",
     "full": "full"
+  },
+  "invite": {
+    "title": "Invite link",
+    "hint": "Send this link to players so they can join.",
+    "label": "Invite link",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the link and copy it by hand.",
+    "share": "Share",
+    "shareText": "Join my SwimQuest tournament: {name}"
   }
 }

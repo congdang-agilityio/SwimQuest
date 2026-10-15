@@ -2,11 +2,18 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { TeamList } from "@/components/teams/team-list";
+import { InviteLink } from "@/components/tournaments/invite-link";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { publicOriginFrom } from "@/server/http/request";
 import { listTeamsWithCounts } from "@/server/teams/manage";
+
+/** Invite link origin: the shared `publicOriginFrom` rules, with the request host as fallback. */
+async function origin(): Promise<string> {
+  return publicOriginFrom(`http://${(await headers()).get("host") ?? "localhost"}`);
+}
 
 /** Organizer page: only the organizer sees it; anyone else gets the not-found page (S-04 AC 5). */
 export default async function ManageTournamentPage({
@@ -36,6 +43,12 @@ export default async function ManageTournamentPage({
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
         {t("manage.vietnamTime")})
       </p>
+      {tournament.status !== "DRAFT" && tournament.inviteToken && (
+        <InviteLink
+          url={`${await origin()}/join/${tournament.inviteToken}`}
+          tournamentName={tournament.name}
+        />
+      )}
       <TeamList
         tournamentId={tournament.id}
         teams={teams}

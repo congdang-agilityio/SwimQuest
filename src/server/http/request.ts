@@ -5,6 +5,11 @@
  * own origin; anywhere else this throws, as it does for an `APP_URL` that is not http(s).
  */
 export function publicOrigin(request: Request): string {
+  return publicOriginFrom(new URL(request.url).origin);
+}
+
+/** `publicOrigin` with an explicit fallback, used only in development and test. */
+export function publicOriginFrom(fallback: string): string {
   const configured = process.env.APP_URL?.trim();
   if (configured) {
     let url: URL | undefined;
@@ -17,7 +22,7 @@ export function publicOrigin(request: Request): string {
     return url.origin;
   }
   const env = process.env.NODE_ENV;
-  if (env === "development" || env === "test") return new URL(request.url).origin;
+  if (env === "development" || env === "test") return fallback;
   throw new Error("APP_URL is not set: the public origin is unknown.");
 }
 
