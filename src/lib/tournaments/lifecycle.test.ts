@@ -6,6 +6,7 @@ import {
   isStartLocked,
   startLockAt,
   type LifecycleTournament,
+  type TournamentStatus,
 } from "./lifecycle";
 
 // Season: 1 Nov 06:00 to 30 Nov 22:00 Vietnam time (UTC+7).
@@ -29,6 +30,16 @@ describe("effectiveStatus", () => {
       "DRAFT",
     );
   });
+  it("passes COMPLETED and ARCHIVED through unchanged", () => {
+    const now = at("2026-12-01T00:00:00+07:00");
+    expect(effectiveStatus({ ...base, status: "COMPLETED" }, now)).toBe("COMPLETED");
+    expect(effectiveStatus({ ...base, status: "ARCHIVED" }, now)).toBe("ARCHIVED");
+  });
+  it("is a closed union of the FR-23 lifecycle states", () => {
+    // @ts-expect-error a typo is not a valid status
+    const typo: TournamentStatus = "PUBLISH";
+    expect(typo).toBe("PUBLISH");
+  });
   it("keeps a stored ACTIVE tournament ACTIVE", () => {
     expect(effectiveStatus({ ...base, status: "ACTIVE" }, at("2026-10-01T00:00:00+07:00"))).toBe(
       "ACTIVE",
@@ -48,9 +59,23 @@ describe("start lock", () => {
     expect(isStartLocked(t, at("2026-10-30T11:59:00+07:00"))).toBe(false);
     expect(isStartLocked(t, at("2026-10-30T12:00:00+07:00"))).toBe(true);
   });
+  it("fails closed (locked) for an invalid date", () => {
+    expect(isStartLocked(base, new Date(Number.NaN))).toBe(true);
+    expect(
+      isStartLocked(
+        { ...base, seasonStartAt: new Date(Number.NaN) },
+        at("2026-10-01T00:00:00+07:00"),
+      ),
+    ).toBe(true);
+  });
 });
 
 describe("isJoiningOpen", () => {
+  it("is closed for COMPLETED and ARCHIVED", () => {
+    const now = at("2026-11-15T00:00:00+07:00");
+    expect(isJoiningOpen({ ...base, status: "COMPLETED" }, now)).toBe(false);
+    expect(isJoiningOpen({ ...base, status: "ARCHIVED" }, now)).toBe(false);
+  });
   it("is open for PUBLISHED and ACTIVE before the season end", () => {
     expect(isJoiningOpen(base, at("2026-10-20T00:00:00+07:00"))).toBe(true);
     expect(isJoiningOpen(base, at("2026-11-01T06:00:00+07:00"))).toBe(true);
