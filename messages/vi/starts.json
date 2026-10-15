@@ -1,0 +1,10 @@
+{
+  "picker": {
+    "title": "Chọn điểm xuất phát",
+    "legend": "Điểm xuất phát của đội",
+    "distance": "{km, number} km",
+    "finish": "Điểm đến",
+    "readOnly": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
+    "back": "Về trang Đội của tôi"
+  }
+}

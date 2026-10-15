@@ -1,0 +1,10 @@
+{
+  "picker": {
+    "title": "Choose start",
+    "legend": "Your team's start",
+    "distance": "{km, number} km",
+    "finish": "Finish",
+    "readOnly": "Only the captain can choose the start.",
+    "back": "Back to My Team"
+  }
+}
