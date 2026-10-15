@@ -22,8 +22,8 @@ export default async function JoinPage({ params }: { params: Promise<{ token: st
       </main>
     );
   }
-  const { tournament, teams, myTeam, joiningOpen } = view;
-  const freeTeams = teams.map((x) => ({
+  const { tournament, myTeam, joiningOpen } = view;
+  const freeTeams = view.teams.map((x) => ({
     id: x.id,
     name: x.name,
     emblemKey: x.emblemKey,
@@ -33,10 +33,9 @@ export default async function JoinPage({ params }: { params: Promise<{ token: st
     <main>
       <h1>{t("title")}</h1>
       {!joiningOpen && !myTeam ? (
-        <>
-          <h2>{t("closedTitle")}</h2>
-          <p>{t("closedBody")}</p>
-        </>
+        <p role="status">
+          <strong>{t("closedTitle")}.</strong> {t("closedBody")}
+        </p>
       ) : (
         <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} />
       )}
