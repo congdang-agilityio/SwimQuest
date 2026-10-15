@@ -13,6 +13,15 @@
     "distance": "{km, number} km",
     "finish": "Finish",
     "readOnly": "Only the captain can choose the start.",
-    "back": "Back to My Team"
+    "back": "Back to My Team",
+    "confirm": "Confirm",
+    "saved": "Start saved: {name}. You can change it until {lockAt} (Vietnam time).",
+    "errors": {
+      "NO_SELECTION": "Pick a start.",
+      "INVALID_START": "This start cannot be chosen.",
+      "START_LOCKED": "The start choice is locked (since {lockedAt}).",
+      "FORBIDDEN": "Only the captain can choose the start.",
+      "GENERIC": "Could not save. Please try again."
+    }
   }
 }
