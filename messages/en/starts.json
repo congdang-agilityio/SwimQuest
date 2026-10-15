@@ -1,4 +1,12 @@
 {
+  "card": {
+    "title": "Starting point",
+    "notChosen": "No start chosen yet",
+    "choose": "Choose start",
+    "change": "Change start",
+    "deadline": "Choose by: {deadline} (Vietnam time).",
+    "auto": "If your team has not chosen by then, a start is assigned automatically."
+  },
   "picker": {
     "title": "Choose start",
     "legend": "Your team's start",

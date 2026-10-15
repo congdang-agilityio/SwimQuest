@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultSeasonTimes, utcToVnParts, vnDayKey, vnLocalToUtc } from "./vn";
+import { defaultSeasonTimes, formatVnDateTime, utcToVnParts, vnDayKey, vnLocalToUtc } from "./vn";
 
 describe("vnLocalToUtc", () => {
   it("converts Vietnam local to UTC", () => {
@@ -64,5 +64,17 @@ describe("vnDayKey", () => {
   });
   it("rejects invalid dates", () => {
     expect(() => vnDayKey(new Date("x"))).toThrow();
+  });
+});
+
+describe("formatVnDateTime", () => {
+  it("formats a UTC instant as HH:mm dd/MM/yyyy in Vietnam time", () => {
+    expect(formatVnDateTime(new Date("2026-10-31T23:00:00Z"))).toBe("06:00 01/11/2026");
+  });
+  it("rolls the day over", () => {
+    expect(formatVnDateTime(new Date("2026-12-31T17:30:00Z"))).toBe("00:30 01/01/2027");
+  });
+  it("rejects invalid dates", () => {
+    expect(() => formatVnDateTime(new Date("x"))).toThrow();
   });
 });
