@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db";
 import { createSwimFromUpload } from "@/server/swims/create-from-upload";
 import { buildFit } from "@/server/swims/parse/__tests__/fit-builder";
@@ -83,7 +83,12 @@ const award = (result: Result) => db.$transaction((tx) => awardDistancePoints(tx
 const entriesOf = (swimResultId: string) => db.pointsEntry.findMany({ where: { swimResultId } });
 
 describe("awardDistancePoints", () => {
-  beforeEach(clean);
+  beforeEach(async () => {
+    // The seasons are in 2026; pin the clock inside them so tests do not rot.
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-06-01T00:00:00+07:00") });
+    await clean();
+  });
+  afterEach(() => vi.useRealTimers());
   afterAll(async () => {
     await clean();
     await db.$disconnect();
