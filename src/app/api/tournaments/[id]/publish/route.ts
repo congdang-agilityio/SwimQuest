@@ -7,12 +7,11 @@ import { publishTournament } from "@/server/tournaments/publish";
 
 export const dynamic = "force-dynamic";
 
-/** The public origin of the request, honoring the proxy's forwarded host and protocol. */
-function requestOrigin(request: Request): string {
-  const url = new URL(request.url);
+/** The public origin, honoring the proxy's forwarded host and protocol. */
+function originOf(request: Request): string {
   const host = request.headers.get("x-forwarded-host")?.split(",")[0].trim();
-  const proto = request.headers.get("x-forwarded-proto")?.split(",")[0].trim();
-  return host ? `${proto === "http" ? "http" : "https"}://${host}` : url.origin;
+  const proto = request.headers.get("x-forwarded-proto") === "http" ? "http" : "https";
+  return host ? `${proto}://${host}` : new URL(request.url).origin;
 }
 
 /**
@@ -34,9 +33,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
   if (!result.ok) return apiError(422, "PUBLISH_INVALID", undefined, result.issues);
 
-  const inviteUrl = `${requestOrigin(request)}/join/${result.tournament.inviteToken}`;
+  const inviteUrl = `${originOf(request)}/join/${result.tournament.inviteToken}`;
   return NextResponse.json(
     { status: "PUBLISHED", inviteUrl },
-    { status: 200, headers: { "cache-control": "no-store" } },
+    { headers: { "cache-control": "no-store" } },
   );
 }

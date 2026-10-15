@@ -40,8 +40,8 @@ export function apiError(
   const error = {
     code,
     message: messages[code],
-    ...(fields ? { fields } : {}),
-    ...(issues ? { issues } : {}),
+    ...(fields && { fields }),
+    ...(issues && { issues }),
   };
   return NextResponse.json({ error }, { status, headers: { "cache-control": "no-store" } });
 }
