@@ -12,5 +12,35 @@
     "noTeams": "No teams yet.",
     "placesLeft": "{count, plural, one {# place left} other {# places left}}",
     "full": "full"
+  },
+  "panel": {
+    "title": "Publish",
+    "preview": "Preview",
+    "publish": "Publish",
+    "publishing": "Publishing...",
+    "confirm": "Publish this tournament? Players will be able to join with the invite link.",
+    "confirmYes": "Yes, publish",
+    "cancel": "Cancel",
+    "networkError": "The request did not go through. Please try again; publishing twice is safe.",
+    "failed": "Publishing failed. Please try again later.",
+    "fixTitle": "Fix these before publishing:",
+    "issues": {
+      "SEASON_END_NOT_AFTER_START": "The season must end after it starts.",
+      "REALISTIC_LIMITS_OUT_OF_BOUNDS": "A realistic swim limit is outside the allowed range.",
+      "ROUTE_MISSING": "Choose a route.",
+      "ROUTE_DISTANCE_INVALID": "Enter a route distance above zero.",
+      "NO_TEAM": "Add at least one team.",
+      "UNKNOWN": "Something needs fixing."
+    }
+  },
+  "invite": {
+    "title": "Invite link",
+    "hint": "Send this link to players so they can join.",
+    "label": "Invite link",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the link and copy it by hand.",
+    "share": "Share",
+    "shareText": "Join my SwimQuest tournament: {name}"
   }
 }

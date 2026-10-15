@@ -12,5 +12,35 @@
     "noTeams": "Chưa có đội nào.",
     "placesLeft": "{count, plural, other {Còn # chỗ}}",
     "full": "đã đầy"
+  },
+  "panel": {
+    "title": "Công bố",
+    "preview": "Xem trước",
+    "publish": "Công bố",
+    "publishing": "Đang công bố...",
+    "confirm": "Công bố giải đấu này? Người chơi sẽ tham gia được bằng liên kết mời.",
+    "confirmYes": "Đồng ý, công bố",
+    "cancel": "Hủy",
+    "networkError": "Yêu cầu chưa gửi được. Hãy thử lại; công bố hai lần là an toàn.",
+    "failed": "Công bố không thành công. Vui lòng thử lại sau.",
+    "fixTitle": "Cần sửa trước khi công bố:",
+    "issues": {
+      "SEASON_END_NOT_AFTER_START": "Mùa giải phải kết thúc sau khi bắt đầu.",
+      "REALISTIC_LIMITS_OUT_OF_BOUNDS": "Một giới hạn bơi thực tế nằm ngoài khoảng cho phép.",
+      "ROUTE_MISSING": "Hãy chọn một lộ trình.",
+      "ROUTE_DISTANCE_INVALID": "Nhập quãng đường lộ trình lớn hơn 0.",
+      "NO_TEAM": "Hãy thêm ít nhất một đội.",
+      "UNKNOWN": "Có mục cần sửa."
+    }
+  },
+  "invite": {
+    "title": "Liên kết mời",
+    "hint": "Gửi liên kết này cho người chơi để họ tham gia.",
+    "label": "Liên kết mời",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "copyFailed": "Không sao chép được. Hãy chọn liên kết và sao chép thủ công.",
+    "share": "Chia sẻ",
+    "shareText": "Tham gia giải SwimQuest của tôi: {name}"
   }
 }
