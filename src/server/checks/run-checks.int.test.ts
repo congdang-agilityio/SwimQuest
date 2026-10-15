@@ -26,6 +26,15 @@ type TournamentOpts = {
   memberStatus?: "ACTIVE" | "LEFT";
 };
 
+/** The rules the owner DTO shows for a tournament made by `tournamentWith` (schema defaults). */
+const rulesOf = (slowestPaceS = 300) => ({
+  seasonStartAt: "2026-04-30T23:00:00.000Z",
+  seasonEndAt: "2026-06-30T17:00:00.000Z",
+  fastestPaceS: 65,
+  slowestPaceS,
+  longestSwimM: 30000,
+});
+
 /** A tournament (season 1 May to 1 July 2026, Vietnam time) with `userId` in one team. */
 async function tournamentWith(userId: string, name: string, opts: TournamentOpts = {}) {
   const org = await user(`org-${name}`);
@@ -105,7 +114,7 @@ describe("runChecks on upload", () => {
         tournamentName: "One",
         status: "VERIFIED",
         reasons: [],
-        rules: expect.any(Object),
+        rules: rulesOf(),
       },
     ]);
   });
@@ -193,7 +202,7 @@ describe("runChecks on upload", () => {
       tournamentName: "Four",
       status: "FLAGGED",
       reasons: ["PACE_TOO_SLOW"],
-      rules: expect.any(Object),
+      rules: rulesOf(240),
     });
   });
 
