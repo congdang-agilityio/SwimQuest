@@ -1,0 +1,22 @@
+{
+  "title": "Kết quả theo giải đấu",
+  "noTournament": "Buổi bơi đã được lưu nhưng chưa được tính vào giải đấu nào. Hãy tham gia một giải đấu để các buổi bơi được tính.",
+  "status": {
+    "VERIFIED": "Đã xác nhận",
+    "FLAGGED": "Cần xem xét - đang chờ duyệt",
+    "DUPLICATE": "Trùng lặp",
+    "REJECTED": "Không được tính",
+    "DISPUTED": "Đang khiếu nại",
+    "REVOKED": "Kết quả đã bị thu hồi",
+    "RULE_MISSED": "Không đạt luật của giải đấu"
+  },
+  "reasons": {
+    "NOT_A_SWIM": "Tệp không phải là hoạt động bơi",
+    "NO_DISTANCE": "Buổi bơi không có quãng đường hợp lệ",
+    "OUTSIDE_SEASON": "Bắt đầu ngoài thời gian mùa giải ({start} đến {end})",
+    "PACE_TOO_FAST": "Tốc độ nhanh hơn mức nhanh nhất thực tế của giải đấu này ({pace} / 100 m)",
+    "PACE_TOO_SLOW": "Tốc độ chậm hơn mức chậm nhất thực tế của giải đấu này ({pace} / 100 m)",
+    "DISTANCE_TOO_LONG": "Quãng đường vượt quá mức bơi dài nhất thực tế của giải đấu này ({distance})",
+    "DUPLICATE_OF_EARLIER_SWIM": "Trùng hoặc chồng thời gian với một buổi bơi bạn đã tải lên trước đó"
+  }
+}

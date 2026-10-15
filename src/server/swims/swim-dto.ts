@@ -8,7 +8,16 @@ export const swimDtoInclude = {
       tournamentId: true,
       status: true,
       reasons: true,
-      tournament: { select: { name: true } },
+      tournament: {
+        select: {
+          name: true,
+          seasonStartAt: true,
+          seasonEndAt: true,
+          fastestPaceSecPer100m: true,
+          slowestPaceSecPer100m: true,
+          longestRealisticSwimM: true,
+        },
+      },
     },
     orderBy: { createdAt: "asc" },
   },
@@ -16,9 +25,26 @@ export const swimDtoInclude = {
 
 type ResultForDto = Pick<SwimResult, "tournamentId" | "status"> & {
   reasons: unknown;
-  tournament: { name: string };
+  tournament: {
+    name: string;
+    seasonStartAt: Date;
+    seasonEndAt: Date;
+    fastestPaceSecPer100m: number;
+    slowestPaceSecPer100m: number;
+    longestRealisticSwimM: number;
+  };
 };
 export type SwimForDto = Swim & { results?: ResultForDto[] };
+
+/** The tournament limits a reason refers to, so the UI can say what the limit was. */
+export type ResultRulesDto = {
+  /** UTC instants (ISO 8601). */
+  seasonStartAt: string;
+  seasonEndAt: string;
+  fastestPaceS: number;
+  slowestPaceS: number;
+  longestSwimM: number;
+};
 
 /** The swim's outcome in one tournament; `reasons` are codes the UI turns into words. */
 export type SwimResultDto = {
@@ -26,6 +52,7 @@ export type SwimResultDto = {
   tournamentName: string;
   status: SwimResult["status"];
   reasons: string[];
+  rules: ResultRulesDto;
 };
 
 /** What the owner sees of a swim: never the track, the file hash or raw points. */
@@ -56,6 +83,13 @@ function toResultDto(r: ResultForDto): SwimResultDto {
     tournamentName: r.tournament.name,
     status: r.status,
     reasons,
+    rules: {
+      seasonStartAt: r.tournament.seasonStartAt.toISOString(),
+      seasonEndAt: r.tournament.seasonEndAt.toISOString(),
+      fastestPaceS: r.tournament.fastestPaceSecPer100m,
+      slowestPaceS: r.tournament.slowestPaceSecPer100m,
+      longestSwimM: r.tournament.longestRealisticSwimM,
+    },
   };
 }
 
