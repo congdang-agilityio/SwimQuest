@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { safeNextPath } from "@/lib/auth/public-paths";
 import { parseSignUp, type SignUpErrors, type SignUpField } from "@/lib/validation/auth";
 
 const FIELDS: { name: SignUpField; type: string; autoComplete: string }[] = [
@@ -13,12 +14,6 @@ const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding
 const errorColor = { color: "#b91c1c" };
 /** NFR-10: links are touch targets too, at least 44x44 CSS px. */
 const link = { display: "inline-flex", alignItems: "center", minHeight: 44, minWidth: 44 } as const;
-
-/** A same-site relative path (one leading slash, no scheme or backslash), else `/home`. */
-export function safeNext(next: string | undefined): string {
-  if (!next || !/^\/(?![/\\])/.test(next) || /[\\\u0000-\u001f]/.test(next)) return "/home";
-  return next;
-}
 
 export function SignUpForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
@@ -40,7 +35,7 @@ export function SignUpForm({ next }: { next?: string }) {
         body: JSON.stringify(parsed.data),
       });
       if (res.status === 201) {
-        window.location.assign(safeNext(next));
+        window.location.assign(safeNextPath(next));
         return;
       }
       setProblem(res.status === 409 ? "taken" : "failed");
