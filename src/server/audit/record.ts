@@ -4,6 +4,8 @@ import type { Prisma } from "@prisma/client";
 export const AUDIT_ACTIONS = {
   TEAM_CAPTAIN_SET: "TEAM_CAPTAIN_SET",
   TEAM_START_AUTO_ASSIGNED: "TEAM_START_AUTO_ASSIGNED",
+  INVITE_LINK_SWITCHED: "INVITE_LINK_SWITCHED",
+  INVITE_LINK_REPLACED: "INVITE_LINK_REPLACED",
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];

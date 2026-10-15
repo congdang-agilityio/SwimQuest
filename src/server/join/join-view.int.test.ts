@@ -60,6 +60,7 @@ describe("getJoinView", () => {
       ],
       myTeam: null,
       joiningOpen: true,
+      linkState: "ON",
     });
   });
 
