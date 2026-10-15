@@ -1,6 +1,7 @@
 import type { Swim, SwimResult } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
+import { awardDistancePoints } from "@/server/scoring/award-distance-points";
 import { findDuplicateOf } from "./duplicates";
 import type { ReasonCode } from "./reasons";
 import { evaluateSwim } from "./standard-checks";
@@ -15,7 +16,8 @@ export type RunChecksHooks = {
   onVerified?: (tx: Tx, result: SwimResult) => Promise<void>;
 };
 
-const noHooks: Required<RunChecksHooks> = { onVerified: async () => {} };
+/** By default a verified result gets its distance points (S-13). */
+const defaultHooks: Required<RunChecksHooks> = { onVerified: awardDistancePoints };
 
 /**
  * Serializes the uploads of one player until the transaction ends, so two uploads at the same
@@ -37,7 +39,7 @@ export async function runChecks(
   hooks: RunChecksHooks = {},
   now: Date = new Date(),
 ): Promise<void> {
-  const { onVerified } = { ...noHooks, ...hooks };
+  const { onVerified } = { ...defaultHooks, ...hooks };
   const memberships = await tx.teamMember.findMany({
     where: { userId: swim.userId, status: "ACTIVE" },
     include: { tournament: true },
