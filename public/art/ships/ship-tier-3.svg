@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 96" role="img" aria-label="Ship tier 3">
+<path d="M6 58h116l-10 24H18z" fill="#FF6B6B" stroke="#062B46" stroke-width="3" stroke-linejoin="round"/>
+<path d="M12 68h104" stroke="#FFD166" stroke-width="3" stroke-linecap="round"/>
+<path d="M30 26v32M62 10v48M94 26v32" stroke="#062B46" stroke-width="3" stroke-linecap="round"/>
+<path d="M34 30l22 26H34z" fill="#F4FBFF" stroke="#062B46" stroke-width="3" stroke-linejoin="round"/>
+<path d="M66 14l26 42H66z" fill="#F4FBFF" stroke="#062B46" stroke-width="3" stroke-linejoin="round"/>
+<path d="M98 30l22 26H98z" fill="#20C8C2" stroke="#062B46" stroke-width="3" stroke-linejoin="round"/>
+<path d="M62 10h14l-7 6z" fill="#FFD166" stroke="#062B46" stroke-width="2" stroke-linejoin="round"/>
+</svg>
