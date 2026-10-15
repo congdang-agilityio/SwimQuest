@@ -1,0 +1,42 @@
+{
+  "manage": {
+    "title": "Teams",
+    "capacity": "Capacity: {count} places",
+    "empty": "No teams yet. Add the first team.",
+    "members": "{count} / {limit}",
+    "add": "Add team",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Delete team \"{name}\"? This cannot be undone.",
+    "deleteConfirmYes": "Confirm delete",
+    "cancel": "Cancel",
+    "deleteFailed": "This team cannot be deleted. Only empty teams of a draft tournament can be deleted."
+  },
+  "form": {
+    "addTitle": "Add team",
+    "editTitle": "Edit team",
+    "name": "Team name",
+    "emblem": "Emblem",
+    "description": "Description (optional)",
+    "memberLimit": "Member limit",
+    "save": "Save team",
+    "cancel": "Cancel"
+  },
+  "emblems": {
+    "turtle": "Turtle",
+    "dolphin": "Dolphin",
+    "wave": "Wave",
+    "anchor": "Anchor",
+    "shell": "Shell",
+    "star": "Star"
+  },
+  "errors": {
+    "NAME_REQUIRED": "Enter a team name.",
+    "NAME_TOO_LONG": "The team name is at most 40 characters.",
+    "EMBLEM_INVALID": "Choose an emblem.",
+    "DESCRIPTION_TOO_LONG": "The description is at most 200 characters.",
+    "LIMIT_INVALID": "Enter a member limit of at least 1.",
+    "LIMIT_BELOW_MEMBERS": "The limit cannot be lower than the current members.",
+    "GENERIC": "Something went wrong. Please try again."
+  }
+}
