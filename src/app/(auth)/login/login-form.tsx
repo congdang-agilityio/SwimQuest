@@ -36,7 +36,7 @@ export function LoginForm({ next }: { next?: string }) {
         body: JSON.stringify({ email: data.email, password: data.password }),
       });
       if (res.status === 200) {
-        window.location.assign(safeNextPath(next, "/home"));
+        window.location.assign(safeNextPath(next));
         return;
       }
       setProblem(res.status === 401 || res.status === 400 ? "invalid" : "failed");

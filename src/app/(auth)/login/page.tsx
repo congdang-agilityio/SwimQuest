@@ -10,7 +10,7 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ next?: string | string[] }>;
 }) {
-  if (await getCurrentUser()) redirect("/home");
+  if (await getCurrentUser()) redirect("/");
   const { next } = await searchParams;
   return <LoginForm next={typeof next === "string" ? next : undefined} />;
 }

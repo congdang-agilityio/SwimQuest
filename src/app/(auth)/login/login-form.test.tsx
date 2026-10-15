@@ -77,19 +77,19 @@ describe("LoginForm", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("goes to a safe next path on 200 and to /home otherwise", async () => {
+  it("goes to a safe next path on 200 and to the home page / otherwise", async () => {
     const there = await logInWith(200, "/teams/3?x=1");
     await waitFor(() => expect(there).toHaveBeenCalledWith("/teams/3?x=1"));
     cleanup();
     const home = await logInWith(200);
-    await waitFor(() => expect(home).toHaveBeenCalledWith("/home"));
+    await waitFor(() => expect(home).toHaveBeenCalledWith("/"));
   });
 
   it.each(["//evil.com", "https://evil.com", "/\\evil.com", "/\t/evil.com", "/\n/evil.com"])(
-    "falls back to /home for the unsafe next %j",
+    "falls back to the home page / for the unsafe next %j",
     async (next) => {
       const assign = await logInWith(200, next);
-      await waitFor(() => expect(assign).toHaveBeenCalledWith("/home"));
+      await waitFor(() => expect(assign).toHaveBeenCalledWith("/"));
     },
   );
 
@@ -113,11 +113,9 @@ describe("LoginForm", () => {
 });
 
 describe("LoginPage", () => {
-  it("sends a signed-in user to /home", async () => {
+  it("sends a signed-in user to the home page /", async () => {
     getCurrentUser.mockResolvedValue({ id: "u" });
-    await expect(LoginPage({ searchParams: Promise.resolve({}) })).rejects.toThrow(
-      "REDIRECT /home",
-    );
+    await expect(LoginPage({ searchParams: Promise.resolve({}) })).rejects.toThrow(/^REDIRECT \/$/);
   });
 
   it("passes next to the form for a signed-out visitor", async () => {
