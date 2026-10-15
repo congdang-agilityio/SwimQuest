@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev -p ${PORT:-3000}",
-    "build": "next build",
+    "postinstall": "prisma generate",
+    "build": "prisma generate && next build",
     "start": "next start -p ${PORT:-3000}",
     "lint": "eslint . && prettier --check .",
     "test": "vitest run",
@@ -18,6 +19,7 @@
     "singleQuote": false
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "argon2": "^0.45.1",
     "fast-xml-parser": "^5.11.2",
