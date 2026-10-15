@@ -1,0 +1,42 @@
+{
+  "manage": {
+    "title": "Các đội",
+    "capacity": "Sức chứa: {count} chỗ",
+    "empty": "Chưa có đội nào. Hãy thêm đội đầu tiên.",
+    "members": "{count} / {limit}",
+    "add": "Thêm đội",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "deleteConfirm": "Xóa đội \"{name}\"? Việc này không thể hoàn tác.",
+    "deleteConfirmYes": "Xác nhận xóa",
+    "cancel": "Hủy",
+    "deleteFailed": "Không thể xóa đội này. Chỉ xóa được đội trống khi giải còn là bản nháp."
+  },
+  "form": {
+    "addTitle": "Thêm đội",
+    "editTitle": "Sửa đội",
+    "name": "Tên đội",
+    "emblem": "Biểu tượng",
+    "description": "Mô tả (không bắt buộc)",
+    "memberLimit": "Số thành viên tối đa",
+    "save": "Lưu đội",
+    "cancel": "Hủy"
+  },
+  "emblems": {
+    "turtle": "Rùa",
+    "dolphin": "Cá heo",
+    "wave": "Sóng",
+    "anchor": "Neo",
+    "shell": "Vỏ sò",
+    "star": "Sao"
+  },
+  "errors": {
+    "NAME_REQUIRED": "Nhập tên đội.",
+    "NAME_TOO_LONG": "Tên đội tối đa 40 ký tự.",
+    "EMBLEM_INVALID": "Chọn một biểu tượng.",
+    "DESCRIPTION_TOO_LONG": "Mô tả tối đa 200 ký tự.",
+    "LIMIT_INVALID": "Nhập số thành viên tối đa từ 1 trở lên.",
+    "LIMIT_BELOW_MEMBERS": "Giới hạn không được thấp hơn số thành viên hiện có.",
+    "GENERIC": "Có lỗi xảy ra. Vui lòng thử lại."
+  }
+}
