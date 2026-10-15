@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import vi_ from "../../../messages/vi/teams.json";
+import routesVi from "../../../messages/vi/routes.json";
 import { TeamList } from "./team-list";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
@@ -65,5 +66,32 @@ describe("TeamList links", () => {
     setup(true);
     const link = screen.getByRole("link", { name: "Đội a" });
     expect(link.getAttribute("href")).toBe("/tournaments/t1/manage/teams/a");
+  });
+});
+
+describe("TeamList start status (#158)", () => {
+  it("shows each team's start and lock only when startLock is given", () => {
+    const render_ = (startLock?: { locked: boolean; lockAtIso: string }) =>
+      render(
+        <NextIntlClientProvider locale="vi" messages={{ teams: vi_, routes: routesVi }}>
+          <TeamList
+            tournamentId="t1"
+            teams={[
+              { ...team("a", 1, 5), startNameKey: "routes.route01.son_thuy" },
+              team("b", 0, 5),
+            ]}
+            capacity={10}
+            isDraft={false}
+            startLock={startLock}
+          />
+        </NextIntlClientProvider>,
+      );
+    render_();
+    expect(screen.queryByText(/Chưa chọn điểm xuất phát/)).toBeNull();
+    cleanup();
+    render_({ locked: true, lockAtIso: "2099-11-01T06:00:00+07:00" });
+    expect(screen.getByText(/Bãi Sơn Thủy/)).toBeTruthy();
+    expect(screen.getByText("Chưa chọn điểm xuất phát")).toBeTruthy();
+    expect(screen.getAllByText(/Đã khóa từ 06:00 01\/11\/2099/)).toHaveLength(2);
   });
 });

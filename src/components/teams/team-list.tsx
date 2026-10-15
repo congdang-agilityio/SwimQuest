@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { TeamEmblem } from "./team-emblem";
 import { TeamForm } from "./team-form";
+import { TeamStartStatus } from "./team-start-status";
 
 export type TeamRow = {
   id: string;
@@ -14,6 +15,8 @@ export type TeamRow = {
   description: string | null;
   memberLimit: number;
   memberCount: number;
+  /** Message key of the chosen start, or null (only used with `startLock`). */
+  startNameKey?: string | null;
 };
 
 type Props = {
@@ -22,13 +25,15 @@ type Props = {
   capacity: number;
   /** Teams can be deleted only while the tournament is a draft. */
   isDraft: boolean;
+  /** Shows each team's start and lock state; omitted for a draft. */
+  startLock?: { locked: boolean; lockAtIso: string };
 };
 
 const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
 const errorColor = { color: "#b91c1c" };
 
 /** Organizer-only team management (rendered by the manage page, which enforces the role). */
-export function TeamList({ tournamentId, teams, capacity, isDraft }: Props) {
+export function TeamList({ tournamentId, teams, capacity, isDraft, startLock }: Props) {
   const t = useTranslations("teams");
   const router = useRouter();
   // "new", a team id being edited, or null.
@@ -86,6 +91,11 @@ export function TeamList({ tournamentId, teams, capacity, isDraft }: Props) {
                 <span>
                   {t("manage.members", { count: team.memberCount, limit: team.memberLimit })}
                 </span>{" "}
+                {startLock && (
+                  <>
+                    <TeamStartStatus startNameKey={team.startNameKey ?? null} {...startLock} />{" "}
+                  </>
+                )}
                 <button type="button" onClick={() => setEditing(team.id)} style={touch}>
                   {t("manage.edit")}
                 </button>

@@ -5,6 +5,8 @@ import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
 import { PublishPanel } from "@/components/tournaments/publish-panel";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
+import { getRoute } from "@/lib/routes";
+import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
@@ -24,6 +26,20 @@ export default async function ManageTournamentPage({
     throw err;
   });
   const { teams, capacity } = await listTeamsWithCounts(tournament.id);
+  const now = new Date();
+  const status = effectiveStatus(tournament, now);
+  const destinations = getRoute(tournament.routeId)?.destinations ?? [];
+  const rows = teams.map((team) => ({
+    ...team,
+    startNameKey: destinations.find((d) => d.slug === team.startDestination)?.nameKey ?? null,
+  }));
+  const startLock =
+    tournament.status === "DRAFT"
+      ? undefined
+      : {
+          locked: isStartLocked(tournament, now),
+          lockAtIso: startLockAt(tournament).toISOString(),
+        };
   const t = await getTranslations("organizer");
   const showInvite = tournament.status !== "DRAFT" && Boolean(tournament.inviteToken);
   const origin = showInvite ? pageOrigin(await headers()) : null;
@@ -35,7 +51,7 @@ export default async function ManageTournamentPage({
     <main>
       <h1>{tournament.name}</h1>
       <p>
-        {t("manage.status")}: <strong>{t(`manage.statusNames.${tournament.status}`)}</strong>
+        {t("manage.status")}: <strong>{t(`manage.statusNames.${status}`)}</strong>
       </p>
       <p id="season">
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
@@ -50,9 +66,10 @@ export default async function ManageTournamentPage({
       )}
       <TeamList
         tournamentId={tournament.id}
-        teams={teams}
+        teams={rows}
         capacity={capacity}
         isDraft={tournament.status === "DRAFT"}
+        startLock={startLock}
       />
     </main>
   );

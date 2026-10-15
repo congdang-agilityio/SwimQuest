@@ -38,5 +38,10 @@
     "LIMIT_INVALID": "Enter a member limit of at least 1.",
     "LIMIT_BELOW_MEMBERS": "The limit cannot be lower than the current members.",
     "GENERIC": "Something went wrong. Please try again."
+  },
+  "start": {
+    "notChosen": "Start not chosen yet",
+    "name": "Start: {name}",
+    "locked": "Locked since {lockedAt} (Vietnam time)"
   }
 }
