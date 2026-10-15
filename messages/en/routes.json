@@ -1,0 +1,19 @@
+{
+  "route01": {
+    "name": "Route 01",
+    "non_nuoc": "Non Nuoc Beach",
+    "son_thuy": "Son Thuy Beach",
+    "pham_van_dong": "Pham Van Dong Beach",
+    "man_thai": "Man Thai Beach",
+    "hon_sup": "Hon Sup",
+    "cu_lao_cham": "Cu Lao Cham",
+    "ly_son": "Ly Son"
+  },
+  "fields": {
+    "route": "Route",
+    "routeDistanceKm": "Route distance (km)"
+  },
+  "destinations": "Destinations in order",
+  "finish": "finish",
+  "distanceHint": "Enter kilometres. Every start has this same distance to Ly Son."
+}

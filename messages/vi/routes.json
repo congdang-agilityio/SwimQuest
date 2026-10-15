@@ -1,0 +1,19 @@
+{
+  "route01": {
+    "name": "Lộ trình 01",
+    "non_nuoc": "Bãi biển Non Nước",
+    "son_thuy": "Bãi Sơn Thủy",
+    "pham_van_dong": "Bãi Phạm Văn Đồng",
+    "man_thai": "Bãi Mân Thái",
+    "hon_sup": "Hòn Sụp",
+    "cu_lao_cham": "Cù Lao Chàm",
+    "ly_son": "Lý Sơn"
+  },
+  "fields": {
+    "route": "Lộ trình",
+    "routeDistanceKm": "Quãng đường lộ trình (km)"
+  },
+  "destinations": "Các điểm đến theo thứ tự",
+  "finish": "điểm về đích",
+  "distanceHint": "Nhập số ki-lô-mét. Mọi điểm xuất phát đều có cùng quãng đường này tới Lý Sơn."
+}
