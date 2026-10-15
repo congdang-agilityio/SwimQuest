@@ -9,12 +9,13 @@ export type MyTournament = {
   effectiveStatus: TournamentStatus;
   isOrganizer: boolean;
   team: { id: string; name: string; emblemKey: string } | null;
+  /** Team progress in basis points; null when there is no team or its start is not chosen yet. */
   progressBp: number | null;
 };
 
 /**
  * Tournaments the user plays in (ACTIVE membership) or organizes, newest join/creation first.
- * A draft is private to its organizer. Progress is the player's team progress (null without a team).
+ * A draft is private to its organizer. Progress is the player's team progress (null without a team or a chosen start).
  */
 export async function listMyTournaments(userId: string, now: Date): Promise<MyTournament[]> {
   const [memberships, organized] = await Promise.all([
@@ -27,28 +28,40 @@ export async function listMyTournaments(userId: string, now: Date): Promise<MyTo
 
   const rows = new Map<
     string,
-    { tournament: (typeof organized)[number]; team: MyTournament["team"]; sortAt: number }
+    {
+      tournament: (typeof organized)[number];
+      team: MyTournament["team"];
+      startChosen: boolean;
+      sortAt: number;
+    }
   >();
   for (const m of memberships) {
     if (m.tournament.status === "DRAFT" && m.tournament.organizerId !== userId) continue;
-    const { id, name, emblemKey } = m.team;
+    const { id, name, emblemKey, startDestination } = m.team;
     rows.set(m.tournamentId, {
       tournament: m.tournament,
       team: { id, name, emblemKey },
+      startChosen: startDestination !== null,
       sortAt: m.joinedAt.getTime(),
     });
   }
   for (const t of organized) {
     const existing = rows.get(t.id);
     if (existing) existing.sortAt = Math.max(existing.sortAt, t.createdAt.getTime());
-    else rows.set(t.id, { tournament: t, team: null, sortAt: t.createdAt.getTime() });
+    else
+      rows.set(t.id, {
+        tournament: t,
+        team: null,
+        startChosen: false,
+        sortAt: t.createdAt.getTime(),
+      });
   }
 
   const entries = [...rows.values()].sort((a, b) => b.sortAt - a.sortAt);
   return Promise.all(
-    entries.map(async ({ tournament: t, team }) => {
+    entries.map(async ({ tournament: t, team, startChosen }) => {
       let progressBp: number | null = null;
-      if (team) {
+      if (team && startChosen) {
         const points = (await getTeamsPoints(t.id)).get(team.id) ?? 0;
         progressBp = routeProgress({
           teamPoints: points,

@@ -25,11 +25,13 @@ export function TournamentCard({ tournament: x }: { tournament: MyTournament }) 
           <p>{t("noTeam")}</p>
         )}
         <p>{t(`status.${x.effectiveStatus}`)}</p>
-        <p>
-          {x.progressBp === null
-            ? t("progressNotStarted")
-            : t("progress", { pct: formatProgressPct(x.progressBp) })}
-        </p>
+        {x.team && (
+          <p>
+            {x.progressBp === null
+              ? t("progressNotStarted")
+              : t("progress", { pct: formatProgressPct(x.progressBp) })}
+          </p>
+        )}
         <Link href="/connect" className={styles.tap}>
           {t("addSwim")}
         </Link>
