@@ -1,0 +1,9 @@
+{
+  "back": "Quay lại trang quản lý",
+  "rosterTitle": "Thành viên",
+  "empty": "Đội chưa có thành viên.",
+  "captain": "Đội trưởng",
+  "makeCaptain": "Chọn làm đội trưởng",
+  "makeCaptainFor": "Chọn {name} làm đội trưởng",
+  "failed": "Không thể chọn đội trưởng. Hãy thử lại."
+}

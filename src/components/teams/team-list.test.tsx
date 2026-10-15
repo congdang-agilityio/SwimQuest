@@ -59,3 +59,11 @@ describe("TeamList", () => {
     expect((screen.getByLabelText(vi_.form.memberLimit) as HTMLInputElement).value).toBe("10");
   });
 });
+
+describe("TeamList links", () => {
+  it("links each team to its organizer page", () => {
+    setup(true);
+    const link = screen.getByRole("link", { name: "Đội a" });
+    expect(link.getAttribute("href")).toBe("/tournaments/t1/manage/teams/a");
+  });
+});

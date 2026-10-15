@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { TeamEmblem } from "./team-emblem";
@@ -74,7 +75,14 @@ export function TeamList({ tournamentId, teams, capacity, isDraft }: Props) {
             ) : (
               <>
                 <TeamEmblem emblemKey={team.emblemKey} size={32} alt="" />{" "}
-                <strong>{team.name}</strong>{" "}
+                <strong>
+                  <Link
+                    href={`/tournaments/${tournamentId}/manage/teams/${team.id}`}
+                    style={{ ...touch, display: "inline-block" }}
+                  >
+                    {team.name}
+                  </Link>
+                </strong>{" "}
                 <span>
                   {t("manage.members", { count: team.memberCount, limit: team.memberLimit })}
                 </span>{" "}
