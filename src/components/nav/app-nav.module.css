@@ -1,6 +1,3 @@
-.shell {
-  min-height: 100vh;
-}
 .account {
   display: flex;
   justify-content: flex-end;
@@ -11,11 +8,9 @@
   align-items: center;
   min-height: 44px;
   min-width: 44px;
-  cursor: pointer;
 }
 .nav {
   position: fixed;
-  z-index: 10;
   inset: auto 0 0 0;
   background: #fff;
   border-top: 1px solid #cbd5e1;
@@ -34,8 +29,6 @@
   align-items: center;
   justify-content: center;
   min-height: 56px;
-  min-width: 44px;
-  padding: 0 4px;
   color: inherit;
   text-decoration: none;
   border-top: 4px solid transparent;
@@ -47,7 +40,6 @@
 .link:focus-visible,
 .account summary:focus-visible {
   outline: 3px solid #1d4ed8;
-  outline-offset: -3px;
 }
 .content {
   padding-bottom: 72px;
@@ -56,7 +48,7 @@
   .nav {
     inset: 0 auto 0 0;
     width: 200px;
-    border-top: 0;
+    border: 0;
     border-right: 1px solid #cbd5e1;
   }
   .list {
@@ -64,9 +56,8 @@
   }
   .link {
     justify-content: flex-start;
-    min-height: 48px;
     padding: 0 16px;
-    border-top: 0;
+    border: 0;
     border-left: 4px solid transparent;
   }
   .link[aria-current="page"] {
@@ -75,8 +66,6 @@
   .account,
   .content {
     margin-left: 200px;
-  }
-  .content {
     padding-bottom: 0;
   }
 }

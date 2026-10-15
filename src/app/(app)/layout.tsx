@@ -16,9 +16,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const nextPath = (await headers()).get(NEXT_PATH_HEADER) ?? "/";
   const user = await requireUser(nextPath);
   return (
-    <div className={styles.shell}>
+    <>
       <AppNav displayName={user.displayName} isPlatformAdmin={user.isPlatformAdmin} />
       <div className={styles.content}>{children}</div>
-    </div>
+    </>
   );
 }
