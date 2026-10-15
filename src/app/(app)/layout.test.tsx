@@ -4,6 +4,7 @@ const state = vi.hoisted(() => ({ headers: new Headers(), requireUser: vi.fn() }
 
 vi.mock("next/headers", () => ({ headers: async () => state.headers }));
 vi.mock("@/server/auth/current-user", () => ({ requireUser: state.requireUser }));
+vi.mock("@/components/nav/app-nav", () => ({ AppNav: () => null }));
 
 const layout = await import("./layout");
 
@@ -21,13 +22,25 @@ describe("(app) layout", () => {
   it("validates the session with the original path from middleware", async () => {
     state.headers.set("x-sq-next-path", "/tournaments/1?tab=team");
     const children = <p>inside</p>;
-    await expect(layout.default({ children })).resolves.toBe(children);
+    const tree = await layout.default({ children });
+    expect(JSON.stringify(tree)).toContain("inside");
     expect(state.requireUser).toHaveBeenCalledWith("/tournaments/1?tab=team");
   });
 
   it("falls back to / when the path header is missing", async () => {
     await layout.default({ children: null });
     expect(state.requireUser).toHaveBeenCalledWith("/");
+  });
+
+  it("passes the user's name and admin flag to the navigation", async () => {
+    state.requireUser.mockResolvedValue({
+      id: "a",
+      displayName: "Admin An",
+      isPlatformAdmin: true,
+    });
+    const tree = await layout.default({ children: null });
+    const nav = tree.props.children[0];
+    expect(nav.props).toEqual({ displayName: "Admin An", isPlatformAdmin: true });
   });
 
   it("does not render children when the session is invalid", async () => {

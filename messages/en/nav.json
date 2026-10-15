@@ -1,0 +1,15 @@
+{
+  "label": "Main menu",
+  "items": {
+    "home": "Home",
+    "tournaments": "Tournaments",
+    "team": "My Team",
+    "voyage": "Voyage",
+    "profile": "Profile",
+    "admin": "Admin"
+  },
+  "profile": {
+    "title": "Profile",
+    "mySwims": "My swims"
+  }
+}

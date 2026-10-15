@@ -1,5 +1,7 @@
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { AppNav } from "@/components/nav/app-nav";
+import styles from "@/components/nav/app-nav.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 
@@ -12,6 +14,11 @@ export const dynamic = "force-dynamic";
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const nextPath = (await headers()).get(NEXT_PATH_HEADER) ?? "/";
-  await requireUser(nextPath);
-  return children;
+  const user = await requireUser(nextPath);
+  return (
+    <>
+      <AppNav displayName={user.displayName} isPlatformAdmin={user.isPlatformAdmin} />
+      <div className={styles.content}>{children}</div>
+    </>
+  );
 }

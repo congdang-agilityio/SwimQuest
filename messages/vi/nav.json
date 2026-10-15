@@ -1,0 +1,15 @@
+{
+  "label": "Menu chính",
+  "items": {
+    "home": "Trang chủ",
+    "tournaments": "Giải đấu",
+    "team": "Đội của tôi",
+    "voyage": "Hành trình",
+    "profile": "Hồ sơ",
+    "admin": "Quản trị"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "mySwims": "Các lần bơi của tôi"
+  }
+}
