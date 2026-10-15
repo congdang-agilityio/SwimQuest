@@ -1,0 +1,14 @@
+{
+  "loading": { "label": "Loading" },
+  "empty": { "title": "Nothing here yet" },
+  "error": {
+    "title": "Something went wrong",
+    "body": "We could not load this. Please try again.",
+    "retry": "Try again"
+  },
+  "accessDenied": {
+    "title": "You do not have access",
+    "body": "You are not allowed to view this page.",
+    "home": "Back to Home"
+  }
+}
