@@ -84,6 +84,25 @@ describe("POST /api/tournaments", () => {
     expect(await db.tournament.count()).toBe(0);
   });
 
+  it("returns 401 UNAUTHENTICATED for an unknown session token", async () => {
+    jar.token = "not-a-real-session-token";
+    const res = await POST(request(valid));
+
+    expect(res.status).toBe(401);
+    expect((await res.json()).error.code).toBe("UNAUTHENTICATED");
+    expect(await db.tournament.count()).toBe(0);
+  });
+
+  it("returns 401 UNAUTHENTICATED for an expired session", async () => {
+    await signIn();
+    await db.session.updateMany({ data: { expiresAt: new Date(Date.now() - 1000) } });
+    const res = await POST(request(valid));
+
+    expect(res.status).toBe(401);
+    expect((await res.json()).error.code).toBe("UNAUTHENTICATED");
+    expect(await db.tournament.count()).toBe(0);
+  });
+
   it("ignores an organizerId in the body", async () => {
     const user = await signIn();
     const other = await db.user.create({
