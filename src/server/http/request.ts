@@ -45,6 +45,8 @@ export function requestHostOrigin(headers: Headers): string {
 /** `publicOriginFrom` for pages: the origin, or `null` (error logged) when it is unknown. */
 export function pageOrigin(headers: Headers): string | null {
   try {
+    // The header-built fallback is computed always, but publicOriginFrom uses it only in
+    // development/test: the production result never depends on request headers.
     return publicOriginFrom(requestHostOrigin(headers));
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err));

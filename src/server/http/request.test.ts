@@ -116,9 +116,12 @@ describe("requestHostOrigin", () => {
     );
   });
 
-  it("falls back to localhost for a Host header that is not a plain host", () => {
-    expect(requestHostOrigin(new Headers({ host: "a.test/evil?x" }))).toBe("http://localhost");
-  });
+  it.each(["a.test/evil?x", "user@evil.example", "a.test\\evil", "a.test evil", "a.test:99999"])(
+    "falls back to localhost for a Host header that is not a plain host (%j)",
+    (host) => {
+      expect(requestHostOrigin(new Headers({ host }))).toBe("http://localhost");
+    },
+  );
 });
 
 describe("pageOrigin", () => {
