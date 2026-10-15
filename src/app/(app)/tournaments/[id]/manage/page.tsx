@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
+import { PublishPanel } from "@/components/tournaments/publish-panel";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
@@ -36,10 +37,11 @@ export default async function ManageTournamentPage({
       <p>
         {t("manage.status")}: <strong>{t(`manage.statusNames.${tournament.status}`)}</strong>
       </p>
-      <p>
+      <p id="season">
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
         {t("manage.vietnamTime")})
       </p>
+      {tournament.status === "DRAFT" && <PublishPanel tournamentId={tournament.id} />}
       {showInvite && origin && (
         <InviteLink
           url={`${origin}/join/${tournament.inviteToken}`}

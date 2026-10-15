@@ -31,6 +31,10 @@ vi.mock("@/components/tournaments/invite-link", () => ({
   InviteLink: ({ url }: { url: string }) => <div data-testid="invite">{url}</div>,
 }));
 
+vi.mock("@/components/tournaments/publish-panel", () => ({
+  PublishPanel: () => <div data-testid="publish-panel" />,
+}));
+
 const { default: ManagePage } = await import("./page");
 
 function published(status = "PUBLISHED") {
