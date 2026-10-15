@@ -65,6 +65,13 @@ describe("AppNav", () => {
     expect(screen.getByText(auth.logout.button)).toBeTruthy();
   });
 
+  it("keeps the visible display name in the account menu's accessible name", () => {
+    setup("/");
+    const summary = screen.getByText("Lan");
+    expect(summary.tagName).toBe("SUMMARY");
+    expect(summary.getAttribute("aria-label")).toBeNull();
+  });
+
   it("has the same keys in vi and en", () => {
     expect(Object.keys(vi_.items)).toEqual(Object.keys(en.items));
     expect(Object.keys(vi_.profile)).toEqual(Object.keys(en.profile));

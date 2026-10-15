@@ -1,7 +1,13 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const PASSWORD = "correct-horse-battery";
 const LABELS = ["Trang chủ", "Giải đấu", "Đội của tôi", "Hành trình", "Hồ sơ"];
+
+async function expectTapTarget(target: Locator) {
+  const box = (await target.boundingBox())!;
+  expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(box.width).toBeGreaterThanOrEqual(44);
+}
 
 test("five destinations are visible; Profile -> Log out works", async ({ page }, testInfo) => {
   await page.goto("/signup");
@@ -24,9 +30,13 @@ test("five destinations are visible; Profile -> Log out works", async ({ page },
   if (viewport.width < 768) expect(box!.y).toBeGreaterThan(viewport.height / 2);
   else expect(box!.x).toBe(0);
 
+  await expectTapTarget(page.locator("summary"));
+  await expectTapTarget(nav.getByRole("link", { name: "Trang chủ" }));
+
   await nav.getByRole("link", { name: "Hồ sơ" }).click();
   await page.waitForURL((url) => url.pathname === "/profile");
   await expect(nav.getByRole("link", { name: "Hồ sơ" })).toHaveAttribute("aria-current", "page");
+  await expectTapTarget(page.getByRole("link", { name: "Các lần bơi của tôi" }));
   await page.getByRole("button", { name: "Đăng xuất" }).click();
   await page.waitForURL((url) => url.pathname === "/login");
 });

@@ -8,20 +8,16 @@ import { isActive, navItems } from "./nav-items";
 import styles from "./app-nav.module.css";
 
 /** Bottom bar below 768 px, left navigation from 768 px; the current tab has aria-current. */
-export function AppNav({
-  displayName,
-  isPlatformAdmin,
-}: {
-  displayName: string;
-  isPlatformAdmin: boolean;
-}) {
+type Props = { displayName: string; isPlatformAdmin: boolean };
+
+export function AppNav({ displayName, isPlatformAdmin }: Props) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   return (
     <>
       <div className={styles.account}>
         <details>
-          <summary aria-label={t("account")}>{displayName}</summary>
+          <summary className={styles.tap}>{displayName}</summary>
           <LogoutButton />
         </details>
       </div>
