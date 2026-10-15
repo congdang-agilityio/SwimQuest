@@ -1,5 +1,7 @@
 /** Pages and endpoints anyone may open; `/x` also covers `/x/...`. */
 const PUBLIC_PATHS = ["/login", "/signup", "/welcome", "/api/health"];
+/** Exact paths without a session; the tick job checks its own `CRON_SECRET`. */
+const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 /** Folders whose contents (not the folder itself) are public: auth API, build output, `public/`. */
 const PUBLIC_DIRS = ["/api/auth/", "/_next/", "/icons/", "/art/"];
 const PUBLIC_FILES = new Set(["/manifest.webmanifest", "/favicon.ico", "/robots.txt"]);
@@ -12,7 +14,7 @@ const ORIGIN = "http://same.site";
 
 /** True when `pathname` can be opened without a session. */
 export function isPublicPath(pathname: string): boolean {
-  if (PUBLIC_FILES.has(pathname)) return true;
+  if (PUBLIC_FILES.has(pathname) || PUBLIC_EXACT.has(pathname)) return true;
   if (PUBLIC_DIRS.some((dir) => pathname.startsWith(dir))) return true;
   return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
