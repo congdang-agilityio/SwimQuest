@@ -7,7 +7,9 @@ export type ApiErrorCode =
   | "INVALID_BODY"
   | "FORBIDDEN_ORIGIN"
   | "INVALID_CREDENTIALS"
-  | "UNAUTHENTICATED";
+  | "UNAUTHENTICATED"
+  | "FORBIDDEN"
+  | "NOT_FOUND";
 
 const messages: Record<ApiErrorCode, string> = {
   VALIDATION_FAILED: "Some fields are invalid.",
@@ -16,6 +18,8 @@ const messages: Record<ApiErrorCode, string> = {
   FORBIDDEN_ORIGIN: "Cross-site requests are not allowed.",
   INVALID_CREDENTIALS: "The email or password is incorrect.",
   UNAUTHENTICATED: "Please log in to continue.",
+  FORBIDDEN: "You do not have permission to do this.",
+  NOT_FOUND: "The requested item was not found.",
 };
 
 /** A JSON error response: `{ error: { code, message, fields? } }`, never cached. */
