@@ -12,7 +12,10 @@ export type EventHandler<T extends DomainEventType> = (
 
 const registry = new Map<DomainEventType, EventHandler<never>[]>();
 
-/** Registers a handler for one event type. Later features call this from this module's importers. */
+/**
+ * Registers a handler for one event type. Feature modules export their handlers; this module
+ * registers them at the bottom of the file, below the registry, so there is no import cycle.
+ */
 export function registerHandler<T extends DomainEventType>(type: T, fn: EventHandler<T>): void {
   registry.set(type, [...(registry.get(type) ?? []), fn as EventHandler<never>]);
 }

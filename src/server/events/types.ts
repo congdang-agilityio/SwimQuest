@@ -1,10 +1,17 @@
+import type { SwimResultStatus } from "@prisma/client";
+
 /** Fields shared by team-scoped events. Ids only: never emails, names or GPS tracks. */
 type TeamEvent = { tournamentId: string; teamId: string };
 type MemberEvent = TeamEvent & { userId: string };
 
 /** Every domain event of release 1, keyed by type, with its payload. */
 export type DomainEventMap = {
-  SWIM_RESULT_CHANGED: TeamEvent & { swimId: string; userId: string };
+  SWIM_RESULT_CHANGED: MemberEvent & {
+    resultId: string;
+    swimId: string;
+    status: SwimResultStatus;
+    previousStatus: SwimResultStatus | null;
+  };
   TEAM_CREATED: TeamEvent & { createdBy: string };
   TEAM_JOINED: MemberEvent;
   PLAYER_ADDED_TO_TEAM: MemberEvent & { addedBy: string };
