@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
+import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import vi_ from "../../../messages/vi/publish.json";
 import { InviteLink } from "./invite-link";
@@ -11,12 +12,16 @@ afterEach(() => {
   Reflect.deleteProperty(document, "execCommand");
 });
 
-function setup() {
-  render(
+function tree() {
+  return (
     <NextIntlClientProvider locale="vi" messages={{ publish: vi_ }}>
       <InviteLink url="https://x.test/join/abc" tournamentName="Giải" />
-    </NextIntlClientProvider>,
+    </NextIntlClientProvider>
   );
+}
+
+function setup() {
+  render(tree());
 }
 
 describe("InviteLink", () => {
@@ -59,5 +64,35 @@ describe("InviteLink", () => {
     setup();
     fireEvent.click(screen.getByRole("button", { name: "Chia sẻ" }));
     expect(share).toHaveBeenCalledWith(expect.objectContaining({ url: "https://x.test/join/abc" }));
+  });
+
+  it("falls back to execCommand when the Clipboard API rejects", async () => {
+    const writeText = vi.fn().mockRejectedValue(new Error("NotAllowedError"));
+    vi.stubGlobal("navigator", { clipboard: { writeText } });
+    const exec = vi.fn().mockReturnValue(true);
+    Object.defineProperty(document, "execCommand", { value: exec, configurable: true });
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Sao chép" }));
+    expect(await screen.findByText("Đã sao chép")).toBeTruthy();
+    expect(exec).toHaveBeenCalledWith("copy");
+  });
+
+  it("removes the hidden textarea even when execCommand throws", async () => {
+    vi.stubGlobal("navigator", {});
+    Object.defineProperty(document, "execCommand", {
+      value: vi.fn().mockImplementation(() => {
+        throw new Error("boom");
+      }),
+      configurable: true,
+    });
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Sao chép" }));
+    expect(await screen.findByText(/Không sao chép được/)).toBeTruthy();
+    expect(document.querySelector("textarea")).toBeNull();
+  });
+
+  it("leaves Share out of the server HTML so hydration matches on phones", () => {
+    vi.stubGlobal("navigator", { share: vi.fn() });
+    expect(renderToString(tree())).not.toContain("Chia sẻ");
   });
 });

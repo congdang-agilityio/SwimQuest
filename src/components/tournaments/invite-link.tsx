@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
@@ -15,19 +15,19 @@ async function copyText(text: string): Promise<boolean> {
   } catch {
     // fall through to the legacy path
   }
+  const area = document.createElement("textarea");
   try {
-    const area = document.createElement("textarea");
     area.value = text;
     area.setAttribute("readonly", "");
     area.style.position = "fixed";
     area.style.opacity = "0";
     document.body.appendChild(area);
     area.select();
-    const ok = document.execCommand("copy");
-    area.remove();
-    return ok;
+    return document.execCommand("copy");
   } catch {
     return false;
+  } finally {
+    area.remove();
   }
 }
 
@@ -36,7 +36,9 @@ export function InviteLink({ url, tournamentName }: { url: string; tournamentNam
   const t = useTranslations("publish.invite");
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
   const input = useRef<HTMLInputElement>(null);
-  const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+  // Detected after mount: the server HTML never has Share, so hydration always matches.
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => setCanShare(typeof navigator.share === "function"), []);
 
   async function copy() {
     const ok = await copyText(url);

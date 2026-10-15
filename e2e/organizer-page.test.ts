@@ -17,7 +17,11 @@ test.afterAll(async () => {
     select: { id: true },
   });
   const ids = users.map((u) => u.id);
-  await prisma.tournament.deleteMany({ where: { organizerId: { in: ids } } });
+  const tournaments = { organizerId: { in: ids } };
+  await prisma.teamMember.deleteMany({ where: { team: { tournament: tournaments } } });
+  await prisma.team.deleteMany({ where: { tournament: tournaments } });
+  await prisma.tournament.deleteMany({ where: tournaments });
+  await prisma.session.deleteMany({ where: { userId: { in: ids } } });
   await prisma.user.deleteMany({ where: { id: { in: ids } } });
   await prisma.$disconnect();
 });
@@ -65,4 +69,44 @@ test("the organizer sees the draft; another player and unknown ids get not-found
   await expect(second.getByText(name)).toHaveCount(0);
   expect((await second.goto("/tournaments/unknown-id/manage"))?.status()).toBe(404);
   await other.close();
+});
+
+test("the invite link appears only after publishing, built from APP_URL", async ({
+  page,
+  baseURL,
+}, testInfo) => {
+  const p = testInfo.project.name;
+  await signUp(page, `organizer-invite-${p}-${stamp}@example.com`, "Hoa");
+  const created = await page.request.post("/api/tournaments", {
+    data: {
+      name: `Giải Mời ${p} ${stamp}`,
+      description: "Mời bạn bơi",
+      seasonStart: { date: "2030-01-01", time: "00:00" },
+      seasonEnd: { date: "2030-12-31", time: "23:59" },
+      routeId: "route01",
+      routeDistanceKm: "60",
+    },
+  });
+  expect(created.status()).toBe(201);
+  const { id } = await created.json();
+  const team = await page.request.post(`/api/tournaments/${id}/teams`, {
+    data: { name: "Cá Heo", emblemKey: "turtle", memberLimit: 5 },
+  });
+  expect(team.status()).toBe(201);
+
+  await page.goto(`/tournaments/${id}/manage`);
+  await expect(page.getByText("Bản nháp")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Liên kết mời" })).toHaveCount(0);
+  await expect(page.getByRole("textbox", { name: "Liên kết mời" })).toHaveCount(0);
+
+  const published = await page.request.post(`/api/tournaments/${id}/publish`);
+  expect(published.ok()).toBe(true);
+  const { inviteUrl } = await published.json();
+  // playwright.config.ts starts the server with APP_URL equal to baseURL.
+  const { inviteToken } = await prisma.tournament.findUniqueOrThrow({ where: { id } });
+
+  await page.goto(`/tournaments/${id}/manage`);
+  const link = page.getByRole("textbox", { name: "Liên kết mời" });
+  await expect(link).toHaveValue(`${baseURL}/join/${inviteToken}`);
+  await expect(link).toHaveValue(inviteUrl);
 });
