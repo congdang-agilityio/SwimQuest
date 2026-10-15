@@ -1,7 +1,7 @@
 // Route progress from team points (FR-41, BR-34): integer math only (NFR-08).
 export type RouteProgress = {
   progressBp: number; // basis points 0..10000, floored, capped at the route end
-  routeKmReached: number; // truncated to 0.1 km, capped at routeKmTotal
+  routeKmReached: number; // truncated to 0.1 km; equals routeKmTotal once finished
   routeKmTotal: number; // routeDistanceM / 1000
   finished: boolean;
 };
@@ -20,10 +20,10 @@ export function routeProgress(i: {
   const total = routeDistanceM * pointsPerKm; // route length in points x 1000
   const done = teamPoints * 1000;
   const finished = done >= total;
-  const reachedM = finished ? routeDistanceM : Math.floor(done / pointsPerKm);
+  const reachedM = Math.floor(done / pointsPerKm);
   return {
     progressBp: finished ? 10000 : Math.floor((done * 10000) / total),
-    routeKmReached: Math.floor(reachedM / 100) / 10,
+    routeKmReached: finished ? routeDistanceM / 1000 : Math.floor(reachedM / 100) / 10,
     routeKmTotal: routeDistanceM / 1000,
     finished,
   };

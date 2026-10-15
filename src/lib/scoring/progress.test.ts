@@ -52,6 +52,19 @@ describe("routeProgress", () => {
     expect(formatRouteKmLabel(p)).toBe("21.3 / 42.5 route km");
   });
 
+  it("shows the full route length once finished on a route not a multiple of 100 m", () => {
+    const route = { routeDistanceM: 42_195, pointsPerKm: 10 };
+    const done = routeProgress({ ...route, teamPoints: 1000 });
+    expect(done.routeKmReached).toBe(42.195);
+    expect(formatRouteKmLabel(done)).toBe("42.195 / 42.195 route km");
+    expect(formatProgressPct(done.progressBp)).toBe("100%");
+    const odd = routeProgress({ routeDistanceM: 42_550, pointsPerKm: 10, teamPoints: 426 });
+    expect(formatRouteKmLabel(odd)).toBe("42.55 / 42.55 route km");
+    const near = routeProgress({ ...route, teamPoints: 421 });
+    expect(near.finished).toBe(false);
+    expect(formatRouteKmLabel(near)).toBe("42.1 / 42.195 route km");
+  });
+
   it("floors instead of rounding up", () => {
     const p = routeProgress({
       teamPoints: 2,
