@@ -12,3 +12,4 @@ requirement
 CLAUDE.md
 README.md
 .github/workflows/release-gate.yml
+src/lib/art/assets.json
