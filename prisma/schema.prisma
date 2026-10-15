@@ -22,20 +22,23 @@ enum ActorType {
 }
 
 model User {
-  id              String       @id @default(cuid())
+  id              String        @id @default(cuid())
   /// Always stored lower-cased (normalized by the client in src/server/db.ts).
-  email           String       @unique
+  email           String        @unique
   passwordHash    String
   displayName     String
-  status          UserStatus   @default(ACTIVE)
-  isPlatformAdmin Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  status          UserStatus    @default(ACTIVE)
+  isPlatformAdmin Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   sessions        Session[]
   auditEvents     AuditEvent[]
-  organized       Tournament[] @relation("OrganizedTournaments")
-  captainOf       Team[]       @relation("CaptainedTeams")
+  organized       Tournament[]  @relation("OrganizedTournaments")
+  captainOf       Team[]        @relation("CaptainedTeams")
   memberships     TeamMember[]
+  swims           Swim[]
+  swimResults     SwimResult[]
+  pointsEntries   PointsEntry[]
 }
 
 model Session {
@@ -116,28 +119,32 @@ model Tournament {
   updatedAt             DateTime         @updatedAt @db.Timestamptz(3)
   teams                 Team[]
   members               TeamMember[]
+  swimResults           SwimResult[]
+  pointsEntries         PointsEntry[]
 
   @@index([organizerId])
 }
 
 model Team {
-  id               String       @id @default(cuid())
+  id               String        @id @default(cuid())
   tournamentId     String
-  tournament       Tournament   @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournament       Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   name             String
   emblemKey        String
   description      String?
   /// At least 1 (check constraint "Team_memberLimit_check").
   memberLimit      Int
   captainUserId    String?
-  captain          User?        @relation("CaptainedTeams", fields: [captainUserId], references: [id], onDelete: SetNull)
+  captain          User?         @relation("CaptainedTeams", fields: [captainUserId], references: [id], onDelete: SetNull)
   /// Destination slug from the tournament's route.
   startDestination String?
-  startSetAt       DateTime?    @db.Timestamptz(3)
+  startSetAt       DateTime?     @db.Timestamptz(3)
   startSetBy       StartSetBy?
-  createdAt        DateTime     @default(now()) @db.Timestamptz(3)
-  updatedAt        DateTime     @updatedAt @db.Timestamptz(3)
+  createdAt        DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime      @updatedAt @db.Timestamptz(3)
   members          TeamMember[]
+  swimResults      SwimResult[]
+  pointsEntries    PointsEntry[]
 
   /// Target of TeamMember's (teamId, tournamentId) foreign key.
   @@unique([id, tournamentId])
@@ -160,4 +167,109 @@ model TeamMember {
   @@unique([tournamentId, userId], map: "TeamMember_one_active_per_tournament", where: raw("\"status\" = 'ACTIVE'"))
   @@index([teamId, status])
   @@index([userId])
+}
+
+enum SwimSource {
+  GPX
+  FIT
+}
+
+enum SwimType {
+  POOL
+  OPEN_WATER
+  UNKNOWN
+}
+
+enum SwimResultStatus {
+  VERIFIED
+  FLAGGED
+  REJECTED
+  DUPLICATE
+  DISPUTED
+  REVOKED
+  RULE_MISSED
+}
+
+enum PointsKind {
+  DISTANCE
+  FIRST_SWIM_BONUS
+  LONG_SWIM_BONUS
+  WEEKLY_MULTIPLIER
+  REVERSAL
+}
+
+/// One uploaded activity file. Distances are whole metres, durations whole seconds (>= 0).
+model Swim {
+  id               String       @id @default(cuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id])
+  source           SwimSource
+  fileSha256       String
+  originalFilename String
+  startedAt        DateTime     @db.Timestamptz(3)
+  endedAt          DateTime     @db.Timestamptz(3)
+  distanceM        Int
+  durationS        Int
+  swimType         SwimType
+  /// Sport as reported by the file, e.g. "swimming".
+  sport            String
+  isSwim           Boolean
+  duplicateOfId    String?
+  duplicateOf      Swim?        @relation("SwimDuplicates", fields: [duplicateOfId], references: [id], onDelete: SetNull)
+  duplicates       Swim[]       @relation("SwimDuplicates")
+  /// Private GPS track: never returned to anyone but the owner.
+  track            Json?
+  createdAt        DateTime     @default(now()) @db.Timestamptz(3)
+  results          SwimResult[]
+
+  @@index([userId, startedAt])
+  @@index([userId, fileSha256])
+}
+
+/// A swim's outcome in one tournament; a swim has at most one result per tournament.
+model SwimResult {
+  id            String           @id @default(cuid())
+  swimId        String
+  swim          Swim             @relation(fields: [swimId], references: [id], onDelete: Cascade)
+  /// Always the team's tournament (enforced by the composite foreign key).
+  tournamentId  String
+  tournament    Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  teamId        String
+  team          Team             @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
+  userId        String
+  user          User             @relation(fields: [userId], references: [id])
+  status        SwimResultStatus
+  /// JSON array of reason codes.
+  reasons       Json
+  countedM      Int              @default(0)
+  createdAt     DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime         @updatedAt @db.Timestamptz(3)
+  pointsEntries PointsEntry[]
+
+  @@unique([swimId, tournamentId])
+  @@index([tournamentId, status])
+}
+
+/// Append-only points ledger: corrections add REVERSAL entries, rows are never edited.
+model PointsEntry {
+  id           String      @id @default(cuid())
+  /// Always the team's tournament (enforced by the composite foreign key).
+  tournamentId String
+  tournament   Tournament  @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  teamId       String
+  team         Team        @relation(fields: [teamId, tournamentId], references: [id, tournamentId], onDelete: Cascade)
+  swimResultId String?
+  swimResult   SwimResult? @relation(fields: [swimResultId], references: [id], onDelete: NoAction)
+  kind         PointsKind
+  points       Int
+  countedM     Int         @default(0)
+  /// Vietnam calendar day "YYYY-MM-DD" (check constraint "PointsEntry_vnDay_check").
+  vnDay        String      @db.Char(10)
+  createdAt    DateTime    @default(now()) @db.Timestamptz(3)
+
+  @@unique([swimResultId, kind])
+  @@index([tournamentId, userId, vnDay])
+  @@index([tournamentId, teamId, createdAt])
 }
