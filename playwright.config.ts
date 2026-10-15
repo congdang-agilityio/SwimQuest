@@ -16,7 +16,7 @@ export default defineConfig({
   webServer: {
     command: "npm run build && npm start",
     url: `http://localhost:${port}/api/health`,
-    env: { PORT: String(port) },
+    env: { PORT: String(port), APP_URL: `http://localhost:${port}` },
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
   },
