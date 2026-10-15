@@ -41,17 +41,13 @@ export function TeamPicker({ token, teams, myTeam }: Props) {
 
   async function choose(teamId: string) {
     setBusy(true);
-    setMessage(null);
     const res = await fetch(`/api/join/${encodeURIComponent(token)}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ teamId }),
     }).catch(() => null);
     setBusy(false);
-    if (res?.ok) {
-      router.push("/team");
-      return;
-    }
+    if (res?.ok) return router.push("/team");
     const body = res ? await res.json().catch(() => null) : null;
     if (res?.status === 409 && body?.error?.code === "TEAM_FULL") setMessage("justFilled");
     else setMessage("failed");
