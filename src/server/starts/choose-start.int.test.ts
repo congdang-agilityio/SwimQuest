@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import { db } from "@/server/db";
-import { chooseStart, getTeamStart, InvalidStartError } from "./choose-start";
+import { chooseStart, getTeamStart, InvalidStartError, StartLockedError } from "./choose-start";
 
 async function clean() {
   await db.teamMember.deleteMany();
@@ -15,7 +15,10 @@ async function clean() {
 const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
-async function setup() {
+// Far from the real clock, so the tests without an injected clock never reach the lock.
+const SEASON_START = new Date("2099-11-01T06:00:00+07:00");
+
+async function setup(dates: { startChoiceDeadlineAt?: Date } = {}) {
   const organizer = await user("organizer");
   const captain = await user("captain");
   const member = await user("member");
@@ -24,8 +27,9 @@ async function setup() {
       organizerId: organizer.id,
       name: "Cup",
       description: "d",
-      seasonStartAt: new Date("2026-11-01T00:00:00+07:00"),
-      seasonEndAt: new Date("2026-12-01T00:00:00+07:00"),
+      seasonStartAt: SEASON_START,
+      seasonEndAt: new Date("2099-12-01T00:00:00+07:00"),
+      startChoiceDeadlineAt: dates.startChoiceDeadlineAt ?? null,
       routeId: "route01",
       routeDistanceM: 100000,
     },
@@ -152,5 +156,79 @@ describe("chooseStart / getTeamStart", () => {
     ]);
     expect(results.filter((r) => r.changed)).toHaveLength(1);
     expect((await stored(team.id)).startDestination).toBe("son_thuy");
+  });
+
+  describe("after the start-choice lock", () => {
+    const justBefore = new Date(SEASON_START.getTime() - 1000);
+
+    const setStart = (teamId: string, slug: string, setBy: "CAPTAIN" | "AUTOMATIC") =>
+      db.team.update({
+        where: { id: teamId },
+        data: {
+          startDestination: slug,
+          startSetAt: new Date("2099-10-01T00:00:00Z"),
+          startSetBy: setBy,
+        },
+      });
+
+    it("still allows a change one second before the deadline", async () => {
+      const { captain, team } = await setup();
+      await setStart(team.id, "non_nuoc", "CAPTAIN");
+      const result = await chooseStart(captain.id, team.id, "hon_sup", justBefore);
+      expect(result.changed).toBe(true);
+      expect((await stored(team.id)).startDestination).toBe("hon_sup");
+    });
+
+    for (const setBy of ["CAPTAIN", "AUTOMATIC"] as const) {
+      it(`refuses a different start exactly at the deadline (start set by ${setBy})`, async () => {
+        const { captain, team } = await setup();
+        await setStart(team.id, "non_nuoc", setBy);
+        const before = await stored(team.id);
+        const err = await chooseStart(captain.id, team.id, "hon_sup", SEASON_START).catch(
+          (e: unknown) => e,
+        );
+        expect(err).toBeInstanceOf(StartLockedError);
+        expect(err).toMatchObject({ status: 409, code: "START_LOCKED", lockedAt: SEASON_START });
+        expect(await stored(team.id)).toEqual(before);
+      });
+
+      it(`accepts the same start at the deadline without writing (start set by ${setBy})`, async () => {
+        const { captain, team } = await setup();
+        await setStart(team.id, "non_nuoc", setBy);
+        const before = await stored(team.id);
+        const result = await chooseStart(captain.id, team.id, "non_nuoc", SEASON_START);
+        expect(result).toEqual({
+          changed: false,
+          start: { slug: "non_nuoc", setAt: before.startSetAt, setBy },
+        });
+        expect(await stored(team.id)).toEqual(before);
+      });
+    }
+
+    it("refuses a first start once locked and writes nothing", async () => {
+      const { captain, team } = await setup();
+      await expect(
+        chooseStart(captain.id, team.id, "non_nuoc", SEASON_START),
+      ).rejects.toBeInstanceOf(StartLockedError);
+      expect((await stored(team.id)).startDestination).toBeNull();
+    });
+
+    it("locks at the start-choice deadline when it is set before the season start", async () => {
+      const deadline = new Date("2099-10-30T12:00:00+07:00");
+      const { captain, team } = await setup({ startChoiceDeadlineAt: deadline });
+      await setStart(team.id, "non_nuoc", "CAPTAIN");
+      const ok = await chooseStart(
+        captain.id,
+        team.id,
+        "son_thuy",
+        new Date(deadline.getTime() - 1000),
+      );
+      expect(ok.changed).toBe(true);
+      const err = await chooseStart(captain.id, team.id, "hon_sup", deadline).catch(
+        (e: unknown) => e,
+      );
+      expect(err).toMatchObject({ code: "START_LOCKED", lockedAt: deadline });
+      expect((await stored(team.id)).startDestination).toBe("son_thuy");
+    });
   });
 });

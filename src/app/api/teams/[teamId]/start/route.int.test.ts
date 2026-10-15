@@ -37,7 +37,8 @@ async function clean() {
 const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
-async function setup() {
+// Far from the real clock by default, so only the lock test reaches the start-choice deadline.
+async function setup(seasonStartAt = new Date("2099-11-01T06:00:00+07:00")) {
   const organizer = await user("organizer");
   const captain = await user("captain");
   const member = await user("member");
@@ -46,8 +47,8 @@ async function setup() {
       organizerId: organizer.id,
       name: "Cup",
       description: "d",
-      seasonStartAt: new Date("2026-11-01T00:00:00+07:00"),
-      seasonEndAt: new Date("2026-12-01T00:00:00+07:00"),
+      seasonStartAt,
+      seasonEndAt: new Date("2099-12-01T00:00:00+07:00"),
       routeId: "route01",
       routeDistanceM: 100000,
     },
@@ -104,6 +105,29 @@ describe("PUT /api/teams/:teamId/start", () => {
       expect(res.status).toBe(422);
       expect((await res.json()).error.code).toBe("INVALID_START");
     }
+  });
+
+  it("returns 409 START_LOCKED with the lock time for a different start after the deadline", async () => {
+    const lockedAt = new Date("2026-01-01T06:00:00+07:00");
+    const { captain, team } = await setup(lockedAt);
+    await db.team.update({
+      where: { id: team.id },
+      data: { startDestination: "non_nuoc", startSetAt: lockedAt, startSetBy: "AUTOMATIC" },
+    });
+    await signIn(captain.id);
+    const res = await PUT(req({ destination: "hon_sup" }), ctx(team.id));
+    expect(res.status).toBe(409);
+    expect((await res.json()).error).toMatchObject({
+      code: "START_LOCKED",
+      message: expect.any(String),
+      issues: [{ lockedAt: lockedAt.toISOString() }],
+    });
+    expect((await db.team.findUniqueOrThrow({ where: { id: team.id } })).startDestination).toBe(
+      "non_nuoc",
+    );
+    const same = await PUT(req({ destination: "non_nuoc" }), ctx(team.id));
+    expect(same.status).toBe(200);
+    expect(await same.json()).toEqual({ destination: "non_nuoc", changed: false });
   });
 
   it("returns 400 INVALID_BODY for a non-JSON object body", async () => {
