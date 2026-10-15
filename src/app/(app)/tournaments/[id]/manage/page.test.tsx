@@ -31,6 +31,10 @@ vi.mock("@/components/tournaments/invite-link", () => ({
   InviteLink: ({ url }: { url: string }) => <div data-testid="invite">{url}</div>,
 }));
 
+vi.mock("@/components/tournaments/publish-panel", () => ({
+  PublishPanel: () => <div data-testid="publish-panel" />,
+}));
+
 const { default: ManagePage } = await import("./page");
 
 function published(status = "PUBLISHED") {
@@ -94,5 +98,15 @@ describe("organizer manage page invite link origin", () => {
     await renderPage();
     expect(screen.queryByTestId("invite")).toBeNull();
     expect(error).not.toHaveBeenCalled();
+  });
+
+  it("shows the publish panel for a draft only", async () => {
+    state.tournament = published("DRAFT");
+    await renderPage();
+    expect(screen.getByTestId("publish-panel")).toBeTruthy();
+    cleanup();
+    state.tournament = published();
+    await renderPage();
+    expect(screen.queryByTestId("publish-panel")).toBeNull();
   });
 });
