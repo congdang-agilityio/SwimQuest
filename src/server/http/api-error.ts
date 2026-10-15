@@ -22,6 +22,7 @@ export type ApiErrorCode =
   | "UNSUPPORTED_FILE"
   | "UNREADABLE_FILE"
   | "NO_DISTANCE"
+  | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
 const messages: Record<ApiErrorCode, string> = {
@@ -45,6 +46,7 @@ const messages: Record<ApiErrorCode, string> = {
   UNSUPPORTED_FILE: "Only GPX or FIT files are supported. Export one from your watch or app.",
   UNREADABLE_FILE: "The file has no readable activity data. Export it again as GPX or FIT.",
   NO_DISTANCE: "The file has no swim distance. Export it as FIT or with distance from your app.",
+  SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
 
