@@ -1,0 +1,42 @@
+{
+  "connect": {
+    "title": "Add a swim",
+    "upload": "Upload GPX/FIT file",
+    "uploadHint": "Choose a .gpx or .fit file exported from your watch or app (10 MB at most).",
+    "busy": "Reading the file…",
+    "submit": "Upload",
+    "chooseFile": "Choose a GPX or FIT file.",
+    "exportHint": "Export the swim as GPX or FIT from your watch or app (Garmin Connect, Strava, Apple Health…) and try again."
+  },
+  "errors": {
+    "FILE_REQUIRED": "No file was chosen.",
+    "FILE_TOO_LARGE": "The file is too large (10 MB at most).",
+    "UNSUPPORTED_FILE": "This file type is not supported. Only GPX or FIT files are accepted.",
+    "UNREADABLE_FILE": "We could not read this file. It may be damaged.",
+    "NO_DISTANCE": "The file has no swim distance, so it cannot be saved.",
+    "UNAUTHENTICATED": "Your session has expired. Please log in again.",
+    "GENERIC": "Something went wrong. Please try again."
+  },
+  "summary": {
+    "title": "Swim saved",
+    "dateTime": "Start date and time (Vietnam time)",
+    "distance": "Distance",
+    "duration": "Duration",
+    "pace": "Average pace",
+    "type": "Type",
+    "status": "Status",
+    "types": {
+      "POOL": "Pool",
+      "OPEN_WATER": "Open water",
+      "UNKNOWN": "Unknown"
+    },
+    "statuses": {
+      "saved": "Saved",
+      "counted": "Counted for points",
+      "flagged": "Waiting for a check",
+      "notCounted": "Saved, not counted",
+      "duplicate": "Duplicate of a swim you already uploaded",
+      "notSwim": "Not a swim"
+    }
+  }
+}

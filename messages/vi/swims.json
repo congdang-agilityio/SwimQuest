@@ -1,0 +1,42 @@
+{
+  "connect": {
+    "title": "Thêm buổi bơi",
+    "upload": "Tải lên tệp GPX/FIT",
+    "uploadHint": "Chọn tệp .gpx hoặc .fit xuất từ đồng hồ hoặc ứng dụng của bạn (tối đa 10 MB).",
+    "busy": "Đang đọc tệp…",
+    "submit": "Tải lên",
+    "chooseFile": "Chọn một tệp GPX hoặc FIT.",
+    "exportHint": "Hãy xuất buổi bơi dưới dạng GPX hoặc FIT từ đồng hồ hoặc ứng dụng (Garmin Connect, Strava, Apple Health…) rồi thử lại."
+  },
+  "errors": {
+    "FILE_REQUIRED": "Chưa có tệp nào được chọn.",
+    "FILE_TOO_LARGE": "Tệp quá lớn (tối đa 10 MB).",
+    "UNSUPPORTED_FILE": "Định dạng tệp này không được hỗ trợ. Chỉ nhận tệp GPX hoặc FIT.",
+    "UNREADABLE_FILE": "Không đọc được tệp này. Có thể tệp bị hỏng.",
+    "NO_DISTANCE": "Tệp không có quãng đường bơi nên không thể lưu.",
+    "UNAUTHENTICATED": "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại.",
+    "GENERIC": "Đã có lỗi xảy ra. Vui lòng thử lại."
+  },
+  "summary": {
+    "title": "Buổi bơi đã lưu",
+    "dateTime": "Ngày và giờ bắt đầu (giờ Việt Nam)",
+    "distance": "Quãng đường",
+    "duration": "Thời gian",
+    "pace": "Tốc độ trung bình",
+    "type": "Loại",
+    "status": "Trạng thái",
+    "types": {
+      "POOL": "Bơi hồ",
+      "OPEN_WATER": "Bơi ngoài trời",
+      "UNKNOWN": "Chưa rõ"
+    },
+    "statuses": {
+      "saved": "Đã lưu",
+      "counted": "Đã được tính điểm",
+      "flagged": "Đang chờ kiểm tra",
+      "notCounted": "Đã lưu, chưa được tính",
+      "duplicate": "Trùng với buổi bơi đã tải lên",
+      "notSwim": "Không phải buổi bơi"
+    }
+  }
+}
