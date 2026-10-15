@@ -16,7 +16,7 @@ const link = { display: "inline-flex", alignItems: "center", minHeight: 44, minW
 
 export function LoginForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
-  const [missing, setMissing] = useState<Partial<Record<Field, true>>>({});
+  const [missing, setMissing] = useState<Record<Field, boolean>>({ email: false, password: false });
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<"invalid" | "failed" | null>(null);
   const safeNext = safeNextPath(next, "");
@@ -24,9 +24,7 @@ export function LoginForm({ next }: { next?: string }) {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget)) as Record<Field, string>;
-    const empty: Partial<Record<Field, true>> = {};
-    if (!data.email?.trim()) empty.email = true;
-    if (!data.password) empty.password = true;
+    const empty = { email: !data.email?.trim(), password: !data.password };
     setProblem(null);
     setMissing(empty);
     if (empty.email || empty.password) return;
