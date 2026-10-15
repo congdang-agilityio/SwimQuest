@@ -26,6 +26,34 @@ export function publicOriginFrom(fallback: string): string {
   throw new Error("APP_URL is not set: the public origin is unknown.");
 }
 
+/**
+ * Development/test fallback origin from the `Host` header: https only when the first
+ * `x-forwarded-proto` value is https. `x-forwarded-host` is never read.
+ */
+export function requestHostOrigin(headers: Headers): string {
+  const first = headers.get("x-forwarded-proto")?.split(",")[0].trim().toLowerCase();
+  const proto = first === "https" ? "https" : "http";
+  const host = headers.get("host") ?? "localhost";
+  if (!/[/?#@\\\s]/.test(host)) {
+    try {
+      return new URL(`${proto}://${host}`).origin;
+    } catch {}
+  }
+  return `${proto}://localhost`;
+}
+
+/** `publicOriginFrom` for pages: the origin, or `null` (error logged) when it is unknown. */
+export function pageOrigin(headers: Headers): string | null {
+  try {
+    // The header-built fallback is computed always, but publicOriginFrom uses it only in
+    // development/test: the production result never depends on request headers.
+    return publicOriginFrom(requestHostOrigin(headers));
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    return null;
+  }
+}
+
 /** False for cross-site browser requests: a foreign or opaque Origin, or Sec-Fetch-Site. */
 export function isSameOrigin(request: Request): boolean {
   if (request.headers.get("sec-fetch-site") === "cross-site") return false;

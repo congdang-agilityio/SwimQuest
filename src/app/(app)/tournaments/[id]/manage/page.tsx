@@ -7,13 +7,8 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { utcToVnParts } from "@/lib/time/vn";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
-import { publicOriginFrom } from "@/server/http/request";
+import { pageOrigin } from "@/server/http/request";
 import { listTeamsWithCounts } from "@/server/teams/manage";
-
-/** Invite link origin: the shared `publicOriginFrom` rules, with the request host as fallback. */
-async function origin(): Promise<string> {
-  return publicOriginFrom(`http://${(await headers()).get("host") ?? "localhost"}`);
-}
 
 /** Organizer page: only the organizer sees it; anyone else gets the not-found page (S-04 AC 5). */
 export default async function ManageTournamentPage({
@@ -29,6 +24,8 @@ export default async function ManageTournamentPage({
   });
   const { teams, capacity } = await listTeamsWithCounts(tournament.id);
   const t = await getTranslations("organizer");
+  const showInvite = tournament.status !== "DRAFT" && Boolean(tournament.inviteToken);
+  const origin = showInvite ? pageOrigin(await headers()) : null;
   const when = (d: Date) => {
     const { date, time } = utcToVnParts(d);
     return `${time} ${date}`;
@@ -43,9 +40,9 @@ export default async function ManageTournamentPage({
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
         {t("manage.vietnamTime")})
       </p>
-      {tournament.status !== "DRAFT" && tournament.inviteToken && (
+      {showInvite && origin && (
         <InviteLink
-          url={`${await origin()}/join/${tournament.inviteToken}`}
+          url={`${origin}/join/${tournament.inviteToken}`}
           tournamentName={tournament.name}
         />
       )}

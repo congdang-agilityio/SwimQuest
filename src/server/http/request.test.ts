@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { publicOrigin, publicOriginFrom } from "./request";
+import { pageOrigin, publicOrigin, publicOriginFrom, requestHostOrigin } from "./request";
 
 const spoofed = {
   "x-forwarded-host": "evil.example",
@@ -78,4 +78,93 @@ describe("publicOriginFrom", () => {
     vi.stubEnv("APP_URL", "");
     expect(() => publicOriginFrom("http://evil.example")).toThrow(/APP_URL/);
   });
+});
+
+describe("requestHostOrigin", () => {
+  it("uses https when x-forwarded-proto is https (the #573 reproduction)", () => {
+    const h = new Headers({ host: "localhost:4100", "x-forwarded-proto": "https" });
+    expect(requestHostOrigin(h)).toBe("https://localhost:4100");
+  });
+
+  it.each([undefined, "http", "wss", "", "httpss"])(
+    "uses http when x-forwarded-proto is %j",
+    (proto) => {
+      const h = new Headers({ host: "localhost:4100" });
+      if (proto !== undefined) h.set("x-forwarded-proto", proto);
+      expect(requestHostOrigin(h)).toBe("http://localhost:4100");
+    },
+  );
+
+  it("reads only the first, trimmed, case-insensitive x-forwarded-proto value", () => {
+    expect(
+      requestHostOrigin(new Headers({ host: "a.test", "x-forwarded-proto": " HTTPS , http" })),
+    ).toBe("https://a.test");
+    expect(
+      requestHostOrigin(new Headers({ host: "a.test", "x-forwarded-proto": "http, https" })),
+    ).toBe("http://a.test");
+  });
+
+  it("never reads x-forwarded-host", () => {
+    const h = new Headers({ host: "localhost:4100", "x-forwarded-host": "evil.example" });
+    expect(requestHostOrigin(h)).toBe("http://localhost:4100");
+  });
+
+  it("falls back to localhost without a Host header", () => {
+    expect(requestHostOrigin(new Headers())).toBe("http://localhost");
+    expect(requestHostOrigin(new Headers({ "x-forwarded-proto": "https" }))).toBe(
+      "https://localhost",
+    );
+  });
+
+  it.each(["a.test/evil?x", "user@evil.example", "a.test\\evil", "a.test evil", "a.test:99999"])(
+    "falls back to localhost for a Host header that is not a plain host (%j)",
+    (host) => {
+      expect(requestHostOrigin(new Headers({ host }))).toBe("http://localhost");
+    },
+  );
+});
+
+describe("pageOrigin", () => {
+  const headers = () =>
+    new Headers({
+      host: "localhost:4100",
+      "x-forwarded-proto": "https",
+      "x-forwarded-host": "evil.example",
+    });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it("prefers a valid APP_URL over the request headers", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("APP_URL", "https://swim.example.com/x");
+    expect(pageOrigin(headers())).toBe("https://swim.example.com");
+  });
+
+  it.each(["development", "test"])("uses the request host fallback in %s", (env) => {
+    vi.stubEnv("NODE_ENV", env);
+    vi.stubEnv("APP_URL", "");
+    expect(pageOrigin(headers())).toBe("https://localhost:4100");
+  });
+
+  it("returns null and logs in production without APP_URL", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("APP_URL", "");
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(pageOrigin(headers())).toBeNull();
+    expect(error).toHaveBeenCalledWith(expect.stringMatching(/APP_URL is not set/));
+  });
+
+  it.each(["not a url", "ftp://swim.example.com", "javascript:alert(1)"])(
+    "returns null and logs in production with an invalid APP_URL %j",
+    (value) => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("APP_URL", value);
+      const error = vi.spyOn(console, "error").mockImplementation(() => {});
+      expect(pageOrigin(headers())).toBeNull();
+      expect(error).toHaveBeenCalledWith(expect.stringMatching(/APP_URL must be/));
+    },
+  );
 });
