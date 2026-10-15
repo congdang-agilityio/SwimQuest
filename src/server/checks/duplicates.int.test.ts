@@ -62,6 +62,35 @@ describe("findDuplicateOf", () => {
     expect(found).toBe(original.id);
   });
 
+  it.each([
+    ["starts earlier and runs into the start", "05:45", "06:15", "d"],
+    ["contains the existing swim", "05:30", "07:00", "e"],
+    ["lies inside the existing swim", "06:10", "06:20", "f"],
+  ])("matches an overlap in every direction: %s", async (_case, start, end, hashChar) => {
+    const user = await makeUser("a@example.com");
+    const original = await makeSwim(user.id, "b".repeat(64), "06:00", "06:30");
+    const found = await findDuplicateOf(db, user.id, {
+      fileSha256: hashChar.repeat(64),
+      startedAt: at(start),
+      endedAt: at(end),
+    });
+    expect(found).toBe(original.id);
+  });
+
+  it("returns the earliest matching swim", async () => {
+    const user = await makeUser("a@example.com");
+    const first = await makeSwim(user.id, HASH, "09:00", "09:30");
+    const later = await makeSwim(user.id, "b".repeat(64), "06:00", "06:30");
+    const createdLater = new Date(first.createdAt.getTime() + 60_000);
+    await db.swim.update({ where: { id: later.id }, data: { createdAt: createdLater } });
+    const found = await findDuplicateOf(db, user.id, {
+      fileSha256: HASH,
+      startedAt: at("06:10"),
+      endedAt: at("06:20"),
+    });
+    expect(found).toBe(first.id);
+  });
+
   it("does not match touching intervals", async () => {
     const user = await makeUser("a@example.com");
     await makeSwim(user.id, "b".repeat(64), "06:00", "06:30");
