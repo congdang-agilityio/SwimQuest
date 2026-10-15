@@ -69,3 +69,10 @@ export function previousWeekStart(weekStart: string): string {
   vnWeekRange(weekStart);
   return msToDay(dayToMs(weekStart) - 7 * DAY_MS);
 }
+
+/** Display form "HH:mm dd/MM/yyyy" of an instant in Vietnam time. */
+export function formatVnDateTime(instant: Date): string {
+  const { date, time } = utcToVnParts(instant);
+  const [y, m, d] = date.split("-");
+  return `${time} ${d}/${m}/${y}`;
+}

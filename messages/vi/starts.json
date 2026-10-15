@@ -1,4 +1,12 @@
 {
+  "card": {
+    "title": "Điểm xuất phát",
+    "notChosen": "Chưa chọn điểm xuất phát",
+    "choose": "Chọn điểm xuất phát",
+    "change": "Đổi điểm xuất phát",
+    "deadline": "Hạn chọn: {deadline} (giờ Việt Nam).",
+    "auto": "Nếu đến hạn đội chưa chọn, hệ thống sẽ tự gán một điểm xuất phát."
+  },
   "picker": {
     "title": "Chọn điểm xuất phát",
     "legend": "Điểm xuất phát của đội",
