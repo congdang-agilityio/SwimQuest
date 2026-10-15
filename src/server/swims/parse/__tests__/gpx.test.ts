@@ -109,4 +109,11 @@ describe("parseGpx", () => {
     const xml = `<gpx><trk><type>swimming</type><trkseg><trkpt lat="1" lon="1"/><trkpt lat="1" lon="2"/></trkseg></trk></gpx>`;
     expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("UNREADABLE_FILE");
   });
+
+  it("rejects deeply nested elements as UNREADABLE_FILE", () => {
+    const open = "<a>".repeat(100);
+    const close = "</a>".repeat(100);
+    const xml = `<gpx><trk><type>swimming</type><extensions>${open}x${close}</extensions><trkseg><trkpt lat="1" lon="1"><time>2026-06-01T07:00:00Z</time></trkpt><trkpt lat="1.01" lon="1"><time>2026-06-01T07:30:00Z</time></trkpt></trkseg></trk></gpx>`;
+    expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("UNREADABLE_FILE");
+  });
 });
