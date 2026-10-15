@@ -12,9 +12,14 @@ test("sign up signs in and redirects; the same email is refused with a login lin
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Mật khẩu").fill("correct-horse-battery");
   await page.getByLabel("Tên hiển thị").fill("Lan");
+  const landing = page.waitForResponse(
+    (res) => res.request().isNavigationRequest() && new URL(res.url()).pathname === "/",
+  );
   await page.getByRole("button", { name: "Đăng ký" }).click();
 
-  await page.waitForURL("**/home");
+  await page.waitForURL((url) => url.pathname === "/");
+  expect((await landing).status()).toBeLessThan(400);
+  await expect(page.getByText("This page could not be found")).toHaveCount(0);
   const cookies = await page.context().cookies();
   expect(cookies.some((c) => c.httpOnly && /session/i.test(c.name))).toBe(true);
 

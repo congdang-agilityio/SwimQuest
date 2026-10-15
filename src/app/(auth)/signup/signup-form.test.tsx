@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../../messages/en/auth.json";
 import vi_ from "../../../../messages/vi/auth.json";
 import SignUpPage from "./page";
-import { SignUpForm, safeNext } from "./signup-form";
+import { SignUpForm } from "./signup-form";
 
 afterEach(() => {
   cleanup();
@@ -78,7 +78,7 @@ describe("SignUpForm validation", () => {
 });
 
 describe("SignUpForm redirect on 201", () => {
-  async function signUpWith(next: string) {
+  async function signUpWith(next: string | undefined) {
     const assign = vi.fn();
     vi.stubGlobal("location", { ...window.location, assign });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 201 }));
@@ -91,13 +91,20 @@ describe("SignUpForm redirect on 201", () => {
     return assign;
   }
 
-  it("sends the user to a safe next path", async () => {
-    expect(await signUpWith("/teams/3")).toHaveBeenCalledWith("/teams/3");
+  it.each(["/teams/3", "/teams/3?x=1"])("sends the user to the safe next path %j", async (next) => {
+    expect(await signUpWith(next)).toHaveBeenCalledWith(next);
   });
 
-  it("falls back to /home for an unsafe next", async () => {
-    expect(await signUpWith("//evil.com")).toHaveBeenCalledWith("/home");
+  it("sends the user to the home page / when there is no next", async () => {
+    expect(await signUpWith(undefined)).toHaveBeenCalledWith("/");
   });
+
+  it.each(["//evil.com", "https://evil.com", "/\\evil.com"])(
+    "falls back to the home page / for the unsafe next %j",
+    async (next) => {
+      expect(await signUpWith(next)).toHaveBeenCalledWith("/");
+    },
+  );
 
   it("passes the next query parameter from the page to the form", async () => {
     const page = await SignUpPage({ searchParams: Promise.resolve({ next: "/teams/3" }) });
@@ -124,14 +131,4 @@ describe("SignUpForm touch targets (NFR-10)", () => {
       expect(link.style.display).toBe("inline-flex");
     }
   });
-});
-
-describe("safeNext", () => {
-  it("keeps same-site relative paths", () => {
-    expect(safeNext("/teams/3?x=1")).toBe("/teams/3?x=1");
-  });
-  it.each([undefined, "", "home", "//evil.com", "/\\evil.com", "https://evil.com", "/a\nb"])(
-    "falls back to /home for %j",
-    (value) => expect(safeNext(value)).toBe("/home"),
-  );
 });
