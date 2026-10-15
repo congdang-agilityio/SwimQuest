@@ -1,0 +1,79 @@
+import { db } from "@/server/db";
+import { routeProgress } from "@/lib/scoring/progress";
+import { effectiveStatus, type TournamentStatus } from "@/lib/tournaments/lifecycle";
+import { getTeamsPoints } from "@/server/scoring/team-points";
+
+export type MyTournament = {
+  id: string;
+  name: string;
+  effectiveStatus: TournamentStatus;
+  isOrganizer: boolean;
+  team: { id: string; name: string; emblemKey: string } | null;
+  progressBp: number | null;
+};
+
+/**
+ * Tournaments the user plays in (ACTIVE membership) or organizes, newest join/creation first.
+ * A draft is private to its organizer. Progress is the player's team progress (null without a team).
+ */
+export async function listMyTournaments(userId: string, now: Date): Promise<MyTournament[]> {
+  const [memberships, organized] = await Promise.all([
+    db.teamMember.findMany({
+      where: { userId, status: "ACTIVE" },
+      include: { team: true, tournament: true },
+    }),
+    db.tournament.findMany({ where: { organizerId: userId } }),
+  ]);
+
+  const rows = new Map<
+    string,
+    { tournament: (typeof organized)[number]; team: MyTournament["team"]; sortAt: number }
+  >();
+  for (const m of memberships) {
+    if (m.tournament.status === "DRAFT" && m.tournament.organizerId !== userId) continue;
+    const { id, name, emblemKey } = m.team;
+    rows.set(m.tournamentId, {
+      tournament: m.tournament,
+      team: { id, name, emblemKey },
+      sortAt: m.joinedAt.getTime(),
+    });
+  }
+  for (const t of organized) {
+    const existing = rows.get(t.id);
+    if (existing) existing.sortAt = Math.max(existing.sortAt, t.createdAt.getTime());
+    else rows.set(t.id, { tournament: t, team: null, sortAt: t.createdAt.getTime() });
+  }
+
+  const entries = [...rows.values()].sort((a, b) => b.sortAt - a.sortAt);
+  return Promise.all(
+    entries.map(async ({ tournament: t, team }) => {
+      let progressBp: number | null = null;
+      if (team) {
+        const points = (await getTeamsPoints(t.id)).get(team.id) ?? 0;
+        progressBp = routeProgress({
+          teamPoints: points,
+          routeDistanceM: t.routeDistanceM,
+          pointsPerKm: t.pointsPerKm,
+        }).progressBp;
+      }
+      return {
+        id: t.id,
+        name: t.name,
+        effectiveStatus: effectiveStatus(t, now),
+        isOrganizer: t.organizerId === userId,
+        team,
+        progressBp,
+      };
+    }),
+  );
+}
+
+/** The most recently joined ACTIVE membership, or null (My Team and Voyage until S-69). */
+export async function getCurrentMembership(userId: string) {
+  const m = await db.teamMember.findFirst({
+    where: { userId, status: "ACTIVE" },
+    orderBy: [{ joinedAt: "desc" }, { id: "desc" }],
+    include: { team: true, tournament: true },
+  });
+  return m ? { tournament: m.tournament, team: m.team } : null;
+}
