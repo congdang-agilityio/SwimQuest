@@ -27,7 +27,7 @@ ids:                              # filled in by setup; do not edit by hand
   wave_field_id: "PVTF_lAHOABo_g84BnGuSzhls3X4"
   agent_field_id: "PVTF_lAHOABo_g84BnGuSzhls3ZE"
   attempts_field_id: "PVTF_lAHOABo_g84BnGuSzhls3ZI"
-stack: ""                         # e.g. "Node 20, Next.js 14, PostgreSQL + Prisma, Vitest, Playwright";
+stack: "Node 22 LTS, TypeScript, Next.js 15 (App Router + route handlers), PostgreSQL (Railway) + Prisma, own email/password sessions (argon2, httpOnly cookie), next-intl, Zod, fast-xml-parser + fit-file-parser, web-push, Vitest, Playwright, ESLint + Prettier"   # e.g. "Node 20, Next.js 14, PostgreSQL + Prisma, Vitest, Playwright";
                                   # empty in a new repo: the Team Lead proposes one, the stakeholder decides
 language:
   artifacts: en                   # fixed: every document, issue and PR is in English
