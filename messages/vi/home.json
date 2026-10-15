@@ -1,0 +1,18 @@
+{
+  "title": "Giải đấu của tôi",
+  "card": {
+    "team": "Đội: {name}",
+    "emblemAlt": "Biểu tượng đội {name}",
+    "noTeam": "Bạn chưa có đội trong giải đấu này",
+    "progress": "Tiến độ: {pct}",
+    "progressNotStarted": "Chưa chọn điểm xuất phát",
+    "addSwim": "Thêm buổi bơi",
+    "status": {
+      "DRAFT": "Bản nháp",
+      "PUBLISHED": "Đang mở đăng ký",
+      "ACTIVE": "Đang diễn ra",
+      "COMPLETED": "Đã kết thúc",
+      "ARCHIVED": "Đã lưu trữ"
+    }
+  }
+}
