@@ -1,11 +1,7 @@
-import { getTranslations } from "next-intl/server";
-
-export default async function HomePage() {
-  const t = await getTranslations("common");
+export default function HomePage() {
   return (
     <main>
-      <h1>{t("appName")}</h1>
-      <p>{t("tagline")}</p>
+      <h1>SwimQuest</h1>
     </main>
   );
 }
