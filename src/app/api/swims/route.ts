@@ -7,6 +7,7 @@ import { ParseError } from "@/server/swims/parse/types";
 import { toOwnerSwimDto } from "@/server/swims/swim-dto";
 
 export const runtime = "nodejs";
+// Must stay below middlewareClientMaxBodySize in next.config.ts (12 MB), or Next truncates bodies.
 const MAX_BODY_BYTES = upload.MAX_UPLOAD_BYTES + 64 * 1024; // the file + multipart overhead
 async function readCappedForm(request: Request): Promise<FormData | null | "FILE_TOO_LARGE"> {
   if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) return "FILE_TOO_LARGE";
