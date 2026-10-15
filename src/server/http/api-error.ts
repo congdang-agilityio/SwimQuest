@@ -14,6 +14,7 @@ export type ApiErrorCode =
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
   | "INVALID_START"
+  | "NOT_A_MEMBER"
   | "PUBLISH_INVALID"
   | "INTERNAL_ERROR";
 
@@ -30,6 +31,7 @@ const messages: Record<ApiErrorCode, string> = {
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
   INVALID_START: "Choose one of the route's start destinations.",
+  NOT_A_MEMBER: "Choose an active member of this team.",
   PUBLISH_INVALID: "The tournament cannot be published yet.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
