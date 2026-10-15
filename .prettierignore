@@ -1,0 +1,14 @@
+node_modules
+.next
+.worktrees
+coverage
+test-results
+playwright-report
+package-lock.json
+docs
+requirement
+.squad
+.claude
+CLAUDE.md
+README.md
+.github/workflows/release-gate.yml
