@@ -25,6 +25,15 @@ const ctx = (teamId: string) => ({ params: Promise.resolve({ teamId }) });
 async function signIn(id: string) {
   jar.token = (await createSession(id)).token;
 }
+async function clean() {
+  await db.teamMember.deleteMany();
+  await db.team.deleteMany();
+  await db.tournament.deleteMany();
+  await db.auditEvent.deleteMany();
+  await db.session.deleteMany();
+  await db.user.deleteMany();
+}
+
 const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
@@ -62,14 +71,10 @@ async function setup() {
 describe("PUT /api/teams/:teamId/start", () => {
   beforeEach(async () => {
     jar.token = undefined;
-    await db.teamMember.deleteMany();
-    await db.team.deleteMany();
-    await db.tournament.deleteMany();
-    await db.auditEvent.deleteMany();
-    await db.session.deleteMany();
-    await db.user.deleteMany();
+    await clean();
   });
   afterAll(async () => {
+    await clean();
     await db.$disconnect();
   });
 
