@@ -35,10 +35,14 @@ export function weeklyMultiplierPct(input: {
   return days === 2 ? v.multiplier2DaysPct : 100;
 }
 
-/** Extra points the multiplier adds to the week's distance points (bonuses excluded). */
+/**
+ * Extra points the multiplier adds to the week's distance points (bonuses excluded), rounded to
+ * the nearest whole number with .5 rounding up (Q-43: 64 x 1.20 = 77 total).
+ */
 export function extraPoints(distancePoints: number, pct: number): number {
   if (!Number.isFinite(distancePoints) || distancePoints < 0) {
     throw new RangeError("distancePoints must be a non-negative number");
   }
-  return Math.floor((distancePoints * (pct - 100)) / 100);
+  if (!Number.isInteger(pct) || pct < 100) throw new RangeError("pct must be an integer >= 100");
+  return Math.floor((distancePoints * (pct - 100) + 50) / 100);
 }

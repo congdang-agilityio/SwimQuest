@@ -56,12 +56,19 @@ describe("weeklyMultiplierPct", () => {
 });
 
 describe("extraPoints", () => {
-  it("64 distance points x 1.20 gives 12 extra (floor of 12.8)", () => {
-    expect(extraPoints(64, 120)).toBe(12);
+  it("64 distance points x 1.20 gives 13 extra, 77 total (12.8 rounds to nearest, Q-43)", () => {
+    expect(extraPoints(64, 120)).toBe(13);
+    expect(64 + extraPoints(64, 120)).toBe(77);
   });
-  it("floors and returns 0 at 100", () => {
-    expect(extraPoints(15, 110)).toBe(1);
+  it("rounds half up and returns 0 at 100", () => {
+    expect(extraPoints(15, 110)).toBe(2);
+    expect(extraPoints(14, 110)).toBe(1);
     expect(extraPoints(50, 100)).toBe(0);
     expect(() => extraPoints(-1, 110)).toThrow(RangeError);
+  });
+  it("rejects a pct that is not an integer of 100 or more", () => {
+    expect(() => extraPoints(64, Number.NaN)).toThrow(RangeError);
+    expect(() => extraPoints(64, 99)).toThrow(RangeError);
+    expect(() => extraPoints(64, 110.5)).toThrow(RangeError);
   });
 });
