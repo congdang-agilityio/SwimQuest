@@ -6,6 +6,8 @@
   "full": "Đã đầy",
   "fullDisabled": "Đã đầy, không thể chọn",
   "justFilled": "Đội đó vừa đầy chỗ. Vui lòng chọn đội khác.",
+  "linkTeamFull": "Đội {name} đã đầy. Vui lòng chọn đội khác còn chỗ.",
+  "selected": "Đã chọn",
   "closedTitle": "Đã đóng đăng ký tham gia",
   "closedBody": "Giải đấu này không còn nhận người tham gia.",
   "invalidTitle": "Liên kết không hợp lệ",

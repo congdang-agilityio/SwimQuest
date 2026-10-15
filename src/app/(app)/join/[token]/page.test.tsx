@@ -14,8 +14,16 @@ vi.mock("@/server/auth/current-user", () => ({
 }));
 vi.mock("@/server/join/join-view", () => ({ getJoinView: state.getJoinView }));
 vi.mock("@/components/join/team-picker", () => ({
-  TeamPicker: ({ myTeam }: { myTeam: { name: string } | null }) => (
-    <div data-testid="picker">{myTeam ? `member of ${myTeam.name}` : "pick a team"}</div>
+  TeamPicker: ({
+    myTeam,
+    preselectedId,
+  }: {
+    myTeam: { name: string } | null;
+    preselectedId?: string | null;
+  }) => (
+    <div data-testid="picker" data-preselected={preselectedId ?? ""}>
+      {myTeam ? `member of ${myTeam.name}` : "pick a team"}
+    </div>
   ),
 }));
 vi.mock("@/components/tournaments/tournament-summary", () => ({
@@ -35,8 +43,10 @@ const tournament = {
 };
 const teams = [{ id: "a", name: "Turtles", emblemKey: "turtle", memberLimit: 5, memberCount: 2 }];
 
-async function renderPage(token = "tok") {
-  render(await JoinPage({ params: Promise.resolve({ token }) }));
+async function renderPage(token = "tok", team?: string | string[]) {
+  render(
+    await JoinPage({ params: Promise.resolve({ token }), searchParams: Promise.resolve({ team }) }),
+  );
 }
 
 describe("join page", () => {
@@ -79,5 +89,20 @@ describe("join page", () => {
     await renderPage();
     expect(screen.getByTestId("picker").textContent).toBe("pick a team");
     expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("preselects a team of this tournament named by ?team=", async () => {
+    state.getJoinView.mockResolvedValue({ tournament, teams, myTeam: null, joiningOpen: true });
+    await renderPage("tok", "a");
+    expect(screen.getByTestId("picker").getAttribute("data-preselected")).toBe("a");
+  });
+
+  it("ignores an unknown or repeated ?team= value", async () => {
+    state.getJoinView.mockResolvedValue({ tournament, teams, myTeam: null, joiningOpen: true });
+    await renderPage("tok", "other-tournament-team");
+    expect(screen.getByTestId("picker").getAttribute("data-preselected")).toBe("");
+    cleanup();
+    await renderPage("tok", ["a", "a"]);
+    expect(screen.getByTestId("picker").getAttribute("data-preselected")).toBe("");
   });
 });

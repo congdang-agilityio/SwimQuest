@@ -6,6 +6,8 @@
   "full": "Full",
   "fullDisabled": "Full, cannot be chosen",
   "justFilled": "That team just filled up. Please choose another team.",
+  "linkTeamFull": "That team is full: {name}. Please choose another team with room.",
+  "selected": "Selected",
   "closedTitle": "Joining is closed",
   "closedBody": "This tournament is not open for joining any more.",
   "invalidTitle": "This link is not valid",

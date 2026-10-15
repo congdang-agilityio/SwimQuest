@@ -21,10 +21,13 @@ const teams = [
   { id: "b", name: "Dolphins", emblemKey: "dolphin", freePlaces: 0 },
 ];
 
-function setup(myTeam: { id: string; name: string } | null = null) {
+function setup(
+  myTeam: { id: string; name: string } | null = null,
+  preselectedId: string | null = null,
+) {
   render(
     <NextIntlClientProvider locale="en" messages={{ join: en }}>
-      <TeamPicker token="tok" teams={teams} myTeam={myTeam} />
+      <TeamPicker token="tok" teams={teams} myTeam={myTeam} preselectedId={preselectedId} />
     </NextIntlClientProvider>,
   );
 }
@@ -74,5 +77,35 @@ describe("TeamPicker", () => {
     expect(screen.getByText("You are in Turtles")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Go to My Team" }).getAttribute("href")).toBe("/team");
     expect(screen.queryAllByRole("button")).toHaveLength(0);
+  });
+
+  it("marks the team from the link as selected and joins it on one click", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    setup(null, "a");
+    expect(screen.getByText("Selected")).toBeTruthy();
+    expect(screen.queryByRole("status")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/team"));
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ teamId: "a" });
+  });
+
+  it("says the linked team is full and still lets the player choose another", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    setup(null, "b");
+    expect(screen.getByRole("status").textContent).toContain("Dolphins");
+    expect(screen.queryByText("Selected")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/team"));
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ teamId: "a" });
+  });
+
+  it("lets the player change the choice after a failed join", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 500 })));
+    setup(null, "a");
+    fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
+    expect((await screen.findByRole("alert")).textContent).toBe(en.failed);
+    expect(screen.queryByRole("status")).toBeNull();
   });
 });
