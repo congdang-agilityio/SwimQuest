@@ -76,6 +76,7 @@ export function parseGpx(buffer: Buffer): ParsedSwim {
   if (!isNode(root)) return unreadable("Not a GPX file");
 
   const trks = arr(root.trk);
+  if (trks.length === 0) unreadable("No activity data");
   const track = readPoints(trks);
   const times = track.flatMap((p) => (p.time ? [p.time] : []));
   const startedAt = times[0] ?? (isNode(root.metadata) ? date(root.metadata.time) : null);
@@ -85,7 +86,9 @@ export function parseGpx(buffer: Buffer): ParsedSwim {
   if (distance === null && track.length >= 2) {
     distance = track.slice(1).reduce((sum, p, i) => sum + haversineM(track[i]!, p), 0);
   }
-  if (distance === null) throw new ParseError("NO_DISTANCE", "File has no distance");
+  if (distance === null || Math.round(distance) <= 0) {
+    throw new ParseError("NO_DISTANCE", "File has no distance");
+  }
 
   const total = positive(findDeep(root, ["totaltime", "totaltimeseconds", "duration"]));
   const last = times[times.length - 1]!;

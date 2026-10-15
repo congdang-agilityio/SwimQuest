@@ -46,6 +46,24 @@ describe("parseGpx", () => {
     expect(codeOf(() => parseGpx(load("pool-no-distance.gpx")))).toBe("NO_DISTANCE");
   });
 
+  it("reports a track with no movement and no distance extension as NO_DISTANCE", () => {
+    const xml = `<gpx><trk><type>lap_swimming</type><trkseg>
+      <trkpt lat="10" lon="106"><time>2026-06-01T07:00:00Z</time></trkpt>
+      <trkpt lat="10" lon="106"><time>2026-06-01T07:30:00Z</time></trkpt></trkseg></trk></gpx>`;
+    expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("NO_DISTANCE");
+  });
+
+  it("rejects a GPX with no track (metadata only) as UNREADABLE_FILE", () => {
+    const xml = `<gpx><metadata><time>2026-06-01T07:00:00Z</time></metadata></gpx>`;
+    expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("UNREADABLE_FILE");
+  });
+
+  it("rejects a route-only GPX as UNREADABLE_FILE", () => {
+    const xml = `<gpx><metadata><time>2026-06-01T07:00:00Z</time></metadata>
+      <rte><rtept lat="10" lon="106"/><rtept lat="10.01" lon="106"/></rte></gpx>`;
+    expect(codeOf(() => parseGpx(Buffer.from(xml)))).toBe("UNREADABLE_FILE");
+  });
+
   it("flags a running GPX as not a swim", () => {
     const s = parseGpx(load("running.gpx"));
     expect(s.isSwim).toBe(false);
