@@ -1,0 +1,9 @@
+{
+  "back": "Back to manage page",
+  "rosterTitle": "Members",
+  "empty": "This team has no members yet.",
+  "captain": "Captain",
+  "makeCaptain": "Make captain",
+  "makeCaptainFor": "Make {name} captain",
+  "failed": "Could not set the captain. Try again."
+}
