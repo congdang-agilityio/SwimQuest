@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import en from "../../../messages/en/checks.json";
 import vi from "../../../messages/vi/checks.json";
-import { REASON_CODES } from "@/server/checks/reasons";
+import { REASON_CODES, type StoredReason } from "@/server/checks/reasons";
 import { CheckReasons } from "./check-reasons";
 
 afterEach(cleanup);
@@ -17,7 +17,7 @@ const rules = {
   longestSwimM: 30000,
 };
 
-function setup(reasons: string[], locale: "vi" | "en" = "en") {
+function setup(reasons: StoredReason[], locale: "vi" | "en" = "en") {
   render(
     <NextIntlClientProvider locale={locale} messages={{ checks: locale === "en" ? en : vi }}>
       <CheckReasons reasons={reasons} rules={rules} />
@@ -37,6 +37,33 @@ describe("CheckReasons", () => {
   ])("explains %s in plain words", (code, text) => {
     setup([code]);
     expect(screen.getByText(text)).toBeTruthy();
+  });
+
+  it.each([
+    [
+      "POOL_ONLY",
+      "OPEN_WATER",
+      "en",
+      /swim type: this tournament counts pool swims only \(this swim: open water\)/,
+    ],
+    ["OPEN_WATER_ONLY", "POOL", "en", /counts open-water swims only \(this swim: pool\)/],
+    [
+      "POOL_ONLY",
+      "OPEN_WATER",
+      "vi",
+      /loại bơi: giải đấu này chỉ tính bơi hồ \(lần bơi này: bơi ngoài trời\)/,
+    ],
+  ] as const)(
+    "explains a %s tournament refusing a %s swim (%s) with its params",
+    (allowed, value, locale, text) => {
+      setup([{ code: "SWIM_TYPE_NOT_ACCEPTED", params: { allowed, value } }], locale);
+      expect(screen.getByText(text)).toBeTruthy();
+    },
+  );
+
+  it("reads plain codes and reason objects in one list", () => {
+    setup(["NO_DISTANCE", { code: "PACE_TOO_SLOW" }]);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
 
   it("has a message in both languages for every reason code", () => {

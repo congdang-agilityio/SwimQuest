@@ -17,6 +17,7 @@
     "PACE_TOO_FAST": "Pace faster than this tournament's fastest realistic pace ({pace} / 100 m)",
     "PACE_TOO_SLOW": "Pace slower than this tournament's slowest realistic pace ({pace} / 100 m)",
     "DISTANCE_TOO_LONG": "Distance above this tournament's longest realistic swim ({distance})",
-    "DUPLICATE_OF_EARLIER_SWIM": "Same as, or overlapping, a swim you uploaded earlier"
+    "DUPLICATE_OF_EARLIER_SWIM": "Same as, or overlapping, a swim you uploaded earlier",
+    "SWIM_TYPE_NOT_ACCEPTED": "Did not count: swim type: this tournament counts {allowed, select, POOL_ONLY {pool swims} OPEN_WATER_ONLY {open-water swims} other {all swims}} only (this swim: {value, select, POOL {pool} OPEN_WATER {open water} other {unknown}})"
   }
 }

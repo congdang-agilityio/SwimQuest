@@ -1,6 +1,12 @@
 import { z } from "zod";
 import type { SwimResultStatus } from "@prisma/client";
-import { REASON_CODES, type ReasonCode } from "@/server/checks/reasons";
+import {
+  REASON_CODES,
+  reasonCodeOf,
+  type Reason,
+  type ReasonCode,
+  type StoredReason,
+} from "@/server/checks/reasons";
 import { db } from "@/server/db";
 import { swimDtoInclude, toOwnerSwimDto, type OwnerSwimDto, type SwimResultDto } from "./swim-dto";
 
@@ -42,7 +48,8 @@ export const DISPLAY_STATUS: Record<SwimResultStatus, DisplayStatus> = {
 
 export type MySwimResultDto = Omit<SwimResultDto, "reasons"> & {
   displayStatus: DisplayStatus;
-  reasons: ReasonCode[];
+  /** Known reasons only: plain codes, or `{ code, params }` from rule checks. */
+  reasons: (ReasonCode | Reason)[];
   /** Net points this swim gave in the tournament (all ledger entries, reversals included). */
   points: number;
 };
@@ -100,8 +107,8 @@ export async function listMySwims(
   };
 }
 
-const isReasonCode = (x: string): x is ReasonCode =>
-  (REASON_CODES as readonly string[]).includes(x);
+const isKnownReason = (x: StoredReason): x is ReasonCode | Reason =>
+  (REASON_CODES as readonly string[]).includes(reasonCodeOf(x));
 
 /**
  * One of the player's own swims with its status, reasons and points in each tournament.
@@ -126,7 +133,7 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
     results: dto.results.map((r, i) => ({
       ...r,
       displayStatus: DISPLAY_STATUS[r.status],
-      reasons: r.reasons.filter(isReasonCode),
+      reasons: r.reasons.filter(isKnownReason),
       points: swim.results[i].pointsEntries.reduce((sum, e) => sum + e.points, 0),
     })),
   };

@@ -204,6 +204,8 @@ describe("reasonOf", () => {
     ["NO_DISTANCE", s(0, 1800), { limit: null, value: 0 }],
     ["NOT_A_SWIM", s(1000, 1800), { limit: null, value: "running" }],
     ["DUPLICATE_OF_EARLIER_SWIM", s(1000, 1800), { limit: null, value: null }],
+    // A rule check reason: RULE_MISSED results skip review, and the reason keeps its own params.
+    ["SWIM_TYPE_NOT_ACCEPTED", s(1000, 1800), { limit: null, value: null }],
   ] as const;
 
   it.each(cases)("gives %s its exact limit and value", (code, swim, params) => {

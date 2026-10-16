@@ -1,5 +1,6 @@
 import type { Prisma, Swim, SwimResult } from "@prisma/client";
 import { utcToVnParts } from "@/lib/time/vn";
+import { readReasons, type StoredReason } from "@/server/checks/reasons";
 
 /** Prisma `include` that loads what the DTO shows of each per-tournament result. */
 export const swimDtoInclude = {
@@ -46,12 +47,15 @@ export type ResultRulesDto = {
   longestSwimM: number;
 };
 
-/** The swim's outcome in one tournament; `reasons` are codes the UI turns into words. */
+/**
+ * The swim's outcome in one tournament; `reasons` are codes (or `{ code, params }` from rule
+ * checks) the UI turns into words.
+ */
 export type SwimResultDto = {
   tournamentId: string;
   tournamentName: string;
   status: SwimResult["status"];
-  reasons: string[];
+  reasons: StoredReason[];
   rules: ResultRulesDto;
 };
 
@@ -75,9 +79,7 @@ export type OwnerSwimDto = {
 };
 
 function toResultDto(r: ResultForDto): SwimResultDto {
-  const reasons = Array.isArray(r.reasons)
-    ? r.reasons.filter((x): x is string => typeof x === "string")
-    : [];
+  const reasons = readReasons(r.reasons);
   return {
     tournamentId: r.tournamentId,
     tournamentName: r.tournament.name,
