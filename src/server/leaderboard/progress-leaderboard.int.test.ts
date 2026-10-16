@@ -92,6 +92,7 @@ describe("progress leaderboard", () => {
         progressBp: 5000,
         routeKmReached: 50,
         reachedAt: new Date("2026-11-03T02:00:00Z"),
+        finishedAt: null,
         isMyTeam: false,
       },
       {
@@ -101,6 +102,7 @@ describe("progress leaderboard", () => {
         progressBp: 1000,
         routeKmReached: 10,
         reachedAt: new Date("2026-11-02T01:00:00Z"),
+        finishedAt: null,
         isMyTeam: true,
       },
       {
@@ -110,6 +112,7 @@ describe("progress leaderboard", () => {
         progressBp: 0,
         routeKmReached: 0,
         reachedAt: null,
+        finishedAt: null,
         isMyTeam: false,
       },
     ]);
@@ -210,6 +213,34 @@ describe("progress leaderboard", () => {
     expect(rows.map((r) => [r.name, r.progressBp, r.reachedAt])).toEqual([
       ["Alpha", 6000, new Date("2026-11-02T00:00:00Z")],
       ["Bravo", 1500, new Date("2026-11-03T00:00:00Z")],
+    ]);
+  });
+
+  it("ranks finished teams by finishedAt and returns it; unfinished keep the old order", async () => {
+    const [org, u1] = await Promise.all(["org", "u1"].map(user));
+    const { t, teams } = await tournament(org.id, ["Aaa", "Bbb", "Ccc", "Ddd"]);
+    const [aaa, bbb, ccc, ddd] = teams;
+    await join(t.id, aaa.id, u1.id);
+    // Both reach 100%; Bbb's entries are later but it finished first (finishedAt is recorded).
+    await entry(t.id, aaa.id, u1.id, 1000, "2026-11-05T00:00:00Z");
+    await entry(t.id, bbb.id, u1.id, 1000, "2026-11-06T00:00:00Z");
+    await db.team.update({
+      where: { id: aaa.id },
+      data: { finishedAt: new Date("2026-11-07T00:00:00Z") },
+    });
+    await db.team.update({
+      where: { id: bbb.id },
+      data: { finishedAt: new Date("2026-11-06T00:00:00Z") },
+    });
+    await entry(t.id, ccc.id, u1.id, 500, "2026-11-03T00:00:00Z");
+    await entry(t.id, ddd.id, u1.id, 500, "2026-11-02T00:00:00Z");
+
+    const rows = await getProgressLeaderboard(u1.id, t.id);
+    expect(rows.map((r) => [r.name, r.finishedAt])).toEqual([
+      ["Bbb", new Date("2026-11-06T00:00:00Z")],
+      ["Aaa", new Date("2026-11-07T00:00:00Z")],
+      ["Ddd", null],
+      ["Ccc", null],
     ]);
   });
 

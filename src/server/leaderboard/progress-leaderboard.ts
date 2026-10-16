@@ -9,6 +9,8 @@ export type ProgressLeaderboardRow = {
   routeKmReached: number;
   /** When the team last got to the points that give its current progress; null without points. */
   reachedAt: Date | null;
+  /** When the team first finished the route (100%); null while unfinished. */
+  finishedAt: Date | null;
   isMyTeam: boolean;
 };
 
@@ -51,8 +53,8 @@ function reachedAtFor(entries: Entry[], threshold: number): Date | null {
 }
 
 /**
- * Teams of a tournament ranked by route progress (S-15 / FR-50): progress desc, then who
- * reached that progress first, then team name. Each points entry counts for the team stored
+ * Teams of a tournament ranked by route progress (S-15 / FR-50): progress desc, then (at 100%
+ * the recorded finish time, else) who reached that progress first, then team name. Each points entry counts for the team stored
  * on it, as in `getTeamsPoints`. Only the tournament's active
  * members and its organizer may read it; anyone else (or an unknown id) gets FORBIDDEN.
  */
@@ -80,6 +82,7 @@ export async function getProgressLeaderboard(
       id: true,
       name: true,
       emblemKey: true,
+      finishedAt: true,
       members: { where: { status: "ACTIVE" }, select: { userId: true } },
     },
   });
@@ -121,16 +124,20 @@ export async function getProgressLeaderboard(
       progressBp: progress.progressBp,
       routeKmReached: progress.routeKmReached,
       reachedAt,
+      finishedAt: team.finishedAt,
       isMyTeam: team.id === viewerTeamId,
     };
   });
 
   const time = (d: Date | null) => (d ? d.getTime() : Number.POSITIVE_INFINITY);
   const cmp = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+  // Finished teams (100%) rank by their recorded finish time; the rest by when they reached it.
+  const key = (r: ProgressLeaderboardRow) =>
+    time(r.progressBp >= 10000 ? (r.finishedAt ?? r.reachedAt) : r.reachedAt);
   return rows.sort(
     (a, b) =>
       b.progressBp - a.progressBp ||
-      time(a.reachedAt) - time(b.reachedAt) ||
+      key(a) - key(b) ||
       cmp(a.name, b.name) ||
       cmp(a.teamId, b.teamId),
   );
