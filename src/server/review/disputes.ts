@@ -37,17 +37,11 @@ function parseReason(reason: unknown): string {
   return parsed.data;
 }
 
-const isUniqueViolation = (err: unknown) =>
-  err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002";
-
 /**
- * The owner disputes one tournament's REJECTED, DUPLICATE or RULE_MISSED result (S-44 AC 1, 4):
- * the result becomes DISPUTED (it does not count, BR-04) and the dispute keeps its earlier
- * status for a rejected dispute to restore. One open dispute per result: a DISPUTED result, or
- * a raise racing another, gives DISPUTE_OPEN. The reason is required (1-300 characters after
- * trimming). Lock order as an upload: the player's `swims:<userId>` lock, then the result row.
- * Throws NotFoundError, ForbiddenError, ReasonRequiredError, NotDisputableError and
- * DisputeOpenError.
+ * The owner disputes one tournament's REJECTED, DUPLICATE or RULE_MISSED result (S-44 AC 1, 4)
+ * with a required reason (1-300 characters): the result becomes DISPUTED (does not count, BR-04)
+ * and the dispute keeps the earlier status. One open dispute per result (DISPUTE_OPEN). Lock
+ * order as an upload: the player's `swims:<userId>` lock, then the result row.
  */
 export async function raiseDispute(
   userId: string,
@@ -80,20 +74,18 @@ export async function raiseDispute(
     });
   } catch (err) {
     // The partial unique index allows one OPEN dispute per result.
-    if (isUniqueViolation(err)) throw new DisputeOpenError();
+    const unique = err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002";
+    if (unique) throw new DisputeOpenError();
     throw err;
   }
 }
 
 /**
  * A reviewer of the result's tournament decides one OPEN dispute with a required reason
- * (S-44 AC 2, 5). Accept makes the result VERIFIED and runs the shared `onVerified` hook
- * (points, bonuses, badges, XP, progress); reject puts back the status it had before the
- * dispute. The dispute is closed with the decider, time and note; a `DISPUTE_DECIDED` audit
- * event and a `SWIM_RESULT_CHANGED` event commit with it. Only this tournament's result
- * changes. Lock order as an upload: `swims:<userId>`, then the dispute and result rows, then
- * the locks `onVerified` takes. Throws NotFoundError, ForbiddenError, ReasonRequiredError and
- * AlreadyDecidedError (the dispute is no longer OPEN).
+ * (S-44 AC 2, 5): accept makes the result VERIFIED and runs `onVerified`; reject restores its
+ * earlier status. The dispute is closed (decider, time, note), audited as `DISPUTE_DECIDED`
+ * and emits `SWIM_RESULT_CHANGED`; only this tournament's result changes. Lock order as an
+ * upload: `swims:<userId>`, the dispute and result rows, then the locks `onVerified` takes.
  */
 export async function decideDispute(
   reviewerId: string,
@@ -134,12 +126,13 @@ export async function decideDispute(
       where: { id: dispute.swimResultId },
       data: { status },
     });
+    const { tournamentId, teamId, userId, swimId } = result;
     await recordAudit(tx, {
       actor: { type: "USER", userId: reviewerId },
       action: AUDIT_ACTIONS.DISPUTE_DECIDED,
       entityType: "Dispute",
       entityId: disputeId,
-      tournamentId: result.tournamentId,
+      tournamentId,
       before: { status: "OPEN", resultStatus: "DISPUTED" },
       after: { status: outcome, resultStatus: status },
       reason: note,
@@ -147,11 +140,11 @@ export async function decideDispute(
     await emitEvent(tx, {
       type: "SWIM_RESULT_CHANGED",
       payload: {
-        tournamentId: result.tournamentId,
-        teamId: result.teamId,
-        userId: result.userId,
+        tournamentId,
+        teamId,
+        userId,
         resultId: result.id,
-        swimId: result.swimId,
+        swimId,
         status,
         previousStatus: "DISPUTED",
       },
