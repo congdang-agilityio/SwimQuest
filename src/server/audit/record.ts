@@ -3,6 +3,7 @@ import type { Prisma } from "@prisma/client";
 /** Audited action names. Add new privileged actions here; never use free-form strings. */
 export const AUDIT_ACTIONS = {
   TEAM_CAPTAIN_SET: "TEAM_CAPTAIN_SET",
+  TEAM_CAPTAIN_HANDOVER: "TEAM_CAPTAIN_HANDOVER",
   TEAM_DETAILS_UPDATED: "TEAM_DETAILS_UPDATED",
   TEAM_START_AUTO_ASSIGNED: "TEAM_START_AUTO_ASSIGNED",
   TEAM_START_SET_BY_ORGANIZER: "TEAM_START_SET_BY_ORGANIZER",

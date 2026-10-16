@@ -2,7 +2,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { AUDIT_ACTIONS } from "@/server/audit/record";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import { db } from "@/server/db";
-import { appointCaptain, NotAMemberError } from "./captain";
+import { appointCaptain, handOverCaptaincy, NotAMemberError } from "./captain";
 import { getTeamRoster } from "./roster";
 
 async function clean() {
@@ -219,6 +219,90 @@ describe("team roster and captain appointment", () => {
       await expect(appointCaptain(organizer.id, "missing", anna.id)).rejects.toBeInstanceOf(
         NotFoundError,
       );
+    });
+  });
+
+  describe("handOverCaptaincy", () => {
+    async function withCaptain() {
+      const ctx = await setup();
+      await db.team.update({ where: { id: ctx.team.id }, data: { captainUserId: ctx.anna.id } });
+      return ctx;
+    }
+
+    it("makes another active member captain, audits it and emits TEAM_CAPTAIN_SET", async () => {
+      const { anna, binh, tournament, team } = await withCaptain();
+
+      await handOverCaptaincy(anna.id, team.id, binh.id);
+
+      expect(await captainOf(team.id)).toBe(binh.id);
+      const events = await db.auditEvent.findMany();
+      expect(events).toHaveLength(1);
+      expect(events[0]).toMatchObject({
+        actorType: "USER",
+        actorUserId: anna.id,
+        action: AUDIT_ACTIONS.TEAM_CAPTAIN_HANDOVER,
+        entityType: "Team",
+        entityId: team.id,
+        tournamentId: tournament.id,
+        before: { captainUserId: anna.id, teamId: team.id, tournamentId: tournament.id },
+        after: { captainUserId: binh.id, teamId: team.id, tournamentId: tournament.id },
+      });
+      const domain = await db.domainEvent.findMany({ where: { type: "TEAM_CAPTAIN_SET" } });
+      expect(domain).toHaveLength(1);
+      expect(domain[0]!.payload).toEqual({
+        tournamentId: tournament.id,
+        teamId: team.id,
+        userId: binh.id,
+        setBy: anna.id,
+      });
+    });
+
+    it("refuses anyone who is not the team's captain", async () => {
+      const { organizer, outsider, anna, binh, team } = await withCaptain();
+      for (const id of [binh.id, organizer.id, outsider.id]) {
+        await expect(handOverCaptaincy(id, team.id, anna.id)).rejects.toBeInstanceOf(
+          ForbiddenError,
+        );
+      }
+      expect(await captainOf(team.id)).toBe(anna.id);
+      expect(await db.auditEvent.count()).toBe(0);
+    });
+
+    it("refuses a target who is not an active member, or the captain themselves", async () => {
+      const { outsider, anna, tournament, team } = await withCaptain();
+      const leaver = await user("leaver");
+      await join(team.id, tournament.id, leaver.id, "LEFT");
+      for (const id of [outsider.id, leaver.id, anna.id, "missing", "", 42 as never]) {
+        await expect(handOverCaptaincy(anna.id, team.id, id)).rejects.toBeInstanceOf(
+          NotAMemberError,
+        );
+      }
+      expect(await captainOf(team.id)).toBe(anna.id);
+      expect(await db.auditEvent.count()).toBe(0);
+    });
+
+    it("throws NotFoundError for an unknown team", async () => {
+      const { anna, binh } = await withCaptain();
+      await expect(handOverCaptaincy(anna.id, "missing", binh.id)).rejects.toBeInstanceOf(
+        NotFoundError,
+      );
+    });
+
+    it("lets the organizer replace the new captain afterwards", async () => {
+      const { organizer, anna, binh, team } = await withCaptain();
+      await handOverCaptaincy(anna.id, team.id, binh.id);
+
+      const result = await appointCaptain(organizer.id, team.id, anna.id);
+
+      expect(result).toEqual({ changed: true, captainUserId: anna.id });
+      expect(await captainOf(team.id)).toBe(anna.id);
+      const actions = (await db.auditEvent.findMany({ orderBy: { createdAt: "asc" } })).map(
+        (e) => e.action,
+      );
+      expect(actions).toEqual([
+        AUDIT_ACTIONS.TEAM_CAPTAIN_HANDOVER,
+        AUDIT_ACTIONS.TEAM_CAPTAIN_SET,
+      ]);
     });
   });
 });
