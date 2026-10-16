@@ -57,6 +57,8 @@ export type SwimPointsBreakdown = {
   distance: number;
   firstSwimBonus: number;
   longSwimBonus: number;
+  /** The REVERSAL entry of a revoked result (negative), 0 when nothing was reversed. */
+  reversal: number;
   total: number;
 };
 export type MySwimDto = Omit<OwnerSwimDto, "results"> & { results: MySwimResultDto[] };
@@ -123,6 +125,7 @@ function breakdown(entries: { kind: PointsKind; points: number }[]): SwimPointsB
     distance: sum("DISTANCE"),
     firstSwimBonus: sum("FIRST_SWIM_BONUS"),
     longSwimBonus: sum("LONG_SWIM_BONUS"),
+    reversal: sum("REVERSAL"),
     total: entries.reduce((n, e) => n + e.points, 0),
   };
 }

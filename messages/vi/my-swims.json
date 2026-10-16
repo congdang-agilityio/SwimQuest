@@ -10,6 +10,7 @@
     "distancePoints": "Điểm quãng đường: {points}",
     "firstSwimBonus": "Thưởng buổi bơi đầu tiên: +{points}",
     "longSwimBonus": "Thưởng buổi bơi dài: +{points}",
+    "reversal": "Đã thu hồi: {points}",
     "points": "Điểm nhận được ở đây: {points}"
   }
 }
