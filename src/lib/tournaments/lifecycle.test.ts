@@ -5,6 +5,8 @@ import {
   isArchivable,
   isResultsFinal,
   isRouteEditable,
+  isSeasonConfigLocked,
+  SEASON_LOCKED_FIELDS,
   isStartLocked,
   startLockAt,
   uploadWindowEndsAt,
@@ -135,5 +137,26 @@ describe("season end, upload window and archive", () => {
     expect(isArchivable({ ...end20, status: "ARCHIVED" }, at("2026-12-10T00:00:00+07:00"))).toBe(
       false,
     );
+  });
+});
+
+describe("season configuration lock (S-32)", () => {
+  it("lists season start, route and route distance as season-locked fields", () => {
+    expect(SEASON_LOCKED_FIELDS).toEqual(["seasonStartAt", "routeId", "routeDistanceM"]);
+  });
+
+  it("is open for a draft at any time and for a published tournament before its start", () => {
+    const after = new Date("2026-11-15T12:00:00+07:00");
+    const justBefore = new Date(seasonStartAt.getTime() - 1);
+    expect(isSeasonConfigLocked({ ...base, status: "DRAFT" }, after)).toBe(false);
+    expect(isSeasonConfigLocked(base, justBefore)).toBe(false);
+  });
+
+  it("is locked from the season start (inclusive) and once completed or archived", () => {
+    const later = new Date("2026-12-05T12:00:00+07:00");
+    expect(isSeasonConfigLocked(base, seasonStartAt)).toBe(true);
+    expect(isSeasonConfigLocked({ ...base, status: "ACTIVE" }, seasonStartAt)).toBe(true);
+    expect(isSeasonConfigLocked(base, later)).toBe(true);
+    expect(isSeasonConfigLocked({ ...base, status: "ARCHIVED" }, later)).toBe(true);
   });
 });

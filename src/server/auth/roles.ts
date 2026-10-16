@@ -20,6 +20,21 @@ export async function requireOrganizer(userId: string, tournamentId: string) {
 }
 
 /**
+ * The tournament's organizer or a platform admin (S-32 AC 4). `user` is the signed-in user
+ * (roles from the database). Throws NotFoundError for an unknown tournament, else ForbiddenError.
+ */
+export async function requireOrganizerOrAdmin(
+  user: { id: string; isPlatformAdmin: boolean } | null,
+  tournamentId: string,
+) {
+  const t = isId(tournamentId) && (await db.tournament.findUnique({ where: { id: tournamentId } }));
+  if (!t) throw new NotFoundError();
+  if (user?.isPlatformAdmin !== true && (!isId(user?.id) || t.organizerId !== user.id))
+    throw new ForbiddenError();
+  return t;
+}
+
+/**
  * Who may review a tournament's flagged swims (S-43): its organizer for now; review helpers
  * (S-45) extend this. Throws NotFoundError for an unknown tournament, else ForbiddenError.
  */
