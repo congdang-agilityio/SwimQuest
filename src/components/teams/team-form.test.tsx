@@ -5,10 +5,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../messages/en/teams.json";
 import vi_ from "../../../messages/vi/teams.json";
 import { TeamForm } from "./team-form";
+import { browser } from "@/lib/http/client-fetch";
 
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, "", "/");
 });
 
 function setup(locale: "vi" | "en" = "vi", initial?: Parameters<typeof TeamForm>[0]["initial"]) {
@@ -89,6 +92,23 @@ describe("TeamForm", () => {
     const msg = await screen.findByText(en.errors.LIMIT_BELOW_MEMBERS);
     expect(msg.id).toBe("team-memberLimit-error");
     expect(screen.getByLabelText(en.form.memberLimit).getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("sends the player to log in again on 401 and shows no error", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 401 })));
+    const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+    window.history.replaceState(null, "", "/tournaments/t1/manage?x=1");
+    const onSaved = setup();
+    type(vi_.form.name, "Cá heo");
+    fireEvent.click(screen.getByRole("radio", { name: vi_.emblems.dolphin }));
+    type(vi_.form.memberLimit, "8");
+    submit();
+    await waitFor(() =>
+      expect(go).toHaveBeenCalledWith("/login?next=%2Ftournaments%2Ft1%2Fmanage%3Fx%3D1"),
+    );
+    await new Promise((r) => setTimeout(r, 20));
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(onSaved).not.toHaveBeenCalled();
   });
 
   it("keeps vi and en keys identical", () => {
