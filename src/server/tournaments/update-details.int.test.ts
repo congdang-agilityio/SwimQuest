@@ -209,19 +209,36 @@ describe("updateDetails: active", () => {
     await expect(stored(t.id)).resolves.toEqual(UNCHANGED);
   });
 
-  it("applies the same rules once the season has ended (completed)", async () => {
+  it("locks the season start once the season has ended (completed) and keeps the name editable", async () => {
     const organizer = await makeUser("organizer");
     const t = await makeTournament(organizer.id, "PUBLISHED");
 
     const locked = await updateDetails(organizer, t.id, { seasonStart: NEW_START }, AFTER);
-    const seasonEnd = { date: "2026-12-01", time: "06:00" };
-    const past = await updateDetails(organizer, t.id, { seasonEnd }, AFTER);
     const renamed = await updateDetails(organizer, t.id, { name: "Renamed" }, AFTER);
 
     expect(locked).toEqual({ ok: false, reason: "SEASON_LOCKED" });
-    expect(past).toMatchObject({ ok: false, errors: { seasonEnd: "SEASON_END_NOT_AFTER_NOW" } });
     expect(renamed.ok).toBe(true);
+    await expect(stored(t.id)).resolves.toEqual({ ...UNCHANGED, name: "Renamed" });
   });
+
+  it.each([
+    ["later than now", { seasonEnd: NEW_END }],
+    ["earlier than now", { seasonEnd: { date: "2026-12-01", time: "06:00" } }],
+    ["with a name", { name: "Renamed", seasonEnd: NEW_END }],
+  ])(
+    "refuses a season end %s once completed so the season cannot reopen",
+    async (_label, input) => {
+      const organizer = await makeUser("organizer");
+      for (const status of ["PUBLISHED", "ACTIVE", "COMPLETED"] as const) {
+        const t = await makeTournament(organizer.id, status);
+
+        const result = await updateDetails(organizer, t.id, input, AFTER);
+
+        expect(result).toEqual({ ok: false, reason: "SEASON_ENDED" });
+        await expect(stored(t.id)).resolves.toEqual(UNCHANGED);
+      }
+    },
+  );
 });
 
 describe("updateDetails: archived", () => {
