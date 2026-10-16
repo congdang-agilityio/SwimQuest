@@ -140,14 +140,9 @@ type Box = { x: number; y: number; width: number; height: number };
 const intersects = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
-// Map width (px) from which the progress label sits on the map; below it the label is a caption
-// directly under the map (#619). Matches the container query in voyage.module.css.
-const LABEL_ON_MAP_FROM_PX = 768;
-
 /**
- * The progress label is whole and readable and covers no destination name. On wide maps it is
- * inside the map box; on narrow maps it is a caption directly under the map, and the ship stays
- * on the map.
+ * The progress label is a whole, readable caption directly under the map at every width (#619),
+ * the ship stays on the map, and the label covers no destination name.
  */
 async function expectLabelReadable(page: Page) {
   const map = (await page.getByTestId("route-map").boundingBox()) as Box;
@@ -156,22 +151,17 @@ async function expectLabelReadable(page: Page) {
   if (!map || !label) throw new Error("map or label not rendered");
   expect(label.x).toBeGreaterThanOrEqual(map.x - 0.5);
   expect(label.x + label.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
-  if (map.width >= LABEL_ON_MAP_FROM_PX) {
-    expect(label.y).toBeGreaterThanOrEqual(map.y - 0.5);
-    expect(label.y + label.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
-  } else {
-    expect(label.y, "caption directly under the map").toBeGreaterThanOrEqual(
-      map.y + map.height - 0.5,
-    );
-    expect(label.y).toBeLessThanOrEqual(map.y + map.height + 16);
-    const fits = await labelEl.evaluate((el) => el.scrollWidth <= el.clientWidth);
-    expect(fits, "label text not cut off").toBe(true);
-    const ship = (await page.getByTestId("ship").boundingBox()) as Box;
-    expect(ship.x).toBeGreaterThanOrEqual(map.x - 0.5);
-    expect(ship.y).toBeGreaterThanOrEqual(map.y - 0.5);
-    expect(ship.x + ship.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
-    expect(ship.y + ship.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
-  }
+  expect(label.y, "caption directly under the map").toBeGreaterThanOrEqual(
+    map.y + map.height - 0.5,
+  );
+  expect(label.y).toBeLessThanOrEqual(map.y + map.height + 16);
+  const fits = await labelEl.evaluate((el) => el.scrollWidth <= el.clientWidth);
+  expect(fits, "label text not cut off").toBe(true);
+  const ship = (await page.getByTestId("ship").boundingBox()) as Box;
+  expect(ship.x).toBeGreaterThanOrEqual(map.x - 0.5);
+  expect(ship.y).toBeGreaterThanOrEqual(map.y - 0.5);
+  expect(ship.x + ship.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
+  expect(ship.y + ship.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
   const names = page.getByTestId("landmark-name");
   await expect(names).toHaveCount(7); // route01 has 7 destinations
   for (const name of await names.all()) {
@@ -290,6 +280,33 @@ test.describe("progress label at the finish in English on a 320 px phone", () =>
     await expectLabelReadable(page);
   });
 });
+
+for (const width of [1024, 1280, 1920]) {
+  test.describe(`progress label on a ${width} px desktop`, () => {
+    test.use({ viewport: { width, height: 1080 } });
+    labelAtFinishTests();
+    labelAtNonNuocStartTests();
+  });
+}
+
+// The cases that used to put the label over a name: Bãi Mân Thái and Cù Lao Chàm (#619).
+for (const [name, start, points] of [
+  ["30% from Sơn Thủy", "son_thuy", 300],
+  ["80% from Hòn Sụp", "hon_sup", 800],
+] as const) {
+  test.describe(`progress label at ${name} on a 1280 px desktop`, () => {
+    test.use({ viewport: { width: 1280, height: 1080 } });
+    test("is a caption and covers no destination name", async ({ page }, testInfo) => {
+      await seedTeamOnMap(page, `voyage-${start}-${testInfo.project.name}-${Date.now()}`, {
+        start,
+        points,
+      });
+      await page.goto("/voyage");
+      await expect(page.getByTestId("progress-label")).toBeVisible();
+      await expectLabelReadable(page);
+    });
+  });
+}
 
 test.describe("progress label at 0% from Non Nước", () => {
   labelAtNonNuocStartTests();

@@ -68,13 +68,6 @@ describe("RouteMap", () => {
     expect(label.parentElement).toBe(screen.getByTestId("route-map").parentElement);
   });
 
-  it("places the on-map label from the ship position", () => {
-    setup({ ship: { x: 80, y: 79 } });
-    const label = screen.getByTestId("progress-label");
-    expect(label.style.getPropertyValue("--ship-x")).toBe("80");
-    expect(label.style.getPropertyValue("--ship-y")).toBe("79");
-  });
-
   it("places all seven destinations at their anchors", () => {
     setup({});
     expect(slugs).toHaveLength(7);

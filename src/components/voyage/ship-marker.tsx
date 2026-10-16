@@ -8,7 +8,7 @@ type Props = {
   alt: string;
 };
 
-// Ship box width as a share of the map width (the progress label CSS relies on it).
+// Ship box width as a share of the map width.
 const BOX_PCT = 12;
 
 /** The team's tier 1 ship on the map. The progress label is rendered by RouteMap. */
