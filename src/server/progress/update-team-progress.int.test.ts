@@ -22,7 +22,8 @@ const user = (n: string) =>
 
 /**
  * A published tournament (1 May to 1 July 2026, Vietnam time) with a 10 km route at the default
- * 10 points per km, so the finish is at 100 team points, and one team holding `userIds`.
+ * 10 points per km, so the finish is at 100 team points, and one team holding `userIds`. The
+ * first-swim and long-swim bonuses are 0 so the team points are the distance points only.
  */
 async function teamOf(userIds: string[]) {
   const org = await user("org");
@@ -36,6 +37,9 @@ async function teamOf(userIds: string[]) {
       seasonEndAt: new Date("2026-07-01T00:00:00+07:00"),
       routeId: "route01",
       routeDistanceM: 10000,
+      firstSwimBonusPoints: 0,
+      longSwimTier1Points: 0,
+      longSwimTier2Points: 0,
     },
   });
   const team = await db.team.create({
