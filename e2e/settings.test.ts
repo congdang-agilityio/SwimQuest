@@ -50,8 +50,9 @@ test("organizer changes the daily limit and sees it saved", async ({ page }, tes
   await page.getByRole("link", { name: "Luật và cài đặt" }).click();
   await expect(page.getByLabel(/Giới hạn mỗi ngày/)).toHaveValue("10");
   await page.getByLabel(/Giới hạn mỗi ngày/).fill("6");
-  await page.getByRole("button", { name: "Lưu" }).click();
-  await expect(page.getByText("Đã lưu cài đặt.")).toBeVisible();
+  const swimForm = page.getByRole("form", { name: "Giới hạn bơi" });
+  await swimForm.getByRole("button", { name: "Lưu" }).click();
+  await expect(swimForm.getByText("Đã lưu cài đặt.")).toBeVisible();
   const row = await prisma.tournament.findUnique({ where: { id } });
   expect(row?.dailyLimitM).toBe(6000);
   await page.reload();

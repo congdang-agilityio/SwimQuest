@@ -38,6 +38,7 @@ vi.mock("@/server/auth/roles", () => {
 vi.mock("@/server/tournaments/update-settings", () => ({
   getSettings: async () => ({
     swim: { longestSwimCountedM: 10000, dailyLimitM: 10000, swimTypeAllowed: "ANY" },
+    deadlines: { submissionDays: 7, lateUploadDays: 3, startChoiceDeadlineAt: null },
   }),
 }));
 
@@ -92,8 +93,9 @@ describe("Rules and settings page", () => {
     await renderPage();
     expect(dailyLimit().disabled).toBe(false);
     expect(swimType().disabled).toBe(false);
-    expect(screen.getByRole("button", { name: en.swim.save })).toBeTruthy();
+    expect(screen.getAllByRole("button", { name: en.swim.save })).toHaveLength(2);
     expect(screen.queryByText(en.swim.locked)).toBeNull();
+    expect(screen.getByLabelText(/Days to upload a swim/)).toHaveProperty("disabled", false);
   });
 
   it("is read-only with the locked note once the season has started", async () => {
@@ -103,5 +105,7 @@ describe("Rules and settings page", () => {
     expect(swimType().disabled).toBe(true);
     expect(screen.queryByRole("button", { name: en.swim.save })).toBeNull();
     expect(screen.getByText(en.swim.locked)).toBeTruthy();
+    expect(screen.getByText(en.deadlines.locked)).toBeTruthy();
+    expect(screen.getByLabelText(/Days to upload a swim/)).toHaveProperty("disabled", true);
   });
 });

@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { DeadlineSettingsForm } from "@/components/settings/deadline-settings-form";
 import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
 import type { SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
@@ -18,9 +19,14 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
     if (err instanceof ForbiddenError || err instanceof NotFoundError) notFound();
     throw err;
   });
-  const swim = (await getSettings(tournament.id))?.swim as SwimRulesValues | undefined;
-  if (!swim) notFound();
+  const settings = await getSettings(tournament.id);
+  const swim = settings?.swim as SwimRulesValues | undefined;
+  const deadlines = settings?.deadlines as
+    | { submissionDays: number; lateUploadDays: number; startChoiceDeadlineAt: Date | null }
+    | undefined;
+  if (!swim || !deadlines) notFound();
   const status = effectiveStatus(tournament, new Date());
+  const locked = status !== "DRAFT" && status !== "PUBLISHED";
   const t = await getTranslations("settings");
   return (
     <main>
@@ -28,10 +34,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
       <p>
         <Link href={`/tournaments/${tournament.id}/manage`}>{t("page.back")}</Link>
       </p>
-      <SwimSettingsForm
+      <SwimSettingsForm tournamentId={tournament.id} values={swim} locked={locked} />
+      <DeadlineSettingsForm
         tournamentId={tournament.id}
-        values={swim}
-        locked={status !== "DRAFT" && status !== "PUBLISHED"}
+        values={{
+          submissionDays: deadlines.submissionDays,
+          lateUploadDays: deadlines.lateUploadDays,
+          startChoiceDeadlineAt: deadlines.startChoiceDeadlineAt?.toISOString() ?? null,
+          seasonStartAt: tournament.seasonStartAt.toISOString(),
+        }}
+        locked={locked}
       />
     </main>
   );

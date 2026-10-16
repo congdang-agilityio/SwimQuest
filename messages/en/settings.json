@@ -35,6 +35,32 @@
   "rules": {
     "longestSwimCounted": "At most {km} km of one swim counts.",
     "dailyLimit": "At most {km} km and its points count per player per day.",
-    "swimType": "Swim type that counts: {type}."
+    "swimType": "Swim type that counts: {type}.",
+    "uploadDeadline": "A swim must be uploaded within {n} days of the swim date and no later than {m} days after the season end time.",
+    "startChoiceAt": "The start choice closes at {at}.",
+    "startChoiceAtSeasonStart": "The start choice closes at the season start ({at})."
+  },
+  "deadlines": {
+    "title": "Deadlines",
+    "submissionDays": "Days to upload a swim",
+    "submissionDaysHelp": "A swim must be uploaded within this many days of the swim date (Vietnam time).",
+    "lateUploadDays": "Days to upload after the season ends",
+    "lateUploadDaysHelp": "No swim can be uploaded later than this many days after the season end time.",
+    "deadlineDate": "Start choice deadline: date",
+    "deadlineTime": "Start choice deadline: time",
+    "deadlineHelp": "Vietnam time. Leave both empty to close the start choice at the season start ({seasonStart}). It cannot be later than the season start.",
+    "atSeasonStart": "Use the season start",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Settings saved.",
+    "locked": "Locked for the season: the deadlines cannot change once the season has started.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "DAYS_INVALID": "Enter a whole number of days from 0 to 60.",
+      "DEADLINE_INVALID": "Enter both a valid date and a valid time, or leave both empty.",
+      "DEADLINE_AFTER_SEASON_START": "The deadline cannot be after the season start.",
+      "UNKNOWN": "This value is not valid."
+    }
   }
 }
