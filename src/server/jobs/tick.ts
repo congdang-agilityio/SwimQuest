@@ -1,5 +1,6 @@
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
+import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
 
 export type StartAssignmentCounts = { tournaments: number; assigned: number; failed: number };
@@ -92,6 +93,36 @@ export async function runDueStartAssignments(now: Date): Promise<StartAssignment
     }
   }
   await emitDueStartLocks(now);
+  return counts;
+}
+
+export type WeekSettlementCounts = { weeks: number; failed: number };
+
+/**
+ * Scheduled job (S-21): settles the weekly multiplier of every week that overlaps the season of
+ * a PUBLISHED/ACTIVE tournament and has ended, oldest first. A failing week is logged and stops
+ * that tournament (later weeks need its streak) until the next tick. Safe to repeat.
+ */
+export async function runDueWeekSettlements(now: Date): Promise<WeekSettlementCounts> {
+  assertValidDate(now);
+  const tournaments = await db.tournament.findMany({
+    where: { status: { in: ["PUBLISHED", "ACTIVE"] }, seasonStartAt: { lt: now } },
+    select: { id: true, seasonStartAt: true, seasonEndAt: true, weekSettlements: true },
+    orderBy: { id: "asc" },
+  });
+  const counts: WeekSettlementCounts = { weeks: 0, failed: 0 };
+  for (const t of tournaments) {
+    const settled = new Set(t.weekSettlements.map((s) => s.weekStart));
+    for (const week of endedSeasonWeeks(t, now).filter((w) => !settled.has(w))) {
+      try {
+        if (await settleWeek(t.id, week, now)) counts.weeks += 1;
+      } catch (error) {
+        counts.failed += 1;
+        console.error(`tick: week ${week} settlement failed for tournament ${t.id}`, error);
+        break;
+      }
+    }
+  }
   return counts;
 }
 

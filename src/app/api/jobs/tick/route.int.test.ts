@@ -11,6 +11,8 @@ function tick(authorization?: string) {
 }
 
 async function clean() {
+  await db.weeklyResult.deleteMany();
+  await db.weekSettlement.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
@@ -72,6 +74,7 @@ describe("POST /api/jobs/tick", () => {
     expect(res.headers.get("cache-control")).toBe("no-store");
     expect(await res.json()).toEqual({
       startAssignments: { tournaments: 1, assigned: 1, failed: 0 },
+      weekSettlements: { weeks: 0, failed: 0 },
     });
     expect(await startOf(team.id)).not.toBeNull();
   });
@@ -85,9 +88,25 @@ describe("POST /api/jobs/tick", () => {
 
     expect(await res.json()).toEqual({
       startAssignments: { tournaments: 0, assigned: 0, failed: 0 },
+      weekSettlements: { weeks: 0, failed: 0 },
     });
     expect(await startOf(team.id)).toBe(first);
     expect(await db.auditEvent.count()).toBe(1);
+  });
+
+  it("settles the weekly multiplier of weeks that have ended", async () => {
+    const team = await dueTournamentWithOpenTeam();
+    await db.tournament.update({
+      where: { id: team.tournamentId },
+      data: { seasonStartAt: new Date(Date.now() - 15 * 86_400_000) },
+    });
+
+    const res = await tick(`Bearer ${SECRET}`);
+
+    const { weekSettlements } = await res.json();
+    expect(weekSettlements.weeks).toBeGreaterThanOrEqual(2);
+    expect(weekSettlements.failed).toBe(0);
+    expect(await db.weekSettlement.count()).toBe(weekSettlements.weeks);
   });
 
   it.each([
