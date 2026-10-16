@@ -1,6 +1,7 @@
 import { parseTeamInput, type TeamErrors } from "@/lib/validation/team";
 import { NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
+import { recordTeamDetailsAudit } from "./team-details";
 
 /**
  * Organizer team management (FR-31, story S-05). Every write checks `requireOrganizer` first
@@ -59,9 +60,12 @@ export async function updateTeam(
   if (!parsed.ok) return parsed;
   const team = await db.$transaction(async (tx) => {
     await lockTeam(tx, teamId);
+    const before = await tx.team.findUniqueOrThrow({ where: { id: teamId } });
     const members = await tx.teamMember.count({ where: { teamId, ...ACTIVE } });
     if (parsed.data.memberLimit < members) throw new TeamRuleError("LIMIT_BELOW_MEMBERS");
-    return tx.team.update({ where: { id: teamId }, data: parsed.data });
+    const next = await tx.team.update({ where: { id: teamId }, data: parsed.data });
+    await recordTeamDetailsAudit(tx, userId, before, next);
+    return next;
   });
   return { ok: true, team };
 }
