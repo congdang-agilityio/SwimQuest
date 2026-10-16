@@ -3,6 +3,9 @@ import type { Tx } from "@/server/checks/run-checks";
 import { emitEvent } from "@/server/events/emit";
 import { getTeamPoints } from "@/server/scoring/team-points";
 
+/** Why a finished team dropped below 100% (S-47): a revoked swim or a player moved away. */
+export type FinishLostReason = "SWIM_REVOKED" | "PLAYER_MOVED";
+
 type LockedTeam = {
   progressBp: number;
   finishedAt: Date | null;
@@ -21,7 +24,11 @@ type LockedTeam = {
  * Lock order: a transaction that updates several teams must call this in ascending `teamId`
  * order (plain string comparison), as `runChecks` does; any other order can deadlock with a
  * concurrent upload. Later callers (team moves, revocations) must follow the same order.
- * Points keep counting after the finish; the finish time never moves.
+ * Points keep counting after the finish; the finish time never moves while the team stays at
+ * 100%. A finished team that drops below 100% loses its finish (S-47): `finishedAt` is cleared,
+ * `finishLostAt`/`finishLostReason` record when and why (`reason`, default SWIM_REVOKED since
+ * any other drop comes from a points reversal), and TEAM_FINISH_LOST is emitted. Reaching 100%
+ * again records a new `finishedAt` (used for tie order), clears the loss and emits TEAM_FINISHED.
  * Progress and finish come only from the points ledger, never from a client value (AC 5).
  */
 export async function updateTeamProgress(
@@ -29,6 +36,7 @@ export async function updateTeamProgress(
   tournamentId: string,
   teamId: string,
   now: Date,
+  reason: FinishLostReason = "SWIM_REVOKED",
 ): Promise<void> {
   const [team] = await tx.$queryRaw<LockedTeam[]>`
     SELECT t."progressBp", t."finishedAt", r."routeDistanceM", r."pointsPerKm"
@@ -45,12 +53,15 @@ export async function updateTeamProgress(
     pointsPerKm: team.pointsPerKm,
   });
   const finishes = finished && team.finishedAt === null;
-  if (progressBp === team.progressBp && !finishes) return;
+  const losesFinish = !finished && team.finishedAt !== null;
+  if (progressBp === team.progressBp && !finishes && !losesFinish) return;
 
-  await tx.team.update({
-    where: { id: teamId },
-    data: { progressBp, ...(finishes ? { finishedAt: now } : {}) },
-  });
+  const finish = finishes
+    ? { finishedAt: now, finishLostAt: null, finishLostReason: null }
+    : losesFinish
+      ? { finishedAt: null, finishLostAt: now, finishLostReason: reason }
+      : {};
+  await tx.team.update({ where: { id: teamId }, data: { progressBp, ...finish } });
   if (progressBp !== team.progressBp) {
     await emitEvent(tx, {
       type: "TEAM_PROGRESS_CHANGED",
@@ -59,5 +70,8 @@ export async function updateTeamProgress(
   }
   if (finishes) {
     await emitEvent(tx, { type: "TEAM_FINISHED", payload: { tournamentId, teamId } });
+  }
+  if (losesFinish) {
+    await emitEvent(tx, { type: "TEAM_FINISH_LOST", payload: { tournamentId, teamId } });
   }
 }
