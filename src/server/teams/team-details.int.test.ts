@@ -5,7 +5,7 @@ import { updateTeam } from "./manage";
 import { updateTeamDetails } from "./team-details";
 
 async function clean() {
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();

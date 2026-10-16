@@ -22,7 +22,6 @@ test.afterAll(async () => {
     select: { id: true },
   });
   const tids = tournaments.map((t) => t.id);
-  await prisma.auditEvent.deleteMany({ where: { tournamentId: { in: tids } } });
   await prisma.teamMember.deleteMany({ where: { tournamentId: { in: tids } } });
   await prisma.team.deleteMany({ where: { tournamentId: { in: tids } } });
   await prisma.tournament.deleteMany({ where: { id: { in: tids } } });

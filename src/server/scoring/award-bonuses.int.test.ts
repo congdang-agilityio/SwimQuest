@@ -6,7 +6,7 @@ import { onVerified } from "./on-verified";
 
 async function clean() {
   await db.domainEvent.deleteMany();
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.notification.deleteMany();
   await db.pushSubscription.deleteMany();
   await db.zaloSwimPost.deleteMany();

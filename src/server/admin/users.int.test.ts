@@ -10,7 +10,7 @@ import {
 } from "./users";
 
 async function clean() {
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.session.deleteMany();
   await db.user.deleteMany();
 }

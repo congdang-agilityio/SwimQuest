@@ -6,7 +6,7 @@ import { checkPersonalBadgesOnVerified } from "./personal-rules";
 
 async function clean() {
   await db.domainEvent.deleteMany();
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.notification.deleteMany();
   await db.pushSubscription.deleteMany();
   await db.zaloSwimPost.deleteMany();

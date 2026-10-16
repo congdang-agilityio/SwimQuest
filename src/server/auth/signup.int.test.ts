@@ -8,7 +8,7 @@ const input = { email: " Lan@Example.com ", password: "correct horse", displayNa
 
 describe("signUp", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });

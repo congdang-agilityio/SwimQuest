@@ -7,7 +7,7 @@ import { getTeamRoster } from "./roster";
 
 async function clean() {
   await db.domainEvent.deleteMany();
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();

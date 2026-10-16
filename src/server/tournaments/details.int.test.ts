@@ -19,7 +19,7 @@ async function clean() {
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();

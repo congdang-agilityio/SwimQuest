@@ -112,6 +112,10 @@ model AuditEvent {
   createdAt    DateTime  @default(dbgenerated("CURRENT_TIMESTAMP"))
 
   @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([tournamentId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([action, createdAt])
 }
 
 enum TournamentStatus {

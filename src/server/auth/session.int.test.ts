@@ -12,7 +12,7 @@ async function makeUser(email = "session@example.com") {
 
 describe("sessions", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });
