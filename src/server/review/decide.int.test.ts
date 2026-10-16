@@ -1,6 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { db } from "@/server/db";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
+import { lockPlayerSwims, runChecks } from "@/server/checks/run-checks";
 import { AlreadyDecidedError, ReasonRequiredError, decideFlagged } from "./decide";
 
 async function clean() {
@@ -218,6 +219,60 @@ describe("decideFlagged", () => {
     const failed = outcomes.find((o) => o.status === "rejected") as PromiseRejectedResult;
     expect(failed.reason).toBeInstanceOf(AlreadyDecidedError);
     expect(await db.auditEvent.count({ where: { action: "SWIM_REVIEWED" } })).toBe(1);
+  });
+
+  it("waits for the player's swims lock, the same lock order as an upload", async () => {
+    const { organizer, player, result } = await setup();
+    let settled = false;
+    let pending: Promise<unknown> | undefined;
+
+    await db.$transaction(async (tx) => {
+      await lockPlayerSwims(tx, player.id);
+      pending = decideFlagged(organizer.id, result.id, { approve: true }, now).finally(
+        () => (settled = true),
+      );
+      await new Promise((r) => setTimeout(r, 300));
+      expect(settled).toBe(false); // blocked on the lock an upload holds
+    });
+    await expect(pending).resolves.toEqual({ resultId: result.id, status: "VERIFIED" });
+  });
+
+  it("settles both a concurrent upload of the player and an approval (no deadlock)", async () => {
+    const { organizer, player, cup, other, result, elsewhere } = await setup();
+    // Approve the flagged result in the tournament whose team the upload handles last.
+    const target = cup.team.id > other.team.id ? result : elsewhere;
+    const reviewer = target === result ? organizer.id : other.t.organizerId;
+    // A 1000 m swim in 30 min (3:00 / 100 m), verified in both tournaments.
+    const upload = () =>
+      db.$transaction(async (tx) => {
+        await lockPlayerSwims(tx, player.id);
+        const swim = await tx.swim.create({
+          data: {
+            userId: player.id,
+            source: "FIT",
+            fileSha256: "b".repeat(64),
+            originalFilename: "new.fit",
+            createdAt: new Date("2026-06-03T07:00:00+07:00"),
+            startedAt: new Date("2026-06-03T06:00:00+07:00"),
+            endedAt: new Date("2026-06-03T06:30:00+07:00"),
+            distanceM: 1000,
+            durationS: 1800,
+            swimType: "POOL",
+            sport: "swimming",
+            isSwim: true,
+          },
+        });
+        await runChecks(tx, swim, {}, now);
+        return swim;
+      });
+
+    const outcomes = await Promise.allSettled([
+      upload(),
+      decideFlagged(reviewer, target.id, { approve: true }, now),
+    ]);
+
+    expect(outcomes.map((o) => o.status)).toEqual(["fulfilled", "fulfilled"]);
+    expect(await db.swimResult.count({ where: { status: "VERIFIED" } })).toBe(3);
   });
 
   it("refuses a non-reviewer, including the other tournament's organizer", async () => {

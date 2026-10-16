@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { SwimResultStatus } from "@prisma/client";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { NotFoundError, requireReviewer } from "@/server/auth/roles";
+import { lockPlayerSwims } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { onVerified } from "@/server/scoring/on-verified";
@@ -33,8 +34,10 @@ type LockedResult = { id: string; status: SwimResultStatus };
  * `decisionNote` (required, 1-300 characters after trimming). Only this tournament's result
  * changes: the same swim's results elsewhere are untouched. The row is locked, so of two
  * decisions at once only one wins. The change, its `SWIM_REVIEWED` audit event and the
- * `SWIM_RESULT_CHANGED` event commit together. Throws NotFoundError, ForbiddenError,
- * ReasonRequiredError and AlreadyDecidedError.
+ * `SWIM_RESULT_CHANGED` event commit together. Lock order: the player's `swims:<userId>` lock
+ * first, then the result row, then the locks `onVerified` takes (points, badges, XP, team rows),
+ * the same order as an upload, so a decision and an upload of the same player cannot deadlock.
+ * Throws NotFoundError, ForbiddenError, ReasonRequiredError and AlreadyDecidedError.
  */
 export async function decideFlagged(
   reviewerId: string,
@@ -43,10 +46,11 @@ export async function decideFlagged(
   now: Date = new Date(),
 ): Promise<DecisionResult> {
   if (!isId(resultId)) throw new NotFoundError();
-  // A result never changes tournament, so the role is checked before the transaction starts.
+  // A result never changes tournament or player, so the role is checked and the player read
+  // before the transaction starts.
   const found = await db.swimResult.findUnique({
     where: { id: resultId },
-    select: { tournamentId: true },
+    select: { tournamentId: true, userId: true },
   });
   if (!found) throw new NotFoundError();
   await requireReviewer(reviewerId, found.tournamentId);
@@ -60,6 +64,9 @@ export async function decideFlagged(
   }
 
   return db.$transaction(async (tx) => {
+    // Serialize with the player's uploads before any other lock: onVerified takes per-player
+    // locks that an upload (holding this lock) takes in another order (see runChecks).
+    await lockPlayerSwims(tx, found.userId);
     const [locked] = await tx.$queryRaw<LockedResult[]>`
       SELECT "id", "status" FROM "SwimResult" WHERE "id" = ${resultId} FOR UPDATE`;
     if (!locked) throw new NotFoundError();
