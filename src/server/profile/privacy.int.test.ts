@@ -4,6 +4,7 @@ import { PRIVACY_DEFAULTS } from "@/lib/privacy";
 import { getPrivacy, setPrivacy } from "./privacy";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

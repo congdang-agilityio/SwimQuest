@@ -25,6 +25,7 @@ const post = (body: unknown, headers: Record<string, string> = {}) =>
 async function clean() {
   await db.seenMoment.deleteMany();
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 async function signIn(n: string) {

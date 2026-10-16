@@ -11,6 +11,7 @@ async function clean() {
   await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.domainEvent.deleteMany();
   await db.notification.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

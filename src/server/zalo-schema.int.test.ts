@@ -6,6 +6,7 @@ async function clean() {
   await db.zaloMessage.deleteMany();
   await db.tournamentZalo.deleteMany();
   await db.zaloBot.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

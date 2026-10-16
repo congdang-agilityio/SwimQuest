@@ -46,6 +46,7 @@ async function signIn(n: string) {
 async function clean() {
   await db.imageAsset.deleteMany();
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 const errorOf = async (res: Response) =>

@@ -17,6 +17,7 @@ test.afterAll(async () => {
     select: { id: true },
   });
   const userId = { in: users.map((u) => u.id) };
+  await prisma.xpEntry.deleteMany({ where: { userId } });
   await prisma.pointsEntry.deleteMany({ where: { userId } });
   await prisma.swimResult.deleteMany({ where: { userId } });
   await prisma.swim.deleteMany({ where: { userId } });

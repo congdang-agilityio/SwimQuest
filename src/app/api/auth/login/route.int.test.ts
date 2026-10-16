@@ -42,6 +42,7 @@ describe("POST /api/auth/login", () => {
     vi.mocked(verifyPassword).mockClear();
     await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
   });
 

@@ -5,10 +5,12 @@ import { getUserLocale, setUserLocale } from "./locale";
 describe("user locale", () => {
   beforeEach(async () => {
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
   });
   afterAll(async () => {
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
     await db.$disconnect();
   });

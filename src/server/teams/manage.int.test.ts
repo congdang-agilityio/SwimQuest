@@ -9,6 +9,7 @@ async function clean() {
   await db.team.deleteMany();
   await db.tournament.deleteMany();
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 

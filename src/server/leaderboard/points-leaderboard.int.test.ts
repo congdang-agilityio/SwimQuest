@@ -4,6 +4,7 @@ import { LeaderboardError } from "./progress-leaderboard";
 import { getKmLeaderboard, getPointsLeaderboard } from "./points-leaderboard";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();

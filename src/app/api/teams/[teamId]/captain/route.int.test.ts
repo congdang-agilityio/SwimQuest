@@ -68,6 +68,7 @@ describe("PUT /api/teams/:teamId/captain", () => {
     await db.team.deleteMany();
     await db.tournament.deleteMany();
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
   });
   afterAll(async () => {
@@ -76,6 +77,7 @@ describe("PUT /api/teams/:teamId/captain", () => {
     await db.team.deleteMany();
     await db.tournament.deleteMany();
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
     await db.$disconnect();
   });

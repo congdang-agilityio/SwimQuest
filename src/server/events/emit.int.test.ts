@@ -12,6 +12,7 @@ describe("emitEvent (database)", () => {
     clearHandlers();
     await db.domainEvent.deleteMany();
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
   });
 

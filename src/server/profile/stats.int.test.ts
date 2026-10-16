@@ -4,6 +4,7 @@ import { getPlayerStats } from "./stats";
 
 async function clean() {
   await db.badge.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

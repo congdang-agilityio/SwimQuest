@@ -28,6 +28,7 @@ const localeCookie = (res: Response) =>
 
 async function clean() {
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 

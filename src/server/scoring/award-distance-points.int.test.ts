@@ -5,6 +5,7 @@ import { buildFit } from "@/server/swims/parse/__tests__/fit-builder";
 import { awardDistancePoints } from "./award-distance-points";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

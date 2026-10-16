@@ -15,6 +15,7 @@ const realAssign = (
 
 async function clean() {
   await db.domainEvent.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
