@@ -30,6 +30,7 @@ export type ApiErrorCode =
   | "TEAM_FULL"
   | "ALREADY_MEMBER"
   | "REMOVED_FROM_TOURNAMENT"
+  | "LAST_ADMIN"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
@@ -62,6 +63,7 @@ const messages: Record<ApiErrorCode, string> = {
   TEAM_FULL: "This team is full. Choose another team.",
   ALREADY_MEMBER: "You are already in a team of this tournament.",
   REMOVED_FROM_TOURNAMENT: "You were removed from this tournament and cannot join it again.",
+  LAST_ADMIN: "The last platform admin role cannot be removed.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
