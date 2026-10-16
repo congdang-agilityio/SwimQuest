@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import type { ArtAsset } from "@/lib/art/route01-art";
 
 type ArtImageProps = {
@@ -15,10 +15,22 @@ type ArtImageProps = {
 export function ArtImage({ art, alt, fallback, className }: ArtImageProps) {
   const [failed, setFailed] = useState(false);
 
+  // The browser can fire `error` before React attaches onError (server-rendered <img>),
+  // so a completed image with no pixels is treated as failed once it mounts.
+  const checkLoaded = useCallback((img: HTMLImageElement | null) => {
+    if (img && img.complete && img.naturalWidth === 0) setFailed(true);
+  }, []);
+
   if (!art || failed) return <>{fallback}</>;
 
   return (
     // eslint-disable-next-line @next/next/no-img-element -- static art, no optimisation needed
-    <img src={art.path} alt={alt} className={className} onError={() => setFailed(true)} />
+    <img
+      ref={checkLoaded}
+      src={art.path}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
   );
 }
