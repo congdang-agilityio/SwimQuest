@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import { deadlinesSettingsSchema } from "./deadlines";
 import { swimSettingsSchema } from "./swim";
+import { visibilitySettingsSchema } from "./visibility";
 
 /**
  * Tournament settings groups (S-23 to S-26, S-93). The organizer saves one group at a time:
@@ -26,6 +27,12 @@ export const SETTINGS_GROUPS = {
     schemaFor: (t) => deadlinesSettingsSchema(t.seasonStartAt),
     columns: ["submissionDays", "lateUploadDays", "startChoiceDeadlineAt"],
     seasonLocked: true,
+  },
+  // Not season configuration (FR-24): editable at any time, even while the season is active.
+  visibility: {
+    schema: visibilitySettingsSchema,
+    columns: ["visibility"],
+    seasonLocked: false,
   },
 } as const satisfies Record<string, SettingsGroup>;
 

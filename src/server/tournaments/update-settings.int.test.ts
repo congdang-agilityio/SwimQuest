@@ -197,6 +197,47 @@ describe("updateSettings", () => {
   });
 });
 
+describe("updateSettings visibility", () => {
+  it("is not season-locked: changes while active or completed, existing members stay", async () => {
+    const user = await makeUser("organizer@example.com");
+    const member = await makeUser("member@example.com");
+    const t = await makeTournament(user.id, "PUBLISHED");
+    const team = await db.team.create({
+      data: { tournamentId: t.id, name: "Sharks", emblemKey: "dolphin", memberLimit: 3 },
+    });
+    await db.teamMember.create({
+      data: { teamId: team.id, tournamentId: t.id, userId: member.id },
+    });
+
+    for (const [id, now, value] of [
+      [t.id, DURING, "PUBLIC"],
+      [t.id, AFTER, "INVITE_ONLY"],
+    ] as const) {
+      const result = await updateSettings(user.id, id, "visibility", { visibility: value }, now);
+      expect(result).toEqual({ ok: true, group: "visibility", values: { visibility: value } });
+    }
+    const completed = await makeTournament(user.id, "COMPLETED");
+    await expect(
+      updateSettings(user.id, completed.id, "visibility", { visibility: "PUBLIC" }, AFTER),
+    ).resolves.toMatchObject({ ok: true });
+
+    await expect(db.teamMember.count({ where: { teamId: team.id } })).resolves.toBe(1);
+  });
+
+  it("rejects an invalid value and keeps the stored one", async () => {
+    const user = await makeUser("organizer@example.com");
+    const t = await makeTournament(user.id, "DRAFT");
+    const result = await updateSettings(user.id, t.id, "visibility", { visibility: "x" }, BEFORE);
+    expect(result).toEqual({
+      ok: false,
+      reason: "INVALID",
+      errors: { visibility: "VISIBILITY_INVALID" },
+    });
+    const row = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    expect(row.visibility).toBeNull();
+  });
+});
+
 describe("getSettings", () => {
   it("returns every group with the schema defaults, then the saved values", async () => {
     const user = await makeUser("organizer@example.com");
@@ -205,9 +246,14 @@ describe("getSettings", () => {
     await expect(getSettings(t.id)).resolves.toEqual({
       swim: DEFAULTS,
       deadlines: DEADLINE_DEFAULTS,
+      visibility: { visibility: null },
     });
     await updateSettings(user.id, t.id, "swim", INPUT, BEFORE);
-    await expect(getSettings(t.id)).resolves.toEqual({ swim: SAVED, deadlines: DEADLINE_DEFAULTS });
+    await expect(getSettings(t.id)).resolves.toEqual({
+      swim: SAVED,
+      deadlines: DEADLINE_DEFAULTS,
+      visibility: { visibility: null },
+    });
   });
 
   it("returns null for a missing tournament", async () => {
