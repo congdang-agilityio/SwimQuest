@@ -244,6 +244,7 @@ describe("runChecks on upload", () => {
     expect(onVerified).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({ tournamentId: five.t.id, status: "VERIFIED" }),
+      expect.any(Date),
     );
   });
 });

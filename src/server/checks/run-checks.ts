@@ -1,7 +1,7 @@
 import type { Swim, SwimResult } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
-import { awardDistancePoints } from "@/server/scoring/award-distance-points";
+import { onVerified as awardAndUpdateProgress } from "@/server/scoring/on-verified";
 import { findDuplicateOf } from "./duplicates";
 import type { ReasonCode } from "./reasons";
 import { evaluateSwim } from "./standard-checks";
@@ -12,12 +12,12 @@ export type Tx = Parameters<
 >[0];
 
 export type RunChecksHooks = {
-  /** Called inside the transaction for each VERIFIED result (S-13 awards points here). */
-  onVerified?: (tx: Tx, result: SwimResult) => Promise<void>;
+  /** Called inside the transaction for each VERIFIED result, with the checks' `now`. */
+  onVerified?: (tx: Tx, result: SwimResult, now: Date) => Promise<void>;
 };
 
-/** By default a verified result gets its distance points (S-13). */
-const defaultHooks: Required<RunChecksHooks> = { onVerified: awardDistancePoints };
+/** By default a verified result gets its points (S-13) and its team's progress (S-19). */
+const defaultHooks: Required<RunChecksHooks> = { onVerified: awardAndUpdateProgress };
 
 /**
  * Serializes the uploads of one player until the transaction ends, so two uploads at the same
@@ -69,6 +69,6 @@ export async function runChecks(
         reasons,
       },
     });
-    if (status === "VERIFIED") await onVerified(tx, result);
+    if (status === "VERIFIED") await onVerified(tx, result, now);
   }
 }
