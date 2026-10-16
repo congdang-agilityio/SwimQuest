@@ -98,11 +98,7 @@ export async function runDueStartAssignments(now: Date): Promise<StartAssignment
 
 export type WeekSettlementCounts = { weeks: number; failed: number };
 
-/**
- * Scheduled job (S-21): settles the weekly multiplier of every week that overlaps the season of
- * a PUBLISHED/ACTIVE tournament and has ended, oldest first. A failing week is logged and stops
- * that tournament (later weeks need its streak) until the next tick. Safe to repeat.
- */
+/** Settles the ended season weeks (S-21), oldest first; a failure stops that tournament's run. */
 export async function runDueWeekSettlements(now: Date): Promise<WeekSettlementCounts> {
   assertValidDate(now);
   const tournaments = await db.tournament.findMany({

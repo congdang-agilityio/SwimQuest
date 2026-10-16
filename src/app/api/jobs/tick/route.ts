@@ -23,9 +23,8 @@ export async function POST(request: Request): Promise<NextResponse> {
   const given = header.startsWith("Bearer ") ? header.slice("Bearer ".length) : "";
   if (!given || !sameSecret(given, secret)) return apiError(401, "UNAUTHENTICATED");
 
-  const now = new Date();
-  const startAssignments = await runDueStartAssignments(now);
-  const weekSettlements = await runDueWeekSettlements(now);
+  const startAssignments = await runDueStartAssignments(new Date());
+  const weekSettlements = await runDueWeekSettlements(new Date());
   return NextResponse.json(
     { startAssignments, weekSettlements },
     { headers: { "cache-control": "no-store" } },

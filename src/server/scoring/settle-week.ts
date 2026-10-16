@@ -1,114 +1,48 @@
+import type { Tournament } from "@prisma/client";
 import { activeDays, extraPoints, weeklyMultiplierPct } from "@/lib/scoring/weekly-multiplier";
-import { previousWeekStart, vnDayKey, vnWeekRange, vnWeekStart } from "@/lib/time/vn";
+import { previousWeekStart, vnWeekRange, vnWeekStart } from "@/lib/time/vn";
 import type { Tx } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
 import { updateTeamProgress } from "@/server/progress/update-team-progress";
 import { lockPlayerPoints } from "./award-distance-points";
 
-const SETTINGS = {
-  longestSwimCountedM: true,
-  multiplierTwoDaysPct: true,
-  multiplierThreeDaysPct: true,
-  streakStepPct: true,
-  multiplierMaxPct: true,
-} as const;
-type Settings = Awaited<ReturnType<typeof settingsOf>>;
-const settingsOf = (tx: Tx, id: string) =>
-  tx.tournament.findUniqueOrThrow({ where: { id }, select: SETTINGS });
-
-/** Mondays of the weeks that overlap the season and have fully ended at `now`, oldest first. */
-export function endedSeasonWeeks(
-  t: { seasonStartAt: Date; seasonEndAt: Date },
-  now: Date,
-): string[] {
+/** Mondays (Vietnam time) of the weeks that overlap the season and have ended at `now`. */
+export function endedSeasonWeeks(t: { seasonStartAt: Date; seasonEndAt: Date }, now: Date) {
   const weeks: string[] = [];
-  for (let week = vnWeekStart(t.seasonStartAt); ;) {
+  for (let week = vnWeekStart(t.seasonStartAt); ; week = vnWeekStart(vnWeekRange(week).end)) {
     const { start, end } = vnWeekRange(week);
     if (start >= t.seasonEndAt || end > now) return weeks;
     weeks.push(week);
-    week = vnWeekStart(end);
   }
 }
 
-/** The team the player was in when the week ended (left after it, or still in it), if any. */
-async function teamAtWeekEnd(tx: Tx, tournamentId: string, userId: string, end: Date) {
-  const member = await tx.teamMember.findFirst({
-    where: {
-      tournamentId,
-      userId,
-      joinedAt: { lt: end },
-      OR: [{ endedAt: null }, { endedAt: { gte: end } }],
-    },
-    orderBy: { joinedAt: "desc" },
-    select: { teamId: true },
-  });
-  return member?.teamId;
-}
-
 /**
- * Computes one player's week from the ledger and writes the change: the WEEKLY_MULTIPLIER
- * entries of a week (vnDay = its Monday) always add up to the week's extra points, so a change is
- * a new entry with the difference. Returns the team that got an entry, or null.
+ * Recomputes a player's week (BR-30) from VERIFIED results and their DISTANCE points (no bonuses).
+ * The week's WEEKLY_MULTIPLIER entries (vnDay = its Monday) add up to `WeeklyResult.extraPoints`:
+ * a change is a new entry with the difference, for the player's team when the week ended.
  */
-async function applyPlayerWeek(
-  tx: Tx,
-  tournamentId: string,
-  t: Settings,
-  userId: string,
-  weekStart: string,
-  now: Date,
-): Promise<string | null> {
-  const { start, end } = vnWeekRange(weekStart);
-  const lastDay = vnDayKey(new Date(end.getTime() - 1));
-  const key = { tournamentId_userId_weekStart: { tournamentId, userId, weekStart } };
-  const [results, distance, given, previous, existing] = await Promise.all([
-    tx.swimResult.findMany({
-      where: {
-        tournamentId,
-        userId,
-        status: "VERIFIED",
-        swim: { startedAt: { gte: start, lt: end } },
-      },
-      select: { teamId: true, swim: { select: { startedAt: true, distanceM: true } } },
-      orderBy: { swim: { startedAt: "asc" } },
-    }),
-    tx.pointsEntry.aggregate({
-      where: {
-        tournamentId,
-        userId,
-        kind: "DISTANCE",
-        vnDay: { gte: weekStart, lte: lastDay },
-        swimResult: { status: "VERIFIED" },
-      },
-      _sum: { points: true },
-    }),
-    tx.pointsEntry.aggregate({
-      where: { tournamentId, userId, kind: "WEEKLY_MULTIPLIER", vnDay: weekStart },
-      _sum: { points: true },
-    }),
-    tx.weeklyResult.findUnique({
-      where: {
-        tournamentId_userId_weekStart: {
-          tournamentId,
-          userId,
-          weekStart: previousWeekStart(weekStart),
-        },
-      },
-      select: { streakWeeks: true },
-    }),
-    tx.weeklyResult.findUnique({ where: key, select: { teamId: true } }),
-  ]);
+async function applyPlayerWeek(tx: Tx, t: Tournament, userId: string, week: string, now: Date) {
+  const { start, end } = vnWeekRange(week);
+  const ids = { tournamentId: t.id, userId };
+  const results = await tx.swimResult.findMany({
+    where: { ...ids, status: "VERIFIED", swim: { startedAt: { gte: start, lt: end } } },
+    select: {
+      teamId: true,
+      swim: { select: { startedAt: true, distanceM: true } },
+      pointsEntries: { where: { kind: "DISTANCE" }, select: { points: true } },
+    },
+    orderBy: { swim: { startedAt: "asc" } },
+  });
+  const rows = await tx.weeklyResult.findMany({
+    where: { ...ids, weekStart: { in: [previousWeekStart(week), week] } },
+  });
+  const existing = rows.find((r) => r.weekStart === week);
+  const streak = rows.find((r) => r.weekStart !== week)?.streakWeeks ?? 0;
   if (results.length === 0 && !existing) return null;
-
-  const days = activeDays(
-    results.map(({ swim }) => ({
-      startedAt: swim.startedAt,
-      distanceM: Math.min(swim.distanceM, t.longestSwimCountedM),
-    })),
-  );
+  const days = activeDays(results.map((r) => r.swim));
   const multiplierPct = weeklyMultiplierPct({
     activeDays: days,
-    previousThreePlusStreak: previous?.streakWeeks ?? 0,
+    previousThreePlusStreak: streak,
     values: {
       multiplier2DaysPct: t.multiplierTwoDaysPct,
       multiplier3DaysPct: t.multiplierThreeDaysPct,
@@ -116,76 +50,60 @@ async function applyPlayerWeek(
       multiplierMaxPct: t.multiplierMaxPct,
     },
   });
-  const distancePoints = distance._sum.points ?? 0;
+  const distancePoints = results.reduce((sum, r) => sum + (r.pointsEntries[0]?.points ?? 0), 0);
   const extra = extraPoints(distancePoints, multiplierPct);
-  const teamId =
-    existing?.teamId ??
-    (await teamAtWeekEnd(tx, tournamentId, userId, end)) ??
-    results[results.length - 1].teamId;
-  const row = {
-    activeDays: days,
-    multiplierPct,
-    distancePoints,
-    extraPoints: extra,
-    streakWeeks: days >= 3 ? (previous?.streakWeeks ?? 0) + 1 : 0,
-  };
-  await tx.weeklyResult.upsert({
-    where: key,
-    create: { tournamentId, userId, teamId, weekStart, settledAt: now, ...row },
-    update: row,
+  const row = { activeDays: days, multiplierPct, distancePoints, extraPoints: extra };
+  const data = { ...row, streakWeeks: days >= 3 ? streak + 1 : 0 };
+  const member = await tx.teamMember.findFirst({
+    where: { ...ids, joinedAt: { lt: end }, OR: [{ endedAt: null }, { endedAt: { gte: end } }] },
+    orderBy: { joinedAt: "desc" },
   });
-  const diff = extra - (given._sum.points ?? 0);
-  if (diff === 0) return null;
+  const teamId = existing?.teamId ?? member?.teamId ?? results[results.length - 1].teamId;
+  if (existing) await tx.weeklyResult.update({ where: { id: existing.id }, data });
+  else
+    await tx.weeklyResult.create({
+      data: { ...ids, teamId, weekStart: week, settledAt: now, ...data },
+    });
+  const points = extra - (existing?.extraPoints ?? 0);
+  if (points === 0) return null;
   await tx.pointsEntry.create({
-    data: {
-      tournamentId,
-      userId,
-      teamId,
-      kind: "WEEKLY_MULTIPLIER",
-      points: diff,
-      vnDay: weekStart,
-    },
+    data: { ...ids, teamId, kind: "WEEKLY_MULTIPLIER", points, vnDay: week },
   });
   return teamId;
 }
 
-const sorted = (teams: Set<string>) => [...teams].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+/** Applies the weeks in order; returns the teams that got points, ascending (lock order). */
+async function applyWeeks(tx: Tx, t: Tournament, userId: string, weeks: string[], now: Date) {
+  await lockPlayerPoints(tx, t.id, userId);
+  const teams: string[] = [];
+  for (const week of weeks) teams.push((await applyPlayerWeek(tx, t, userId, week, now)) ?? "");
+  return [...new Set(teams.filter(Boolean))].sort();
+}
 
 /**
- * Settles the weekly multiplier (S-21, FR-49, BR-30) of one tournament for the week starting
- * `weekStart` (Monday, Vietnam time) once: claims the `WeekSettlement` row first, so a repeated
- * or concurrent call does nothing and returns false. Every player with a verified result that
- * week gets a `WeeklyResult` and, when the multiplier adds points, a WEEKLY_MULTIPLIER entry
- * for their team when the week ended; then the progress of those teams is refreshed.
- * Weeks must be settled oldest first: the streak reads the previous week's `WeeklyResult`.
+ * Settles a tournament's week (S-21) once, oldest week first: a repeated or concurrent call finds
+ * the `WeekSettlement` claimed and returns false. Then refreshes the progress of changed teams.
  */
-export async function settleWeek(
-  tournamentId: string,
-  weekStart: string,
-  now: Date = new Date(),
-): Promise<boolean> {
-  const { start, end } = vnWeekRange(weekStart);
+export async function settleWeek(tournamentId: string, week: string, now = new Date()) {
+  const { start, end } = vnWeekRange(week);
   return db.$transaction(
     async (tx) => {
-      const claimed = await tx.weekSettlement.createMany({
-        data: [{ tournamentId, weekStart, settledAt: now }],
+      const claim = await tx.weekSettlement.createMany({
+        data: { tournamentId, weekStart: week, settledAt: now },
         skipDuplicates: true,
       });
-      if (claimed.count === 0) return false;
-      const t = await settingsOf(tx, tournamentId);
+      if (claim.count === 0) return false;
+      const t = await tx.tournament.findUniqueOrThrow({ where: { id: tournamentId } });
       const players = await tx.swimResult.findMany({
         where: { tournamentId, status: "VERIFIED", swim: { startedAt: { gte: start, lt: end } } },
         distinct: ["userId"],
-        select: { userId: true },
         orderBy: { userId: "asc" },
       });
       const teams = new Set<string>();
       for (const { userId } of players) {
-        await lockPlayerPoints(tx, tournamentId, userId);
-        const team = await applyPlayerWeek(tx, tournamentId, t, userId, weekStart, now);
-        if (team) teams.add(team);
+        for (const team of await applyWeeks(tx, t, userId, [week], now)) teams.add(team);
       }
-      for (const teamId of sorted(teams)) await updateTeamProgress(tx, tournamentId, teamId, now);
+      for (const team of [...teams].sort()) await updateTeamProgress(tx, tournamentId, team, now);
       return true;
     },
     { timeout: 60_000 },
@@ -193,32 +111,23 @@ export async function settleWeek(
 }
 
 /**
- * Recomputes a player's settled week after their results changed (S-46), and every later
- * settled week, since their streaks depend on it. Each change is a new WEEKLY_MULTIPLIER entry
- * with the difference (positive or negative); earlier entries are never edited. Does nothing for
- * a week that is not settled yet. Returns the teams whose points changed, in ascending order:
- * the caller refreshes their progress (`updateTeamProgress`) in its own lock order.
+ * Recomputes a player's settled week (S-46) and the later settled weeks (streaks). Returns the
+ * teams whose points changed, ascending; the caller refreshes their progress in its lock order.
  */
 export async function recalculatePlayerWeek(
   tx: Tx,
   tournamentId: string,
   userId: string,
-  weekStart: string,
-  now: Date = new Date(),
+  week: string,
+  now = new Date(),
 ): Promise<string[]> {
-  vnWeekRange(weekStart);
+  vnWeekRange(week);
   const settled = await tx.weekSettlement.findMany({
-    where: { tournamentId, weekStart: { gte: weekStart } },
-    select: { weekStart: true },
+    where: { tournamentId, weekStart: { gte: week } },
     orderBy: { weekStart: "asc" },
   });
-  if (settled[0]?.weekStart !== weekStart) return [];
-  await lockPlayerPoints(tx, tournamentId, userId);
-  const t = await settingsOf(tx, tournamentId);
-  const teams = new Set<string>();
-  for (const week of settled) {
-    const team = await applyPlayerWeek(tx, tournamentId, t, userId, week.weekStart, now);
-    if (team) teams.add(team);
-  }
-  return sorted(teams);
+  if (settled[0]?.weekStart !== week) return [];
+  const t = await tx.tournament.findUniqueOrThrow({ where: { id: tournamentId } });
+  const weeks = settled.map((s) => s.weekStart);
+  return applyWeeks(tx, t, userId, weeks, now);
 }
