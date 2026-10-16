@@ -22,6 +22,8 @@ export type ApiErrorCode =
   | "UNSUPPORTED_FILE"
   | "UNREADABLE_FILE"
   | "NO_DISTANCE"
+  | "IMAGE_TYPE_NOT_ALLOWED"
+  | "IMAGE_TOO_LARGE"
   | "JOIN_CLOSED"
   | "LINK_OFF"
   | "TEAM_FULL"
@@ -51,6 +53,8 @@ const messages: Record<ApiErrorCode, string> = {
   UNSUPPORTED_FILE: "Only GPX or FIT files are supported. Export one from your watch or app.",
   UNREADABLE_FILE: "The file has no readable activity data. Export it again as GPX or FIT.",
   NO_DISTANCE: "The file has no swim distance. Export it as FIT or with distance from your app.",
+  IMAGE_TYPE_NOT_ALLOWED: "Only PNG, JPEG or WebP images are allowed.",
+  IMAGE_TOO_LARGE: "The image is larger than 2 MB.",
   JOIN_CLOSED: "Joining this tournament is closed.",
   LINK_OFF: "This invite link has been switched off.",
   TEAM_FULL: "This team is full. Choose another team.",
