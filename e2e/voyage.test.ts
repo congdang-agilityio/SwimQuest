@@ -156,7 +156,7 @@ async function expectLabelOnMap(page: Page, { clear = false } = {}) {
   expect(apart, "label must not cover the Lý Sơn name").toBe(true);
 }
 
-async function seedTeamAtFinish(page: Page, label: string) {
+async function seedTeamOnMap(page: Page, label: string, { start = "hon_sup", points = 1500 } = {}) {
   const email = `${label}-${stamp}@example.com`;
   const orgEmail = `${label}-org-${stamp}@example.com`;
   emails.push(email, orgEmail);
@@ -190,7 +190,7 @@ async function seedTeamAtFinish(page: Page, label: string) {
       name: "Đội",
       emblemKey: "dolphin",
       memberLimit: 5,
-      startDestination: "hon_sup",
+      startDestination: start,
       startSetBy: "CAPTAIN",
       startSetAt: new Date(),
     },
@@ -198,6 +198,7 @@ async function seedTeamAtFinish(page: Page, label: string) {
   await prisma.teamMember.create({
     data: { tournamentId: tournament.id, teamId: team.id, userId: me.id, status: "ACTIVE" },
   });
+  if (points === 0) return;
   // 1500 points on a 100 km route at 10 points/km is above the route length.
   await prisma.pointsEntry.create({
     data: {
@@ -205,8 +206,8 @@ async function seedTeamAtFinish(page: Page, label: string) {
       userId: me.id,
       teamId: team.id,
       kind: "DISTANCE",
-      points: 1500,
-      countedM: 150000,
+      points,
+      countedM: points * 100,
       vnDay: "2026-02-01",
     },
   });
@@ -216,7 +217,7 @@ function labelAtFinishTests() {
   test("at 100% the label is whole, on the map and clear of the Lý Sơn name", async ({
     page,
   }, testInfo) => {
-    await seedTeamAtFinish(
+    await seedTeamOnMap(
       page,
       `voyage-finish-${testInfo.project.name}-${testInfo.parallelIndex}-${testInfo.workerIndex}-${testInfo.retry}-${Date.now()}`,
     );
@@ -233,4 +234,26 @@ test.describe("progress label at the finish", () => {
 test.describe("progress label at the finish on a 320 px phone", () => {
   test.use({ viewport: { width: 320, height: 568 } });
   labelAtFinishTests();
+});
+
+// Non Nước sits near the top of the map (y = 8%), so a label above the ship would be cut off.
+function labelAtNonNuocStartTests() {
+  test("at 0% from Non Nước the label is whole and on the map", async ({ page }, testInfo) => {
+    await seedTeamOnMap(page, `voyage-non-nuoc-${testInfo.project.name}-${Date.now()}`, {
+      start: "non_nuoc",
+      points: 0,
+    });
+    await page.goto("/voyage");
+    await expect(page.getByTestId("progress-label")).toHaveText("0 / 100 km hành trình · 0%");
+    await expectLabelOnMap(page);
+  });
+}
+
+test.describe("progress label at 0% from Non Nước", () => {
+  labelAtNonNuocStartTests();
+});
+
+test.describe("progress label at 0% from Non Nước on a 320 px phone", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  labelAtNonNuocStartTests();
 });
