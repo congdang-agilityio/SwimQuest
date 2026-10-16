@@ -1,7 +1,7 @@
-import { emitEvent } from "@/server/events/emit";
 import type { Swim, SwimResult } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 import { onVerified as awardAndUpdateProgress } from "@/server/scoring/on-verified";
 import { findDuplicateOf } from "./duplicates";
 import type { ReasonCode } from "./reasons";

@@ -1,4 +1,3 @@
-import { emitEvent } from "@/server/events/emit";
 import { getRoute, startDestinations } from "@/lib/routes";
 import {
   effectiveStatus,
@@ -7,6 +6,7 @@ import {
 } from "@/lib/tournaments/lifecycle";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 
 export type AutoAssignment = { teamId: string; slug: string };
 

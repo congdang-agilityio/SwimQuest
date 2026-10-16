@@ -1,9 +1,9 @@
-import { emitEvent } from "@/server/events/emit";
 import type { StartSetBy } from "@prisma/client";
 import { getRoute, startDestinations } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { ForbiddenError, NotFoundError, requireCaptain } from "@/server/auth/roles";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 
 /** The slug is not one of the start destinations of the team's route (e.g. the finish). */
 export class InvalidStartError extends Error {

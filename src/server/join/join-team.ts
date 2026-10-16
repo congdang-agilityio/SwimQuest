@@ -1,7 +1,7 @@
-import { emitEvent } from "@/server/events/emit";
 import { Prisma } from "@prisma/client";
 import { isJoiningOpen, type LifecycleTournament } from "@/lib/tournaments/lifecycle";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 import {
   findMyTeam,
   isRemovedFromTournament,

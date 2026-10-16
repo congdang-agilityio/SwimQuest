@@ -1,7 +1,7 @@
-import { emitEvent } from "@/server/events/emit";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 
 /** The chosen user is not an active member of the team. */
 export class NotAMemberError extends Error {
