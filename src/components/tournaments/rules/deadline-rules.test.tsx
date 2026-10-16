@@ -37,13 +37,22 @@ describe("DeadlineRules", () => {
     ).toBeTruthy();
   });
 
+  it("uses the singular for one day", () => {
+    setup({ submissionDays: 1, lateUploadDays: 1 });
+    expect(
+      screen.getByText(
+        "A swim must be uploaded within 1 day of the swim date and no later than 1 day after the season end time.",
+      ),
+    ).toBeTruthy();
+  });
+
   it("shows changed N, M and start-choice deadline", () => {
     setup({
       submissionDays: 5,
       lateUploadDays: 1,
       startChoiceDeadlineAt: new Date("2026-10-30T13:30:00Z"),
     });
-    expect(screen.getByText(/within 5 days.*no later than 1 days/)).toBeTruthy();
+    expect(screen.getByText(/within 5 days.*no later than 1 day after/)).toBeTruthy();
     expect(screen.getByText("The start choice closes at 20:30 30/10/2026.")).toBeTruthy();
   });
 });

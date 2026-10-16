@@ -126,6 +126,11 @@ export function DeadlineSettingsForm({
     if (!form) return;
     (form.elements.namedItem("startChoiceDeadlineDate") as HTMLInputElement).value = "";
     (form.elements.namedItem("startChoiceDeadlineTime") as HTMLInputElement).value = "";
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next.startChoiceDeadlineDate;
+      return next;
+    });
   }
 
   return (
@@ -158,6 +163,8 @@ export function DeadlineSettingsForm({
             type="time"
             defaultValue={parts.time}
             disabled={locked}
+            aria-invalid={errors.startChoiceDeadlineDate ? true : undefined}
+            aria-describedby={describedBy("startChoiceDeadlineDate")}
             style={control}
           />
         </label>

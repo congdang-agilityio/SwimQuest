@@ -49,8 +49,8 @@ describe("DeadlineSettingsForm", () => {
     setup({ ...defaults, startChoiceDeadlineAt: "2026-10-30T13:30:00.000Z" });
     fireEvent.change(input(/Days to upload a swim/), { target: { value: "5" } });
     fireEvent.click(screen.getByRole("button", { name: en.deadlines.atSeasonStart }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect(await screen.findByText("Settings saved.")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Save deadlines" }));
+    expect(await screen.findByText("Deadlines saved.")).toBeTruthy();
     const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(JSON.parse(init.body as string)).toEqual({
       group: "deadlines",
@@ -63,7 +63,7 @@ describe("DeadlineSettingsForm", () => {
     });
   });
 
-  it("shows field errors from a 400", async () => {
+  it("shows field errors from a 400 linked to the date and time inputs", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(() =>
@@ -76,17 +76,67 @@ describe("DeadlineSettingsForm", () => {
       ),
     );
     setup();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect((await screen.findByRole("alert")).textContent).toContain(
-      "cannot be after the season start",
+    fireEvent.click(screen.getByRole("button", { name: "Save deadlines" }));
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("cannot be after the season start");
+    for (const field of [input(/deadline: date/), input(/deadline: time/)]) {
+      expect(field.getAttribute("aria-invalid")).toBe("true");
+      expect(field.getAttribute("aria-describedby")?.split(" ")).toEqual([
+        "startChoiceDeadlineDate-help",
+        alert.id,
+      ]);
+    }
+    const days = input(/Days to upload a swim/);
+    expect(days.getAttribute("aria-invalid")).toBeNull();
+    expect(days.getAttribute("aria-describedby")).toBe("submissionDays-help");
+  });
+
+  it("links a days error to its input", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        json(400, {
+          error: { code: "VALIDATION_FAILED", fields: { submissionDays: "DAYS_INVALID" } },
+        }),
+      ),
     );
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Save deadlines" }));
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain(en.deadlines.errors.DAYS_INVALID);
+    const days = input(/Days to upload a swim/);
+    expect(days.getAttribute("aria-invalid")).toBe("true");
+    expect(days.getAttribute("aria-describedby")).toBe(`submissionDays-help ${alert.id}`);
+    expect(input(/deadline: time/).getAttribute("aria-invalid")).toBeNull();
+  });
+
+  it("clears a stale deadline error on use the season start", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        json(400, {
+          error: {
+            code: "VALIDATION_FAILED",
+            fields: { startChoiceDeadlineDate: "DEADLINE_INVALID" },
+          },
+        }),
+      ),
+    );
+    setup({ ...defaults, startChoiceDeadlineAt: "2026-10-30T13:30:00.000Z" });
+    fireEvent.click(screen.getByRole("button", { name: "Save deadlines" }));
+    await screen.findByRole("alert");
+    fireEvent.click(screen.getByRole("button", { name: en.deadlines.atSeasonStart }));
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(input(/deadline: date/).getAttribute("aria-invalid")).toBeNull();
+    expect(input(/deadline: time/).getAttribute("aria-invalid")).toBeNull();
+    expect(input(/deadline: date/).value).toBe("");
   });
 
   it("is read-only with the locked note when the season has started", () => {
     setup(defaults, true);
     expect(input(/Days to upload a swim/).disabled).toBe(true);
     expect(input(/deadline: date/).disabled).toBe(true);
-    expect(screen.queryByRole("button", { name: "Save" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Save deadlines" })).toBeNull();
     expect(screen.getByText(en.deadlines.locked)).toBeTruthy();
   });
 
@@ -96,7 +146,7 @@ describe("DeadlineSettingsForm", () => {
       vi.fn(() => json(409, {})),
     );
     setup();
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save deadlines" }));
     expect(await screen.findByText(en.deadlines.locked)).toBeTruthy();
     expect(input(/Days to upload a swim/).disabled).toBe(true);
   });

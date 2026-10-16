@@ -93,7 +93,8 @@ describe("Rules and settings page", () => {
     await renderPage();
     expect(dailyLimit().disabled).toBe(false);
     expect(swimType().disabled).toBe(false);
-    expect(screen.getAllByRole("button", { name: en.swim.save })).toHaveLength(2);
+    expect(screen.getByRole("button", { name: en.swim.save })).toBeTruthy();
+    expect(screen.getByRole("button", { name: en.deadlines.save })).toBeTruthy();
     expect(screen.queryByText(en.swim.locked)).toBeNull();
     expect(screen.getByLabelText(/Days to upload a swim/)).toHaveProperty("disabled", false);
   });
