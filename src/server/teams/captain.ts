@@ -1,5 +1,10 @@
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
-import { NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import {
+  ForbiddenError,
+  NotFoundError,
+  requireCaptain,
+  requireOrganizer,
+} from "@/server/auth/roles";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 
@@ -60,5 +65,54 @@ export async function appointCaptain(
       payload: { tournamentId, teamId, userId: memberUserId, setBy: organizerId },
     });
     return { changed: true, captainUserId: memberUserId };
+  });
+}
+
+export type HandOverCaptaincyResult = { captainUserId: string; previousCaptainUserId: string };
+
+/**
+ * The captain makes another active member captain and becomes a normal member (story S-40,
+ * FR-35). Throws the role errors of `requireCaptain` and NotAMemberError (the target is not an
+ * active member, or is the captain). The team row is locked and both checks repeated inside the
+ * transaction; the change, its `TEAM_CAPTAIN_HANDOVER` audit event and `TEAM_CAPTAIN_SET` event
+ * commit together. A later organizer appointment (`appointCaptain`) still replaces the result.
+ */
+export async function handOverCaptaincy(
+  captainId: string,
+  teamId: string,
+  memberUserId: string,
+): Promise<HandOverCaptaincyResult> {
+  const { tournamentId } = await requireCaptain(captainId, teamId);
+  if (typeof memberUserId !== "string" || memberUserId.length === 0 || memberUserId === captainId) {
+    throw new NotAMemberError();
+  }
+
+  return db.$transaction(async (tx) => {
+    const [locked] = await tx.$queryRaw<{ captainUserId: string | null }[]>`
+      SELECT "captainUserId" FROM "Team" WHERE "id" = ${teamId} FOR UPDATE`;
+    if (!locked) throw new NotFoundError();
+    if (locked.captainUserId !== captainId) throw new ForbiddenError();
+    const member = await tx.$queryRaw<{ id: string }[]>`
+      SELECT "id" FROM "TeamMember"
+      WHERE "teamId" = ${teamId} AND "userId" = ${memberUserId} AND "status" = 'ACTIVE'
+      FOR SHARE`;
+    if (member.length === 0) throw new NotAMemberError();
+
+    await tx.team.update({ where: { id: teamId }, data: { captainUserId: memberUserId } });
+    const ids = { teamId, tournamentId };
+    await recordAudit(tx, {
+      actor: { type: "USER", userId: captainId },
+      action: AUDIT_ACTIONS.TEAM_CAPTAIN_HANDOVER,
+      entityType: "Team",
+      entityId: teamId,
+      tournamentId,
+      before: { ...ids, captainUserId: captainId },
+      after: { ...ids, captainUserId: memberUserId },
+    });
+    await emitEvent(tx, {
+      type: "TEAM_CAPTAIN_SET",
+      payload: { tournamentId, teamId, userId: memberUserId, setBy: captainId },
+    });
+    return { captainUserId: memberUserId, previousCaptainUserId: captainId };
   });
 }
