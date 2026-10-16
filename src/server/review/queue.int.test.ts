@@ -1,7 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { db } from "@/server/db";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
-import { getReviewItem, getReviewQueue } from "./queue";
+import type { Swim, Tournament } from "@prisma/client";
+import { REASON_CODES } from "@/server/checks/reasons";
+import { getReviewItem, getReviewQueue, reasonOf } from "./queue";
 
 async function clean() {
   await db.pointsEntry.deleteMany();
@@ -171,5 +173,50 @@ describe("getReviewItem", () => {
     await expect(getReviewItem(outsider.id, flagged.id)).rejects.toBeInstanceOf(ForbiddenError);
     await expect(getReviewItem(organizer.id, elsewhere.id)).rejects.toBeInstanceOf(ForbiddenError);
     await expect(getReviewItem(organizer.id, "nope")).rejects.toBeInstanceOf(NotFoundError);
+  });
+});
+
+describe("reasonOf", () => {
+  const t = {
+    slowestPaceSecPer100m: 300,
+    fastestPaceSecPer100m: 65,
+    longestRealisticSwimM: 30000,
+    seasonStartAt: new Date("2026-05-01T00:00:00Z"),
+    seasonEndAt: new Date("2026-07-01T00:00:00Z"),
+  } as Tournament;
+  const s = (distanceM: number, durationS: number) =>
+    ({
+      distanceM,
+      durationS,
+      sport: "running",
+      startedAt: new Date("2026-08-01T00:00:00Z"),
+    }) as Swim;
+  const season = {
+    seasonStartAt: "2026-05-01T00:00:00.000Z",
+    seasonEndAt: "2026-07-01T00:00:00.000Z",
+  };
+
+  const cases = [
+    ["PACE_TOO_FAST", s(1000, 600), { limit: 65, value: 60 }],
+    ["PACE_TOO_SLOW", s(1000, 3300), { limit: 300, value: 330 }],
+    ["DISTANCE_TOO_LONG", s(31000, 40000), { limit: 30000, value: 31000 }],
+    ["OUTSIDE_SEASON", s(1000, 1800), { limit: season, value: "2026-08-01T00:00:00.000Z" }],
+    ["NO_DISTANCE", s(0, 1800), { limit: null, value: 0 }],
+    ["NOT_A_SWIM", s(1000, 1800), { limit: null, value: "running" }],
+    ["DUPLICATE_OF_EARLIER_SWIM", s(1000, 1800), { limit: null, value: null }],
+  ] as const;
+
+  it.each(cases)("gives %s its exact limit and value", (code, swim, params) => {
+    expect(reasonOf(code, swim, t)).toEqual({ code, ...params });
+  });
+
+  it("covers every reason code", () => {
+    expect(cases.map(([code]) => code).sort()).toEqual([...REASON_CODES].sort());
+  });
+
+  it("never rounds a failed pace onto the limit it failed", () => {
+    // 300.4 s and 64.96 s per 100 m: rounding would show 300 and 65, equal to the limits.
+    expect(reasonOf("PACE_TOO_SLOW", s(1000, 3004), t).value).toBe(301);
+    expect(reasonOf("PACE_TOO_FAST", s(1000, 649.6), t).value).toBe(64);
   });
 });

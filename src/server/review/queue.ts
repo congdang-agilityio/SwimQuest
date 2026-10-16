@@ -1,6 +1,6 @@
 import type { Prisma, Swim, Tournament } from "@prisma/client";
 import { utcToVnParts } from "@/lib/time/vn";
-import { ForbiddenError, NotFoundError, requireReviewer } from "@/server/auth/roles";
+import { NotFoundError, requireReviewer } from "@/server/auth/roles";
 import { db } from "@/server/db";
 import { PUBLIC_PLAYER_SELECT, type PublicPlayer } from "@/server/users/public-player";
 
@@ -43,12 +43,18 @@ const include = {
 } satisfies Prisma.SwimResultInclude;
 type Row = Prisma.SwimResultGetPayload<{ include: typeof include }>;
 
-function reasonOf(code: string, swim: Swim, t: Tournament, pace: number | null): ReviewReason {
+const rawPace = (s: Pick<Swim, "distanceM" | "durationS">) =>
+  s.distanceM > 0 ? s.durationS / (s.distanceM / 100) : null;
+const roundWith = (round: (x: number) => number, x: number | null) =>
+  x === null ? null : round(x);
+
+/** A reason with its params. A failed pace is rounded away from its limit, never onto it. */
+export function reasonOf(code: string, swim: Swim, t: Tournament): ReviewReason {
   switch (code) {
     case "PACE_TOO_FAST":
-      return { code, limit: t.fastestPaceSecPer100m, value: pace };
+      return { code, limit: t.fastestPaceSecPer100m, value: roundWith(Math.floor, rawPace(swim)) };
     case "PACE_TOO_SLOW":
-      return { code, limit: t.slowestPaceSecPer100m, value: pace };
+      return { code, limit: t.slowestPaceSecPer100m, value: roundWith(Math.ceil, rawPace(swim)) };
     case "DISTANCE_TOO_LONG":
       return { code, limit: t.longestRealisticSwimM, value: swim.distanceM };
     case "OUTSIDE_SEASON": {
@@ -68,7 +74,6 @@ function reasonOf(code: string, swim: Swim, t: Tournament, pace: number | null):
 }
 
 function toItem({ id, swim, user, tournament, reasons }: Row): ReviewQueueItem {
-  const pace = swim.distanceM > 0 ? Math.round(swim.durationS / (swim.distanceM / 100)) : null;
   const codes = Array.isArray(reasons) ? reasons.filter((r) => typeof r === "string") : [];
   return {
     resultId: id,
@@ -78,9 +83,9 @@ function toItem({ id, swim, user, tournament, reasons }: Row): ReviewQueueItem {
     date: utcToVnParts(swim.startedAt).date,
     distanceM: swim.distanceM,
     durationS: swim.durationS,
-    pacePer100mS: pace,
+    pacePer100mS: roundWith(Math.round, rawPace(swim)),
     swimType: swim.swimType,
-    reasons: codes.map((c) => reasonOf(c, swim, tournament, pace)),
+    reasons: codes.map((c) => reasonOf(c, swim, tournament)),
   };
 }
 
@@ -111,11 +116,8 @@ export async function getReviewItem(viewerId: string, resultId: string): Promise
   if (typeof resultId !== "string" || resultId === "") throw new NotFoundError();
   const row = await db.swimResult.findUnique({ where: { id: resultId }, include });
   if (!row) throw new NotFoundError();
-  try {
-    await requireReviewer(viewerId, row.tournamentId);
-  } catch {
-    throw new ForbiddenError();
-  }
+  // The row's tournament exists, so this throws only ForbiddenError (or a real DB error).
+  await requireReviewer(viewerId, row.tournamentId);
   const track = simplifyTrack(row.swim.track);
   return { ...toItem(row), tournamentId: row.tournamentId, status: row.status, track };
 }
