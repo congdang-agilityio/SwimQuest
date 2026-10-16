@@ -1,3 +1,4 @@
+import { notificationHandlers } from "../notifications/handlers";
 import type { db } from "../db";
 import type { DomainEventMap, DomainEventType } from "./types";
 
@@ -30,4 +31,12 @@ export function clearHandlers(): void {
   registry.clear();
 }
 
-// Concrete handlers (notifications, badges) are registered here by later tasks.
+export function registerNotificationHandlers(): void {
+  for (const [type, fn] of Object.entries(notificationHandlers)) {
+    registry.set(type as DomainEventType, [
+      ...(registry.get(type as DomainEventType) ?? []),
+      fn as EventHandler<never>,
+    ]);
+  }
+}
+registerNotificationHandlers();
