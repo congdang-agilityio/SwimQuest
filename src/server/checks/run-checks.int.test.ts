@@ -244,6 +244,32 @@ describe("runChecks on upload", () => {
     expect(onVerified).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({ tournamentId: five.t.id, status: "VERIFIED" }),
+      expect.any(Date),
     );
+  });
+
+  it("calls onVerified in ascending team id order, not join order (lock order)", async () => {
+    const me = await user("me");
+    const a = await tournamentWith(me.id, "A");
+    const b = await tournamentWith(me.id, "B");
+    const [low, high] = [a.team.id, b.team.id].sort();
+    // Join the higher team id first, so join order is the reverse of the team id order.
+    await db.teamMember.updateMany({
+      where: { teamId: high },
+      data: { joinedAt: new Date("2026-05-02T00:00:00Z") },
+    });
+    await db.teamMember.updateMany({
+      where: { teamId: low },
+      data: { joinedAt: new Date("2026-05-03T00:00:00Z") },
+    });
+    const swim = await db.swim.create({ data: swimData(me.id) });
+    const teamIds: string[] = [];
+    const onVerified = vi.fn(async (_tx: unknown, result: { teamId: string }) => {
+      teamIds.push(result.teamId);
+    });
+
+    await db.$transaction((tx) => runChecks(tx, swim, { onVerified }));
+
+    expect(teamIds).toEqual([low, high]);
   });
 });

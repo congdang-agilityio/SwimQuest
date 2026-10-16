@@ -1,5 +1,8 @@
 import { db } from "@/server/db";
 
+/** The shared client or an interactive transaction: anything that can run a raw query. */
+type PointsReader = Pick<typeof db, "$queryRaw">;
+
 export type PlayerTotals = { points: number; countedM: number };
 
 /** Points and verified metres per user in one tournament; users without entries get zeros. */
@@ -27,8 +30,11 @@ export async function getPlayerTotals(
  * the team stored on it (`PointsEntry.teamId`), so the swims of a member who is no longer
  * active stay with the team, and a move re-attributes a player's entries to the new team.
  */
-export async function getTeamsPoints(tournamentId: string): Promise<Map<string, number>> {
-  const rows = await db.$queryRaw<{ teamId: string; points: bigint }[]>`
+export async function getTeamsPoints(
+  tournamentId: string,
+  client: PointsReader = db,
+): Promise<Map<string, number>> {
+  const rows = await client.$queryRaw<{ teamId: string; points: bigint }[]>`
     SELECT t."id" AS "teamId", COALESCE(SUM(p."points"), 0) AS "points"
     FROM "Team" t
     LEFT JOIN "PointsEntry" p
@@ -38,7 +44,14 @@ export async function getTeamsPoints(tournamentId: string): Promise<Map<string, 
   return new Map(rows.map((row) => [row.teamId, Number(row.points)]));
 }
 
-/** Points of one team (0 when the team has no entries or does not exist). */
-export async function getTeamPoints(tournamentId: string, teamId: string): Promise<number> {
-  return (await getTeamsPoints(tournamentId)).get(teamId) ?? 0;
+/**
+ * Points of one team (0 when the team has no entries or does not exist). Pass the caller's
+ * transaction as `client` to count entries it has not committed yet.
+ */
+export async function getTeamPoints(
+  tournamentId: string,
+  teamId: string,
+  client: PointsReader = db,
+): Promise<number> {
+  return (await getTeamsPoints(tournamentId, client)).get(teamId) ?? 0;
 }
