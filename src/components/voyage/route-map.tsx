@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
@@ -37,7 +38,9 @@ export function RouteMap({
     pct: formatProgressPct(progress.progressBp),
   });
   return (
-    <section aria-label={t("voyage.mapLabel")}>
+    // The section is the container for the progress label: on narrow maps it is a caption under
+    // the map, on wide maps it sits on the map (the map is the section's first box).
+    <section aria-label={t("voyage.mapLabel")} className={styles.mapWrap}>
       <div
         data-testid="route-map"
         style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden" }}
@@ -89,15 +92,18 @@ export function RouteMap({
             </span>
           </div>
         ))}
-        {ship && (
-          <ShipMarker
-            x={ship.x}
-            y={ship.y}
-            alt={t("voyage.ship", { team: teamName })}
-            label={label}
-          />
-        )}
+        {ship && <ShipMarker x={ship.x} y={ship.y} alt={t("voyage.ship", { team: teamName })} />}
       </div>
+      {ship && (
+        <strong
+          data-testid="progress-label"
+          // On wide maps: above the ship (below it in the upper half), on the side with more room.
+          className={`${styles.progressLabel} ${ship.y < 50 ? styles.labelBelow : styles.labelAbove} ${ship.x > 50 ? styles.labelToLeft : styles.labelToRight}`}
+          style={{ "--ship-x": ship.x, "--ship-y": ship.y } as CSSProperties}
+        >
+          {label}
+        </strong>
+      )}
       {start ? (
         <p data-testid="start-info">
           {t("voyage.start", { name: t(`routes.${routeId}.${start.slug}`) })}

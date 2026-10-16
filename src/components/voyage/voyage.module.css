@@ -54,3 +54,45 @@
   width: 100%;
   height: auto;
 }
+
+/* The map section (map first) holds the progress label. Below 768 px of map width the label is a caption under the
+   map, because on narrow maps no spot on the map fits it without covering a destination name. */
+.mapWrap {
+  position: relative;
+  container: voyage-map / inline-size;
+}
+
+.progressLabel {
+  display: block;
+}
+
+/* Wide maps: on the map, above the ship (below it in the upper half), anchored to the side with
+   more room. The map is 100cqw wide and 62.5cqw high (16:10); the ship box is 12cqw wide and
+   9cqw high (ship art is 4:3), centred on --ship-x / --ship-y (percent of the map). */
+@container voyage-map (min-width: 768px) {
+  .progressLabel {
+    position: absolute;
+    width: max-content;
+    background: #fffc;
+  }
+
+  .labelBelow {
+    top: calc(var(--ship-y) * 0.625cqw + 4.5cqw);
+  }
+
+  .labelAbove {
+    top: calc(var(--ship-y) * 0.625cqw - 4.5cqw);
+    transform: translateY(-100%);
+  }
+
+  .labelToRight {
+    left: calc((var(--ship-x) - 6) * 1cqw);
+    max-width: calc((100 - var(--ship-x) + 6) * 1cqw);
+  }
+
+  .labelToLeft {
+    right: calc((100 - var(--ship-x) - 6) * 1cqw);
+    max-width: calc((var(--ship-x) + 6) * 1cqw);
+    text-align: right;
+  }
+}
