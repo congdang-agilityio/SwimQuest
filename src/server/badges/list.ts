@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 
 export type BadgeListItem = {
   id: string;
+  userId: string;
   kind: BadgeKind;
   /** Organizer's reason for a manual (Special) badge; null otherwise. */
   reason: string | null;
@@ -10,47 +11,26 @@ export type BadgeListItem = {
   tournament: { id: string; name: string };
 };
 
-export type MemberBadge = BadgeListItem & { userId: string };
-
 const select = {
   id: true,
+  userId: true,
   kind: true,
   reason: true,
   awardedAt: true,
-  userId: true,
   tournament: { select: { id: true, name: true } },
 } as const;
-
-const newestFirst = [{ awardedAt: "desc" }, { id: "desc" }] as const;
+const orderBy = [{ awardedAt: "desc" }, { id: "desc" }] as const;
 
 /** A player's active (not removed) badges across all tournaments, newest first. */
-export async function listUserBadges(userId: string): Promise<BadgeListItem[]> {
-  const rows = await db.badge.findMany({
-    where: { userId, removedAt: null },
-    select,
-    orderBy: [...newestFirst],
-  });
-  return rows.map((r) => ({
-    id: r.id,
-    kind: r.kind,
-    reason: r.reason,
-    awardedAt: r.awardedAt,
-    tournament: r.tournament,
-  }));
+export function listUserBadges(userId: string): Promise<BadgeListItem[]> {
+  return db.badge.findMany({ where: { userId, removedAt: null }, select, orderBy: [...orderBy] });
 }
 
-/** Active badges of the given players in one tournament, grouped by user id, newest first. */
-export async function listMembersBadges(
-  tournamentId: string,
-  userIds: string[],
-): Promise<Map<string, MemberBadge[]>> {
-  const result = new Map<string, MemberBadge[]>(userIds.map((id) => [id, []]));
-  if (userIds.length === 0) return result;
-  const rows = await db.badge.findMany({
-    where: { tournamentId, userId: { in: userIds }, removedAt: null },
-    select,
-    orderBy: [...newestFirst],
-  });
+/** Active badges of the given players in one tournament, by user id, newest first. */
+export async function listMembersBadges(tournamentId: string, userIds: string[]) {
+  const result = new Map<string, BadgeListItem[]>(userIds.map((id) => [id, []]));
+  const where = { tournamentId, userId: { in: userIds }, removedAt: null };
+  const rows = await db.badge.findMany({ where, select, orderBy: [...orderBy] });
   for (const row of rows) result.get(row.userId)?.push(row);
   return result;
 }
