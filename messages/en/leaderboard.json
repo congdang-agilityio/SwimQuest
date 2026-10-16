@@ -1,0 +1,14 @@
+{
+  "link": "Leaderboard",
+  "title": "Leaderboard",
+  "tabs": "Leaderboards",
+  "progressTab": "Progress",
+  "progressHeader": "Ranks route progress from team points.",
+  "caption": "Teams ranked by route progress",
+  "rank": "Rank",
+  "team": "Team",
+  "progress": "Progress",
+  "routeKm": "Route km",
+  "kmValue": "{km} km",
+  "yourTeam": "Your team"
+}

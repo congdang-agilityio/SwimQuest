@@ -1,0 +1,14 @@
+{
+  "link": "Bảng xếp hạng",
+  "title": "Bảng xếp hạng",
+  "tabs": "Các bảng xếp hạng",
+  "progressTab": "Tiến độ",
+  "progressHeader": "Xếp hạng tiến độ trên lộ trình, tính từ điểm của đội.",
+  "caption": "Xếp hạng các đội theo tiến độ lộ trình",
+  "rank": "Hạng",
+  "team": "Đội",
+  "progress": "Tiến độ",
+  "routeKm": "Km lộ trình",
+  "kmValue": "{km} km",
+  "yourTeam": "Đội của bạn"
+}
