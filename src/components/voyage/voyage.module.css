@@ -6,9 +6,48 @@
   object-fit: cover;
 }
 
+/* Zero-size anchor: the icon is centred on the anchor, the name sits beside it, never under it. */
+.destination {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
 .landmark {
-  width: 48%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(18px, 6.7vw, 44px);
+  max-width: none;
   height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.nameRight,
+.nameLeft {
+  position: absolute;
+  top: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  background: #fffd;
+  padding: 0 2px;
+  font-size: 0.6rem;
+  line-height: 1.2;
+}
+
+.nameRight {
+  left: calc(clamp(18px, 6.7vw, 44px) / 2 + 2px);
+}
+
+.nameLeft {
+  right: calc(clamp(18px, 6.7vw, 44px) / 2 + 2px);
+}
+
+@media (min-width: 480px) {
+  .nameRight,
+  .nameLeft {
+    font-size: 0.8rem;
+  }
 }
 
 .ship {

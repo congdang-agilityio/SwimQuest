@@ -68,17 +68,8 @@ export function RouteMap({
           <div
             key={d.slug}
             data-testid={`destination-${d.slug}`}
-            style={{
-              position: "absolute",
-              left: `${d.x}%`,
-              top: `${d.y}%`,
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "14%",
-              fontSize: "0.8rem",
-            }}
+            className={styles.destination}
+            style={{ left: `${d.x}%`, top: `${d.y}%` }}
           >
             <ArtImage
               art={landmarkArt(d.slug)}
@@ -87,11 +78,8 @@ export function RouteMap({
               fallback={<span aria-hidden="true">●</span>}
             />
             <span
-              style={{
-                background: "#fffd",
-                fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400,
-                textAlign: "center",
-              }}
+              className={d.x >= 50 ? styles.nameLeft : styles.nameRight}
+              style={{ fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400 }}
             >
               {t(`routes.${routeId}.${d.slug}`)}
               {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
