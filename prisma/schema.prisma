@@ -78,6 +78,10 @@ model User {
   decidedQuotas        TournamentQuotaRequest[] @relation("QuotaRequestDecisions")
   reports              Report[]                 @relation("ReportReporter")
   handledReports       Report[]                 @relation("ReportHandler")
+  /// Which notification categories are pushed to the browser; all on by default.
+  pushCategories       Json                     @default("{\"INVITATIONS\": true, \"TEAM\": true, \"VERIFICATION\": true, \"MILESTONES\": true}")
+  notifications        Notification[]
+  pushSubscriptions    PushSubscription[]
 }
 
 model Session {
@@ -203,6 +207,8 @@ model Tournament {
   rulesText                  String?
   archivedAt                 DateTime?             @db.Timestamptz(3)
   seasonEndProcessedAt       DateTime?             @db.Timestamptz(3)
+  /// Set once the start-lock notice has been sent.
+  startLockProcessedAt       DateTime?             @db.Timestamptz(3)
   createdAt                  DateTime              @default(now()) @db.Timestamptz(3)
   updatedAt                  DateTime              @updatedAt @db.Timestamptz(3)
   teams                      Team[]
@@ -659,4 +665,43 @@ model Report {
   createdAt   DateTime         @default(now()) @db.Timestamptz(3)
 
   @@index([status, createdAt])
+}
+
+enum NotificationCategory {
+  INVITATIONS
+  TEAM
+  VERIFICATION
+  MILESTONES
+}
+
+/// An in-app notification; also the queue for browser push (pushedAt null = not pushed yet).
+model Notification {
+  id        String               @id @default(cuid())
+  userId    String
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  NotificationCategory
+  /// Message key, e.g. "swim.verified".
+  type      String
+  /// Values filled into the message.
+  params    Json                 @default("{}")
+  link      String
+  readAt    DateTime?            @db.Timestamptz(3)
+  pushedAt  DateTime?            @db.Timestamptz(3)
+  createdAt DateTime             @default(now()) @db.Timestamptz(3)
+
+  @@index([userId, createdAt])
+  @@index([pushedAt])
+}
+
+/// A browser push subscription of a user.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([userId])
 }
