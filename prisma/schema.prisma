@@ -68,6 +68,16 @@ model User {
   /// Preferred UI language; null follows the browser.
   locale           String?
   images           ImageAsset[]   @relation("ImageOwner")
+
+  /// Tournaments allowed on top of the platform quota (granted by approved quota requests).
+  extraTournamentQuota Int                      @default(0)
+  /// Set when an admin resets the password; the user must choose a new one at next sign-in.
+  mustChangePassword   Boolean                  @default(false)
+  updatedSettings      PlatformSetting[]        @relation("PlatformSettingUpdater")
+  quotaRequests        TournamentQuotaRequest[] @relation("QuotaRequestOwner")
+  decidedQuotas        TournamentQuotaRequest[] @relation("QuotaRequestDecisions")
+  reports              Report[]                 @relation("ReportReporter")
+  handledReports       Report[]                 @relation("ReportHandler")
 }
 
 model Session {
@@ -583,4 +593,70 @@ model ImageAsset {
   coverOf   User?     @relation("UserCover")
 
   @@index([ownerId, kind])
+}
+
+/// A platform-wide setting edited by admins, e.g. quotas and swim limits.
+model PlatformSetting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  updatedBy   User?    @relation("PlatformSettingUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+}
+
+enum QuotaRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// A player's request for more tournaments than the platform quota allows.
+model TournamentQuotaRequest {
+  id             String             @id @default(cuid())
+  userId         String
+  user           User               @relation("QuotaRequestOwner", fields: [userId], references: [id], onDelete: Cascade)
+  reason         String
+  status         QuotaRequestStatus @default(PENDING)
+  decidedById    String?
+  decidedBy      User?              @relation("QuotaRequestDecisions", fields: [decidedById], references: [id], onDelete: SetNull)
+  decidedAt      DateTime?          @db.Timestamptz(3)
+  decisionReason String?
+  createdAt      DateTime           @default(now()) @db.Timestamptz(3)
+
+  /// One pending request per user.
+  @@unique([userId], map: "TournamentQuotaRequest_one_pending_per_user", where: raw("\"status\" = 'PENDING'"))
+  @@index([status, createdAt])
+}
+
+enum ReportTargetType {
+  PLAYER
+  TEAM
+  TOURNAMENT
+  SWIM
+}
+
+enum ReportStatus {
+  OPEN
+  HANDLED
+  DISMISSED
+}
+
+/// A problem report about a player, team, tournament or swim, handled by admins.
+model Report {
+  id          String           @id @default(cuid())
+  reporterId  String
+  reporter    User             @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetType  ReportTargetType
+  /// Id of the reported row; its table follows targetType.
+  targetId    String
+  text        String
+  status      ReportStatus     @default(OPEN)
+  /// Internal admin note; never shown to the reporter.
+  note        String?
+  handledById String?
+  handledBy   User?            @relation("ReportHandler", fields: [handledById], references: [id], onDelete: SetNull)
+  handledAt   DateTime?        @db.Timestamptz(3)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(3)
+
+  @@index([status, createdAt])
 }
