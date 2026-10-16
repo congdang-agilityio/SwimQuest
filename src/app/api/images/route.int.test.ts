@@ -80,6 +80,7 @@ describe("POST /api/images and GET /api/images/:id", () => {
     expect(served.headers.get("content-type")).toBe("image/png");
     expect(served.headers.get("cache-control")).toBe("public, max-age=31536000, immutable");
     expect(served.headers.get("x-content-type-options")).toBe("nosniff");
+    expect(served.headers.get("content-security-policy")).toBe("default-src 'none'");
     expect(Buffer.from(await served.arrayBuffer()).equals(bytes)).toBe(true);
   });
 
@@ -95,6 +96,14 @@ describe("POST /api/images and GET /api/images/:id", () => {
     await signIn("me");
     const res = await POST(upload(png(MAX_IMAGE_BYTES)));
     expect(res.status).toBe(201);
+  });
+
+  it("refuses an image one byte over the 2 MB cap (inside the body cap) and stores nothing", async () => {
+    await signIn("me");
+    const res = await POST(upload(png(MAX_IMAGE_BYTES + 1)));
+    expect(res.status).toBe(400);
+    expect((await errorOf(res)).code).toBe("IMAGE_TOO_LARGE");
+    expect(await db.imageAsset.count()).toBe(0);
   });
 
   it("refuses a 2.1 MB image with IMAGE_TOO_LARGE and stores nothing", async () => {
