@@ -90,14 +90,21 @@ describe("my team view", () => {
     expect(view!.start).toBeNull();
     expect(view!.memberCount).toBe(3);
     expect(view!.roster).toEqual([
-      { id: cap.id, displayName: "cap", verifiedKm: 5, points: 50, isCaptain: true },
-      { id: b.id, displayName: "bee", verifiedKm: 1.5, points: 15, isCaptain: false },
-      { id: c.id, displayName: "cee", verifiedKm: 0, points: 0, isCaptain: false },
+      { id: cap.id, displayName: "cap", verifiedKm: 5, points: 50, isCaptain: true, level: 1 },
+      { id: b.id, displayName: "bee", verifiedKm: 1.5, points: 15, isCaptain: false, level: 1 },
+      { id: c.id, displayName: "cee", verifiedKm: 0, points: 0, isCaptain: false, level: 1 },
     ]);
     expect(view!.teamPoints).toBe(65);
     expect(view!.teamPoints).toBe(view!.roster.reduce((s, m) => s + m.points, 0));
     expect(view!.progress.progressBp).toBe(Math.floor((65 * 1000 * 10000) / (100000 * 10)));
     expect(team.id).toBeTruthy();
+  });
+
+  it("shows each member's level from their XP", async () => {
+    const { cap, b } = await setup();
+    await db.xpEntry.create({ data: { userId: b.id, kind: "DISTANCE", xp: 150 } });
+    const view = await getMyTeamView(cap.id);
+    expect(view!.roster.map((m) => m.level)).toEqual([1, 3, 1]);
   });
 
   it("returns the team's finishedAt, null while unfinished", async () => {
