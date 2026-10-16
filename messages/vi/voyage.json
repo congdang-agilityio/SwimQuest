@@ -1,0 +1,9 @@
+{
+  "mapLabel": "Bản đồ Lộ trình 01",
+  "start": "Điểm xuất phát: {name}",
+  "finish": "Đích",
+  "noStart": "Chưa chọn điểm xuất phát",
+  "progress": "{reached} / {total} km hành trình · {pct}",
+  "ship": "Tàu của {team}",
+  "note": "Bản đồ chỉ mang tính minh họa, không phải hải đồ dẫn đường."
+}

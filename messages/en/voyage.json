@@ -1,0 +1,9 @@
+{
+  "mapLabel": "Route 01 map",
+  "start": "Start: {name}",
+  "finish": "Finish",
+  "noStart": "Start not chosen yet",
+  "progress": "{reached} / {total} route km · {pct}",
+  "ship": "{team}'s ship",
+  "note": "This map is illustrative and is not a navigation chart."
+}
