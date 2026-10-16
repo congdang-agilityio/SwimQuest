@@ -46,6 +46,10 @@ model User {
   decidedDisputes  Dispute[]      @relation("DisputeDecisions")
   helperOf         ReviewHelper[] @relation("ReviewHelperUser")
   appointedHelpers ReviewHelper[] @relation("ReviewHelperAppointer")
+  badges           Badge[]        @relation("BadgeOwner")
+  givenBadges      Badge[]        @relation("BadgeGiver")
+  xpEntries        XpEntry[]
+  xpWeeks          XpWeek[]
 }
 
 model Session {
@@ -180,6 +184,7 @@ model Tournament {
   weeklyResults              WeeklyResult[]
   weekSettlements            WeekSettlement[]
   reviewHelpers              ReviewHelper[]
+  badges                     Badge[]
 
   @@index([organizerId])
 }
@@ -211,6 +216,7 @@ model Team {
   swimResults      SwimResult[]
   pointsEntries    PointsEntry[]
   weeklyResults    WeeklyResult[]
+  badges           Badge[]
 
   /// Target of TeamMember's (teamId, tournamentId) foreign key.
   @@unique([id, tournamentId])
@@ -290,6 +296,7 @@ model Swim {
   track            Json?
   createdAt        DateTime     @default(now()) @db.Timestamptz(3)
   results          SwimResult[]
+  xpEntries        XpEntry[]
 
   @@index([userId, startedAt])
   @@index([userId, fileSha256])
@@ -453,4 +460,86 @@ model ReviewHelper {
   /// One active helper row per player and tournament.
   @@unique([tournamentId, userId], map: "ReviewHelper_one_active_per_tournament", where: raw("\"removedAt\" IS NULL"))
   @@index([userId])
+}
+
+enum BadgeKind {
+  PARTICIPATION
+  EXPLORER
+  PERSEVERANCE
+  TEAMWORK
+  CONQUEROR
+  SEASON
+  SPECIAL
+  LY_SON
+}
+
+/// A badge a player earned in one tournament. Removal sets removedAt; rows are never deleted.
+model Badge {
+  id            String     @id @default(cuid())
+  tournamentId  String
+  tournament    Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User       @relation("BadgeOwner", fields: [userId], references: [id])
+  /// Team the badge was earned with, if any; the badge stays with the player.
+  teamId        String?
+  team          Team?      @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  kind          BadgeKind
+  reason        String?
+  /// Organizer who gave a manual badge (e.g. SPECIAL); null for automatic badges.
+  givenById     String?
+  givenBy       User?      @relation("BadgeGiver", fields: [givenById], references: [id], onDelete: SetNull)
+  awardedAt     DateTime   @default(now()) @db.Timestamptz(3)
+  removedAt     DateTime?  @db.Timestamptz(3)
+  removedReason String?
+
+  /// One active badge of a kind per player and tournament.
+  @@unique([tournamentId, userId, kind], map: "Badge_one_active_per_kind", where: raw("\"removedAt\" IS NULL"))
+  @@index([userId, awardedAt])
+}
+
+enum XpKind {
+  DISTANCE
+  FIRST_SWIM_BONUS
+  LONG_SWIM_BONUS
+  WEEKLY_MULTIPLIER
+  REVERSAL
+}
+
+/// Append-only XP ledger across tournaments: corrections add REVERSAL entries, rows are never edited.
+model XpEntry {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  swimId     String?
+  swim       Swim?     @relation(fields: [swimId], references: [id], onDelete: NoAction)
+  /// Monday of the week in Vietnam time, "YYYY-MM-DD" (check constraint "XpEntry_weekStart_check").
+  weekStart  String?   @db.Char(10)
+  kind       XpKind
+  xp         Int
+  /// Vietnam calendar day "YYYY-MM-DD" (check constraint "XpEntry_vnDay_check").
+  vnDay      String?   @db.Char(10)
+  /// The entry this REVERSAL cancels.
+  reversesId String?
+  reverses   XpEntry?  @relation("XpReversals", fields: [reversesId], references: [id], onDelete: NoAction)
+  reversals  XpEntry[] @relation("XpReversals")
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+
+  /// One entry of a kind per swim; entries without a swim are not constrained (NULLs differ).
+  @@unique([swimId, kind])
+  @@index([userId])
+}
+
+/// A player's settled weekly XP multiplier.
+model XpWeek {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  /// Monday of the week in Vietnam time, "YYYY-MM-DD" (check constraint "XpWeek_weekStart_check").
+  weekStart     String   @db.Char(10)
+  /// Integer percent, 120 = x1.20.
+  multiplierPct Int
+  extraXp       Int
+  settledAt     DateTime @db.Timestamptz(3)
+
+  @@unique([userId, weekStart])
 }
