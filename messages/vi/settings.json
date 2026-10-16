@@ -1,0 +1,40 @@
+{
+  "page": {
+    "title": "Luật và cài đặt",
+    "back": "Quay lại quản lý giải đấu"
+  },
+  "swim": {
+    "title": "Giới hạn bơi",
+    "longestSwimCounted": "Quãng bơi dài nhất được tính (km)",
+    "longestSwimCountedHelp": "Giới hạn số km của một buổi bơi được tính điểm. Đây là giới hạn khác với quãng bơi dài nhất hợp lý.",
+    "dailyLimit": "Giới hạn mỗi ngày (km)",
+    "dailyLimitHelp": "Giới hạn quãng đường và điểm được tính cho mỗi người chơi trong một ngày.",
+    "swimType": "Loại bơi được tính",
+    "swimTypeHelp": "Buổi bơi thuộc loại khác sẽ không được tính trong giải này.",
+    "types": {
+      "ANY": "Bơi hồ và bơi ngoài trời",
+      "POOL_ONLY": "Chỉ bơi hồ",
+      "OPEN_WATER_ONLY": "Chỉ bơi ngoài trời"
+    },
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu cài đặt.",
+    "locked": "Đã khóa trong mùa giải: không thể thay đổi cài đặt này sau khi mùa giải bắt đầu.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa gửi được. Hãy kiểm tra kết nối và thử lại.",
+    "errors": {
+      "DISTANCE_REQUIRED": "Hãy nhập số km.",
+      "DISTANCE_INVALID": "Hãy nhập một số hợp lệ.",
+      "DISTANCE_NOT_POSITIVE": "Số km phải lớn hơn 0.",
+      "DISTANCE_TOO_PRECISE": "Chỉ dùng tối đa 2 chữ số thập phân.",
+      "DISTANCE_TOO_LARGE": "Số km quá lớn.",
+      "SWIM_TYPE_INVALID": "Hãy chọn một loại bơi.",
+      "UNKNOWN": "Giá trị chưa hợp lệ."
+    }
+  },
+  "rules": {
+    "longestSwimCounted": "Một buổi bơi được tính tối đa {km} km.",
+    "dailyLimit": "Mỗi người chơi được tính tối đa {km} km và điểm tương ứng mỗi ngày.",
+    "swimType": "Loại bơi được tính: {type}."
+  }
+}

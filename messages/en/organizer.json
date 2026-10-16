@@ -9,6 +9,7 @@
       "ACTIVE": "In progress",
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
-    }
+    },
+    "settingsLink": "Rules and settings"
   }
 }

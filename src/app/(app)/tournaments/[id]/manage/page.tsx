@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { TeamList } from "@/components/teams/team-list";
@@ -60,6 +61,11 @@ export default async function ManageTournamentPage({
       <p id="season">
         {t("manage.season")}: {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
         {t("manage.vietnamTime")})
+      </p>
+      <p>
+        <Link href={`/tournaments/${tournament.id}/manage/settings`}>
+          {t("manage.settingsLink")}
+        </Link>
       </p>
       {tournament.status === "DRAFT" && <PublishPanel tournamentId={tournament.id} />}
       {showInvite && origin && (
