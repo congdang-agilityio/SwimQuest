@@ -1,10 +1,13 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { shipArt } from "@/lib/art/route01-art";
 import { ArtImage } from "./art-image";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 const art = shipArt(1)!;
 
@@ -20,6 +23,22 @@ describe("ArtImage", () => {
     fireEvent.error(screen.getByAltText("Ship"));
     expect(document.querySelector("img")).toBeNull();
     expect(screen.getByTestId("fb")).toBeTruthy();
+  });
+
+  it("renders the fallback when the image already failed before it mounted", () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(true);
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(0);
+    render(<ArtImage art={art} alt="Ship" fallback={<span data-testid="fb" />} />);
+    expect(document.querySelector("img")).toBeNull();
+    expect(screen.getByTestId("fb")).toBeTruthy();
+  });
+
+  it("keeps an image that finished loading", () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(true);
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(64);
+    render(<ArtImage art={art} alt="Ship" fallback={<span data-testid="fb" />} />);
+    expect(screen.getByAltText("Ship")).toBeTruthy();
+    expect(screen.queryByTestId("fb")).toBeNull();
   });
 
   it("renders the fallback when no art is given", () => {
