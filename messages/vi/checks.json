@@ -18,6 +18,8 @@
     "PACE_TOO_SLOW": "Tốc độ chậm hơn mức chậm nhất thực tế của giải đấu này ({pace} / 100 m)",
     "DISTANCE_TOO_LONG": "Quãng đường vượt quá mức bơi dài nhất thực tế của giải đấu này ({distance})",
     "DUPLICATE_OF_EARLIER_SWIM": "Trùng hoặc chồng thời gian với một buổi bơi bạn đã tải lên trước đó",
-    "SWIM_TYPE_NOT_ACCEPTED": "Không được tính: loại bơi: giải đấu này chỉ tính {allowed, select, POOL_ONLY {bơi hồ} OPEN_WATER_ONLY {bơi ngoài trời} other {mọi loại bơi}} (lần bơi này: {value, select, POOL {bơi hồ} OPEN_WATER {bơi ngoài trời} other {không rõ}})"
+    "SWIM_TYPE_NOT_ACCEPTED": "Không được tính: loại bơi: giải đấu này chỉ tính {allowed, select, POOL_ONLY {bơi hồ} OPEN_WATER_ONLY {bơi ngoài trời} other {mọi loại bơi}} (lần bơi này: {value, select, POOL {bơi hồ} OPEN_WATER {bơi ngoài trời} other {không rõ}})",
+    "UPLOADED_AFTER_DEADLINE": "Không được tính: tải lên sau hạn: giải đấu này chỉ tính lần bơi được tải lên trong vòng {days} ngày kể từ ngày bơi ({swimDate})",
+    "UPLOAD_WINDOW_CLOSED": "Không được tính: tải lên sau hạn: giải đấu ngừng nhận lần bơi {days} ngày sau khi mùa giải kết thúc ({end})"
   }
 }

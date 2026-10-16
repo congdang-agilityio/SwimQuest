@@ -61,6 +61,31 @@ describe("CheckReasons", () => {
     },
   );
 
+  it.each([
+    [
+      { code: "UPLOADED_AFTER_DEADLINE", params: { days: 7, swimDate: "2026-11-01" } },
+      "en",
+      /uploaded after the deadline: .* within 7 days of the swim date \(2026-11-01\)/,
+    ],
+    [
+      { code: "UPLOAD_WINDOW_CLOSED", params: { days: 3 } },
+      "en",
+      /uploaded after the deadline: uploads closed 3 days after the season end \(31\/12 23:59\)/,
+    ],
+    [
+      { code: "UPLOADED_AFTER_DEADLINE", params: { days: 7, swimDate: "2026-11-01" } },
+      "vi",
+      /tải lên sau hạn: .* trong vòng 7 ngày kể từ ngày bơi \(2026-11-01\)/,
+    ],
+    [{ code: "UPLOAD_WINDOW_CLOSED", params: { days: 3 } }, "vi", /tải lên sau hạn: .* 3 ngày/],
+  ] as const)(
+    "explains a late upload %o (%s) as uploaded after the deadline",
+    (r, locale, text) => {
+      setup([r], locale);
+      expect(screen.getByText(text)).toBeTruthy();
+    },
+  );
+
   it("reads plain codes and reason objects in one list", () => {
     setup(["NO_DISTANCE", { code: "PACE_TOO_SLOW" }]);
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
