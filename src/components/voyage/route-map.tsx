@@ -19,9 +19,9 @@ export type RouteMapProps = {
   ship: Point | null;
 };
 
+/** Route map base: background and landmarks from the art registry, names as text. */
 const ASPECT = 1.6; // map box is 16:10; SVG viewBox is 160 x 100
 
-/** Route map: background and landmarks from the art registry, names and progress as text. */
 export function RouteMap({
   routeId,
   teamName,
@@ -68,43 +68,40 @@ export function RouteMap({
             />
           </svg>
         )}
-        {destinations.map((d) => {
-          const isStart = start?.slug === d.slug;
-          return (
-            <div
-              key={d.slug}
-              data-testid={`destination-${d.slug}`}
+        {destinations.map((d) => (
+          <div
+            key={d.slug}
+            data-testid={`destination-${d.slug}`}
+            style={{
+              position: "absolute",
+              left: `${d.x}%`,
+              top: `${d.y}%`,
+              transform: "translate(-50%, -50%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "14%",
+              fontSize: "0.8rem",
+            }}
+          >
+            <ArtImage
+              art={landmarkArt(d.slug)}
+              alt=""
+              className={styles.landmark}
+              fallback={<span aria-hidden="true">●</span>}
+            />
+            <span
               style={{
-                position: "absolute",
-                left: `${d.x}%`,
-                top: `${d.y}%`,
-                transform: "translate(-50%, -50%)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "14%",
-                fontSize: "0.8rem",
+                background: "#fffd",
+                fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400,
+                textAlign: "center",
               }}
             >
-              <ArtImage
-                art={landmarkArt(d.slug)}
-                alt=""
-                className={styles.landmark}
-                fallback={<span aria-hidden="true">●</span>}
-              />
-              <span
-                style={{
-                  background: "#fffd",
-                  fontWeight: isStart || d.isFinish ? 700 : 400,
-                  textAlign: "center",
-                }}
-              >
-                {t(`routes.${routeId}.${d.slug}`)}
-                {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
-              </span>
-            </div>
-          );
-        })}
+              {t(`routes.${routeId}.${d.slug}`)}
+              {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
+            </span>
+          </div>
+        ))}
         {ship && (
           <ShipMarker
             x={ship.x}
