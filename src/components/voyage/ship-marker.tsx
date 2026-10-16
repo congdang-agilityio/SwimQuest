@@ -9,8 +9,18 @@ type Props = {
   label: string;
 };
 
+const BOX_PCT = 12;
+
 /** The team's tier 1 ship with its progress label (text, not part of the picture). */
 export function ShipMarker({ x, y, alt, label }: Props) {
+  // The label sits above the ship (below it in the upper half of the map, so it is not cut off
+  // at the top), anchored to the side with more room, and wraps so it stays inside the map.
+  // The box is 12% of the map wide and centred on the ship, so a percentage of the box maps to
+  // the free space on the chosen side.
+  const rightHalf = x > 50;
+  const upperHalf = y < 50;
+  const roomPct = rightHalf ? x + BOX_PCT / 2 : 100 - x + BOX_PCT / 2;
+  const maxWidthPct = (roomPct / BOX_PCT) * 100;
   return (
     <div
       data-testid="ship"
@@ -22,7 +32,7 @@ export function ShipMarker({ x, y, alt, label }: Props) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "12%",
+        width: `${BOX_PCT}%`,
       }}
     >
       <ArtImage
@@ -35,7 +45,17 @@ export function ShipMarker({ x, y, alt, label }: Props) {
           </span>
         }
       />
-      <strong data-testid="progress-label" style={{ whiteSpace: "nowrap", background: "#fffc" }}>
+      <strong
+        data-testid="progress-label"
+        style={{
+          position: "absolute",
+          ...(upperHalf ? { top: "100%" } : { bottom: "100%" }),
+          ...(rightHalf ? { right: 0, textAlign: "right" } : { left: 0 }),
+          width: "max-content",
+          maxWidth: `${maxWidthPct}%`,
+          background: "#fffc",
+        }}
+      >
         {label}
       </strong>
     </div>
