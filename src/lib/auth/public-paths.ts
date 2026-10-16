@@ -1,5 +1,5 @@
 /** Pages and endpoints anyone may open; `/x` also covers `/x/...`. */
-const PUBLIC_PATHS = ["/login", "/signup", "/welcome", "/api/health"];
+const PUBLIC_PATHS = ["/login", "/signup", "/welcome", "/api/health", "/api/locale"];
 /** Exact paths without a session; the tick job checks its own `CRON_SECRET`. */
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 /** Folders whose contents (not the folder itself) are public: auth API, build output, `public/`. */

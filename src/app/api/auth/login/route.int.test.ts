@@ -49,6 +49,24 @@ describe("POST /api/auth/login", () => {
     await db.$disconnect();
   });
 
+  it("sets NEXT_LOCALE from the saved locale on login", async () => {
+    await db.user.create({
+      data: { email: "lan@example.com", passwordHash, displayName: "Lan", locale: "en" },
+    });
+    const res = await POST(request({ email: "lan@example.com", password: PASSWORD }));
+    expect(res.status).toBe(200);
+    const cookie = res.headers.getSetCookie().find((c) => c.startsWith("NEXT_LOCALE="));
+    expect(cookie).toContain("NEXT_LOCALE=en");
+    expect(cookie).toContain("Max-Age=31536000");
+  });
+
+  it("sets no NEXT_LOCALE when the user never chose a language (Vietnamese default)", async () => {
+    await makeUser();
+    const res = await POST(request({ email: "lan@example.com", password: PASSWORD }));
+    expect(res.status).toBe(200);
+    expect(res.headers.getSetCookie().some((c) => c.startsWith("NEXT_LOCALE="))).toBe(false);
+  });
+
   it("signs an active user in with 200, the public user and a new session cookie", async () => {
     const user = await makeUser();
 

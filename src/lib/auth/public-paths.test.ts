@@ -53,6 +53,7 @@ describe("isPublicPath", () => {
     "/api/auth/logout",
     "/api/auth/signup",
     "/api/health",
+    "/api/locale",
     "/api/jobs/tick",
     "/api/images/ckabc123",
     "/manifest.webmanifest",

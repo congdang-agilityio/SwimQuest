@@ -17,7 +17,12 @@ const loginSchema = z.object({
 });
 
 export type LoginResult =
-  | { ok: true; user: { id: string; displayName: string }; sessionToken: string }
+  | {
+      ok: true;
+      user: { id: string; displayName: string };
+      locale: string | null;
+      sessionToken: string;
+    }
   | { ok: false; reason: "INVALID_INPUT" | "INVALID_CREDENTIALS" };
 
 /**
@@ -32,7 +37,7 @@ export async function logIn(input: unknown): Promise<LoginResult> {
 
   const user = await db.user.findUnique({
     where: { email },
-    select: { id: true, displayName: true, status: true, passwordHash: true },
+    select: { id: true, displayName: true, status: true, passwordHash: true, locale: true },
   });
   const matches = await verifyPassword(user?.passwordHash ?? DUMMY_PASSWORD_HASH, password);
   if (!user || !matches || user.status !== "ACTIVE") {
@@ -40,5 +45,10 @@ export async function logIn(input: unknown): Promise<LoginResult> {
   }
 
   const { token } = await createSession(user.id);
-  return { ok: true, user: { id: user.id, displayName: user.displayName }, sessionToken: token };
+  return {
+    ok: true,
+    user: { id: user.id, displayName: user.displayName },
+    locale: user.locale,
+    sessionToken: token,
+  };
 }
