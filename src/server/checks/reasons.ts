@@ -19,6 +19,10 @@ export const REASON_CODES = [
   "DUPLICATE_OF_EARLIER_SWIM",
   /** The swim's type (pool / open water) is not one the tournament accepts (rule check). */
   "SWIM_TYPE_NOT_ACCEPTED",
+  /** Uploaded more than the tournament's N days after the swim date, Vietnam time (rule check). */
+  "UPLOADED_AFTER_DEADLINE",
+  /** Uploaded at or after the season end time plus the tournament's M days (rule check). */
+  "UPLOAD_WINDOW_CLOSED",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];

@@ -97,6 +97,8 @@ test("a tournament member sees Verified, then Duplicate for the same file", asyn
       routeId: "route01",
       routeDistanceM: 100000,
       fastestPaceSecPer100m: 30,
+      // The fixture swim is dated 2026-06-01: keep its upload within the submission deadline.
+      submissionDays: 36500,
     },
   });
   tournamentIds.push(tournament.id);

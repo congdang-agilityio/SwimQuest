@@ -55,10 +55,11 @@ async function tournamentWith(userId: string, name: string, swimTypeAllowed: Swi
 }
 
 /** A stored 1000 m swim in 30 min (3:00 / 100 m) on 1 June 2026: passes the standard checks. */
-const storeSwim = (userId: string, swimType: SwimType, durationS = 1800) =>
+const storeSwim = (userId: string, swimType: SwimType, durationS = 1800, createdAt?: Date) =>
   db.$transaction(async (tx) => {
     const swim = await tx.swim.create({
       data: {
+        ...(createdAt ? { createdAt } : {}),
         userId,
         source: "FIT",
         fileSha256: "f".repeat(64),
@@ -159,5 +160,35 @@ describe("runChecks with tournament rule checks", () => {
       status: "FLAGGED",
       reasons: ["PACE_TOO_SLOW"],
     });
+  });
+
+  it("marks a swim uploaded 8 days after its date RULE_MISSED: no points, no review", async () => {
+    const me = await user("me");
+    const { t, org } = await tournamentWith(me.id, "Any", "ANY");
+    const uploadedAt = new Date("2026-06-09T10:00:00+07:00");
+    const swim = await storeSwim(me.id, "POOL", 1800, uploadedAt);
+
+    const result = await resultIn(swim.id, t.id);
+    expect(result).toMatchObject({
+      status: "RULE_MISSED",
+      reasons: [{ code: "UPLOADED_AFTER_DEADLINE", params: { days: 7, swimDate: "2026-06-01" } }],
+    });
+    expect(await db.pointsEntry.count({ where: { swimResultId: result.id } })).toBe(0);
+    expect(await getReviewQueue(org.id, t.id)).toEqual([]);
+    const mine = await getMySwim(me.id, swim.id);
+    expect(mine?.results[0]).toMatchObject({
+      displayStatus: "ruleMissed",
+      points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, total: 0 },
+    });
+  });
+
+  it("verifies a swim uploaded on the 7th day after its date", async () => {
+    const me = await user("me");
+    const { t } = await tournamentWith(me.id, "Any", "ANY");
+    const swim = await storeSwim(me.id, "POOL", 1800, new Date("2026-06-08T23:00:00+07:00"));
+
+    const result = await resultIn(swim.id, t.id);
+    expect(result.status).toBe("VERIFIED");
+    expect(await db.pointsEntry.count({ where: { swimResultId: result.id } })).toBeGreaterThan(0);
   });
 });
