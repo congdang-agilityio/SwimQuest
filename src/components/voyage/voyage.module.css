@@ -57,10 +57,6 @@
 
 /* The progress label is a caption under the map at every width (#619): no spot on the map is free of
    destination names at every progress and viewport, so it never sits on the map. */
-.mapWrap {
-  position: relative;
-}
-
 .progressLabel {
   display: block;
 }

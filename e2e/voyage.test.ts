@@ -290,9 +290,9 @@ for (const width of [1024, 1280, 1920]) {
 }
 
 // The cases that used to put the label over a name: Bãi Mân Thái and Cù Lao Chàm (#619).
-for (const [name, start, points] of [
-  ["30% from Sơn Thủy", "son_thuy", 300],
-  ["80% from Hòn Sụp", "hon_sup", 800],
+for (const [name, start, points, text] of [
+  ["30% from Sơn Thủy", "son_thuy", 300, "30 / 100 km hành trình · 30%"],
+  ["80% from Hòn Sụp", "hon_sup", 800, "80 / 100 km hành trình · 80%"],
 ] as const) {
   test.describe(`progress label at ${name} on a 1280 px desktop`, () => {
     test.use({ viewport: { width: 1280, height: 1080 } });
@@ -302,7 +302,7 @@ for (const [name, start, points] of [
         points,
       });
       await page.goto("/voyage");
-      await expect(page.getByTestId("progress-label")).toBeVisible();
+      await expect(page.getByTestId("progress-label")).toHaveText(text);
       await expectLabelReadable(page);
     });
   });
@@ -314,6 +314,11 @@ test.describe("progress label at 0% from Non Nước", () => {
 
 test.describe("progress label at 0% from Non Nước on a 320 px phone", () => {
   test.use({ viewport: { width: 320, height: 568 } });
+  labelAtNonNuocStartTests();
+});
+
+test.describe("progress label at 0% from Non Nước on a 768 px viewport", () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
   labelAtNonNuocStartTests();
 });
 
@@ -345,11 +350,6 @@ async function expectNamesReadable(page: Page) {
     for (const icon of icons) expect(intersects(names[i], icon), slugs[i]).toBe(false);
   }
 }
-
-test.describe("progress label at 0% from Non Nước on a 768 px viewport", () => {
-  test.use({ viewport: { width: 768, height: 1024 } });
-  labelAtNonNuocStartTests();
-});
 
 test.describe("destination names stay readable", () => {
   test("on the project viewport", async ({ page }, testInfo) => {

@@ -37,7 +37,7 @@ export function RouteMap({
     pct: formatProgressPct(progress.progressBp),
   });
   return (
-    <section aria-label={t("voyage.mapLabel")} className={styles.mapWrap}>
+    <section aria-label={t("voyage.mapLabel")}>
       <div
         data-testid="route-map"
         style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden" }}
