@@ -1,10 +1,11 @@
-import type { Swim, SwimResult } from "@prisma/client";
+import type { Swim, SwimResult, Tournament } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { onVerified as awardAndUpdateProgress } from "@/server/scoring/on-verified";
 import { findDuplicateOf } from "./duplicates";
-import type { ReasonCode } from "./reasons";
+import type { Reason, ReasonCode } from "./reasons";
+import { evaluateRules } from "./rule-checks";
 import { evaluateSwim } from "./standard-checks";
 
 /** Interactive transaction client of the shared Prisma client. */
@@ -32,7 +33,8 @@ export async function lockPlayerSwims(tx: Tx, userId: string): Promise<void> {
  * Checks a stored swim in every tournament where its player has an ACTIVE membership and the
  * tournament is PUBLISHED or ACTIVE at `now` (S-12). A duplicate of an earlier swim gets
  * `duplicateOfId` and a DUPLICATE result per tournament; the original is never touched.
- * Otherwise each tournament gets VERIFIED or FLAGGED from its own standard checks.
+ * Otherwise each tournament gets FLAGGED from its own standard checks; a swim that passes them
+ * gets RULE_MISSED (no review, no points) when it misses a tournament rule, else VERIFIED.
  */
 export async function runChecks(
   tx: Tx,
@@ -64,7 +66,7 @@ export async function runChecks(
   for (const m of active) {
     const { status, reasons } = duplicateOfId
       ? { status: "DUPLICATE" as const, reasons: ["DUPLICATE_OF_EARLIER_SWIM"] as ReasonCode[] }
-      : evaluateSwim(swim, m.tournament);
+      : checkIn(swim, m.tournament);
     const result = await tx.swimResult.create({
       data: {
         swimId: swim.id,
@@ -89,4 +91,15 @@ export async function runChecks(
     });
     if (status === "VERIFIED") await onVerified(tx, result, now);
   }
+}
+
+/** Standard checks first; only a swim that passes them is checked against the rules. */
+function checkIn(
+  swim: Swim,
+  tournament: Tournament,
+): { status: "VERIFIED" | "FLAGGED" | "RULE_MISSED"; reasons: (ReasonCode | Reason)[] } {
+  const standard = evaluateSwim(swim, tournament);
+  if (standard.status !== "VERIFIED") return standard;
+  const { missed } = evaluateRules(swim, tournament);
+  return missed.length > 0 ? { status: "RULE_MISSED", reasons: missed } : standard;
 }
