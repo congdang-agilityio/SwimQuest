@@ -25,6 +25,8 @@ export type MyTeamView = {
   } | null;
   teamPoints: number;
   progress: RouteProgress;
+  /** When the team first finished the route (100%); null while unfinished. */
+  finishedAt: Date | null;
   memberCount: number;
   roster: MyTeamMember[];
 };
@@ -78,6 +80,7 @@ export async function getMyTeamView(userId: string): Promise<MyTeamView | null> 
       routeDistanceM: tournament.routeDistanceM,
       pointsPerKm: tournament.pointsPerKm,
     }),
+    finishedAt: team.finishedAt,
     memberCount: roster.length,
     roster,
   };

@@ -99,6 +99,14 @@ describe("my team view", () => {
     expect(team.id).toBeTruthy();
   });
 
+  it("returns the team's finishedAt, null while unfinished", async () => {
+    const { team, cap } = await setup();
+    expect((await getMyTeamView(cap.id))!.finishedAt).toBeNull();
+    const at = new Date("2026-11-20T08:00:00Z");
+    await db.team.update({ where: { id: team.id }, data: { finishedAt: at } });
+    expect((await getMyTeamView(cap.id))!.finishedAt).toEqual(at);
+  });
+
   it("reports the chosen start", async () => {
     const { team, b } = await setup();
     await db.team.update({
