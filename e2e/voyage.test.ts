@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
@@ -77,6 +77,7 @@ test("a verified swim moves the label and the ship after a refresh", async ({ pa
   await page.goto("/voyage");
   await expect(page.getByTestId("progress-label")).toHaveText("0 / 100 km hành trình · 0%");
   await expect(page.getByTestId("ship")).toBeVisible();
+  await expectLabelOnMap(page);
   await expect(page.getByTestId("route-path")).toBeAttached();
   await expect(page.getByTestId("destination-ly_son")).toContainText("Lý Sơn");
   await expect(page.getByText(/không phải hải đồ/)).toBeVisible();
@@ -133,4 +134,126 @@ test("a team without a start sees the notice, no path and no ship", async ({ pag
   await expect(page.getByTestId("no-start")).toHaveText("Chưa chọn điểm xuất phát");
   await expect(page.getByTestId("ship")).toHaveCount(0);
   await expect(page.getByTestId("route-path")).toHaveCount(0);
+});
+
+/** The progress label is fully inside the map and does not cover the Lý Sơn name. */
+async function expectLabelOnMap(page: Page, { clear = false } = {}) {
+  const map = await page.getByTestId("route-map").boundingBox();
+  const label = await page.getByTestId("progress-label").boundingBox();
+  if (!map || !label) throw new Error("map or label not rendered");
+  expect(label.x).toBeGreaterThanOrEqual(map.x - 0.5);
+  expect(label.y).toBeGreaterThanOrEqual(map.y - 0.5);
+  expect(label.x + label.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
+  expect(label.y + label.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
+  if (!clear) return;
+  const name = await page.getByTestId("destination-ly_son").locator("span").first().boundingBox();
+  if (!name) throw new Error("Lý Sơn name not rendered");
+  const apart =
+    label.x + label.width <= name.x ||
+    name.x + name.width <= label.x ||
+    label.y + label.height <= name.y ||
+    name.y + name.height <= label.y;
+  expect(apart, "label must not cover the Lý Sơn name").toBe(true);
+}
+
+async function seedTeamOnMap(page: Page, label: string, { start = "hon_sup", points = 1500 } = {}) {
+  const email = `${label}-${stamp}@example.com`;
+  const orgEmail = `${label}-org-${stamp}@example.com`;
+  emails.push(email, orgEmail);
+  await page.goto("/signup");
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Mật khẩu").fill(PASSWORD);
+  await page.getByLabel("Tên hiển thị").fill("Lan");
+  await page.getByRole("button", { name: "Đăng ký" }).click();
+  await page.waitForURL((url) => url.pathname === "/");
+  const me = await prisma.user.findUniqueOrThrow({ where: { email } });
+  const organizer = await prisma.user.create({
+    data: { email: orgEmail, passwordHash: "x", displayName: "Org" },
+  });
+  const tournament = await prisma.tournament.create({
+    data: {
+      organizerId: organizer.id,
+      name: `Giải ${label} ${stamp}`,
+      description: "d",
+      status: "ACTIVE",
+      seasonStartAt: new Date("2026-01-01T00:00:00+07:00"),
+      seasonEndAt: new Date("2099-01-01T00:00:00+07:00"),
+      routeId: "route01",
+      routeDistanceM: 100000,
+      fastestPaceSecPer100m: 30,
+    },
+  });
+  tournamentIds.push(tournament.id);
+  const team = await prisma.team.create({
+    data: {
+      tournamentId: tournament.id,
+      name: "Đội",
+      emblemKey: "dolphin",
+      memberLimit: 5,
+      startDestination: start,
+      startSetBy: "CAPTAIN",
+      startSetAt: new Date(),
+    },
+  });
+  await prisma.teamMember.create({
+    data: { tournamentId: tournament.id, teamId: team.id, userId: me.id, status: "ACTIVE" },
+  });
+  if (points === 0) return;
+  // 1500 points on a 100 km route at 10 points/km is above the route length.
+  await prisma.pointsEntry.create({
+    data: {
+      tournamentId: tournament.id,
+      userId: me.id,
+      teamId: team.id,
+      kind: "DISTANCE",
+      points,
+      countedM: points * 100,
+      vnDay: "2026-02-01",
+    },
+  });
+}
+
+function labelAtFinishTests() {
+  test("at 100% the label is whole, on the map and clear of the Lý Sơn name", async ({
+    page,
+  }, testInfo) => {
+    await seedTeamOnMap(
+      page,
+      `voyage-finish-${testInfo.project.name}-${testInfo.parallelIndex}-${testInfo.workerIndex}-${testInfo.retry}-${Date.now()}`,
+    );
+    await page.goto("/voyage");
+    await expect(page.getByTestId("progress-label")).toHaveText("100 / 100 km hành trình · 100%");
+    await expectLabelOnMap(page, { clear: true });
+  });
+}
+
+test.describe("progress label at the finish", () => {
+  labelAtFinishTests();
+});
+
+test.describe("progress label at the finish on a 320 px phone", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  labelAtFinishTests();
+});
+
+// Non Nước sits near the top of the map (y = 8%), so a label above the ship would be cut off.
+function labelAtNonNuocStartTests() {
+  test("at 0% from Non Nước the label is whole and on the map", async ({ page }, testInfo) => {
+    await seedTeamOnMap(page, `voyage-non-nuoc-${testInfo.project.name}-${Date.now()}`, {
+      start: "non_nuoc",
+      points: 0,
+    });
+    await page.goto("/voyage");
+    await expect(page.getByTestId("progress-label")).toHaveText("0 / 100 km hành trình · 0%");
+    await expectLabelOnMap(page);
+  });
+}
+
+test.describe("progress label at 0% from Non Nước", () => {
+  labelAtNonNuocStartTests();
+});
+
+test.describe("progress label at 0% from Non Nước on a 320 px phone", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  labelAtNonNuocStartTests();
 });
