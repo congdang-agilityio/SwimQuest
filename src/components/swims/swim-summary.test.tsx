@@ -60,6 +60,10 @@ describe("SwimSummary", () => {
     setup({ isDuplicate: true });
     expect(screen.getByText("Trùng với buổi bơi đã tải lên")).toBeTruthy();
   });
+  it("links to the swim detail page", () => {
+    setup({ id: "abc" }, "en");
+    expect(screen.getByRole("link", { name: "Open swim" }).getAttribute("href")).toBe("/swims/abc");
+  });
   it("tells a player in no tournament the swim counts nowhere yet", () => {
     setup({ results: [] }, "en");
     expect(screen.getByText(/does not count in any tournament yet/)).toBeTruthy();

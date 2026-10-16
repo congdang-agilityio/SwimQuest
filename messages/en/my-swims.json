@@ -4,5 +4,9 @@
   "add": "Add a swim",
   "more": "More",
   "loading": "Loading…",
-  "error": "Could not load more swims. Please try again."
+  "error": "Could not load more swims. Please try again.",
+  "detail": {
+    "title": "Swim details",
+    "points": "Points earned here: {points}"
+  }
 }
