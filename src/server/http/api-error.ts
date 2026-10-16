@@ -11,6 +11,7 @@ export type ApiErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "ROUTE_LOCKED"
+  | "SEASON_LOCKED"
   | "START_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
@@ -42,6 +43,7 @@ const messages: Record<ApiErrorCode, string> = {
   FORBIDDEN: "You do not have permission to do this.",
   NOT_FOUND: "The requested item was not found.",
   ROUTE_LOCKED: "The route cannot be changed after the season has started.",
+  SEASON_LOCKED: "These settings cannot be changed after the season has started.",
   START_LOCKED: "The team's start is locked and can no longer be changed.",
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
