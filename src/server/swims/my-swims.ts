@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { SwimResultStatus } from "@prisma/client";
+import type { PointsKind, SwimResultStatus } from "@prisma/client";
 import {
   REASON_CODES,
   reasonCodeOf,
@@ -50,8 +50,14 @@ export type MySwimResultDto = Omit<SwimResultDto, "reasons"> & {
   displayStatus: DisplayStatus;
   /** Known reasons only: plain codes, or `{ code, params }` from rule checks. */
   reasons: (ReasonCode | Reason)[];
-  /** Net points this swim gave in the tournament (all ledger entries, reversals included). */
-  points: number;
+  points: SwimPointsBreakdown;
+};
+/** `total` is the net of all ledger entries (reversals included); the rest are per kind. */
+export type SwimPointsBreakdown = {
+  distance: number;
+  firstSwimBonus: number;
+  longSwimBonus: number;
+  total: number;
 };
 export type MySwimDto = Omit<OwnerSwimDto, "results"> & { results: MySwimResultDto[] };
 
@@ -110,6 +116,17 @@ export async function listMySwims(
 const isKnownReason = (x: StoredReason): x is ReasonCode | Reason =>
   (REASON_CODES as readonly string[]).includes(reasonCodeOf(x));
 
+function breakdown(entries: { kind: PointsKind; points: number }[]): SwimPointsBreakdown {
+  const sum = (kind: PointsKind) =>
+    entries.filter((e) => e.kind === kind).reduce((n, e) => n + e.points, 0);
+  return {
+    distance: sum("DISTANCE"),
+    firstSwimBonus: sum("FIRST_SWIM_BONUS"),
+    longSwimBonus: sum("LONG_SWIM_BONUS"),
+    total: entries.reduce((n, e) => n + e.points, 0),
+  };
+}
+
 /**
  * One of the player's own swims with its status, reasons and points in each tournament.
  * Another player's swim (or an unknown id) is `null`, so its existence is not revealed.
@@ -121,7 +138,10 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
     include: {
       results: {
         ...swimDtoInclude.results,
-        select: { ...swimDtoInclude.results.select, pointsEntries: { select: { points: true } } },
+        select: {
+          ...swimDtoInclude.results.select,
+          pointsEntries: { select: { kind: true, points: true } },
+        },
       },
     },
   });
@@ -134,7 +154,7 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
       ...r,
       displayStatus: DISPLAY_STATUS[r.status],
       reasons: r.reasons.filter(isKnownReason),
-      points: swim.results[i].pointsEntries.reduce((sum, e) => sum + e.points, 0),
+      points: breakdown(swim.results[i].pointsEntries),
     })),
   };
 }

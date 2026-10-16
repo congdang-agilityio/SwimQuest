@@ -125,7 +125,7 @@ describe("runChecks with tournament rule checks", () => {
     expect(missed).toMatchObject({
       displayStatus: "ruleMissed",
       reasons: [missedType("POOL_ONLY", "OPEN_WATER")],
-      points: 0,
+      points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, total: 0 },
     });
     const stored = await db.swim.findUniqueOrThrow({
       where: { id: swim.id },

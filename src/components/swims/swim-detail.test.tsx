@@ -37,7 +37,7 @@ const swim: MySwimDto = {
       displayStatus: "verified",
       reasons: [],
       rules,
-      points: 12,
+      points: { distance: 12, firstSwimBonus: 0, longSwimBonus: 0, total: 12 },
     },
     {
       tournamentId: "b",
@@ -46,7 +46,7 @@ const swim: MySwimDto = {
       displayStatus: "waitingForReview",
       reasons: ["PACE_TOO_FAST"],
       rules,
-      points: 0,
+      points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, total: 0 },
     },
   ],
 };
@@ -75,6 +75,26 @@ describe("SwimDetail", () => {
     expect(beta.textContent).toContain("Points earned here: 0");
     expect(beta.textContent).toMatch(/fastest realistic pace \(1:05 \/ 100 m\)/);
     expect(screen.getByText("1.25 km")).toBeTruthy();
+  });
+  it("lists distance points and each bonus on its own line, and only distance when no bonus", () => {
+    setup({
+      results: [
+        {
+          ...swim.results[0],
+          points: { distance: 32, firstSwimBonus: 20, longSwimBonus: 25, total: 77 },
+        },
+        swim.results[0],
+      ],
+    });
+    const [full, plain] = screen
+      .getAllByRole("listitem")
+      .filter((li) => li.querySelector("strong"));
+    expect(full.textContent).toContain("Distance points: 32");
+    expect(full.textContent).toContain("First-swim bonus: +20");
+    expect(full.textContent).toContain("Long-swim bonus: +25");
+    expect(full.textContent).toContain("Points earned here: 77");
+    expect(plain.textContent).toContain("Distance points: 12");
+    expect(plain.textContent).not.toContain("bonus");
   });
   it("has no swim-level status row", () => {
     setup();

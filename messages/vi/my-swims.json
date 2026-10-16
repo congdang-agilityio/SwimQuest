@@ -7,6 +7,9 @@
   "error": "Không tải thêm được các buổi bơi. Vui lòng thử lại.",
   "detail": {
     "title": "Chi tiết buổi bơi",
+    "distancePoints": "Điểm quãng đường: {points}",
+    "firstSwimBonus": "Thưởng buổi bơi đầu tiên: +{points}",
+    "longSwimBonus": "Thưởng buổi bơi dài: +{points}",
     "points": "Điểm nhận được ở đây: {points}"
   }
 }

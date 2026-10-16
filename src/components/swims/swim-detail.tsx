@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import * as f from "@/lib/format/swim";
 import { CheckReasons } from "./check-reasons";
+import { PointsBreakdown } from "./points-breakdown";
 import type { MySwimDto } from "@/server/swims/my-swims";
 
 /** A swim with its status, points and reasons in each tournament (no swim-level status). */
@@ -36,7 +37,7 @@ export function SwimDetail({ swim }: { swim: MySwimDto }) {
               <strong>{r.tournamentName}</strong>
               {": "}
               <span>{tc(`status.${r.status}`)}</span>
-              <p>{t("points", { points: r.points })}</p>
+              <PointsBreakdown points={r.points} />
               <CheckReasons reasons={r.reasons} rules={r.rules} />
             </li>
           ))}
