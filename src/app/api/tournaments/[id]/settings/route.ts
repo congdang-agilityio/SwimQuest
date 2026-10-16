@@ -24,8 +24,7 @@ export async function GET(_request: Request, { params }: Ctx) {
   const { id } = await params;
   const denied = await guarded(() => requireOrganizer(auth.user.id, id));
   if (denied instanceof Response) return denied;
-  const settings = await getSettings(id);
-  return settings ? ok({ settings }) : apiError(404, "NOT_FOUND");
+  return ok({ settings: await getSettings(id) }); // requireOrganizer already 404s a missing tournament
 }
 
 export async function PATCH(request: Request, { params }: Ctx) {
