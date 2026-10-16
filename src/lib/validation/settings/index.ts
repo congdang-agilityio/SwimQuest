@@ -2,6 +2,7 @@ import type { z } from "zod";
 import { deadlinesSettingsSchema } from "./deadlines";
 import { extraRulesSettingsSchema } from "./extra-rules";
 import { POINTS_COLUMNS, pointsSettingsSchema } from "./points";
+import { realisticLimitsSettingsSchema } from "./realistic-limits";
 import { swimSettingsSchema } from "./swim";
 import { visibilitySettingsSchema } from "./visibility";
 
@@ -19,6 +20,8 @@ export type SettingsGroup = {
     seasonStartAt: Date;
     slowestPaceSecPer100m: number;
     longestRealisticSwimM: number;
+    swimLimitBounds: unknown;
+    extraSlowestPaceSecPer100m: number | null;
   }) => z.ZodType<Record<string, unknown>, unknown>;
 };
 
@@ -38,6 +41,15 @@ export const SETTINGS_GROUPS = {
     schema: extraRulesSettingsSchema({ slowestPaceSecPer100m: 300, longestRealisticSwimM: 30000 }),
     schemaFor: (t) => extraRulesSettingsSchema(t),
     columns: ["minSwimDistanceM", "extraSlowestPaceSecPer100m"],
+    seasonLocked: true,
+  },
+  realisticLimits: {
+    schema: realisticLimitsSettingsSchema({
+      swimLimitBounds: null,
+      extraSlowestPaceSecPer100m: null,
+    }),
+    schemaFor: (t) => realisticLimitsSettingsSchema(t),
+    columns: ["fastestPaceSecPer100m", "slowestPaceSecPer100m", "longestRealisticSwimM"],
     seasonLocked: true,
   },
   points: { schema: pointsSettingsSchema, columns: POINTS_COLUMNS, seasonLocked: true },

@@ -13,6 +13,11 @@ const INPUT = { longestSwimCountedKm: "5", dailyLimitKm: "12.5", swimTypeAllowed
 const SAVED = { longestSwimCountedM: 5_000, dailyLimitM: 12_500, swimTypeAllowed: "POOL_ONLY" };
 const DEADLINE_DEFAULTS = { submissionDays: 7, lateUploadDays: 3, startChoiceDeadlineAt: null };
 const DEFAULTS = { longestSwimCountedM: 10_000, dailyLimitM: 10_000, swimTypeAllowed: "ANY" };
+const LIMIT_DEFAULTS = {
+  fastestPaceSecPer100m: 65,
+  slowestPaceSecPer100m: 300,
+  longestRealisticSwimM: 30_000,
+};
 const POINT_DEFAULTS = {
   pointsPerKm: 10,
   firstSwimBonusPoints: 20,
@@ -260,6 +265,7 @@ describe("getSettings", () => {
       swim: DEFAULTS,
       deadlines: DEADLINE_DEFAULTS,
       extraRules: { minSwimDistanceM: null, extraSlowestPaceSecPer100m: null },
+      realisticLimits: LIMIT_DEFAULTS,
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
@@ -268,6 +274,7 @@ describe("getSettings", () => {
       swim: SAVED,
       deadlines: DEADLINE_DEFAULTS,
       extraRules: { minSwimDistanceM: null, extraSlowestPaceSecPer100m: null },
+      realisticLimits: LIMIT_DEFAULTS,
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
