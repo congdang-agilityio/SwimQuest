@@ -7,6 +7,9 @@
   "error": "Could not load more swims. Please try again.",
   "detail": {
     "title": "Swim details",
+    "distancePoints": "Distance points: {points}",
+    "firstSwimBonus": "First-swim bonus: +{points}",
+    "longSwimBonus": "Long-swim bonus: +{points}",
     "points": "Points earned here: {points}"
   }
 }
