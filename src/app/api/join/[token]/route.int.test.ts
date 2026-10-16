@@ -126,6 +126,24 @@ describe("POST /api/join/:token", () => {
     expect((await res.json()).error.code).toBe("TEAM_FULL");
   });
 
+  it("answers 403 REMOVED_FROM_TOURNAMENT for a player removed after the start", async () => {
+    const { player, tournament, team, other } = await setup();
+    await db.teamMember.create({
+      data: {
+        teamId: other.id,
+        tournamentId: tournament.id,
+        userId: player.id,
+        status: "REMOVED",
+        endReason: "REMOVED_AFTER_START",
+        endedAt: new Date(),
+      },
+    });
+    await signIn(player.id);
+    const res = await POST(req({ teamId: team.id }), ctx(TOKEN));
+    expect(res.status).toBe(403);
+    expect((await res.json()).error.code).toBe("REMOVED_FROM_TOURNAMENT");
+  });
+
   it("answers 410 JOIN_CLOSED when joining is closed", async () => {
     const { player, team } = await setup("DRAFT");
     await signIn(player.id);

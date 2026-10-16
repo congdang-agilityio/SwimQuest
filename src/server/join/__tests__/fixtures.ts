@@ -67,3 +67,20 @@ export async function addMember(
   await db.teamMember.create({ data: { teamId, tournamentId, userId: u.id, status } });
   return u;
 }
+
+export const DURING_SEASON = new Date("2026-11-10T00:00:00+07:00");
+
+/** A past membership of `userId`, ended for `endReason` at `endedAt` (removals: REMOVED). */
+export function endedMembership(
+  teamId: string,
+  tournamentId: string,
+  userId: string,
+  endReason: "LEFT" | "REMOVED_BEFORE_START" | "REMOVED_AFTER_START",
+  joinedAt: Date,
+  endedAt: Date,
+) {
+  const status = endReason === "LEFT" ? "LEFT" : "REMOVED";
+  return db.teamMember.create({
+    data: { teamId, tournamentId, userId, status, endReason, joinedAt, endedAt },
+  });
+}

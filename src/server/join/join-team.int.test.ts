@@ -4,7 +4,10 @@ import {
   addMember,
   BEFORE_START,
   cleanJoinRows,
+  DURING_SEASON,
+  endedMembership,
   SEASON_END,
+  SEASON_START,
   tournamentWithTeams,
   user,
 } from "./__tests__/fixtures";
@@ -139,5 +142,89 @@ describe("joinTeam", () => {
     expect(rejected?.reason).toEqual(joinError("ALREADY_MEMBER"));
     expect(rejected?.reason.team.id).toBe(joined?.value.team.id);
     expect(await db.teamMember.count({ where: { userId: player.id } })).toBe(1);
+  });
+  describe("after a removal", () => {
+    const joinedAt = new Date("2026-10-05T00:00:00Z");
+
+    it("refuses a player removed after the start, through any link, and adds nothing", async () => {
+      const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+      const player = await user("player");
+      await endedMembership(
+        teams[0].id,
+        tournament.id,
+        player.id,
+        "REMOVED_AFTER_START",
+        joinedAt,
+        DURING_SEASON,
+      );
+
+      for (const team of teams) {
+        await expect(joinTeam(player.id, token, team.id, DURING_SEASON)).rejects.toEqual(
+          joinError("REMOVED_FROM_TOURNAMENT", 403),
+        );
+      }
+      expect(await db.teamMember.count({ where: { userId: player.id, status: "ACTIVE" } })).toBe(0);
+    });
+
+    it("lets a player removed before the start join a team with room", async () => {
+      const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+      const player = await user("player");
+      await endedMembership(
+        teams[0].id,
+        tournament.id,
+        player.id,
+        "REMOVED_BEFORE_START",
+        joinedAt,
+        BEFORE_START,
+      );
+
+      const result = await joinTeam(player.id, token, teams[1].id, BEFORE_START);
+
+      expect(result.team.id).toBe(teams[1].id);
+      expect(await activeMembers(teams[1].id)).toBe(1);
+    });
+
+    it("does not hold a removal against a later membership that has since ended", async () => {
+      const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+      const player = await user("player");
+      await endedMembership(
+        teams[0].id,
+        tournament.id,
+        player.id,
+        "REMOVED_AFTER_START",
+        joinedAt,
+        SEASON_START,
+      );
+      await endedMembership(
+        teams[1].id,
+        tournament.id,
+        player.id,
+        "LEFT",
+        SEASON_START,
+        DURING_SEASON,
+      );
+
+      const result = await joinTeam(player.id, token, teams[0].id, DURING_SEASON);
+
+      expect(result.team.id).toBe(teams[0].id);
+    });
+
+    it("does not refuse a player removed after the start of another tournament", async () => {
+      const { teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+      const other = await tournamentWithTeams("COMPLETED");
+      const player = await user("player");
+      await endedMembership(
+        other.teams[0].id,
+        other.tournament.id,
+        player.id,
+        "REMOVED_AFTER_START",
+        joinedAt,
+        DURING_SEASON,
+      );
+
+      const result = await joinTeam(player.id, token, teams[0].id, DURING_SEASON);
+
+      expect(result.team.id).toBe(teams[0].id);
+    });
   });
 });

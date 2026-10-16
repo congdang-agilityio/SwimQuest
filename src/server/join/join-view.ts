@@ -19,7 +19,11 @@ export type JoinView = {
   joiningOpen: boolean;
   /** "OFF" when the organizer switched the link off: nobody can join through it (S-34). */
   linkState: "ON" | "OFF";
+  /** Why this player may not join at all; "REMOVED_FROM_TOURNAMENT" after a removal after the start (S-41). */
+  blockedReason: JoinBlockedReason | null;
 };
+
+export type JoinBlockedReason = "REMOVED_FROM_TOURNAMENT";
 
 /** Invite tokens are 43-character base64url strings; anything far off is not looked up. */
 export function isTokenShaped(token: unknown): token is string {
@@ -40,11 +44,30 @@ export async function findMyTeam(userId: string, tournamentId: string, client: C
 }
 
 /**
+ * True when the player's latest membership in the tournament ended with a removal after the
+ * start (S-41 AC 3): they cannot join it again through any link. A later membership (the
+ * organizer adding them back, S-42) lifts this.
+ */
+export async function isRemovedFromTournament(
+  userId: string,
+  tournamentId: string,
+  client: Client = db,
+) {
+  const latest = await client.teamMember.findFirst({
+    where: { userId, tournamentId },
+    orderBy: [{ joinedAt: "desc" }, { id: "desc" }],
+    select: { endReason: true },
+  });
+  return latest?.endReason === "REMOVED_AFTER_START";
+}
+
+/**
  * What an invite link opens (story S-07, FR-28): the tournament summary, its teams with active
  * member counts and full flags, the player's current team and whether joining is open (BR-33,
  * `isJoiningOpen` at `now`). Unknown or malformed tokens return null. A draft or finished
  * tournament still shows, with `joiningOpen: false`. A switched-off link shows `linkState: "OFF"`
- * and `joiningOpen: false`; a replaced (old) token is unknown.
+ * and `joiningOpen: false`; a replaced (old) token is unknown. A player removed after the start
+ * gets `blockedReason: "REMOVED_FROM_TOURNAMENT"` and `joiningOpen: false`.
  */
 export async function getJoinView(
   userId: string,
@@ -55,9 +78,10 @@ export async function getJoinView(
   const t = await db.tournament.findUnique({ where: { inviteToken: token } });
   if (!t) return null;
 
-  const [{ teams }, myTeam] = await Promise.all([
+  const [{ teams }, myTeam, removed] = await Promise.all([
     listTeamsWithCounts(t.id),
     findMyTeam(userId, t.id),
+    isRemovedFromTournament(userId, t.id),
   ]);
   return {
     tournament: {
@@ -76,7 +100,8 @@ export async function getJoinView(
       return { id, name, emblemKey, description, memberCount, memberLimit, full };
     }),
     myTeam,
-    joiningOpen: t.inviteEnabled && isJoiningOpen(t, now),
+    joiningOpen: !removed && t.inviteEnabled && isJoiningOpen(t, now),
     linkState: t.inviteEnabled ? "ON" : "OFF",
+    blockedReason: removed ? "REMOVED_FROM_TOURNAMENT" : null,
   };
 }
