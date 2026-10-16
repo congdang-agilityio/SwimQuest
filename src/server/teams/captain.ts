@@ -92,7 +92,6 @@ export async function handOverCaptaincy(
       WHERE "teamId" = ${teamId} AND "userId" = ${memberUserId} AND "status" = 'ACTIVE'
       FOR SHARE`;
     if (member.length === 0) throw new NotAMemberError();
-
     await tx.team.update({ where: { id: teamId }, data: { captainUserId: memberUserId } });
     const ids = { teamId, tournamentId };
     await recordAudit(tx, {
