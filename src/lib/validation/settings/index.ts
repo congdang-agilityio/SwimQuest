@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import { deadlinesSettingsSchema } from "./deadlines";
+import { extraRulesSettingsSchema } from "./extra-rules";
 import { POINTS_COLUMNS, pointsSettingsSchema } from "./points";
 import { swimSettingsSchema } from "./swim";
 import { visibilitySettingsSchema } from "./visibility";
@@ -14,7 +15,11 @@ export type SettingsGroup = {
   columns: readonly string[];
   seasonLocked: boolean;
   /** Stricter schema that needs the tournament (used by the save when present). */
-  schemaFor?: (tournament: { seasonStartAt: Date }) => z.ZodType<Record<string, unknown>, unknown>;
+  schemaFor?: (tournament: {
+    seasonStartAt: Date;
+    slowestPaceSecPer100m: number;
+    longestRealisticSwimM: number;
+  }) => z.ZodType<Record<string, unknown>, unknown>;
 };
 
 export const SETTINGS_GROUPS = {
@@ -27,6 +32,12 @@ export const SETTINGS_GROUPS = {
     schema: deadlinesSettingsSchema(),
     schemaFor: (t) => deadlinesSettingsSchema(t.seasonStartAt),
     columns: ["submissionDays", "lateUploadDays", "startChoiceDeadlineAt"],
+    seasonLocked: true,
+  },
+  extraRules: {
+    schema: extraRulesSettingsSchema({ slowestPaceSecPer100m: 300, longestRealisticSwimM: 30000 }),
+    schemaFor: (t) => extraRulesSettingsSchema(t),
+    columns: ["minSwimDistanceM", "extraSlowestPaceSecPer100m"],
     seasonLocked: true,
   },
   points: { schema: pointsSettingsSchema, columns: POINTS_COLUMNS, seasonLocked: true },
