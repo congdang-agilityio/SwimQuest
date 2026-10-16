@@ -6,7 +6,6 @@ export type PublishIssueCode =
   | "REALISTIC_LIMITS_OUT_OF_BOUNDS"
   | "ROUTE_MISSING"
   | "ROUTE_DISTANCE_INVALID"
-  | "VISIBILITY_MISSING"
   | "NO_TEAM";
 
 /** One thing to fix before publishing; `field` names the form field the UI links to. */
@@ -17,7 +16,6 @@ export type PublishCandidate = {
   seasonEndAt: Date;
   routeId: string;
   routeDistanceM: number;
-  visibility: "PUBLIC" | "INVITE_ONLY" | null;
 } & Record<SwimLimitField, number>;
 
 const LIMIT_FIELDS = Object.keys(SWIM_LIMIT_BOUNDS) as SwimLimitField[];
@@ -49,9 +47,6 @@ export function validateForPublish(t: PublishCandidate, teams: readonly unknown[
   if (!hasUsableRoute(t.routeId)) issues.push({ code: "ROUTE_MISSING", field: "routeId" });
   if (!Number.isSafeInteger(t.routeDistanceM) || t.routeDistanceM <= 0) {
     issues.push({ code: "ROUTE_DISTANCE_INVALID", field: "routeDistanceKm" });
-  }
-  if (t.visibility !== "PUBLIC" && t.visibility !== "INVITE_ONLY") {
-    issues.push({ code: "VISIBILITY_MISSING", field: "visibility" });
   }
   if (!Array.isArray(teams) || teams.length === 0) issues.push({ code: "NO_TEAM", field: "teams" });
   return issues;

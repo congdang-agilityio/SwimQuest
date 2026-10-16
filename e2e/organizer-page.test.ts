@@ -89,10 +89,6 @@ test("the invite link appears only after publishing, built from APP_URL", async 
   });
   expect(created.status()).toBe(201);
   const { id } = await created.json();
-  const chosen = await page.request.patch(`/api/tournaments/${id}/settings`, {
-    data: { group: "visibility", values: { visibility: "INVITE_ONLY" } },
-  });
-  expect(chosen.ok()).toBe(true);
   const team = await page.request.post(`/api/tournaments/${id}/teams`, {
     data: { name: "Cá Heo", emblemKey: "turtle", memberLimit: 5 },
   });

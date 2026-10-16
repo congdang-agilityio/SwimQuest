@@ -29,7 +29,6 @@
       "REALISTIC_LIMITS_OUT_OF_BOUNDS": "Một giới hạn bơi thực tế nằm ngoài khoảng cho phép.",
       "ROUTE_MISSING": "Hãy chọn một lộ trình.",
       "ROUTE_DISTANCE_INVALID": "Nhập quãng đường lộ trình lớn hơn 0.",
-      "VISIBILITY_MISSING": "Chọn cách giải được tìm thấy: công khai hoặc chỉ qua liên kết mời.",
       "NO_TEAM": "Hãy thêm ít nhất một đội.",
       "UNKNOWN": "Có mục cần sửa."
     }

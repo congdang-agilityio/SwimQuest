@@ -15,14 +15,7 @@ async function clean() {
 const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
-async function draft(
-  organizerId: string,
-  {
-    withTeam = true,
-    routeDistanceM = 100_000,
-    visibility = "INVITE_ONLY" as "PUBLIC" | "INVITE_ONLY" | null,
-  } = {},
-) {
+async function draft(organizerId: string, { withTeam = true, routeDistanceM = 100_000 } = {}) {
   const tournament = await db.tournament.create({
     data: {
       organizerId,
@@ -32,7 +25,6 @@ async function draft(
       seasonEndAt: new Date("2026-12-01T00:00:00+07:00"),
       routeId: "route01",
       routeDistanceM,
-      visibility,
     },
   });
   if (withTeam) {
@@ -43,13 +35,7 @@ async function draft(
   return tournament;
 }
 
-async function setup(
-  options: {
-    withTeam?: boolean;
-    routeDistanceM?: number;
-    visibility?: "PUBLIC" | "INVITE_ONLY" | null;
-  } = {},
-) {
+async function setup(options: { withTeam?: boolean; routeDistanceM?: number } = {}) {
   const organizer = await user("organizer");
   const outsider = await user("outsider");
   const tournament = await draft(organizer.id, options);
@@ -121,19 +107,6 @@ describe("publishTournament", () => {
     expect(stored.status).toBe("DRAFT");
     expect(stored.inviteToken).toBeNull();
     expect(stored.publishedAt).toBeNull();
-  });
-
-  it("refuses a draft without a visibility choice with VISIBILITY_MISSING", async () => {
-    const { organizer, tournament } = await setup({ visibility: null });
-    const result = await publishTournament(organizer.id, tournament.id);
-
-    expect(result).toEqual({
-      ok: false,
-      reason: "PUBLISH_INVALID",
-      issues: [{ code: "VISIBILITY_MISSING", field: "visibility" }],
-    });
-    const stored = await db.tournament.findUniqueOrThrow({ where: { id: tournament.id } });
-    expect(stored.status).toBe("DRAFT");
   });
 
   it("refuses a non-organizer and leaves the draft unpublished", async () => {

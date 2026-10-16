@@ -8,7 +8,6 @@ const valid: PublishCandidate = {
   seasonEndAt: new Date("2026-11-30T23:59:00+07:00"),
   routeId: "route01",
   routeDistanceM: 100_000,
-  visibility: "INVITE_ONLY",
   ...DEFAULT_SWIM_LIMITS,
 };
 const teams = [{ id: "team-1" }];
@@ -16,13 +15,6 @@ const teams = [{ id: "team-1" }];
 describe("validateForPublish", () => {
   it("returns no issues for a valid draft with a team", () => {
     expect(validateForPublish(valid, teams)).toEqual([]);
-  });
-
-  it("reports VISIBILITY_MISSING when no visibility was chosen, accepts either choice", () => {
-    expect(validateForPublish({ ...valid, visibility: null }, teams)).toEqual([
-      { code: "VISIBILITY_MISSING", field: "visibility" },
-    ]);
-    expect(validateForPublish({ ...valid, visibility: "PUBLIC" }, teams)).toEqual([]);
   });
 
   it("reports SEASON_END_NOT_AFTER_START when the end equals the start (date and time)", () => {
