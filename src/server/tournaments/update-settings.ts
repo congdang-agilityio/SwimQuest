@@ -31,8 +31,9 @@ function errorsOf(
 /**
  * Saves one settings group (story S-23 AC 2, AC 5). Organizer only (throws the role errors of
  * `requireOrganizer`). A season-locked group is refused with SEASON_LOCKED once the tournament is
- * ACTIVE or later; the write is conditional on the stored status and season start, so a
- * concurrent change of them cannot slip through. Returns the stored values (km as metres).
+ * ACTIVE or later; the write is conditional on the stored status, season start and the group's
+ * write guard, so a concurrent change of them cannot slip through (a miss re-checks once on a
+ * fresh read; `retry` is internal). Returns the stored values (km as metres).
  */
 export async function updateSettings(
   userId: string,
@@ -40,6 +41,7 @@ export async function updateSettings(
   group: string,
   input: unknown,
   now: Date,
+  retry = true,
 ): Promise<UpdateSettingsResult> {
   const tournament = await requireOrganizer(userId, tournamentId);
   if (!isSettingsGroup(group)) return { ok: false, reason: "UNKNOWN_GROUP" };
@@ -56,12 +58,14 @@ export async function updateSettings(
     return { ok: false, reason: "INVALID", errors: errorsOf(parsed.error.issues) };
 
   const where = settings.seasonLocked ? OPEN_FOR_SEASON_SETTINGS(now) : {};
+  const guard = settings.writeGuard?.(parsed.data) ?? {};
   const { count } = await db.tournament.updateMany({
-    where: { id: tournament.id, ...where },
+    where: { AND: [{ id: tournament.id }, where, guard] },
     data: parsed.data,
   });
-  if (count === 0) return { ok: false, reason: "SEASON_LOCKED" };
-  return { ok: true, group, values: parsed.data };
+  if (count > 0) return { ok: true, group, values: parsed.data };
+  if (retry) return updateSettings(userId, tournamentId, group, input, now, false);
+  return { ok: false, reason: "SEASON_LOCKED" };
 }
 
 /** Every settings group with its stored values (schema defaults until saved); null if missing. */

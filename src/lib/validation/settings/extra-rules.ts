@@ -8,7 +8,7 @@ export const formatPace = (sec: number) =>
   `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
 
 /** "m:ss" or "mm:ss" (or whole seconds as a number) to seconds per 100 m; null if malformed. */
-function parsePace(value: unknown): number | null {
+export function parsePace(value: unknown): number | null {
   if (typeof value === "number") return Number.isInteger(value) && value > 0 ? value : null;
   const m = typeof value === "string" ? /^(\d{1,3}):([0-5]\d)$/.exec(value.trim()) : null;
   const sec = m ? Number(m[1]) * 60 + Number(m[2]) : 0;
