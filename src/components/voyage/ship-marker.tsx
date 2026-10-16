@@ -3,12 +3,9 @@ import { shipArt } from "@/lib/art/route01-art";
 import styles from "./voyage.module.css";
 
 type Props = {
-  /** Position as percent of the map box. */
   x: number;
   y: number;
-  /** Accessible name, e.g. "Cá Mập's ship". */
   alt: string;
-  /** Progress text, e.g. "68 / 100 route km · 68%". */
   label: string;
 };
 

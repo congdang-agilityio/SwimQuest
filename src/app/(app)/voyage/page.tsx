@@ -6,7 +6,6 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { getVoyage } from "@/server/voyage/get-voyage";
 
-// Always computed from current points: refreshing after a verified swim shows the new position.
 export const dynamic = "force-dynamic";
 
 export default async function VoyagePage() {
