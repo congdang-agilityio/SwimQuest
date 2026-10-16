@@ -21,11 +21,7 @@ export class NotDisputableError extends Error {
 }
 
 export type DisputeDecision = { accept: boolean; reason?: string };
-export type DisputeDecisionResult = {
-  disputeId: string;
-  resultId: string;
-  status: SwimResultStatus;
-};
+export type DisputeOutcome = { disputeId: string; resultId: string; status: SwimResultStatus };
 
 const DISPUTABLE: readonly SwimResultStatus[] = ["REJECTED", "DUPLICATE", "RULE_MISSED"];
 const reasonSchema = z.string().trim().min(1).max(300);
@@ -49,12 +45,9 @@ export async function raiseDispute(
   reason: string,
 ): Promise<{ disputeId: string; resultId: string }> {
   if (!isId(resultId)) throw new NotFoundError();
-  const found = await db.swimResult.findUnique({
-    where: { id: resultId },
-    select: { userId: true },
-  });
-  if (!found) throw new NotFoundError();
-  if (!isId(userId) || found.userId !== userId) throw new ForbiddenError();
+  const owner = (await db.swimResult.findUnique({ where: { id: resultId } }))?.userId;
+  if (!owner) throw new NotFoundError();
+  if (!isId(userId) || owner !== userId) throw new ForbiddenError();
   const text = parseReason(reason);
 
   try {
@@ -92,7 +85,7 @@ export async function decideDispute(
   disputeId: string,
   decision: DisputeDecision,
   now: Date = new Date(),
-): Promise<DisputeDecisionResult> {
+): Promise<DisputeOutcome> {
   if (!isId(disputeId)) throw new NotFoundError();
   const found = await db.dispute.findUnique({
     where: { id: disputeId },
