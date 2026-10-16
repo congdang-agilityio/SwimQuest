@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 96" role="img" aria-label="Ship tier 3">
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="96" viewBox="0 0 128 96" role="img" aria-label="Ship tier 3">
 <path d="M6 58h116l-10 24H18z" fill="#FF6B6B" stroke="#062B46" stroke-width="3" stroke-linejoin="round"/>
 <path d="M12 68h104" stroke="#FFD166" stroke-width="3" stroke-linecap="round"/>
 <path d="M30 26v32M62 10v48M94 26v32" stroke="#062B46" stroke-width="3" stroke-linecap="round"/>
