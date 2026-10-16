@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { setSessionCookie } from "@/server/auth/cookie";
 import { logIn } from "@/server/auth/login";
 import { apiError } from "@/server/http/api-error";
+import { isLocale, setLocaleCookie } from "@/server/profile/locale";
 import { isSameOrigin, readJson } from "@/server/http/request";
 
 export const dynamic = "force-dynamic";
@@ -25,5 +26,6 @@ export async function POST(request: Request) {
     { user: result.user },
     { status: 200, headers: { "cache-control": "no-store" } },
   );
+  if (isLocale(result.locale)) setLocaleCookie(response, result.locale);
   return setSessionCookie(response, result.sessionToken);
 }
