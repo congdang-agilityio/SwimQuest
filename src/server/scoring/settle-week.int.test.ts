@@ -386,6 +386,50 @@ describe("recalculatePlayerWeek", () => {
   });
 });
 
+describe("late verification (onVerified)", () => {
+  const totalPoints = async (teamId: string) =>
+    (await db.pointsEntry.aggregate({ where: { teamId }, _sum: { points: true } }))._sum.points;
+
+  it("a swim verified after its week was settled adds the difference and the next streak", async () => {
+    const me = await user("me");
+    const { t, team } = await tournamentWith(me.id);
+    for (const offset of [0, 1]) await swim(me.id, t.id, team.id, 1000, day(W1, offset));
+    for (const offset of [0, 1, 2]) await swim(me.id, t.id, team.id, 1000, day(W2, offset));
+    await settleWeek(t.id, W1, SETTLE_AT);
+    await settleWeek(t.id, W2, SETTLE_AT);
+    // Week 1: 20 x 1.10 = +2; week 2: 30 x 1.20 = +6 (no streak yet).
+    expect((await multiplierEntries(t.id, me.id)).map((e) => e.points)).toEqual([2, 6]);
+
+    await swim(me.id, t.id, team.id, 1000, day(W1, 4));
+
+    // Week 1 now has 3 days: 30 x 1.20 = +6 (+4); week 2 streak: 30 x 1.25 = +8 (+2).
+    expect((await multiplierEntries(t.id, me.id)).map((e) => [e.vnDay, e.points])).toEqual([
+      [W1, 2],
+      [W2, 6],
+      [W1, 4],
+      [W2, 2],
+    ]);
+    expect(await weekly(t.id, me.id, W1)).toMatchObject({ activeDays: 3, extraPoints: 6 });
+    expect(await weekly(t.id, me.id, W2)).toMatchObject({
+      multiplierPct: 125,
+      extraPoints: 8,
+      streakWeeks: 2,
+    });
+    // The team's progress includes the new multiplier entries (10 bp per point here).
+    expect(await progressOf(team.id)).toBe((await totalPoints(team.id))! * 10);
+  });
+
+  it("a swim verified in a week that is not settled writes no multiplier entry", async () => {
+    const me = await user("me");
+    const { t, team } = await tournamentWith(me.id);
+    await settleWeek(t.id, W2, SETTLE_AT);
+    for (const offset of [0, 1, 2]) await swim(me.id, t.id, team.id, 1000, day(W1, offset));
+
+    expect(await multiplierEntries(t.id, me.id)).toEqual([]);
+    expect(await db.weeklyResult.count()).toBe(0);
+  });
+});
+
 describe("endedSeasonWeeks", () => {
   const season = {
     seasonStartAt: new Date("2026-05-01T06:00:00+07:00"),

@@ -1,4 +1,4 @@
-import type { Tournament } from "@prisma/client";
+import type { SwimResult, Tournament } from "@prisma/client";
 import { activeDays, extraPoints, weeklyMultiplierPct } from "@/lib/scoring/weekly-multiplier";
 import { previousWeekStart, vnWeekRange, vnWeekStart } from "@/lib/time/vn";
 import type { Tx } from "@/server/checks/run-checks";
@@ -130,4 +130,16 @@ export async function recalculatePlayerWeek(
   const t = await tx.tournament.findUniqueOrThrow({ where: { id: tournamentId } });
   const weeks = settled.map((s) => s.weekStart);
   return applyWeeks(tx, t, userId, weeks, now);
+}
+
+/**
+ * Late verification: when a result's week (Vietnam time) is already settled, recomputes that
+ * week and the later settled weeks for its player (BR-29, FR-78). No-op for an unsettled week.
+ * Returns the teams whose points changed, ascending.
+ */
+export async function recalculateSettledWeek(tx: Tx, result: SwimResult, now = new Date()) {
+  if (result.status !== "VERIFIED") return [];
+  const { startedAt } = await tx.swim.findUniqueOrThrow({ where: { id: result.swimId } });
+  const week = vnWeekStart(startedAt);
+  return recalculatePlayerWeek(tx, result.tournamentId, result.userId, week, now);
 }
