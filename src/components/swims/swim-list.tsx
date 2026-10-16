@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { EmptyState } from "@/components/states/empty-state";
+import { clientFetch } from "@/lib/http/client-fetch";
 import * as f from "@/lib/format/swim";
 import { utcToVnParts } from "@/lib/time/vn";
 import type { MySwimListItem, MySwimsPage } from "@/server/swims/my-swims";
@@ -23,7 +24,7 @@ export function SwimList({ initialItems, initialCursor }: Props) {
     setBusy(true);
     setFailed(false);
     try {
-      const res = await fetch(`/api/me/swims?cursor=${encodeURIComponent(cursor)}`);
+      const res = await clientFetch(`/api/me/swims?cursor=${encodeURIComponent(cursor)}`);
       if (!res.ok) throw new Error(String(res.status));
       const page = (await res.json()) as MySwimsPage;
       setItems((prev) => [...prev, ...page.items]);
