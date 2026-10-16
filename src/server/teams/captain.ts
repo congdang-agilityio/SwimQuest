@@ -71,11 +71,8 @@ export async function appointCaptain(
 export type HandOverCaptaincyResult = { captainUserId: string; previousCaptainUserId: string };
 
 /**
- * The captain makes another active member captain and becomes a normal member (story S-40,
- * FR-35). Throws the role errors of `requireCaptain` and NotAMemberError (the target is not an
- * active member, or is the captain). The team row is locked and both checks repeated inside the
- * transaction; the change, its `TEAM_CAPTAIN_HANDOVER` audit event and `TEAM_CAPTAIN_SET` event
- * commit together. A later organizer appointment (`appointCaptain`) still replaces the result.
+ * The captain makes another active member captain (story S-40). Throws the errors of
+ * `requireCaptain` and NotAMemberError; the change, audit and event commit together.
  */
 export async function handOverCaptaincy(
   captainId: string,
