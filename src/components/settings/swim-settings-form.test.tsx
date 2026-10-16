@@ -62,9 +62,51 @@ describe("SwimSettingsForm", () => {
     );
     setup();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect((await screen.findByRole("alert")).textContent).toContain(
-      "The distance must be greater than 0.",
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("The distance must be greater than 0.");
+    const input = screen.getByLabelText(/Daily limit/);
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(alert.id).toBeTruthy();
+    expect(input.getAttribute("aria-describedby")?.split(" ")).toEqual([
+      "dailyLimitKm-help",
+      alert.id,
+    ]);
+    expect(screen.getByLabelText(/Longest swim counted/).getAttribute("aria-describedby")).toBe(
+      "longestSwimCountedKm-help",
     );
+  });
+
+  it("links a swim type error to the select", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        json(400, {
+          error: { code: "VALIDATION_FAILED", fields: { swimTypeAllowed: "SWIM_TYPE_INVALID" } },
+        }),
+      ),
+    );
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("Choose a swim type.");
+    const select = screen.getByLabelText(/Swim type/);
+    expect(select.getAttribute("aria-invalid")).toBe("true");
+    expect(select.getAttribute("aria-describedby")?.split(" ")).toEqual([
+      "swimTypeAllowed-help",
+      alert.id,
+    ]);
+  });
+
+  it("shows a general error when a 400 names no field of the form", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        json(400, { error: { code: "VALIDATION_FAILED", fields: { body: "INVALID_JSON" } } }),
+      ),
+    );
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect((await screen.findByRole("alert")).textContent).toBe(en.swim.failed);
   });
 
   it("is read-only with a note when locked", () => {
@@ -81,6 +123,8 @@ describe("SwimSettingsForm", () => {
     );
     setup();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    await waitFor(() => expect(screen.getByText(/Locked for the season/)).toBeTruthy());
+    const note = await screen.findByRole("status");
+    expect(note.textContent).toBe(en.swim.locked);
+    await waitFor(() => expect(document.activeElement).toBe(note));
   });
 });

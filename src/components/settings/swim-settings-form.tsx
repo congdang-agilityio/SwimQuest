@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { kmText, type SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { clientFetch } from "@/lib/http/client-fetch";
@@ -8,6 +8,7 @@ import { clientFetch } from "@/lib/http/client-fetch";
 const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
 const errorColor = { color: "#b91c1c" };
 const TYPES = ["ANY", "POOL_ONLY", "OPEN_WATER_ONLY"] as const;
+const FIELDS = ["longestSwimCountedKm", "dailyLimitKm", "swimTypeAllowed"];
 
 type Status = "idle" | "saved" | "locked" | "failed" | "network";
 
@@ -26,6 +27,12 @@ export function SwimSettingsForm({
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const locked = initiallyLocked || status === "locked";
+  const lockedNote = useRef<HTMLParagraphElement>(null);
+
+  // A 409 removes the focused Save button: move focus to the note so the lock is announced.
+  useEffect(() => {
+    if (status === "locked") lockedNote.current?.focus();
+  }, [status]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,7 +66,8 @@ export function SwimSettingsForm({
         const known: Record<string, string> = {};
         if (fields && typeof fields === "object")
           for (const [k, v] of Object.entries(fields))
-            known[k] = typeof v === "string" && t.has(`errors.${v}`) ? v : "UNKNOWN";
+            if (FIELDS.includes(k))
+              known[k] = typeof v === "string" && t.has(`errors.${v}`) ? v : "UNKNOWN";
         setErrors(known);
         if (Object.keys(known).length === 0) setStatus("failed");
       } else {
@@ -72,6 +80,16 @@ export function SwimSettingsForm({
     }
   }
 
+  const describedBy = (name: string) =>
+    errors[name] ? `${name}-help ${name}-error` : `${name}-help`;
+  const fieldError = (name: string) =>
+    errors[name] && (
+      <span id={`${name}-error`} role="alert" style={errorColor}>
+        {" "}
+        {t(`errors.${errors[name]}`)}
+      </span>
+    );
+
   const field = (name: string, label: string, help: string, defaultValue: string) => (
     <p>
       <label>
@@ -82,24 +100,23 @@ export function SwimSettingsForm({
           defaultValue={defaultValue}
           disabled={locked}
           aria-invalid={errors[name] ? true : undefined}
-          aria-describedby={`${name}-help`}
+          aria-describedby={describedBy(name)}
           style={control}
         />
       </label>
       <small id={`${name}-help`}>{help}</small>
-      {errors[name] && (
-        <span role="alert" style={errorColor}>
-          {" "}
-          {t(`errors.${errors[name]}`)}
-        </span>
-      )}
+      {fieldError(name)}
     </p>
   );
 
   return (
     <form onSubmit={onSubmit} noValidate aria-labelledby="swim-settings-title">
       <h2 id="swim-settings-title">{t("title")}</h2>
-      {locked && <p role="note">{t("locked")}</p>}
+      {locked && (
+        <p ref={lockedNote} role="status" tabIndex={-1}>
+          {t("locked")}
+        </p>
+      )}
       {field(
         "longestSwimCountedKm",
         t("longestSwimCounted"),
@@ -114,7 +131,8 @@ export function SwimSettingsForm({
             name="swimTypeAllowed"
             defaultValue={values.swimTypeAllowed}
             disabled={locked}
-            aria-describedby="swimTypeAllowed-help"
+            aria-invalid={errors.swimTypeAllowed ? true : undefined}
+            aria-describedby={describedBy("swimTypeAllowed")}
             style={control}
           >
             {TYPES.map((type) => (
@@ -125,12 +143,7 @@ export function SwimSettingsForm({
           </select>
         </label>
         <small id="swimTypeAllowed-help">{t("swimTypeHelp")}</small>
-        {errors.swimTypeAllowed && (
-          <span role="alert" style={errorColor}>
-            {" "}
-            {t(`errors.${errors.swimTypeAllowed}`)}
-          </span>
-        )}
+        {fieldError("swimTypeAllowed")}
       </p>
       {!locked && (
         <button type="submit" disabled={busy} style={{ minHeight: 44, minWidth: 44, padding: 8 }}>
