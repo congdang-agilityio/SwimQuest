@@ -2,6 +2,7 @@ import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { db } from "@/server/db";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
 import { getPlayerTotals } from "@/server/scoring/team-points";
+import { getLevels } from "@/server/xp/level";
 import {
   PUBLIC_PLAYER_SELECT,
   toPublicPlayer,
@@ -12,6 +13,7 @@ export type MyTeamMember = PublicPlayer & {
   verifiedKm: number;
   points: number;
   isCaptain: boolean;
+  level: number;
 };
 
 export type MyTeamView = {
@@ -50,6 +52,7 @@ export async function getMyTeamView(userId: string): Promise<MyTeamView | null> 
     tournament.id,
     members.map((m) => m.user.id),
   );
+  const levels = await getLevels(members.map((m) => m.user.id));
   const roster = members.map(({ user }): MyTeamMember => {
     const t = totals.get(user.id) ?? { points: 0, countedM: 0 };
     return {
@@ -57,6 +60,7 @@ export async function getMyTeamView(userId: string): Promise<MyTeamView | null> 
       verifiedKm: t.countedM / 1000,
       points: t.points,
       isCaptain: user.id === team.captainUserId,
+      level: levels.get(user.id)?.level ?? 1,
     };
   });
   const teamPoints = roster.reduce((sum, m) => sum + m.points, 0);
