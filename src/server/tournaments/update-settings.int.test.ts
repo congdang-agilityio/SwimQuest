@@ -259,6 +259,7 @@ describe("getSettings", () => {
     await expect(getSettings(t.id)).resolves.toEqual({
       swim: DEFAULTS,
       deadlines: DEADLINE_DEFAULTS,
+      extraRules: { minSwimDistanceM: null, extraSlowestPaceSecPer100m: null },
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
@@ -266,6 +267,7 @@ describe("getSettings", () => {
     await expect(getSettings(t.id)).resolves.toEqual({
       swim: SAVED,
       deadlines: DEADLINE_DEFAULTS,
+      extraRules: { minSwimDistanceM: null, extraSlowestPaceSecPer100m: null },
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
