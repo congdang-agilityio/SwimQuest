@@ -19,6 +19,14 @@ export async function requireOrganizer(userId: string, tournamentId: string) {
   return t;
 }
 
+/**
+ * Who may review a tournament's flagged swims (S-43): its organizer for now; review helpers
+ * (S-45) extend this. Throws NotFoundError for an unknown tournament, else ForbiddenError.
+ */
+export async function requireReviewer(userId: string, tournamentId: string) {
+  return requireOrganizer(userId, tournamentId);
+}
+
 export async function isOrganizer(userId: string, tournamentId: string): Promise<boolean> {
   if (!isId(userId) || !isId(tournamentId)) return false;
   return (await db.tournament.count({ where: { id: tournamentId, organizerId: userId } })) > 0;
