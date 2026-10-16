@@ -1,0 +1,9 @@
+{
+  "captain": "Captain",
+  "progress": "Progress: {percent}%",
+  "points": "{points} points",
+  "members": "Members: {count} / {limit}",
+  "addSwim": "Add swim",
+  "rosterTitle": "Members",
+  "km": "{km} km"
+}
