@@ -248,6 +248,8 @@ model Team {
   /// Set when a correction takes the team back below the finish.
   finishLostAt     DateTime?      @db.Timestamptz(3)
   finishLostReason String?
+  /// Unguessable token for the public finish page; null until the team shares.
+  shareToken       String?        @unique
   createdAt        DateTime       @default(now()) @db.Timestamptz(3)
   updatedAt        DateTime       @updatedAt @db.Timestamptz(3)
   members          TeamMember[]
