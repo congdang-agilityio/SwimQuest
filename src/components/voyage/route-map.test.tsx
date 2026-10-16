@@ -59,6 +59,27 @@ describe("RouteMap", () => {
     expect(screen.getByText(voyageEn.note)).toBeTruthy();
   });
 
+  it("places all seven destinations at their anchors", () => {
+    setup({});
+    expect(slugs).toHaveLength(7);
+    for (const slug of slugs) {
+      const el = screen.getByTestId(`destination-${slug}`);
+      expect(el.style.left).toBe(`${anchors.anchors[slug].x}%`);
+      expect(el.style.top).toBe(`${anchors.anchors[slug].y}%`);
+    }
+  });
+
+  it("marks only Ly Son as the finish with a text marker", () => {
+    setup({});
+    expect(screen.getByTestId("destination-ly_son").textContent).toContain("(Finish)");
+    expect(screen.getAllByTestId("finish-marker")).toHaveLength(1);
+  });
+
+  it("renders a 16:10 box", () => {
+    setup({});
+    expect(screen.getByTestId("route-map").style.aspectRatio).toBe("16 / 10");
+  });
+
   it("uses the current language", () => {
     setup({}, "vi");
     expect(screen.getByTestId("progress-label").textContent).toBe("68 / 100 km hành trình · 68%");
@@ -66,12 +87,14 @@ describe("RouteMap", () => {
     expect(screen.getByText(voyageVi.note)).toBeTruthy();
   });
 
-  it("keeps 100% at the finish", () => {
+  it("keeps 100% with the ship at the finish", () => {
     setup({
       progress: { progressBp: 10000, routeKmReached: 100, routeKmTotal: 100 },
       ship: { x: 80, y: 79 },
     });
     expect(screen.getByTestId("progress-label").textContent).toBe("100 / 100 route km · 100%");
+    expect(screen.getByTestId("ship").style.left).toBe("80%");
+    expect(screen.getByTestId("ship").style.top).toBe("79%");
   });
 
   it("marks an automatic start with its assignment time", () => {

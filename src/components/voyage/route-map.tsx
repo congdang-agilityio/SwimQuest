@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { landmarkArt, ROUTE01_ART } from "@/lib/art/route01-art";
+import type { MapPoint } from "@/lib/routes/path-position";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import { ShipMarker } from "./ship-marker";
 import styles from "./voyage.module.css";
@@ -10,15 +11,15 @@ export type RouteMapProps = {
   routeId: string;
   teamName: string;
   destinations: { slug: string; x: number; y: number; isFinish: boolean }[];
-  path: { x: number; y: number }[] | null;
+  path: MapPoint[] | null;
   start: { slug: string; automaticAtIso: string | null } | null;
   progress: { progressBp: number; routeKmReached: number; routeKmTotal: number };
-  ship: { x: number; y: number } | null;
+  ship: MapPoint | null;
 };
 
-/** Route map base: background and landmarks from the art registry, names as text. */
 const ASPECT = 1.6; // map box is 16:10; SVG viewBox is 160 x 100
 
+/** Route map base: background and landmarks from the art registry, names and progress as text. */
 export function RouteMap({
   routeId,
   teamName,
