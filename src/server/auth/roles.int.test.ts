@@ -7,6 +7,7 @@ import {
   requireCaptain,
   requireOrganizer,
   requirePlatformAdmin,
+  requireReviewer,
   roleErrorResponse,
 } from "./roles";
 
@@ -96,6 +97,19 @@ describe("role guards", () => {
         ForbiddenError,
       );
       expect(await isOrganizer(bad as string, tournament.id)).toBe(false);
+    });
+  });
+
+  describe("requireReviewer", () => {
+    it("accepts the organizer and refuses players and outsiders", async () => {
+      const { organizer, captain, member, outsider, tournament } = await setup();
+      await expect(requireReviewer(organizer.id, tournament.id)).resolves.toMatchObject({
+        id: tournament.id,
+      });
+      for (const u of [captain, member, outsider]) {
+        await expect(requireReviewer(u.id, tournament.id)).rejects.toBeInstanceOf(ForbiddenError);
+      }
+      await expect(requireReviewer(organizer.id, "missing")).rejects.toBeInstanceOf(NotFoundError);
     });
   });
 
