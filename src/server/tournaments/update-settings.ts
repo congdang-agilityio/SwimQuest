@@ -51,7 +51,7 @@ export async function updateSettings(
 
   if (typeof input !== "object" || input === null || Array.isArray(input))
     return { ok: false, reason: "INVALID", errors: { body: "INVALID_BODY" } };
-  const parsed = settings.schema.safeParse(input);
+  const parsed = (settings.schemaFor?.(tournament) ?? settings.schema).safeParse(input);
   if (!parsed.success)
     return { ok: false, reason: "INVALID", errors: errorsOf(parsed.error.issues) };
 

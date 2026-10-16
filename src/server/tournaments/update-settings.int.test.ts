@@ -11,6 +11,7 @@ const DURING = new Date("2026-11-15T12:00:00+07:00");
 const AFTER = new Date("2026-12-05T12:00:00+07:00");
 const INPUT = { longestSwimCountedKm: "5", dailyLimitKm: "12.5", swimTypeAllowed: "POOL_ONLY" };
 const SAVED = { longestSwimCountedM: 5_000, dailyLimitM: 12_500, swimTypeAllowed: "POOL_ONLY" };
+const DEADLINE_DEFAULTS = { submissionDays: 7, lateUploadDays: 3, startChoiceDeadlineAt: null };
 const DEFAULTS = { longestSwimCountedM: 10_000, dailyLimitM: 10_000, swimTypeAllowed: "ANY" };
 
 async function clean() {
@@ -201,9 +202,12 @@ describe("getSettings", () => {
     const user = await makeUser("organizer@example.com");
     const t = await makeTournament(user.id, "DRAFT");
 
-    await expect(getSettings(t.id)).resolves.toEqual({ swim: DEFAULTS });
+    await expect(getSettings(t.id)).resolves.toEqual({
+      swim: DEFAULTS,
+      deadlines: DEADLINE_DEFAULTS,
+    });
     await updateSettings(user.id, t.id, "swim", INPUT, BEFORE);
-    await expect(getSettings(t.id)).resolves.toEqual({ swim: SAVED });
+    await expect(getSettings(t.id)).resolves.toEqual({ swim: SAVED, deadlines: DEADLINE_DEFAULTS });
   });
 
   it("returns null for a missing tournament", async () => {
