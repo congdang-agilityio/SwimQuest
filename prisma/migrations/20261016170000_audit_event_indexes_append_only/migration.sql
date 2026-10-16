@@ -12,7 +12,9 @@ CREATE INDEX "AuditEvent_action_createdAt_idx" ON "AuditEvent"("action", "create
 
 -- Append-only audit events (hand-written).
 -- Every DELETE and every UPDATE is rejected, except the update made by the foreign key
--- "ON DELETE SET NULL" when an actor user is deleted: it only sets "actorUserId" to NULL.
+-- "ON DELETE SET NULL" when an actor user is deleted: it only sets "actorUserId" to NULL,
+-- and only once that user no longer exists (the FK action runs after the user row is gone),
+-- so a direct null-out while the user still exists is rejected.
 CREATE FUNCTION audit_event_append_only() RETURNS trigger
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -20,6 +22,7 @@ BEGIN
     AND OLD."actorUserId" IS NOT NULL
     AND NEW."actorUserId" IS NULL
     AND (to_jsonb(NEW) - 'actorUserId') = (to_jsonb(OLD) - 'actorUserId')
+    AND NOT EXISTS (SELECT 1 FROM "User" WHERE "id" = OLD."actorUserId")
   THEN
     RETURN NEW;
   END IF;

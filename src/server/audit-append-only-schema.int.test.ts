@@ -57,6 +57,18 @@ describe("AuditEvent append-only schema", () => {
     expect(stored.createdAt).toEqual(event.createdAt);
   });
 
+  it("rejects setting actorUserId to null while the user still exists", async () => {
+    const { event } = await setup();
+    await expect(
+      db.$executeRawUnsafe(
+        `UPDATE "AuditEvent" SET "actorUserId" = NULL WHERE "id" = $1`,
+        event.id,
+      ),
+    ).rejects.toThrow(/append-only/);
+    const stored = await db.auditEvent.findUniqueOrThrow({ where: { id: event.id } });
+    expect(stored.actorUserId).not.toBeNull();
+  });
+
   it("rejects setting actorUserId to null together with another column", async () => {
     const { event } = await setup();
     await expect(
