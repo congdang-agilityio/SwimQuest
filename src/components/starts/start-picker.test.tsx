@@ -4,11 +4,14 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import routes from "../../../messages/vi/routes.json";
 import vi_ from "../../../messages/vi/starts.json";
+import { browser } from "@/lib/http/client-fetch";
 import { StartPicker } from "./start-picker";
 
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, "", "/");
 });
 
 const NAMES = routes.route01;
@@ -141,6 +144,18 @@ describe("StartPicker", () => {
       setup({ currentSlug: "son_thuy" });
       confirm();
       expect((await screen.findByRole("alert")).textContent).toBe(vi_.picker.errors[code]);
+    });
+
+    it("sends the player to log in again on 401 and shows no error", async () => {
+      vi.stubGlobal("fetch", reply(401, { error: { code: "UNAUTHENTICATED" } }));
+      const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+      window.history.replaceState(null, "", "/team/start");
+      setup({ currentSlug: "son_thuy" });
+      confirm();
+      await waitFor(() => expect(go).toHaveBeenCalledWith("/login?next=%2Fteam%2Fstart"));
+      await new Promise((r) => setTimeout(r, 20));
+      expect(screen.queryByRole("alert")).toBeNull();
+      expect(screen.queryByRole("status")).toBeNull();
     });
 
     it("shows the generic message for other failures and network errors", async () => {

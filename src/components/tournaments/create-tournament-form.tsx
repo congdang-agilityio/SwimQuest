@@ -3,6 +3,7 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { RouteFields } from "./route-fields";
+import { clientFetch } from "@/lib/http/client-fetch";
 import { listRoutes } from "@/lib/routes";
 import { defaultSeasonTimes } from "@/lib/time/vn";
 import { parseTournamentDraft, type TournamentDraftErrors } from "@/lib/validation/tournament";
@@ -42,7 +43,7 @@ export function CreateTournamentForm() {
     if (!parsed.ok) return;
     setBusy(true);
     try {
-      const res = await fetch("/api/tournaments", {
+      const res = await clientFetch("/api/tournaments", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(body),

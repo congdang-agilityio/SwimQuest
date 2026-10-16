@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { clientFetch } from "@/lib/http/client-fetch";
 import { formatVnDateTime } from "@/lib/time/vn";
 
 const control = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
@@ -49,7 +50,7 @@ export function StartPicker({
     setError(null);
     setBusy(true);
     try {
-      const res = await fetch(`/api/teams/${encodeURIComponent(teamId)}/start`, {
+      const res = await clientFetch(`/api/teams/${encodeURIComponent(teamId)}/start`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ destination: selected }),
