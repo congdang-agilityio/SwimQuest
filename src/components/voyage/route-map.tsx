@@ -17,6 +17,8 @@ export type RouteMapProps = {
 };
 
 const ASPECT = 1.6; // map box is 16:10; SVG viewBox is 160 x 100
+// Names sit right of their icon (open sea), except near the right edge where they would not fit.
+const NAME_LEFT_FROM_X = 75;
 /** Route map base: background and landmarks from the art registry, names and progress as text. */
 export function RouteMap({
   routeId,
@@ -68,17 +70,8 @@ export function RouteMap({
           <div
             key={d.slug}
             data-testid={`destination-${d.slug}`}
-            style={{
-              position: "absolute",
-              left: `${d.x}%`,
-              top: `${d.y}%`,
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "14%",
-              fontSize: "0.8rem",
-            }}
+            className={styles.destination}
+            style={{ left: `${d.x}%`, top: `${d.y}%` }}
           >
             <ArtImage
               art={landmarkArt(d.slug)}
@@ -87,11 +80,9 @@ export function RouteMap({
               fallback={<span aria-hidden="true">●</span>}
             />
             <span
-              style={{
-                background: "#fffd",
-                fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400,
-                textAlign: "center",
-              }}
+              data-testid="landmark-name"
+              className={d.x >= NAME_LEFT_FROM_X ? styles.nameLeft : styles.nameRight}
+              style={{ fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400 }}
             >
               {t(`routes.${routeId}.${d.slug}`)}
               {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}

@@ -136,6 +136,10 @@ test("a team without a start sees the notice, no path and no ship", async ({ pag
   await expect(page.getByTestId("route-path")).toHaveCount(0);
 });
 
+type Box = { x: number; y: number; width: number; height: number };
+const intersects = (a: Box, b: Box) =>
+  a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+
 /** The progress label is fully inside the map and does not cover the Lý Sơn name. */
 async function expectLabelOnMap(page: Page, { clear = false } = {}) {
   const map = await page.getByTestId("route-map").boundingBox();
@@ -256,4 +260,56 @@ test.describe("progress label at 0% from Non Nước", () => {
 test.describe("progress label at 0% from Non Nước on a 320 px phone", () => {
   test.use({ viewport: { width: 320, height: 568 } });
   labelAtNonNuocStartTests();
+});
+
+async function expectNamesReadable(page: Page) {
+  const map = (await page.getByTestId("route-map").boundingBox()) as Box;
+  // Every rendered destination is checked, so a new or missed one cannot hide an overlap.
+  const dests = page.locator('[data-testid^="destination-"]');
+  await expect(dests).toHaveCount(7); // route01 has 7 destinations
+  const slugs: string[] = [];
+  const names: Box[] = [];
+  const icons: Box[] = [];
+  for (const dest of await dests.all()) {
+    const slug = (await dest.getAttribute("data-testid"))!.replace("destination-", "");
+    const name = (await dest.getByTestId("landmark-name").boundingBox()) as Box;
+    expect(name, `${slug} name`).not.toBeNull();
+    expect(name.x, `${slug} left`).toBeGreaterThanOrEqual(map.x);
+    expect(name.y, `${slug} top`).toBeGreaterThanOrEqual(map.y);
+    expect(name.x + name.width, `${slug} right`).toBeLessThanOrEqual(map.x + map.width);
+    expect(name.y + name.height, `${slug} bottom`).toBeLessThanOrEqual(map.y + map.height);
+    slugs.push(slug);
+    names.push(name);
+    const icon = await dest.locator("img").first().boundingBox();
+    if (icon) icons.push(icon);
+  }
+  for (let i = 0; i < names.length; i++) {
+    for (let j = i + 1; j < names.length; j++) {
+      expect(intersects(names[i], names[j]), `${slugs[i]}/${slugs[j]}`).toBe(false);
+    }
+    for (const icon of icons) expect(intersects(names[i], icon), slugs[i]).toBe(false);
+  }
+}
+
+test.describe("destination names stay readable", () => {
+  test("on the project viewport", async ({ page }, testInfo) => {
+    await seedTeamOnMap(page, `names-${testInfo.project.name}-${Date.now()}`, {
+      start: "non_nuoc",
+      points: 0,
+    });
+    await page.goto("/voyage");
+    await expectNamesReadable(page);
+  });
+});
+
+test.describe("destination names stay readable at 320 px", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  test("no overlap on a 320 px viewport", async ({ page }, testInfo) => {
+    await seedTeamOnMap(page, `names320-${testInfo.project.name}-${Date.now()}`, {
+      start: "non_nuoc",
+      points: 0,
+    });
+    await page.goto("/voyage");
+    await expectNamesReadable(page);
+  });
 });
