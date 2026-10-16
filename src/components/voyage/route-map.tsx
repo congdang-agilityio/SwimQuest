@@ -6,17 +6,14 @@ import { formatProgressPct } from "@/lib/scoring/progress";
 import { ShipMarker } from "./ship-marker";
 import styles from "./voyage.module.css";
 
-type Point = { x: number; y: number };
-
 export type RouteMapProps = {
   routeId: string;
   teamName: string;
   destinations: { slug: string; x: number; y: number; isFinish: boolean }[];
-  /** Points from the start to the finish; null when the team has no start. */
-  path: Point[] | null;
+  path: { x: number; y: number }[] | null;
   start: { slug: string; automaticAtIso: string | null } | null;
   progress: { progressBp: number; routeKmReached: number; routeKmTotal: number };
-  ship: Point | null;
+  ship: { x: number; y: number } | null;
 };
 
 /** Route map base: background and landmarks from the art registry, names as text. */
