@@ -53,3 +53,12 @@ export function isJoiningOpen(t: LifecycleTournament, now: Date): boolean {
 export function isRouteEditable(t: LifecycleTournament, now: Date): boolean {
   return now.getTime() < t.seasonStartAt.getTime();
 }
+
+/** Season configuration that is fixed from the season start (FR-24, BR-06), as stored columns. */
+export const SEASON_LOCKED_FIELDS = ["seasonStartAt", "routeId", "routeDistanceM"] as const;
+
+/** Season configuration may change only in a draft, or a published tournament before its start. */
+export function isSeasonConfigLocked(t: LifecycleTournament, now: Date): boolean {
+  const status = effectiveStatus(t, now);
+  return status !== "DRAFT" && status !== "PUBLISHED";
+}

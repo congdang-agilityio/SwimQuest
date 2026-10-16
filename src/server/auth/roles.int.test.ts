@@ -6,6 +6,7 @@ import {
   NotFoundError,
   requireCaptain,
   requireOrganizer,
+  requireOrganizerOrAdmin,
   requirePlatformAdmin,
   requireReviewer,
   roleErrorResponse,
@@ -97,6 +98,34 @@ describe("role guards", () => {
         ForbiddenError,
       );
       expect(await isOrganizer(bad as string, tournament.id)).toBe(false);
+    });
+  });
+
+  describe("requireOrganizerOrAdmin", () => {
+    it("returns the tournament for its organizer and for a platform admin", async () => {
+      const { organizer, tournament } = await setup();
+      const admin = await user("admin", true);
+      for (const u of [organizer, admin]) {
+        await expect(requireOrganizerOrAdmin(u, tournament.id)).resolves.toMatchObject({
+          id: tournament.id,
+        });
+      }
+    });
+
+    it("refuses another player, even a captain, and no user", async () => {
+      const { captain, outsider, tournament } = await setup();
+      for (const u of [captain, outsider, null]) {
+        await expect(requireOrganizerOrAdmin(u, tournament.id)).rejects.toBeInstanceOf(
+          ForbiddenError,
+        );
+      }
+    });
+
+    it("throws NotFoundError for an unknown tournament, also for an admin", async () => {
+      const admin = await user("admin", true);
+      for (const id of ["missing", ""]) {
+        await expect(requireOrganizerOrAdmin(admin, id)).rejects.toBeInstanceOf(NotFoundError);
+      }
     });
   });
 
