@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import { deadlinesSettingsSchema } from "./deadlines";
+import { POINTS_COLUMNS, pointsSettingsSchema } from "./points";
 import { swimSettingsSchema } from "./swim";
 import { visibilitySettingsSchema } from "./visibility";
 
@@ -28,6 +29,7 @@ export const SETTINGS_GROUPS = {
     columns: ["submissionDays", "lateUploadDays", "startChoiceDeadlineAt"],
     seasonLocked: true,
   },
+  points: { schema: pointsSettingsSchema, columns: POINTS_COLUMNS, seasonLocked: true },
   // Not season configuration (FR-24): editable at any time, even while the season is active.
   visibility: {
     schema: visibilitySettingsSchema,

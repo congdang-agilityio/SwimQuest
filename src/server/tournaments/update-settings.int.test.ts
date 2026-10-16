@@ -13,6 +13,18 @@ const INPUT = { longestSwimCountedKm: "5", dailyLimitKm: "12.5", swimTypeAllowed
 const SAVED = { longestSwimCountedM: 5_000, dailyLimitM: 12_500, swimTypeAllowed: "POOL_ONLY" };
 const DEADLINE_DEFAULTS = { submissionDays: 7, lateUploadDays: 3, startChoiceDeadlineAt: null };
 const DEFAULTS = { longestSwimCountedM: 10_000, dailyLimitM: 10_000, swimTypeAllowed: "ANY" };
+const POINT_DEFAULTS = {
+  pointsPerKm: 10,
+  firstSwimBonusPoints: 20,
+  longSwimTier1M: 1000,
+  longSwimTier1Points: 10,
+  longSwimTier2M: 3000,
+  longSwimTier2Points: 25,
+  multiplierTwoDaysPct: 110,
+  multiplierThreeDaysPct: 120,
+  streakStepPct: 5,
+  multiplierMaxPct: 140,
+};
 
 async function clean() {
   await db.xpEntry.deleteMany();
@@ -247,12 +259,14 @@ describe("getSettings", () => {
     await expect(getSettings(t.id)).resolves.toEqual({
       swim: DEFAULTS,
       deadlines: DEADLINE_DEFAULTS,
+      points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
     await updateSettings(user.id, t.id, "swim", INPUT, BEFORE);
     await expect(getSettings(t.id)).resolves.toEqual({
       swim: SAVED,
       deadlines: DEADLINE_DEFAULTS,
+      points: POINT_DEFAULTS,
       visibility: { visibility: null },
     });
   });
