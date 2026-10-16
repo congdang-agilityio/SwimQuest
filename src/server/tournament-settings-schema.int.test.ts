@@ -2,6 +2,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { db } from "./db";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.teamMember.deleteMany();

@@ -17,6 +17,7 @@ type Status = "DRAFT" | "PUBLISHED" | "ACTIVE" | "COMPLETED" | "ARCHIVED";
 
 async function clean() {
   await db.$executeRaw`TRUNCATE "AuditEvent"`;
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

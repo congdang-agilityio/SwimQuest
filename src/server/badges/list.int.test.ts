@@ -4,6 +4,7 @@ import { listMembersBadges, listUserBadges } from "./list";
 
 async function clean() {
   await db.badge.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();

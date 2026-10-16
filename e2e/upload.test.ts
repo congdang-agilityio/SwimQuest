@@ -19,6 +19,7 @@ test.afterAll(async () => {
   });
   const userId = { in: users.map((u) => u.id) };
   // Points entries reference swim results, so they go first.
+  await prisma.xpEntry.deleteMany({ where: { userId } });
   await prisma.pointsEntry.deleteMany({ where: { userId } });
   await prisma.swimResult.deleteMany({ where: { userId } });
   await prisma.swim.deleteMany({ where: { userId } });

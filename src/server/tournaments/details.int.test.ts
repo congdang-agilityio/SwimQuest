@@ -16,6 +16,7 @@ const DURING = new Date("2026-11-10T00:00:00+07:00");
 
 /** Order: points entries, swim results, swims, members, teams, tournaments, sessions, users. */
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

@@ -6,6 +6,7 @@ import { REASON_CODES } from "@/server/checks/reasons";
 import { getReviewItem, getReviewQueue, reasonOf } from "./queue";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

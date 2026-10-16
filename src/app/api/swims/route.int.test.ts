@@ -35,6 +35,7 @@ async function signIn(n: string) {
   return u;
 }
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.swim.deleteMany();
   await db.session.deleteMany();
   await db.user.deleteMany();

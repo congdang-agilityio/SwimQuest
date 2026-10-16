@@ -36,6 +36,7 @@ describe("current user", () => {
     jar.token = undefined;
     await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
+    await db.xpEntry.deleteMany();
     await db.user.deleteMany();
   });
 

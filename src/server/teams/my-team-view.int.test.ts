@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { getMyTeamView } from "./my-team-view";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();

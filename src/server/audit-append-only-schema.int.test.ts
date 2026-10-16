@@ -5,6 +5,7 @@ import { db } from "./db";
 async function clean() {
   await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 

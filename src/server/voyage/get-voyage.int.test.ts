@@ -4,6 +4,7 @@ import { getVoyage } from "./get-voyage";
 import anchors from "../../../public/art/route01/map-anchors.json";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
@@ -121,6 +122,7 @@ describe("getVoyage", () => {
 });
 
 async function setup2(userId: string, tournamentId: string, teamId: string) {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   const at = async () => (await getVoyage(userId))!.ship!;
   const a = await at();

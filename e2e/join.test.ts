@@ -29,6 +29,7 @@ test.afterAll(async () => {
   const swims = (
     await prisma.swim.findMany({ where: { userId: { in: ids } }, select: { id: true } })
   ).map((s) => s.id);
+  await prisma.xpEntry.deleteMany({ where: { userId: { in: ids } } });
   await prisma.pointsEntry.deleteMany({
     where: { OR: [{ teamId: { in: teams } }, { userId: { in: ids } }] },
   });

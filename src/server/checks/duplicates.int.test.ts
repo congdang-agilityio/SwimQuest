@@ -30,11 +30,13 @@ async function makeSwim(userId: string, hash: string, start: string, end: string
 
 describe("findDuplicateOf", () => {
   beforeEach(async () => {
+    await db.xpEntry.deleteMany();
     await db.swim.deleteMany();
     await db.session.deleteMany();
     await db.user.deleteMany();
   });
   afterAll(async () => {
+    await db.xpEntry.deleteMany();
     await db.swim.deleteMany();
     await db.user.deleteMany();
     await db.$disconnect();

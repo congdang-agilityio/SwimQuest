@@ -5,6 +5,7 @@ async function clean() {
   await db.report.deleteMany();
   await db.tournamentQuotaRequest.deleteMany();
   await db.platformSetting.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

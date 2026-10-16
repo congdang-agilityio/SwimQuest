@@ -5,6 +5,7 @@ import { db } from "./db";
 async function clean() {
   await db.dispute.deleteMany();
   await db.reviewHelper.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

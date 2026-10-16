@@ -13,6 +13,7 @@ function tick(authorization?: string) {
 async function clean() {
   await db.weeklyResult.deleteMany();
   await db.weekSettlement.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

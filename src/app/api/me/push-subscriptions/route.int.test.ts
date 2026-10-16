@@ -31,6 +31,7 @@ const sub = (n: string, auth = "a") => ({
 async function clean() {
   await db.pushSubscription.deleteMany();
   await db.session.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 async function makeUser(n: string) {

@@ -15,6 +15,7 @@ const DEADLINE_DEFAULTS = { submissionDays: 7, lateUploadDays: 3, startChoiceDea
 const DEFAULTS = { longestSwimCountedM: 10_000, dailyLimitM: 10_000, swimTypeAllowed: "ANY" };
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

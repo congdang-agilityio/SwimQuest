@@ -51,6 +51,7 @@ const emailPrefix = () => `upload-${test.info().project.name}-`;
  */
 async function removeUploadUsers(): Promise<void> {
   const where = { user: { email: { startsWith: emailPrefix() } } };
+  await db.xpEntry.deleteMany({ where });
   await db.swimResult.deleteMany({ where: { swim: where } });
   await db.swim.deleteMany({ where });
   await db.user.deleteMany({ where: where.user });

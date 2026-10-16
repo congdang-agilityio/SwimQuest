@@ -14,6 +14,7 @@ const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.swim.deleteMany();
   await db.session.deleteMany();
   await db.user.deleteMany();

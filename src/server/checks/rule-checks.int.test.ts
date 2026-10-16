@@ -141,6 +141,7 @@ describe("runChecks with tournament rule checks", () => {
     const pool = await storeSwim(me.id, "POOL");
     expect((await resultIn(pool.id, t.id)).status).toBe("VERIFIED");
 
+    await db.xpEntry.deleteMany();
     await db.pointsEntry.deleteMany();
     await db.domainEvent.deleteMany();
     await db.swimResult.deleteMany();

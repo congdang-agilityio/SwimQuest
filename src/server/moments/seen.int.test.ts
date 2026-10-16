@@ -4,6 +4,7 @@ import { hasSeen, isValidMomentKey, markSeen, unseenKeys } from "./seen";
 
 async function clean() {
   await db.seenMoment.deleteMany();
+  await db.xpEntry.deleteMany();
   await db.user.deleteMany();
 }
 const mkUser = (n: string) =>

@@ -16,6 +16,7 @@ const { GET } = await import("./route");
 const get = (qs = "") => GET(new Request(`http://localhost/api/me/swims${qs}`));
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.swim.deleteMany();
   await db.session.deleteMany();
   await db.user.deleteMany();

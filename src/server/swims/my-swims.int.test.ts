@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { getMySwim, InvalidCursorError, listMySwims } from "./my-swims";
 
 async function clean() {
+  await db.xpEntry.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
