@@ -23,3 +23,51 @@ export const SWIM_LIMIT_BOUNDS: Readonly<Record<SwimLimitField, { min: number; m
     slowestPaceSecPer100m: { min: 180, max: 600 },
     longestRealisticSwimM: { min: 5_000, max: 60_000 },
   });
+
+/** Platform defaults and sanity bounds, as the platform admin edits them (S-64). */
+export type SwimLimitConfig = {
+  defaults: Record<SwimLimitField, number>;
+  bounds: Record<SwimLimitField, { min: number; max: number }>;
+};
+/** Field errors by path, e.g. `{ "bounds.longestRealisticSwimM": "MIN_ABOVE_MAX" }`. */
+export type LimitConfigErrors = Record<string, string>;
+/** The config used until a platform admin saves one. */
+export const STARTING_SWIM_LIMIT_CONFIG: SwimLimitConfig = Object.freeze({
+  defaults: DEFAULT_SWIM_LIMITS,
+  bounds: SWIM_LIMIT_BOUNDS,
+});
+
+const FIELDS = Object.keys(DEFAULT_SWIM_LIMITS) as SwimLimitField[];
+const at = (v: unknown, key: string): unknown =>
+  typeof v === "object" && v !== null && !Array.isArray(v)
+    ? (v as Record<string, unknown>)[key]
+    : undefined;
+const isCount = (v: unknown): v is number => Number.isSafeInteger(v) && (v as number) > 0;
+
+/**
+ * Checks a config (S-64 AC 4): positive whole numbers (s per 100 m or m), each min <= max, each
+ * default inside its bounds, and the default fastest pace faster than the default slowest.
+ */
+export function validateLimitConfig(
+  input: unknown,
+): { ok: true; config: SwimLimitConfig } | { ok: false; errors: LimitConfigErrors } {
+  const errors: LimitConfigErrors = {};
+  const config = { defaults: {}, bounds: {} } as SwimLimitConfig;
+  for (const f of FIELDS) {
+    const value = at(at(input, "defaults"), f);
+    const bound = at(at(input, "bounds"), f);
+    const [min, max] = [at(bound, "min"), at(bound, "max")];
+    if (!isCount(value)) errors[`defaults.${f}`] = "INVALID_NUMBER";
+    if (!isCount(min)) errors[`bounds.${f}.min`] = "INVALID_NUMBER";
+    if (!isCount(max)) errors[`bounds.${f}.max`] = "INVALID_NUMBER";
+    if (!isCount(value) || !isCount(min) || !isCount(max)) continue;
+    if (min > max) errors[`bounds.${f}`] = "MIN_ABOVE_MAX";
+    else if (value < min || value > max) errors[`defaults.${f}`] = "OUT_OF_BOUNDS";
+    config.defaults[f] = value;
+    config.bounds[f] = { min, max };
+  }
+  const { fastestPaceSecPer100m: fast, slowestPaceSecPer100m: slow } = config.defaults;
+  if (fast !== undefined && slow !== undefined && fast >= slow)
+    errors["defaults.fastestPaceSecPer100m"] ??= "NOT_FASTER_THAN_SLOWEST";
+  return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true, config };
+}
