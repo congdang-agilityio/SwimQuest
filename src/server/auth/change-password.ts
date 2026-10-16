@@ -24,7 +24,10 @@ const asString = (value: unknown) => (typeof value === "string" ? value : "");
  * the sign-up rule and must be entered twice. On success, in one transaction: the new argon2id
  * hash is stored, `mustChangePassword` is cleared, every other session of the user is deleted
  * (`currentSessionId` stays) and PASSWORD_CHANGED is audited without any password or hash.
- * Runs exactly one argon2 verify, also for an unknown or inactive user.
+ * A missing, non-string or unknown `currentSessionId` revokes all of the user's sessions.
+ * For any non-empty current password of at most 128 characters it runs exactly one argon2
+ * verify, also for an unknown or inactive user. If the password changed concurrently after the
+ * verify, the change is refused with WRONG_PASSWORD.
  */
 export async function changePassword(
   userId: string,

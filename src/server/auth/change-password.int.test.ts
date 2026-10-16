@@ -84,6 +84,59 @@ describe("changePassword", () => {
     await expect(db.session.count({ where: { userId: user.id } })).resolves.toBe(1);
   });
 
+  it.each([
+    ["missing", undefined],
+    ["unknown", "not-a-session-of-this-user"],
+  ])("revokes every session of the user for a %s currentSessionId", async (_, sessionId) => {
+    const { user, current, other } = await setUp();
+    const stranger = await db.user.create({
+      data: { email: "other@example.com", passwordHash: "x", displayName: "Other" },
+    });
+    const strangerSession = await createSession(stranger.id);
+
+    const result = await changePassword(user.id, sessionId as never, {
+      current: OLD,
+      next: NEW,
+      confirm: NEW,
+    });
+
+    expect(result).toEqual({ ok: true });
+    await expect(db.session.count({ where: { userId: user.id } })).resolves.toBe(0);
+    await expect(findValidSession(current.token)).resolves.toBeNull();
+    await expect(findValidSession(other.token)).resolves.toBeNull();
+    await expect(findValidSession(strangerSession.token)).resolves.not.toBeNull();
+  });
+
+  it("lets exactly one of two concurrent changes win", async () => {
+    const { user, currentSessionId } = await setUp();
+    const candidates = ["first new password", "second new password"];
+
+    const results = await Promise.all(
+      candidates.map((next) =>
+        changePassword(user.id, currentSessionId, { current: OLD, next, confirm: next }),
+      ),
+    );
+
+    const winners = results.flatMap((result, i) => (result.ok ? [candidates[i]] : []));
+    expect(winners).toHaveLength(1);
+    expect(results.filter((result) => !result.ok)).toEqual([
+      { ok: false, errors: { current: "WRONG_PASSWORD" } },
+    ]);
+    await expect(db.auditEvent.count({ where: { action: "PASSWORD_CHANGED" } })).resolves.toBe(1);
+    const loser = candidates.find((candidate) => candidate !== winners[0]);
+    await expect(logIn({ email: EMAIL, password: winners[0] })).resolves.toMatchObject({
+      ok: true,
+    });
+    await expect(logIn({ email: EMAIL, password: loser as string })).resolves.toEqual({
+      ok: false,
+      reason: "INVALID_CREDENTIALS",
+    });
+    await expect(logIn({ email: EMAIL, password: OLD })).resolves.toEqual({
+      ok: false,
+      reason: "INVALID_CREDENTIALS",
+    });
+  });
+
   it("records PASSWORD_CHANGED without any password or hash", async () => {
     const { user, currentSessionId } = await setUp({ mustChangePassword: true });
 
