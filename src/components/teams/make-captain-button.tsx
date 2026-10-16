@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { clientFetch } from "@/lib/http/client-fetch";
 
 type Props = { teamId: string; userId: string; name: string };
 
@@ -16,7 +17,7 @@ export function MakeCaptainButton({ teamId, userId, name }: Props) {
   async function appoint() {
     setBusy(true);
     setFailed(false);
-    const res = await fetch(`/api/teams/${teamId}/captain`, {
+    const res = await clientFetch(`/api/teams/${teamId}/captain`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ userId }),

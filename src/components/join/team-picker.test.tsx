@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../messages/en/join.json";
 import { TeamPicker } from "./team-picker";
+import { browser } from "@/lib/http/client-fetch";
 
 const push = vi.fn();
 const refresh = vi.fn();
@@ -107,5 +108,18 @@ describe("TeamPicker", () => {
     fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
     expect((await screen.findByRole("alert")).textContent).toBe(en.failed);
     expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("sends the player to log in again on 401 and shows no error", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 401 })));
+    const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+    window.history.replaceState(null, "", "/join/tok?team=a");
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
+    await waitFor(() => expect(go).toHaveBeenCalledWith("/login?next=%2Fjoin%2Ftok%3Fteam%3Da"));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(push).not.toHaveBeenCalled();
+    window.history.replaceState(null, "", "/");
   });
 });

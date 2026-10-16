@@ -1,13 +1,19 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import vi_ from "../../../messages/vi/teams.json";
 import routesVi from "../../../messages/vi/routes.json";
 import { TeamList } from "./team-list";
+import { browser } from "@/lib/http/client-fetch";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, "", "/");
+});
 
 const team = (id: string, memberCount: number, memberLimit: number) => ({
   id,
@@ -93,5 +99,21 @@ describe("TeamList start status (#158)", () => {
     expect(screen.getByText(/Bãi Sơn Thủy/)).toBeTruthy();
     expect(screen.getByText("Chưa chọn điểm xuất phát")).toBeTruthy();
     expect(screen.getAllByText(/Đã khóa từ 06:00 01\/11\/2099/)).toHaveLength(2);
+  });
+});
+
+describe("TeamList session expiry", () => {
+  it("sends the player to log in again when deleting gets a 401, with no error", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 401 })));
+    const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+    window.history.replaceState(null, "", "/tournaments/t1/manage");
+    setup(true);
+    fireEvent.click(screen.getByRole("button", { name: vi_.manage.delete }));
+    fireEvent.click(screen.getByRole("button", { name: vi_.manage.deleteConfirmYes }));
+    await waitFor(() =>
+      expect(go).toHaveBeenCalledWith("/login?next=%2Ftournaments%2Ft1%2Fmanage"),
+    );
+    await new Promise((r) => setTimeout(r, 20));
+    expect(screen.queryByRole("alert")).toBeNull();
   });
 });

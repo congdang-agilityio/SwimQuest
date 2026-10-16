@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { TeamEmblem } from "@/components/teams/team-emblem";
+import { clientFetch } from "@/lib/http/client-fetch";
 
 export type PickerTeam = {
   id: string;
@@ -48,7 +49,7 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
   async function choose(teamId: string) {
     setChosenId(teamId);
     setBusy(true);
-    const res = await fetch(`/api/join/${encodeURIComponent(token)}`, {
+    const res = await clientFetch(`/api/join/${encodeURIComponent(token)}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ teamId }),

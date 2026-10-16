@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { TeamEmblem } from "./team-emblem";
 import { TeamForm } from "./team-form";
 import { TeamStartStatus } from "./team-start-status";
+import { clientFetch } from "@/lib/http/client-fetch";
 
 export type TeamRow = {
   id: string;
@@ -50,7 +51,7 @@ export function TeamList({ tournamentId, teams, capacity, isDraft, startLock }: 
 
   async function remove(id: string) {
     setDeleteFailed(false);
-    const res = await fetch(`/api/teams/${id}`, { method: "DELETE" }).catch(() => null);
+    const res = await clientFetch(`/api/teams/${id}`, { method: "DELETE" }).catch(() => null);
     if (res?.status === 204) {
       setConfirming(null);
       router.refresh();

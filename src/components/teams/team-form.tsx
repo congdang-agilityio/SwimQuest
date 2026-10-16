@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { EMBLEM_KEYS } from "@/lib/emblems";
+import { clientFetch } from "@/lib/http/client-fetch";
 import { parseTeamInput, type TeamErrorCode, type TeamField } from "@/lib/validation/team";
 import { TeamEmblem } from "./team-emblem";
 
@@ -51,7 +52,7 @@ export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
     if (!parsed.ok) return;
     setBusy(true);
     try {
-      const res = await fetch(action.url, {
+      const res = await clientFetch(action.url, {
         method: action.method,
         headers: { "content-type": "application/json" },
         body: JSON.stringify(parsed.data),
