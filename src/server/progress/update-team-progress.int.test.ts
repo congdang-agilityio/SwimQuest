@@ -2,11 +2,13 @@ import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vites
 import type { SwimResult } from "@prisma/client";
 import { runChecks, type Tx } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
+import { getProgressLeaderboard } from "@/server/leaderboard/progress-leaderboard";
 import { awardDistancePoints } from "@/server/scoring/award-distance-points";
-import { updateTeamProgress } from "./update-team-progress";
+import { updateTeamProgress, type FinishLostReason } from "./update-team-progress";
 
 async function clean() {
   await db.domainEvent.deleteMany();
+  await db.notification.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
@@ -88,6 +90,35 @@ function barrier(count: number) {
     if (++arrived === count) release();
     return all;
   };
+}
+
+/**
+ * Adds `points` (negative for a revocation) to the team at `at` and refreshes its progress in
+ * the same transaction, as a revocation or a player move does.
+ */
+function changePoints(
+  tournamentId: string,
+  teamId: string,
+  userId: string,
+  points: number,
+  at: string,
+  reason?: FinishLostReason,
+) {
+  const now = new Date(at);
+  return db.$transaction(async (tx) => {
+    await tx.pointsEntry.create({
+      data: {
+        tournamentId,
+        teamId,
+        userId,
+        kind: points < 0 ? "REVERSAL" : "DISTANCE",
+        points,
+        vnDay: "2026-06-01",
+        createdAt: now,
+      },
+    });
+    await updateTeamProgress(tx, tournamentId, teamId, now, reason);
+  });
 }
 
 const teamRow = (id: string) => db.team.findUniqueOrThrow({ where: { id } });
@@ -184,6 +215,120 @@ describe("updateTeamProgress", () => {
       _sum: { points: true },
     });
     expect(points._sum.points).toBe(130);
+  });
+
+  it("withdraws the finish when a revoked swim takes the team below 100%", async () => {
+    const me = await user("me");
+    const { t, team } = await teamOf([me.id]);
+    await changePoints(t.id, team.id, me.id, 100, "2026-06-01T08:00:00+07:00");
+
+    await changePoints(t.id, team.id, me.id, -30, "2026-06-02T09:00:00+07:00", "SWIM_REVOKED");
+
+    const row = await teamRow(team.id);
+    expect(row.progressBp).toBe(7000);
+    expect(row.finishedAt).toBeNull();
+    expect(row.finishLostAt).toEqual(new Date("2026-06-02T09:00:00+07:00"));
+    expect(row.finishLostReason).toBe("SWIM_REVOKED");
+    const lost = await eventsOf("TEAM_FINISH_LOST");
+    expect(lost.map((e) => e.payload)).toEqual([{ tournamentId: t.id, teamId: team.id }]);
+    const changed = await eventsOf("TEAM_PROGRESS_CHANGED");
+    expect(changed.map((e) => e.payload)).toEqual([
+      { tournamentId: t.id, teamId: team.id, fromBp: 0, toBp: 10000 },
+      { tournamentId: t.id, teamId: team.id, fromBp: 10000, toBp: 7000 },
+    ]);
+  });
+
+  it("records PLAYER_MOVED when a moved player's points take the team below 100%", async () => {
+    const a = await user("a");
+    const b = await user("b");
+    const { t, team } = await teamOf([a.id, b.id]);
+    const other = await db.team.create({
+      data: { tournamentId: t.id, name: "Sharks", emblemKey: "shark", memberLimit: 5 },
+    });
+    await changePoints(t.id, team.id, a.id, 60, "2026-06-01T08:00:00+07:00");
+    await changePoints(t.id, team.id, b.id, 50, "2026-06-01T09:00:00+07:00");
+
+    const movedAt = new Date("2026-06-03T10:00:00+07:00");
+    await db.$transaction(async (tx) => {
+      await tx.pointsEntry.updateMany({ where: { userId: b.id }, data: { teamId: other.id } });
+      for (const id of [team.id, other.id].sort()) {
+        await updateTeamProgress(tx, t.id, id, movedAt, "PLAYER_MOVED");
+      }
+    });
+
+    const row = await teamRow(team.id);
+    expect(row.progressBp).toBe(6000);
+    expect(row.finishedAt).toBeNull();
+    expect(row.finishLostAt).toEqual(movedAt);
+    expect(row.finishLostReason).toBe("PLAYER_MOVED");
+    expect((await teamRow(other.id)).finishLostAt).toBeNull();
+    expect(await eventsOf("TEAM_FINISH_LOST")).toHaveLength(1);
+  });
+
+  it("does not withdraw a finish while the team stays at 100%", async () => {
+    const me = await user("me");
+    const { team, t } = await teamOf([me.id]);
+    await changePoints(t.id, team.id, me.id, 130, "2026-06-01T08:00:00+07:00");
+
+    await changePoints(t.id, team.id, me.id, -30, "2026-06-02T09:00:00+07:00", "SWIM_REVOKED");
+
+    const row = await teamRow(team.id);
+    expect(row.finishedAt).toEqual(new Date("2026-06-01T08:00:00+07:00"));
+    expect(row.finishLostAt).toBeNull();
+    expect(await eventsOf("TEAM_FINISH_LOST")).toEqual([]);
+  });
+
+  it("records a new finish time when a withdrawn team reaches 100% again", async () => {
+    const me = await user("me");
+    const { t, team } = await teamOf([me.id]);
+    await changePoints(t.id, team.id, me.id, 100, "2026-06-01T08:00:00+07:00");
+    await changePoints(t.id, team.id, me.id, -30, "2026-06-02T09:00:00+07:00", "SWIM_REVOKED");
+
+    await changePoints(t.id, team.id, me.id, 40, "2026-06-04T07:00:00+07:00");
+
+    const row = await teamRow(team.id);
+    expect(row.progressBp).toBe(10000);
+    expect(row.finishedAt).toEqual(new Date("2026-06-04T07:00:00+07:00"));
+    expect(row.finishLostAt).toBeNull();
+    expect(row.finishLostReason).toBeNull();
+    const finished = await eventsOf("TEAM_FINISHED");
+    expect(finished.map((e) => e.payload)).toEqual([
+      { tournamentId: t.id, teamId: team.id },
+      { tournamentId: t.id, teamId: team.id },
+    ]);
+  });
+
+  it("drops the withdrawn team from the finish on the leaderboard and ranks it by its new time", async () => {
+    const a = await user("a");
+    const b = await user("b");
+    const { t, team: alpha } = await teamOf([a.id]);
+    const bravo = await db.team.create({
+      data: { tournamentId: t.id, name: "Bravo", emblemKey: "shark", memberLimit: 5 },
+    });
+    await db.teamMember.create({ data: { tournamentId: t.id, teamId: bravo.id, userId: b.id } });
+    await changePoints(t.id, alpha.id, a.id, 100, "2026-06-01T08:00:00+07:00");
+    await changePoints(t.id, alpha.id, a.id, -30, "2026-06-02T09:00:00+07:00", "SWIM_REVOKED");
+    await changePoints(t.id, bravo.id, b.id, 100, "2026-06-03T08:00:00+07:00");
+
+    const withdrawn = await getProgressLeaderboard(a.id, t.id);
+    expect(withdrawn.map((r) => [r.teamId, r.progressBp])).toEqual([
+      [bravo.id, 10000],
+      [alpha.id, 7000],
+    ]);
+
+    await changePoints(t.id, alpha.id, a.id, 30, "2026-06-04T07:00:00+07:00");
+
+    const rows = await getProgressLeaderboard(a.id, t.id);
+    expect(rows.map((r) => [r.teamId, r.progressBp, r.reachedAt])).toEqual([
+      [bravo.id, 10000, new Date("2026-06-03T08:00:00+07:00")],
+      [alpha.id, 10000, new Date("2026-06-04T07:00:00+07:00")],
+    ]);
+    const finishOrder = await db.team.findMany({
+      where: { tournamentId: t.id, finishedAt: { not: null } },
+      orderBy: { finishedAt: "asc" },
+      select: { id: true },
+    });
+    expect(finishOrder.map((r) => r.id)).toEqual([bravo.id, alpha.id]);
   });
 
   it("does nothing for a team that does not exist", async () => {
