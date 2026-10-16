@@ -1,3 +1,4 @@
+// GET (organizer) reads every settings group; PATCH { group, values } saves one.
 import { NextResponse } from "next/server";
 import { requireApiUser } from "@/server/auth/current-user";
 import { requireOrganizer, roleErrorResponse } from "@/server/auth/roles";
@@ -9,7 +10,6 @@ export const dynamic = "force-dynamic";
 type Ctx = { params: Promise<{ id: string }> };
 const ok = (body: object) => NextResponse.json(body, { headers: { "cache-control": "no-store" } });
 
-/** Runs `fn`, turning the organizer role errors into their API responses. */
 async function guarded<T>(fn: () => Promise<T>): Promise<T | Response> {
   try {
     return await fn();
@@ -18,7 +18,6 @@ async function guarded<T>(fn: () => Promise<T>): Promise<T | Response> {
   }
 }
 
-/** GET /api/tournaments/:id/settings: every settings group with its values (organizer only). */
 export async function GET(_request: Request, { params }: Ctx) {
   const auth = await requireApiUser();
   if (!auth.ok) return auth.response;
@@ -29,7 +28,6 @@ export async function GET(_request: Request, { params }: Ctx) {
   return settings ? ok({ settings }) : apiError(404, "NOT_FOUND");
 }
 
-/** PATCH /api/tournaments/:id/settings with `{ group, values }`: saves one settings group. */
 export async function PATCH(request: Request, { params }: Ctx) {
   if (!isSameOrigin(request)) return apiError(403, "FORBIDDEN_ORIGIN");
   const auth = await requireApiUser();
