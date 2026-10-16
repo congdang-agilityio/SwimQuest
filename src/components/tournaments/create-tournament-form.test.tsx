@@ -1,16 +1,19 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../messages/en/tournaments.json";
 import viMessages from "../../../messages/vi/tournaments.json";
 import enRoutes from "../../../messages/en/routes.json";
 import viRoutes from "../../../messages/vi/routes.json";
+import { browser } from "@/lib/http/client-fetch";
 import { CreateTournamentForm } from "./create-tournament-form";
 
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, "", "/");
 });
 
 function setup(locale: "vi" | "en" = "en") {
@@ -106,6 +109,26 @@ describe("CreateTournamentForm", () => {
     fireEvent.submit(screen.getByRole("form"));
     expect(await screen.findByText("Something went wrong. Please try again.")).toBeTruthy();
     expect(screen.queryByText(/errors\.SOMETHING_NEW/)).toBeNull();
+  });
+
+  it("sends the player to log in again on 401 and shows no generic error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => Response.json({ error: { code: "UNAUTHENTICATED" } }, { status: 401 })),
+    );
+    const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+    window.history.replaceState(null, "", "/tournaments/new");
+    setup();
+    set(/Tournament name/, "Giải Hè");
+    set(/Description/, "Mô tả");
+    const dates = screen.getAllByLabelText("Date");
+    fireEvent.change(dates[0], { target: { value: "2026-11-01" } });
+    fireEvent.change(dates[1], { target: { value: "2026-11-30" } });
+    set(/Route distance/, "60");
+    fireEvent.submit(screen.getByRole("form"));
+    await waitFor(() => expect(go).toHaveBeenCalledWith("/login?next=%2Ftournaments%2Fnew"));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(screen.queryByText("Something went wrong. Please try again.")).toBeNull();
   });
 
   it("has Vietnamese copy labelled as Vietnam time", () => {

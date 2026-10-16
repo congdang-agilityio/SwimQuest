@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { clientFetch } from "@/lib/http/client-fetch";
 
 type Issue = { code: string; field: string };
 
@@ -37,9 +38,9 @@ export function PublishPanel({ tournamentId }: { tournamentId: string }) {
     setIssues([]);
     setError(null);
     try {
-      const res = await fetch(`/api/tournaments/${tournamentId}/publish`, { method: "POST" }).catch(
-        () => null,
-      );
+      const res = await clientFetch(`/api/tournaments/${tournamentId}/publish`, {
+        method: "POST",
+      }).catch(() => null);
       if (!res) {
         setError("network");
       } else if (res.ok) {

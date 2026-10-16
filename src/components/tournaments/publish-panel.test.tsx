@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import vi_ from "../../../messages/vi/publish.json";
+import { browser } from "@/lib/http/client-fetch";
 import { PublishPanel } from "./publish-panel";
 
 const refresh = vi.fn();
@@ -11,6 +12,8 @@ afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
   refresh.mockClear();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, "", "/");
 });
 
 function setup() {
@@ -106,6 +109,24 @@ describe("PublishPanel", () => {
     ).toBe(true);
     resolve(new Response(JSON.stringify({ status: "PUBLISHED" }), { status: 200 }));
     await waitFor(() => expect(refresh).toHaveBeenCalledTimes(1));
+  });
+
+  it("sends the player to log in again on 401 and shows no error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => json(401, { error: { code: "UNAUTHENTICATED" } })),
+    );
+    const go = vi.spyOn(browser, "go").mockImplementation(() => {});
+    window.history.replaceState(null, "", "/tournaments/t1/manage");
+    setup();
+    fireEvent.click(screen.getByRole("button", { name: "Công bố" }));
+    fireEvent.click(screen.getByRole("button", { name: "Đồng ý, công bố" }));
+    await waitFor(() =>
+      expect(go).toHaveBeenCalledWith("/login?next=%2Ftournaments%2Ft1%2Fmanage"),
+    );
+    await new Promise((r) => setTimeout(r, 20));
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(refresh).not.toHaveBeenCalled();
   });
 
   it("allows a retry after a network error", async () => {
