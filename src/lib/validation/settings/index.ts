@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import { deadlinesSettingsSchema } from "./deadlines";
 import { swimSettingsSchema } from "./swim";
 
 /**
@@ -10,12 +11,20 @@ export type SettingsGroup = {
   schema: z.ZodType<Record<string, unknown>, unknown>;
   columns: readonly string[];
   seasonLocked: boolean;
+  /** Stricter schema that needs the tournament (used by the save when present). */
+  schemaFor?: (tournament: { seasonStartAt: Date }) => z.ZodType<Record<string, unknown>, unknown>;
 };
 
 export const SETTINGS_GROUPS = {
   swim: {
     schema: swimSettingsSchema,
     columns: ["longestSwimCountedM", "dailyLimitM", "swimTypeAllowed"],
+    seasonLocked: true,
+  },
+  deadlines: {
+    schema: deadlinesSettingsSchema(),
+    schemaFor: (t) => deadlinesSettingsSchema(t.seasonStartAt),
+    columns: ["submissionDays", "lateUploadDays", "startChoiceDeadlineAt"],
     seasonLocked: true,
   },
 } as const satisfies Record<string, SettingsGroup>;
