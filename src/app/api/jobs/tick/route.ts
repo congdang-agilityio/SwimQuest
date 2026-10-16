@@ -1,7 +1,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { apiError } from "@/server/http/api-error";
-import { runDueStartAssignments } from "@/server/jobs/tick";
+import { runDueStartAssignments, runDueWeekSettlements } from "@/server/jobs/tick";
 
 export const dynamic = "force-dynamic";
 
@@ -24,5 +24,9 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!given || !sameSecret(given, secret)) return apiError(401, "UNAUTHENTICATED");
 
   const startAssignments = await runDueStartAssignments(new Date());
-  return NextResponse.json({ startAssignments }, { headers: { "cache-control": "no-store" } });
+  const weekSettlements = await runDueWeekSettlements(new Date());
+  return NextResponse.json(
+    { startAssignments, weekSettlements },
+    { headers: { "cache-control": "no-store" } },
+  );
 }

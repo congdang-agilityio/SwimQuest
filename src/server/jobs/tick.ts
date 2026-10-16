@@ -1,5 +1,6 @@
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
+import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
 
 export type StartAssignmentCounts = { tournaments: number; assigned: number; failed: number };
@@ -92,6 +93,32 @@ export async function runDueStartAssignments(now: Date): Promise<StartAssignment
     }
   }
   await emitDueStartLocks(now);
+  return counts;
+}
+
+export type WeekSettlementCounts = { weeks: number; failed: number };
+
+/** Settles the ended season weeks (S-21), oldest first; a failure stops that tournament's run. */
+export async function runDueWeekSettlements(now: Date): Promise<WeekSettlementCounts> {
+  assertValidDate(now);
+  const tournaments = await db.tournament.findMany({
+    where: { status: { in: ["PUBLISHED", "ACTIVE"] }, seasonStartAt: { lt: now } },
+    select: { id: true, seasonStartAt: true, seasonEndAt: true, weekSettlements: true },
+    orderBy: { id: "asc" },
+  });
+  const counts: WeekSettlementCounts = { weeks: 0, failed: 0 };
+  for (const t of tournaments) {
+    const settled = new Set(t.weekSettlements.map((s) => s.weekStart));
+    for (const week of endedSeasonWeeks(t, now).filter((w) => !settled.has(w))) {
+      try {
+        if (await settleWeek(t.id, week, now)) counts.weeks += 1;
+      } catch (error) {
+        counts.failed += 1;
+        console.error(`tick: week ${week} settlement failed for tournament ${t.id}`, error);
+        break;
+      }
+    }
+  }
   return counts;
 }
 
