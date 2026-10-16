@@ -45,10 +45,15 @@ export async function runChecks(
     include: { tournament: true },
     orderBy: { joinedAt: "asc" },
   });
-  const active = memberships.filter((m) => {
-    const status = effectiveStatus(m.tournament, now);
-    return status === "PUBLISHED" || status === "ACTIVE";
-  });
+  // Lock order: onVerified locks each team row until the transaction ends, so teams are handled
+  // in ascending teamId order (plain string comparison). Two uploads that touch the same teams
+  // then lock them in the same order and cannot deadlock (see updateTeamProgress).
+  const active = memberships
+    .filter((m) => {
+      const status = effectiveStatus(m.tournament, now);
+      return status === "PUBLISHED" || status === "ACTIVE";
+    })
+    .sort((a, b) => (a.teamId < b.teamId ? -1 : a.teamId > b.teamId ? 1 : 0));
 
   const duplicateOfId = await findDuplicateOf(tx, swim.userId, swim, swim.id);
   if (duplicateOfId) {

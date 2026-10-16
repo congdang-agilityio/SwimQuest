@@ -17,7 +17,11 @@ type LockedTeam = {
  * updates run one after the other and only the first one to reach 100% sets `finishedAt` and
  * emits TEAM_FINISHED. The lock is FOR NO KEY UPDATE, not FOR UPDATE: each new points entry
  * holds a FOR KEY SHARE lock on its team (foreign key), and FOR UPDATE would deadlock two
- * transactions that both inserted points before updating the progress. Points keep counting after the finish; the finish time never moves.
+ * transactions that both inserted points before updating the progress.
+ * Lock order: a transaction that updates several teams must call this in ascending `teamId`
+ * order (plain string comparison), as `runChecks` does; any other order can deadlock with a
+ * concurrent upload. Later callers (team moves, revocations) must follow the same order.
+ * Points keep counting after the finish; the finish time never moves.
  * Progress and finish come only from the points ledger, never from a client value (AC 5).
  */
 export async function updateTeamProgress(
