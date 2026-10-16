@@ -179,6 +179,20 @@ describe("setPlatformAdmin", () => {
     expect((await db.user.findUniqueOrThrow({ where: { id: a.id } })).isPlatformAdmin).toBe(false);
   });
 
+  it("keeps one admin when the last two remove each other at the same time", async () => {
+    const a = await admin();
+    const b = await admin("Second");
+
+    const results = await Promise.allSettled([
+      setPlatformAdmin(actor(a), b.id, false),
+      setPlatformAdmin(actor(b), a.id, false),
+    ]);
+
+    expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+    expect(await db.user.count({ where: { isPlatformAdmin: true } })).toBe(1);
+    expect(await db.auditEvent.count()).toBe(1);
+  });
+
   it("refuses a non-admin and changes nothing", async () => {
     const player = await user("Player");
     const lan = await user("Lan");

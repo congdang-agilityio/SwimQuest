@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { UserStatus } from "@prisma/client";
+import type { Prisma, UserStatus } from "@prisma/client";
 import { db } from "@/server/db";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { ForbiddenError, NotFoundError, requirePlatformAdmin } from "@/server/auth/roles";
@@ -7,22 +7,10 @@ import { ForbiddenError, NotFoundError, requirePlatformAdmin } from "@/server/au
 /** The admin caller. Only `id` is trusted: the role is always re-read from the database. */
 export type AdminActor = { id: string; isPlatformAdmin: boolean };
 
-/** One user as platform admins see it. The email is for admins only. */
-export type AdminUserDto = {
-  id: string;
-  displayName: string;
-  email: string;
-  status: UserStatus;
-  isPlatformAdmin: boolean;
-  createdAt: string;
-};
 export type AdminUsersPage = { items: AdminUserDto[]; nextCursor: string | null };
 
 export class InvalidCursorError extends Error {
-  constructor() {
-    super("INVALID_CURSOR");
-    this.name = "InvalidCursorError";
-  }
+  readonly code = "INVALID_CURSOR";
 }
 
 /** Removing this admin role would leave no active platform admin. */
@@ -47,7 +35,9 @@ const select = {
   createdAt: true,
 } as const;
 
-type UserRow = Omit<AdminUserDto, "createdAt"> & { createdAt: Date };
+type UserRow = Prisma.UserGetPayload<{ select: typeof select }>;
+/** One user as platform admins see it. The email is for admins only. */
+export type AdminUserDto = Omit<UserRow, "createdAt"> & { createdAt: string };
 const toDto = (u: UserRow): AdminUserDto => ({ ...u, createdAt: u.createdAt.toISOString() });
 
 function encodeCursor(createdAt: Date, id: string): string {
@@ -63,15 +53,15 @@ function decodeCursor(cursor: string): { createdAt: Date; id: string } {
   }
 }
 
+/** The user with this id, or null for an unknown or malformed id. */
+async function findUser(client: Pick<typeof db, "user">, rawId: unknown) {
+  const id = userId.safeParse(rawId);
+  return id.success ? client.user.findUnique({ where: { id: id.data }, select }) : null;
+}
+
 /** Refuses unless the caller is an active platform admin right now, per the database. */
 async function requireAdmin(actor: AdminActor): Promise<void> {
-  const id = userId.safeParse(actor?.id);
-  const user = id.success
-    ? await db.user.findUnique({
-        where: { id: id.data },
-        select: { isPlatformAdmin: true, status: true },
-      })
-    : null;
+  const user = await findUser(db, actor?.id);
   requirePlatformAdmin(user?.status === "ACTIVE" ? user : null);
 }
 
@@ -86,25 +76,16 @@ export async function searchUsers(
   await requireAdmin(actor);
   const { q, cursor } = searchOptions.parse(options);
   const after = cursor ? decodeCursor(cursor) : null;
+  const text = { contains: q ?? "", mode: "insensitive" as const };
+  const keyset = after && [
+    { createdAt: { lt: after.createdAt } },
+    { ...after, id: { lt: after.id } },
+  ];
   const rows = await db.user.findMany({
     where: {
       AND: [
-        q
-          ? {
-              OR: [
-                { displayName: { contains: q, mode: "insensitive" as const } },
-                { email: { contains: q, mode: "insensitive" as const } },
-              ],
-            }
-          : {},
-        after
-          ? {
-              OR: [
-                { createdAt: { lt: after.createdAt } },
-                { createdAt: after.createdAt, id: { lt: after.id } },
-              ],
-            }
-          : {},
+        q ? { OR: [{ displayName: text }, { email: text }] } : {},
+        keyset ? { OR: keyset } : {},
       ],
     },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
@@ -122,8 +103,7 @@ export async function searchUsers(
 /** One user for the admin user page; `NotFoundError` for an unknown id. */
 export async function getUserForAdmin(actor: AdminActor, targetId: string): Promise<AdminUserDto> {
   await requireAdmin(actor);
-  const id = userId.safeParse(targetId);
-  const user = id.success ? await db.user.findUnique({ where: { id: id.data }, select }) : null;
+  const user = await findUser(db, targetId);
   if (!user) throw new NotFoundError();
   return toDto(user);
 }
@@ -139,7 +119,6 @@ export async function setPlatformAdmin(
   isAdmin: boolean,
 ): Promise<AdminUserDto> {
   const value = z.boolean().parse(isAdmin);
-  const id = userId.safeParse(targetId);
   return db.$transaction(async (tx) => {
     // Lock every admin row so concurrent removals cannot leave the platform without an admin.
     const admins = await tx.$queryRaw<{ id: string; status: UserStatus }[]>`
@@ -147,17 +126,14 @@ export async function setPlatformAdmin(
     const active = admins.filter((a) => a.status === "ACTIVE");
     if (!active.some((a) => a.id === actor?.id)) throw new ForbiddenError();
 
-    const target = id.success ? await tx.user.findUnique({ where: { id: id.data }, select }) : null;
+    const target = await findUser(tx, targetId);
     if (!target) throw new NotFoundError();
     if (target.isPlatformAdmin === value) return toDto(target);
     const isLastActive = active.length === 1 && active[0].id === target.id;
     if (!value && isLastActive) throw new LastAdminError();
 
-    const updated = await tx.user.update({
-      where: { id: target.id },
-      data: { isPlatformAdmin: value },
-      select,
-    });
+    const data = { isPlatformAdmin: value };
+    const updated = await tx.user.update({ where: { id: target.id }, data, select });
     await recordAudit(tx, {
       actor: { type: "USER", userId: actor.id },
       action: AUDIT_ACTIONS.ADMIN_ROLE_CHANGED,
