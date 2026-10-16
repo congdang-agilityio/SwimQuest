@@ -1,0 +1,40 @@
+{
+  "page": {
+    "title": "Rules and settings",
+    "back": "Back to tournament management"
+  },
+  "swim": {
+    "title": "Swim limits",
+    "longestSwimCounted": "Longest swim counted (km)",
+    "longestSwimCountedHelp": "Caps how much of one swim counts. This is separate from the longest realistic swim.",
+    "dailyLimit": "Daily limit (km)",
+    "dailyLimitHelp": "Caps the distance and points counted per player per day.",
+    "swimType": "Swim type that counts",
+    "swimTypeHelp": "A swim of the other type does not count in this tournament.",
+    "types": {
+      "ANY": "Pool and open water",
+      "POOL_ONLY": "Pool only",
+      "OPEN_WATER_ONLY": "Open water only"
+    },
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Settings saved.",
+    "locked": "Locked for the season: these settings cannot change once the season has started.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "DISTANCE_REQUIRED": "Enter a number of km.",
+      "DISTANCE_INVALID": "Enter a valid number.",
+      "DISTANCE_NOT_POSITIVE": "The distance must be greater than 0.",
+      "DISTANCE_TOO_PRECISE": "Use at most 2 decimals.",
+      "DISTANCE_TOO_LARGE": "The distance is too large.",
+      "SWIM_TYPE_INVALID": "Choose a swim type.",
+      "UNKNOWN": "This value is not valid."
+    }
+  },
+  "rules": {
+    "longestSwimCounted": "At most {km} km of one swim counts.",
+    "dailyLimit": "At most {km} km and its points count per player per day.",
+    "swimType": "Swim type that counts: {type}."
+  }
+}

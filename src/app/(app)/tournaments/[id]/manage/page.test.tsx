@@ -100,6 +100,13 @@ describe("organizer manage page invite link origin", () => {
     expect(error).not.toHaveBeenCalled();
   });
 
+  it("links to the Rules and settings page", async () => {
+    await renderPage();
+    expect(screen.getByRole("link", { name: en.manage.settingsLink }).getAttribute("href")).toBe(
+      "/tournaments/t1/manage/settings",
+    );
+  });
+
   it("shows the publish panel for a draft only", async () => {
     state.tournament = published("DRAFT");
     await renderPage();
