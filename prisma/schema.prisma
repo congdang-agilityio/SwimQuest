@@ -50,6 +50,24 @@ model User {
   givenBadges      Badge[]        @relation("BadgeGiver")
   xpEntries        XpEntry[]
   xpWeeks          XpWeek[]
+  /// Uploaded avatar; null shows avatarDefaultKey (or the app default).
+  avatarImageId    String?        @unique
+  avatarImage      ImageAsset?    @relation("UserAvatar", fields: [avatarImageId], references: [id], onDelete: SetNull)
+  /// Key of a built-in default avatar.
+  avatarDefaultKey String?
+  coverImageId     String?        @unique
+  coverImage       ImageAsset?    @relation("UserCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+  bio              String?
+  /// Province or city code, never an address (check constraint "User_regionCode_check").
+  regionCode       String?
+  goalsText        String?
+  goalDistanceM    Int?
+  disciplines      String[]       @default([])
+  /// Per-field visibility levels; {} means every field is at its default level.
+  privacy          Json           @default("{}")
+  /// Preferred UI language; null follows the browser.
+  locale           String?
+  images           ImageAsset[]   @relation("ImageOwner")
 }
 
 model Session {
@@ -542,4 +560,27 @@ model XpWeek {
   settledAt     DateTime @db.Timestamptz(3)
 
   @@unique([userId, weekStart])
+}
+
+enum ImageKind {
+  AVATAR
+  COVER
+  TOURNAMENT_BANNER
+  TOURNAMENT_LOGO
+}
+
+/// An uploaded image stored in Postgres. The size cap is enforced by the image service.
+model ImageAsset {
+  id        String    @id @default(cuid())
+  ownerId   String
+  owner     User      @relation("ImageOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  kind      ImageKind
+  mime      String
+  bytes     Bytes
+  sizeBytes Int
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  avatarOf  User?     @relation("UserAvatar")
+  coverOf   User?     @relation("UserCover")
+
+  @@index([ownerId, kind])
 }
