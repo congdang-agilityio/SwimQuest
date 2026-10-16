@@ -1,5 +1,4 @@
 import type { SwimType, SwimTypeAllowed } from "@prisma/client";
-import { uploadWindowEndsAt } from "@/lib/tournaments/lifecycle";
 import { vnDayKey } from "@/lib/time/vn";
 import type { Reason } from "./reasons";
 
@@ -45,7 +44,9 @@ export function evaluateRules(swim: RuleSwim, tournament: RuleTournament): { mis
       params: { days: tournament.submissionDays, swimDate },
     });
   }
-  if (swim.createdAt.getTime() >= uploadWindowEndsAt(tournament).getTime()) {
+  // Same window as uploadWindowEndsAt: results are final from that moment.
+  const windowEnd = tournament.seasonEndAt.getTime() + tournament.lateUploadDays * 86_400_000;
+  if (swim.createdAt.getTime() >= windowEnd) {
     missed.push({ code: "UPLOAD_WINDOW_CLOSED", params: { days: tournament.lateUploadDays } });
   }
   return { missed };
