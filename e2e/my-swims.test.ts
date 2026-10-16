@@ -68,3 +68,46 @@ test("two uploaded swims are listed newest first from the Profile tab", async ({
   await expect(rows.nth(1)).toContainText("01/05/2026");
   await expect(rows.nth(0).getByRole("link")).toHaveAttribute("href", /^\/swims\/.+/);
 });
+
+test("a swim opens with status and points per tournament; another user gets not-found", async ({
+  page,
+  browser,
+}, testInfo) => {
+  const email = `my-swim-detail-${testInfo.project.name}-${stamp}@example.com`;
+  emails.push(email);
+  await page.goto("/signup");
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Mật khẩu").fill(PASSWORD);
+  await page.getByLabel("Tên hiển thị").fill("Lan");
+  await page.getByRole("button", { name: "Đăng ký" }).click();
+  await page.waitForURL((url) => url.pathname === "/");
+
+  await page.goto("/connect");
+  await page.getByLabel("Tải lên tệp GPX/FIT").setInputFiles({
+    name: "detail.gpx",
+    mimeType: "application/gpx+xml",
+    buffer: Buffer.from(gpx("2026-07-01")),
+  });
+  await page.getByRole("button", { name: "Tải lên", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Buổi bơi đã lưu" })).toBeVisible();
+  await page.getByRole("link", { name: "Mở buổi bơi" }).click();
+  await page.waitForURL((url) => /^\/swims\/.+/.test(url.pathname));
+  const detailUrl = page.url();
+  await expect(page.getByRole("heading", { name: "Chi tiết buổi bơi" })).toBeVisible();
+  await expect(page.getByText("01/07/2026")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Kết quả theo giải đấu" })).toBeVisible();
+
+  const other = await browser.newContext();
+  const op = await other.newPage();
+  const email2 = `my-swim-detail2-${testInfo.project.name}-${stamp}@example.com`;
+  emails.push(email2);
+  await op.goto("/signup");
+  await op.getByLabel("Email").fill(email2);
+  await op.getByLabel("Mật khẩu").fill(PASSWORD);
+  await op.getByLabel("Tên hiển thị").fill("Minh");
+  await op.getByRole("button", { name: "Đăng ký" }).click();
+  await op.waitForURL((url) => url.pathname === "/");
+  const res = await op.goto(detailUrl);
+  expect(res?.status()).toBe(404);
+  await other.close();
+});

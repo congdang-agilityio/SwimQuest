@@ -4,5 +4,9 @@
   "add": "Thêm buổi bơi",
   "more": "Xem thêm",
   "loading": "Đang tải…",
-  "error": "Không tải thêm được các buổi bơi. Vui lòng thử lại."
+  "error": "Không tải thêm được các buổi bơi. Vui lòng thử lại.",
+  "detail": {
+    "title": "Chi tiết buổi bơi",
+    "points": "Điểm nhận được ở đây: {points}"
+  }
 }

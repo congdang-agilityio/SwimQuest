@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import * as f from "@/lib/format/swim";
 import { CheckReasons } from "./check-reasons";
@@ -46,6 +47,9 @@ export function SwimSummary({ swim }: { swim: OwnerSwimDto }) {
           ))}
         </ul>
       )}
+      <p>
+        <Link href={`/swims/${swim.id}`}>{t("open")}</Link>
+      </p>
     </section>
   );
 }

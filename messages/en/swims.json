@@ -37,6 +37,7 @@
       "notCounted": "Saved, not counted",
       "duplicate": "Duplicate of a swim you already uploaded",
       "notSwim": "Not a swim"
-    }
+    },
+    "open": "Open swim"
   }
 }
