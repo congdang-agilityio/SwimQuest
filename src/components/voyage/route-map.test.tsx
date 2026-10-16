@@ -59,6 +59,15 @@ describe("RouteMap", () => {
     expect(screen.getByText(voyageEn.note)).toBeTruthy();
   });
 
+  it("renders exactly one progress label, outside the ship, next to the map box", () => {
+    setup({});
+    expect(screen.getAllByTestId("progress-label")).toHaveLength(1);
+    const label = screen.getByTestId("progress-label");
+    expect(screen.getByTestId("ship").contains(label)).toBe(false);
+    expect(screen.getByTestId("route-map").contains(label)).toBe(false);
+    expect(label.parentElement).toBe(screen.getByTestId("route-map").parentElement);
+  });
+
   it("places all seven destinations at their anchors", () => {
     setup({});
     expect(slugs).toHaveLength(7);
@@ -107,6 +116,7 @@ describe("RouteMap", () => {
     expect(screen.getByTestId("no-start").textContent).toBe("Start not chosen yet");
     expect(screen.queryByTestId("route-path")).toBeNull();
     expect(screen.queryByTestId("ship")).toBeNull();
+    expect(screen.queryByTestId("progress-label")).toBeNull();
     expect(screen.getByText(voyageEn.note)).toBeTruthy();
   });
 });

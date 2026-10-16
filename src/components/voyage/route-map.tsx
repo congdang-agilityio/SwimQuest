@@ -89,15 +89,17 @@ export function RouteMap({
             </span>
           </div>
         ))}
-        {ship && (
-          <ShipMarker
-            x={ship.x}
-            y={ship.y}
-            alt={t("voyage.ship", { team: teamName })}
-            label={label}
-          />
-        )}
+        {ship && <ShipMarker x={ship.x} y={ship.y} alt={t("voyage.ship", { team: teamName })} />}
       </div>
+      {ship && (
+        <strong
+          data-testid="progress-label"
+          // A caption under the map at every width, so it never covers a destination name.
+          className={styles.progressLabel}
+        >
+          {label}
+        </strong>
+      )}
       {start ? (
         <p data-testid="start-info">
           {t("voyage.start", { name: t(`routes.${routeId}.${start.slug}`) })}

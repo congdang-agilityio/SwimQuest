@@ -77,7 +77,7 @@ test("a verified swim moves the label and the ship after a refresh", async ({ pa
   await page.goto("/voyage");
   await expect(page.getByTestId("progress-label")).toHaveText("0 / 100 km hành trình · 0%");
   await expect(page.getByTestId("ship")).toBeVisible();
-  await expectLabelOnMap(page);
+  await expectLabelReadable(page);
   await expect(page.getByTestId("route-path")).toBeAttached();
   await expect(page.getByTestId("destination-ly_son")).toContainText("Lý Sơn");
   await expect(page.getByText(/không phải hải đồ/)).toBeVisible();
@@ -140,24 +140,34 @@ type Box = { x: number; y: number; width: number; height: number };
 const intersects = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
-/** The progress label is fully inside the map and does not cover the Lý Sơn name. */
-async function expectLabelOnMap(page: Page, { clear = false } = {}) {
-  const map = await page.getByTestId("route-map").boundingBox();
-  const label = await page.getByTestId("progress-label").boundingBox();
+/**
+ * The progress label is a whole, readable caption directly under the map at every width (#619),
+ * the ship stays on the map, and the label covers no destination name.
+ */
+async function expectLabelReadable(page: Page) {
+  const map = (await page.getByTestId("route-map").boundingBox()) as Box;
+  const labelEl = page.getByTestId("progress-label");
+  const label = (await labelEl.boundingBox()) as Box;
   if (!map || !label) throw new Error("map or label not rendered");
   expect(label.x).toBeGreaterThanOrEqual(map.x - 0.5);
-  expect(label.y).toBeGreaterThanOrEqual(map.y - 0.5);
   expect(label.x + label.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
-  expect(label.y + label.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
-  if (!clear) return;
-  const name = await page.getByTestId("destination-ly_son").locator("span").first().boundingBox();
-  if (!name) throw new Error("Lý Sơn name not rendered");
-  const apart =
-    label.x + label.width <= name.x ||
-    name.x + name.width <= label.x ||
-    label.y + label.height <= name.y ||
-    name.y + name.height <= label.y;
-  expect(apart, "label must not cover the Lý Sơn name").toBe(true);
+  expect(label.y, "caption directly under the map").toBeGreaterThanOrEqual(
+    map.y + map.height - 0.5,
+  );
+  expect(label.y).toBeLessThanOrEqual(map.y + map.height + 16);
+  const fits = await labelEl.evaluate((el) => el.scrollWidth <= el.clientWidth);
+  expect(fits, "label text not cut off").toBe(true);
+  const ship = (await page.getByTestId("ship").boundingBox()) as Box;
+  expect(ship.x).toBeGreaterThanOrEqual(map.x - 0.5);
+  expect(ship.y).toBeGreaterThanOrEqual(map.y - 0.5);
+  expect(ship.x + ship.width).toBeLessThanOrEqual(map.x + map.width + 0.5);
+  expect(ship.y + ship.height).toBeLessThanOrEqual(map.y + map.height + 0.5);
+  const names = page.getByTestId("landmark-name");
+  await expect(names).toHaveCount(7); // route01 has 7 destinations
+  for (const name of await names.all()) {
+    const box = (await name.boundingBox()) as Box;
+    expect(intersects(label, box), `label covers ${await name.textContent()}`).toBe(false);
+  }
 }
 
 async function seedTeamOnMap(page: Page, label: string, { start = "hon_sup", points = 1500 } = {}) {
@@ -218,7 +228,7 @@ async function seedTeamOnMap(page: Page, label: string, { start = "hon_sup", poi
 }
 
 function labelAtFinishTests() {
-  test("at 100% the label is whole, on the map and clear of the Lý Sơn name", async ({
+  test("at 100% the label is whole and clear of every destination name", async ({
     page,
   }, testInfo) => {
     await seedTeamOnMap(
@@ -227,7 +237,7 @@ function labelAtFinishTests() {
     );
     await page.goto("/voyage");
     await expect(page.getByTestId("progress-label")).toHaveText("100 / 100 km hành trình · 100%");
-    await expectLabelOnMap(page, { clear: true });
+    await expectLabelReadable(page);
   });
 }
 
@@ -242,14 +252,59 @@ test.describe("progress label at the finish on a 320 px phone", () => {
 
 // Non Nước sits near the top of the map (y = 8%), so a label above the ship would be cut off.
 function labelAtNonNuocStartTests() {
-  test("at 0% from Non Nước the label is whole and on the map", async ({ page }, testInfo) => {
+  test("at 0% from Non Nước the label is whole and clear of every destination name", async ({
+    page,
+  }, testInfo) => {
     await seedTeamOnMap(page, `voyage-non-nuoc-${testInfo.project.name}-${Date.now()}`, {
       start: "non_nuoc",
       points: 0,
     });
     await page.goto("/voyage");
     await expect(page.getByTestId("progress-label")).toHaveText("0 / 100 km hành trình · 0%");
-    await expectLabelOnMap(page);
+    await expectLabelReadable(page);
+  });
+}
+
+test.describe("progress label at the finish on a 768 px viewport", () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+  labelAtFinishTests();
+});
+
+test.describe("progress label at the finish in English on a 320 px phone", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  test("the full English label is visible", async ({ page }, testInfo) => {
+    await seedTeamOnMap(page, `voyage-finish-en-${testInfo.project.name}-${Date.now()}`);
+    await page.context().addCookies([{ name: "NEXT_LOCALE", value: "en", url: page.url() }]);
+    await page.goto("/voyage");
+    await expect(page.getByTestId("progress-label")).toHaveText("100 / 100 route km · 100%");
+    await expectLabelReadable(page);
+  });
+});
+
+for (const width of [1024, 1280, 1920]) {
+  test.describe(`progress label on a ${width} px desktop`, () => {
+    test.use({ viewport: { width, height: 1080 } });
+    labelAtFinishTests();
+    labelAtNonNuocStartTests();
+  });
+}
+
+// The cases that used to put the label over a name: Bãi Mân Thái and Cù Lao Chàm (#619).
+for (const [name, start, points, text] of [
+  ["30% from Sơn Thủy", "son_thuy", 300, "30 / 100 km hành trình · 30%"],
+  ["80% from Hòn Sụp", "hon_sup", 800, "80 / 100 km hành trình · 80%"],
+] as const) {
+  test.describe(`progress label at ${name} on a 1280 px desktop`, () => {
+    test.use({ viewport: { width: 1280, height: 1080 } });
+    test("is a caption and covers no destination name", async ({ page }, testInfo) => {
+      await seedTeamOnMap(page, `voyage-${start}-${testInfo.project.name}-${Date.now()}`, {
+        start,
+        points,
+      });
+      await page.goto("/voyage");
+      await expect(page.getByTestId("progress-label")).toHaveText(text);
+      await expectLabelReadable(page);
+    });
   });
 }
 
@@ -259,6 +314,11 @@ test.describe("progress label at 0% from Non Nước", () => {
 
 test.describe("progress label at 0% from Non Nước on a 320 px phone", () => {
   test.use({ viewport: { width: 320, height: 568 } });
+  labelAtNonNuocStartTests();
+});
+
+test.describe("progress label at 0% from Non Nước on a 768 px viewport", () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
   labelAtNonNuocStartTests();
 });
 
