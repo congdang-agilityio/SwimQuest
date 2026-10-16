@@ -68,8 +68,6 @@ export async function appointCaptain(
   });
 }
 
-export type HandOverCaptaincyResult = { captainUserId: string; previousCaptainUserId: string };
-
 /**
  * The captain makes another active member captain (story S-40). Throws the errors of
  * `requireCaptain` and NotAMemberError; the change, audit and event commit together.
@@ -78,7 +76,7 @@ export async function handOverCaptaincy(
   captainId: string,
   teamId: string,
   memberUserId: string,
-): Promise<HandOverCaptaincyResult> {
+): Promise<void> {
   const { tournamentId } = await requireCaptain(captainId, teamId);
   if (typeof memberUserId !== "string" || memberUserId.length === 0 || memberUserId === captainId) {
     throw new NotAMemberError();
@@ -110,6 +108,5 @@ export async function handOverCaptaincy(
       type: "TEAM_CAPTAIN_SET",
       payload: { tournamentId, teamId, userId: memberUserId, setBy: captainId },
     });
-    return { captainUserId: memberUserId, previousCaptainUserId: captainId };
   });
 }

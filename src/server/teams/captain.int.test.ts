@@ -232,9 +232,8 @@ describe("team roster and captain appointment", () => {
     it("makes another active member captain, audits it and emits TEAM_CAPTAIN_SET", async () => {
       const { anna, binh, tournament, team } = await withCaptain();
 
-      const result = await handOverCaptaincy(anna.id, team.id, binh.id);
+      await handOverCaptaincy(anna.id, team.id, binh.id);
 
-      expect(result).toEqual({ captainUserId: binh.id, previousCaptainUserId: anna.id });
       expect(await captainOf(team.id)).toBe(binh.id);
       const events = await db.auditEvent.findMany();
       expect(events).toHaveLength(1);
