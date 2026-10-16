@@ -1,0 +1,8 @@
+{
+  "title": "My swims",
+  "empty": "You have no swims yet.",
+  "add": "Add a swim",
+  "more": "More",
+  "loading": "Loading…",
+  "error": "Could not load more swims. Please try again."
+}
