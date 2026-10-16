@@ -22,7 +22,8 @@ const isUserId = (v: unknown): v is string =>
 
 /**
  * Sets a one-time temporary password for a player (S-59 AC 2, 4, 5), for an active platform
- * admin (role re-read from the database). In one transaction: the argon2id hash is stored,
+ * admin (role re-read from the database). The argon2id hash is computed before the transaction;
+ * in one transaction (caller and target checked again) the hash is stored,
  * `mustChangePassword` is set, all of the player's sessions are deleted and
  * `PASSWORD_RESET_BY_ADMIN` is audited (admin, player, time; never the password or hash).
  * Returns the temporary password; it is not stored anywhere in clear text.
@@ -32,18 +33,26 @@ export async function resetPassword(
   actor: AdminActor,
   userId: string,
 ): Promise<{ temporaryPassword: string }> {
-  return db.$transaction(async (tx) => {
-    const adminId = typeof actor?.id === "string" ? actor.id : "";
-    const admin = isUserId(adminId) ? await tx.user.findUnique({ where: { id: adminId } }) : null;
+  const adminId = typeof actor?.id === "string" ? actor.id : "";
+  type Client = Pick<typeof db, "user">;
+  const check = async (client: Client) => {
+    const admin = isUserId(adminId)
+      ? await client.user.findUnique({ where: { id: adminId } })
+      : null;
     requirePlatformAdmin(admin?.status === "ACTIVE" ? admin : null);
-
     const target = isUserId(userId)
-      ? await tx.user.findUnique({ where: { id: userId }, select: { id: true, status: true } })
+      ? await client.user.findUnique({ where: { id: userId }, select: { id: true, status: true } })
       : null;
     if (!target || target.status === "DELETED") throw new NotFoundError();
+    return target;
+  };
 
-    const password = temporaryPassword();
-    const passwordHash = await hashPassword(password);
+  // Check first, then hash outside the transaction (argon2id is slow), then re-check inside it.
+  await check(db);
+  const password = temporaryPassword();
+  const passwordHash = await hashPassword(password);
+  return db.$transaction(async (tx) => {
+    const target = await check(tx);
     await tx.user.update({
       where: { id: target.id },
       data: { passwordHash, mustChangePassword: true },

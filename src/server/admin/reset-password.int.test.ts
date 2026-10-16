@@ -22,7 +22,10 @@ afterAll(async () => {
 const OLD_PASSWORD = "old-password-1";
 let oldHash = "";
 let n = 0;
-const user = async (isPlatformAdmin = false, status: "ACTIVE" | "SUSPENDED" = "ACTIVE") => {
+const user = async (
+  isPlatformAdmin = false,
+  status: "ACTIVE" | "SUSPENDED" | "DELETED" = "ACTIVE",
+) => {
   oldHash ||= await hashPassword(OLD_PASSWORD);
   return db.user.create({
     data: {
@@ -52,6 +55,7 @@ describe("resetPassword", () => {
     const { temporaryPassword } = await resetPassword(actor(admin), player.id);
 
     expect(temporaryPassword).toHaveLength(TEMPORARY_PASSWORD_LENGTH);
+    expect(temporaryPassword).toMatch(/^[a-km-np-zA-HJ-NP-Z2-9]{12}$/);
     expect(TEMPORARY_PASSWORD_LENGTH).toBe(12);
     const stored = await db.user.findUniqueOrThrow({ where: { id: player.id } });
     expect(stored.mustChangePassword).toBe(true);
@@ -135,6 +139,20 @@ describe("resetPassword", () => {
     for (const id of ["nope", "", "x".repeat(101), 42]) {
       await expect(resetPassword(actor(admin), id as string)).rejects.toBeInstanceOf(NotFoundError);
     }
+    expect(await db.auditEvent.count()).toBe(0);
+  });
+
+  it("returns NotFoundError for a DELETED user and changes nothing", async () => {
+    const admin = await user(true);
+    const deleted = await user(false, "DELETED");
+    await session(deleted.id, "d1");
+
+    await expect(resetPassword(actor(admin), deleted.id)).rejects.toBeInstanceOf(NotFoundError);
+
+    const stored = await db.user.findUniqueOrThrow({ where: { id: deleted.id } });
+    expect(stored.passwordHash).toBe(oldHash);
+    expect(stored.mustChangePassword).toBe(false);
+    expect(await db.session.count({ where: { userId: deleted.id } })).toBe(1);
     expect(await db.auditEvent.count()).toBe(0);
   });
 });

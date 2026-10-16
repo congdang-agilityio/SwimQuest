@@ -13,12 +13,18 @@ export class AdminContactError extends Error {
   readonly code = "INVALID_ADMIN_CONTACT";
 }
 
-// Plain text: line breaks and tabs allowed, other control characters refused.
+// Plain text: line breaks (CRLF from a form post becomes LF) and tabs allowed; other C0/C1
+// control characters and bidi overrides (they can visually reorder a phone number) refused.
 const contactSchema = z
   .string()
-  .trim()
-  .max(200)
-  .regex(/^[^\x00-\x08\x0b-\x1f\x7f]*$/);
+  .transform((s) => s.replace(/\r\n/g, "\n"))
+  .pipe(
+    z
+      .string()
+      .trim()
+      .max(200)
+      .regex(/^[^\x00-\x08\x0b-\x1f\x7f-\x9f\u202a-\u202e\u2066-\u2069]*$/),
+  );
 
 async function readContact(client: Parameters<typeof getSetting>[2]): Promise<string> {
   const stored = await getSetting(ADMIN_CONTACT_SETTING_KEY, "", client);

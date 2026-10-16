@@ -85,6 +85,15 @@ describe("setAdminContact", () => {
     expect(await db.auditEvent.count()).toBe(2);
   });
 
+  it("normalizes CRLF line breaks from a form post to LF before validation", async () => {
+    const admin = await user(true);
+
+    expect(await setAdminContact(actor(admin), "Zalo 0901\r\nor the desk\r\n")).toBe(
+      "Zalo 0901\nor the desk",
+    );
+    expect(await getAdminContact()).toBe("Zalo 0901\nor the desk");
+  });
+
   it("does not audit when the contact did not change", async () => {
     const admin = await user(true);
     await setAdminContact(actor(admin), "Call Lan");
@@ -95,8 +104,17 @@ describe("setAdminContact", () => {
 
   it("refuses text over 200 characters, non-text and control characters, saving nothing", async () => {
     const admin = await user(true);
-    for (const bad of ["x".repeat(201), 42, null, undefined, { a: 1 }, "bell\u0007", "nul\u0000"]) {
-      const err = await setAdminContact(actor(admin), bad as string).catch((e: unknown) => e);
+    const bad = ["x".repeat(201), 42, null, undefined, { a: 1 }, "bell\u0007", "nul\u0000"];
+    const c1AndBidi = [
+      "csi\u009b",
+      "nel\u0085",
+      "rlo\u202e09",
+      "lre\u202a",
+      "rli\u2067",
+      "pdi\u2069",
+    ];
+    for (const value of [...bad, ...c1AndBidi, "lone\rcr"]) {
+      const err = await setAdminContact(actor(admin), value as string).catch((e: unknown) => e);
       expect(err).toBeInstanceOf(AdminContactError);
       expect(err).toMatchObject({ status: 400, code: "INVALID_ADMIN_CONTACT" });
     }
