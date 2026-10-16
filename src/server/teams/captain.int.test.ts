@@ -6,6 +6,7 @@ import { appointCaptain, NotAMemberError } from "./captain";
 import { getTeamRoster } from "./roster";
 
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.auditEvent.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
@@ -61,6 +62,24 @@ describe("team roster and captain appointment", () => {
   afterAll(async () => {
     await clean();
     await db.$disconnect();
+  });
+
+  describe("captain events", () => {
+    it("emits one TEAM_CAPTAIN_SET per change and none when nothing changed", async () => {
+      const { organizer, anna, tournament, team } = await setup();
+
+      await appointCaptain(organizer.id, team.id, anna.id);
+      await appointCaptain(organizer.id, team.id, anna.id);
+
+      const events = await db.domainEvent.findMany({ where: { type: "TEAM_CAPTAIN_SET" } });
+      expect(events).toHaveLength(1);
+      expect(events[0].payload).toEqual({
+        tournamentId: tournament.id,
+        teamId: team.id,
+        userId: anna.id,
+        setBy: organizer.id,
+      });
+    });
   });
 
   describe("getTeamRoster", () => {

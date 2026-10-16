@@ -6,6 +6,7 @@ import {
 } from "@/lib/tournaments/lifecycle";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 
 export type AutoAssignment = { teamId: string; slug: string };
 
@@ -111,6 +112,10 @@ export async function assignMissingStarts(
             startSetAt: now.toISOString(),
             startSetBy: "AUTOMATIC",
           },
+        });
+        await emitEvent(tx, {
+          type: "TEAM_START_SET",
+          payload: { tournamentId, teamId: team.id, startId: slug, setBy: "AUTOMATIC" },
         });
         assignments.push({ teamId: team.id, slug });
       }

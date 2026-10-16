@@ -1,8 +1,20 @@
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/server/db";
+import { assignMissingStarts } from "@/server/starts/auto-assign";
 import { ensureStartsAssigned, runDueStartAssignments } from "./tick";
 
+// The real assignment by default; a test can make it a no-op to leave a team without a start.
+vi.mock("@/server/starts/auto-assign", async (importOriginal) => {
+  const real = await importOriginal<typeof import("@/server/starts/auto-assign")>();
+  return { ...real, assignMissingStarts: vi.fn(real.assignMissingStarts) };
+});
+const assignMock = vi.mocked(assignMissingStarts);
+const realAssign = (
+  await vi.importActual<typeof import("@/server/starts/auto-assign")>("@/server/starts/auto-assign")
+).assignMissingStarts;
+
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
@@ -21,7 +33,12 @@ type Status = "DRAFT" | "PUBLISHED" | "COMPLETED" | "ARCHIVED";
 
 let n = 0;
 async function setupTournament(
-  opts: { status?: Status; seasonStartAt?: Date; startChoiceDeadlineAt?: Date } = {},
+  opts: {
+    status?: Status;
+    seasonStartAt?: Date;
+    seasonEndAt?: Date;
+    startChoiceDeadlineAt?: Date;
+  } = {},
 ) {
   const organizer = await db.user.create({
     data: { email: `organizer${++n}@example.com`, passwordHash: "h", displayName: "organizer" },
@@ -34,7 +51,7 @@ async function setupTournament(
       name: "Cup",
       description: "d",
       seasonStartAt: opts.seasonStartAt ?? SEASON_START,
-      seasonEndAt: new Date("2099-12-01T00:00:00+07:00"),
+      seasonEndAt: opts.seasonEndAt ?? new Date("2099-12-01T00:00:00+07:00"),
       startChoiceDeadlineAt: opts.startChoiceDeadlineAt ?? null,
       routeId: "route01",
       routeDistanceM: 100000,
@@ -61,6 +78,11 @@ const startOf = async (id: string) =>
 
 describe("runDueStartAssignments", () => {
   beforeEach(clean);
+  afterEach(() => {
+    vi.restoreAllMocks();
+    assignMock.mockReset();
+    assignMock.mockImplementation(realAssign);
+  });
   afterAll(async () => {
     await clean();
     await db.$disconnect();
@@ -120,6 +142,87 @@ describe("runDueStartAssignments", () => {
     expect(again).toEqual({ tournaments: 0, assigned: 0, failed: 0 });
     expect(await startOf(open.id)).toBe(first);
     expect(await db.auditEvent.count()).toBe(1);
+  });
+
+  it("emits TEAM_START_LOCKED once per team, however many ticks run", async () => {
+    const t = await setupTournament();
+    const a = await addTeam(t.id, "non_nuoc");
+    const b = await addTeam(t.id);
+    const other = await setupTournament({ status: "DRAFT" });
+    await addTeam(other.id, "hon_sup");
+
+    await runDueStartAssignments(SEASON_START);
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 60_000));
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 120_000));
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_LOCKED" } });
+    expect(events).toHaveLength(2);
+    expect(events.map((e) => (e.payload as { teamId: string }).teamId).sort()).toEqual(
+      [a.id, b.id].sort(),
+    );
+    expect(events[0].tournamentId).toBe(t.id);
+    const row = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    expect(row.startLockProcessedAt).not.toBeNull();
+    expect(
+      (await db.tournament.findUniqueOrThrow({ where: { id: other.id } })).startLockProcessedAt,
+    ).toBeNull();
+  });
+
+  it("emits no start-lock event before the lock time", async () => {
+    const t = await setupTournament();
+    await addTeam(t.id, "non_nuoc");
+    await runDueStartAssignments(BEFORE);
+    expect(await db.domainEvent.count({ where: { type: "TEAM_START_LOCKED" } })).toBe(0);
+  });
+
+  it("emits no start-lock event for a completed tournament", async () => {
+    const done = await setupTournament({ seasonEndAt: new Date(SEASON_START.getTime() + 1000) });
+    await addTeam(done.id, "non_nuoc");
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 2000));
+
+    expect(await db.domainEvent.count({ where: { type: "TEAM_START_LOCKED" } })).toBe(0);
+    expect(log).not.toHaveBeenCalled();
+  });
+
+  it("rolls the claim back when a team has no start, and emits on a later tick", async () => {
+    const t = await setupTournament();
+    const open = await addTeam(t.id);
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    assignMock.mockResolvedValueOnce([]);
+
+    await runDueStartAssignments(SEASON_START);
+
+    expect(await db.domainEvent.count({ where: { type: "TEAM_START_LOCKED" } })).toBe(0);
+    expect(
+      (await db.tournament.findUniqueOrThrow({ where: { id: t.id } })).startLockProcessedAt,
+    ).toBeNull();
+    expect(log).toHaveBeenCalledOnce();
+
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 60_000));
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 120_000));
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_LOCKED" } });
+    expect(events).toHaveLength(1);
+    expect((events[0].payload as { teamId: string }).teamId).toBe(open.id);
+  });
+
+  it("still emits for the other tournaments when one fails", async () => {
+    const created = [await setupTournament(), await setupTournament()];
+    const [first, second] = created.sort((x, y) => (x.id < y.id ? -1 : 1));
+    await addTeam(first.id);
+    const ok = await addTeam(second.id, "non_nuoc");
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    // The first tournament in processing order keeps a team without a start and fails.
+    assignMock.mockImplementation(async () => []);
+
+    await runDueStartAssignments(SEASON_START);
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_LOCKED" } });
+    expect(events.map((e) => e.tournamentId)).toEqual([second.id]);
+    expect((events[0].payload as { teamId: string }).teamId).toBe(ok.id);
+    expect(log).toHaveBeenCalledOnce();
   });
 
   it("rejects an invalid now", async () => {
