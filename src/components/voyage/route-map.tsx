@@ -1,17 +1,43 @@
 import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
+import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { landmarkArt, ROUTE01_ART } from "@/lib/art/route01-art";
+import { formatProgressPct } from "@/lib/scoring/progress";
+import { ShipMarker } from "./ship-marker";
 import styles from "./voyage.module.css";
+
+type Point = { x: number; y: number };
 
 export type RouteMapProps = {
   routeId: string;
+  teamName: string;
   destinations: { slug: string; x: number; y: number; isFinish: boolean }[];
+  /** Points from the start to the finish; null when the team has no start. */
+  path: Point[] | null;
+  start: { slug: string; automaticAtIso: string | null } | null;
+  progress: { progressBp: number; routeKmReached: number; routeKmTotal: number };
+  ship: Point | null;
 };
 
-/** Route map base: background and landmarks from the art registry, names as text. */
-export function RouteMap({ routeId, destinations }: RouteMapProps) {
+const ASPECT = 1.6; // map box is 16:10; SVG viewBox is 160 x 100
+
+/** Route map: background and landmarks from the art registry, names and progress as text. */
+export function RouteMap({
+  routeId,
+  teamName,
+  destinations,
+  path,
+  start,
+  progress,
+  ship,
+}: RouteMapProps) {
   const t = useTranslations();
   const background = ROUTE01_ART.find((a) => a.key === "map");
+  const label = t("voyage.progress", {
+    reached: progress.routeKmReached,
+    total: progress.routeKmTotal,
+    pct: formatProgressPct(progress.progressBp),
+  });
   return (
     <section aria-label={t("voyage.mapLabel")}>
       <div
@@ -24,41 +50,83 @@ export function RouteMap({ routeId, destinations }: RouteMapProps) {
           className={styles.background}
           fallback={<div style={{ position: "absolute", inset: 0, background: "#bde3f2" }} />}
         />
-        {destinations.map((d) => (
-          <div
-            key={d.slug}
-            data-testid={`destination-${d.slug}`}
-            style={{
-              position: "absolute",
-              left: `${d.x}%`,
-              top: `${d.y}%`,
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "14%",
-              fontSize: "0.8rem",
-            }}
+        {path && (
+          <svg
+            data-testid="route-path"
+            viewBox="0 0 160 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
           >
-            <ArtImage
-              art={landmarkArt(d.slug)}
-              alt=""
-              className={styles.landmark}
-              fallback={<span aria-hidden="true">●</span>}
+            <polyline
+              points={path.map((p) => `${p.x * ASPECT},${p.y}`).join(" ")}
+              fill="none"
+              stroke="#c2410c"
+              strokeWidth={3}
+              strokeDasharray="6 4"
+              vectorEffect="non-scaling-stroke"
             />
-            <span
+          </svg>
+        )}
+        {destinations.map((d) => {
+          const isStart = start?.slug === d.slug;
+          return (
+            <div
+              key={d.slug}
+              data-testid={`destination-${d.slug}`}
               style={{
-                background: "#fffd",
-                fontWeight: d.isFinish ? 700 : 400,
-                textAlign: "center",
+                position: "absolute",
+                left: `${d.x}%`,
+                top: `${d.y}%`,
+                transform: "translate(-50%, -50%)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "14%",
+                fontSize: "0.8rem",
               }}
             >
-              {t(`routes.${routeId}.${d.slug}`)}
-              {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
-            </span>
-          </div>
-        ))}
+              <ArtImage
+                art={landmarkArt(d.slug)}
+                alt=""
+                className={styles.landmark}
+                fallback={<span aria-hidden="true">●</span>}
+              />
+              <span
+                style={{
+                  background: "#fffd",
+                  fontWeight: isStart || d.isFinish ? 700 : 400,
+                  textAlign: "center",
+                }}
+              >
+                {t(`routes.${routeId}.${d.slug}`)}
+                {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
+              </span>
+            </div>
+          );
+        })}
+        {ship && (
+          <ShipMarker
+            x={ship.x}
+            y={ship.y}
+            alt={t("voyage.ship", { team: teamName })}
+            label={label}
+          />
+        )}
       </div>
+      {start ? (
+        <p data-testid="start-info">
+          {t("voyage.start", { name: t(`routes.${routeId}.${start.slug}`) })}
+          {start.automaticAtIso && (
+            <>
+              {" · "}
+              <StartOriginLabel setAtIso={start.automaticAtIso} />
+            </>
+          )}
+        </p>
+      ) : (
+        <p data-testid="no-start">{t("voyage.noStart")}</p>
+      )}
       <p data-testid="map-note">{t("voyage.note")}</p>
     </section>
   );
