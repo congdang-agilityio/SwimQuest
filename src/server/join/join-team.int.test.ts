@@ -39,6 +39,22 @@ describe("joinTeam", () => {
     expect(member.status).toBe("ACTIVE");
   });
 
+  it("emits one TEAM_JOINED event for the join, and none for a refused join", async () => {
+    const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [1]);
+    const player = await user("player");
+    const other = await user("other");
+
+    await joinTeam(player.id, token, teams[0].id, BEFORE_START);
+    await expect(joinTeam(other.id, token, teams[0].id, BEFORE_START)).rejects.toBeDefined();
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_JOINED" } });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      tournamentId: tournament.id,
+      payload: { tournamentId: tournament.id, teamId: teams[0].id, userId: player.id },
+    });
+  });
+
   it("refuses a full team and adds nothing", async () => {
     const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 1]);
     await addMember(teams[1].id, tournament.id, "m1");

@@ -1,3 +1,4 @@
+import { emitEvent } from "@/server/events/emit";
 import type { Swim, SwimResult } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
@@ -72,6 +73,18 @@ export async function runChecks(
         userId: swim.userId,
         status,
         reasons,
+      },
+    });
+    await emitEvent(tx, {
+      type: "SWIM_RESULT_CHANGED",
+      payload: {
+        tournamentId: m.tournamentId,
+        teamId: m.teamId,
+        userId: swim.userId,
+        resultId: result.id,
+        swimId: swim.id,
+        status,
+        previousStatus: null,
       },
     });
     if (status === "VERIFIED") await onVerified(tx, result, now);

@@ -2,6 +2,7 @@ import { db } from "@/server/db";
 
 /** Shared rows for the join integration tests (not a test file itself). */
 export async function cleanJoinRows() {
+  await db.domainEvent.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
   await db.pointsEntry.deleteMany();

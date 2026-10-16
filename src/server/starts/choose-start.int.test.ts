@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { chooseStart, getTeamStart, InvalidStartError, StartLockedError } from "./choose-start";
 
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();
@@ -67,6 +68,21 @@ describe("chooseStart / getTeamStart", () => {
   it("reports no start for a new team", async () => {
     const { team } = await setup();
     expect(await getTeamStart(team.id)).toEqual({ slug: null, setAt: null, setBy: null });
+  });
+
+  it("emits one TEAM_START_SET per change, none for the same slug", async () => {
+    const { captain, team, tournament } = await setup();
+    await chooseStart(captain.id, team.id, "non_nuoc");
+    await chooseStart(captain.id, team.id, "non_nuoc");
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_SET" } });
+    expect(events).toHaveLength(1);
+    expect(events[0].payload).toEqual({
+      tournamentId: tournament.id,
+      teamId: team.id,
+      startId: "non_nuoc",
+      setBy: captain.id,
+    });
   });
 
   it("lets the captain choose a start", async () => {

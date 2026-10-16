@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { assignMissingStarts } from "./auto-assign";
 
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();
@@ -72,6 +73,22 @@ describe("assignMissingStarts", () => {
     expect(result).toEqual([]);
     expect((await team(open.id)).startDestination).toBeNull();
     expect(await db.auditEvent.count()).toBe(0);
+  });
+
+  it("emits one TEAM_START_SET with setBy AUTOMATIC per assignment", async () => {
+    const t = await setupTournament();
+    const open = await addTeam(t.id);
+    const [assignment] = await assignMissingStarts(t.id, AT_DEADLINE);
+    await assignMissingStarts(t.id, AT_DEADLINE);
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_SET" } });
+    expect(events).toHaveLength(1);
+    expect(events[0].payload).toEqual({
+      tournamentId: t.id,
+      teamId: open.id,
+      startId: assignment.slug,
+      setBy: "AUTOMATIC",
+    });
   });
 
   it("uses the start-choice deadline when it is earlier than the season start", async () => {

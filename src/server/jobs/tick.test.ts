@@ -21,7 +21,9 @@ describe("runDueStartAssignments (failure isolation)", () => {
 
   it("counts a failing tournament and still runs the others", async () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
-    mocks.findMany.mockResolvedValue([{ id: "a" }, { id: "b" }, { id: "c" }]);
+    // First call: the tournaments due for assignment. Later calls: no start-lock work.
+    mocks.findMany.mockResolvedValueOnce([{ id: "a" }, { id: "b" }, { id: "c" }]);
+    mocks.findMany.mockResolvedValue([]);
     mocks.assignMissingStarts.mockImplementation(async (id: string) => {
       if (id === "b") throw new Error("boom");
       return [{ teamId: `${id}-team`, slug: "non_nuoc" }];

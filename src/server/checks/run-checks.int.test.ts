@@ -7,6 +7,7 @@ import { toOwnerSwimDto } from "@/server/swims/swim-dto";
 import { lockPlayerSwims, runChecks } from "./run-checks";
 
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
@@ -122,6 +123,25 @@ describe("runChecks on upload", () => {
         rules: rulesOf(),
       },
     ]);
+  });
+
+  it("emits one SWIM_RESULT_CHANGED event per result", async () => {
+    const me = await user("me");
+    const { t, team } = await tournamentWith(me.id, "One");
+    const swim = await upload(me.id, fit("2026-06-01T06:00:00+07:00", 1800));
+
+    const [result] = await resultsOf(swim.id);
+    const events = await db.domainEvent.findMany({ where: { type: "SWIM_RESULT_CHANGED" } });
+    expect(events).toHaveLength(1);
+    expect(events[0].payload).toEqual({
+      tournamentId: t.id,
+      teamId: team.id,
+      userId: me.id,
+      resultId: result.id,
+      swimId: swim.id,
+      status: "VERIFIED",
+      previousStatus: null,
+    });
   });
 
   it("flags a swim slower than the tournament's slowest pace, with the reason", async () => {

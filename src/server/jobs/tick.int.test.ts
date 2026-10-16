@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { ensureStartsAssigned, runDueStartAssignments } from "./tick";
 
 async function clean() {
+  await db.domainEvent.deleteMany();
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();
@@ -120,6 +121,37 @@ describe("runDueStartAssignments", () => {
     expect(again).toEqual({ tournaments: 0, assigned: 0, failed: 0 });
     expect(await startOf(open.id)).toBe(first);
     expect(await db.auditEvent.count()).toBe(1);
+  });
+
+  it("emits TEAM_START_LOCKED once per team, however many ticks run", async () => {
+    const t = await setupTournament();
+    const a = await addTeam(t.id, "non_nuoc");
+    const b = await addTeam(t.id);
+    const other = await setupTournament({ status: "DRAFT" });
+    await addTeam(other.id, "hon_sup");
+
+    await runDueStartAssignments(SEASON_START);
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 60_000));
+    await runDueStartAssignments(new Date(SEASON_START.getTime() + 120_000));
+
+    const events = await db.domainEvent.findMany({ where: { type: "TEAM_START_LOCKED" } });
+    expect(events).toHaveLength(2);
+    expect(events.map((e) => (e.payload as { teamId: string }).teamId).sort()).toEqual(
+      [a.id, b.id].sort(),
+    );
+    expect(events[0].tournamentId).toBe(t.id);
+    const row = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    expect(row.startLockProcessedAt).not.toBeNull();
+    expect(
+      (await db.tournament.findUniqueOrThrow({ where: { id: other.id } })).startLockProcessedAt,
+    ).toBeNull();
+  });
+
+  it("emits no start-lock event before the lock time", async () => {
+    const t = await setupTournament();
+    await addTeam(t.id, "non_nuoc");
+    await runDueStartAssignments(BEFORE);
+    expect(await db.domainEvent.count({ where: { type: "TEAM_START_LOCKED" } })).toBe(0);
   });
 
   it("rejects an invalid now", async () => {

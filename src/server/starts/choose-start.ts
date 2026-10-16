@@ -1,3 +1,4 @@
+import { emitEvent } from "@/server/events/emit";
 import type { StartSetBy } from "@prisma/client";
 import { getRoute, startDestinations } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
@@ -89,6 +90,10 @@ export async function chooseStart(
       where: { id: team.id },
       data: { startDestination: slug, startSetAt: new Date(), startSetBy: "CAPTAIN" },
       select: { startDestination: true, startSetAt: true, startSetBy: true },
+    });
+    await emitEvent(tx, {
+      type: "TEAM_START_SET",
+      payload: { tournamentId: team.tournamentId, teamId: team.id, startId: slug, setBy: userId },
     });
     return { changed: true, start: toStart(updated) };
   });

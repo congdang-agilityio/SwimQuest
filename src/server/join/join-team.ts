@@ -1,3 +1,4 @@
+import { emitEvent } from "@/server/events/emit";
 import { Prisma } from "@prisma/client";
 import { isJoiningOpen, type LifecycleTournament } from "@/lib/tournaments/lifecycle";
 import { db } from "@/server/db";
@@ -95,6 +96,7 @@ export async function joinTeam(
       if (members >= team.memberLimit) throw new JoinError("TEAM_FULL");
 
       await tx.teamMember.create({ data: { teamId, tournamentId, userId } });
+      await emitEvent(tx, { type: "TEAM_JOINED", payload: { tournamentId, teamId, userId } });
       return { tournamentId, team: { id: team.id, name: team.name, emblemKey: team.emblemKey } };
     });
   } catch (err) {

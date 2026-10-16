@@ -1,3 +1,4 @@
+import { emitEvent } from "@/server/events/emit";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
@@ -53,6 +54,10 @@ export async function appointCaptain(
       tournamentId,
       before: { ...ids, captainUserId: locked.captainUserId },
       after: { ...ids, captainUserId: memberUserId },
+    });
+    await emitEvent(tx, {
+      type: "TEAM_CAPTAIN_SET",
+      payload: { tournamentId, teamId, userId: memberUserId, setBy: organizerId },
     });
     return { changed: true, captainUserId: memberUserId };
   });
