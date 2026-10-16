@@ -44,7 +44,7 @@ const actor = (u: { id: string; isPlatformAdmin: boolean }) => ({
 const session = (userId: string, tokenHash: string) =>
   db.session.create({ data: { userId, tokenHash, expiresAt: new Date(Date.now() + 3_600_000) } });
 
-/** A swimmer on a team with one verified swim and its points entry. */
+/** A swimmer on a team with one verified swim, its points entry and its XP entry. */
 async function swimmerWithPoints() {
   const organizer = await user("Organizer");
   const swimmer = await user("Swimmer");
@@ -103,6 +103,9 @@ async function swimmerWithPoints() {
       vnDay: "2026-11-02",
     },
   });
+  await db.xpEntry.create({
+    data: { userId: swimmer.id, swimId: swim.id, kind: "DISTANCE", xp: 24, vnDay: "2026-11-02" },
+  });
   return swimmer;
 }
 
@@ -111,6 +114,7 @@ const snapshot = async (userId: string) => ({
   results: await db.swimResult.findMany({ where: { userId }, orderBy: { id: "asc" } }),
   points: await db.pointsEntry.findMany({ where: { userId }, orderBy: { id: "asc" } }),
   members: await db.teamMember.findMany({ where: { userId }, orderBy: { id: "asc" } }),
+  xp: await db.xpEntry.findMany({ where: { userId }, orderBy: { id: "asc" } }),
 });
 
 describe("suspendUser", () => {
@@ -150,6 +154,7 @@ describe("suspendUser", () => {
     const before = await snapshot(swimmer.id);
     expect(before.points).toHaveLength(1);
     expect(before.members).toHaveLength(1);
+    expect(before.xp).toHaveLength(1);
 
     await suspendUser(actor(admin), swimmer.id, "Cheating report");
     expect(await snapshot(swimmer.id)).toEqual(before);
@@ -170,6 +175,44 @@ describe("suspendUser", () => {
     expect((await db.user.findUniqueOrThrow({ where: { id: target.id } })).status).toBe("ACTIVE");
     expect(await db.session.count()).toBe(1);
     expect(await db.auditEvent.count()).toBe(0);
+  });
+
+  it("accepts a reason of exactly 500 characters, also with surrounding spaces", async () => {
+    const admin = await user("Admin", true);
+    const lan = await user("Lan");
+    const minh = await user("Minh");
+    const reason = "x".repeat(500);
+
+    await expect(suspendUser(actor(admin), lan.id, reason)).resolves.toMatchObject({
+      status: "SUSPENDED",
+    });
+    await expect(suspendUser(actor(admin), minh.id, `  ${reason}  `)).resolves.toMatchObject({
+      status: "SUSPENDED",
+    });
+    const events = await db.auditEvent.findMany();
+    expect(events.map((e) => e.reason)).toEqual([reason, reason]);
+  });
+
+  it("lets only one of two admins suspending each other at once succeed", async () => {
+    for (let round = 0; round < 5; round++) {
+      await clean();
+      const a = await user("AdminA", true);
+      const b = await user("AdminB", true);
+
+      const results = await Promise.allSettled([
+        suspendUser(actor(a), b.id, "Mutual"),
+        suspendUser(actor(b), a.id, "Mutual"),
+      ]);
+
+      const ok = results.filter((r) => r.status === "fulfilled");
+      const failed = results.filter((r) => r.status === "rejected");
+      expect(ok).toHaveLength(1);
+      expect(failed).toHaveLength(1);
+      expect((failed[0] as PromiseRejectedResult).reason).toBeInstanceOf(ForbiddenError);
+      const active = await db.user.count({ where: { isPlatformAdmin: true, status: "ACTIVE" } });
+      expect(active).toBeGreaterThanOrEqual(1);
+      expect(await db.auditEvent.count()).toBe(1);
+    }
   });
 
   it("refuses an admin suspending themselves", async () => {

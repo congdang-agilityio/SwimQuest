@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { UserStatus } from "@prisma/client";
 import { db } from "@/server/db";
 import { AUDIT_ACTIONS, type AuditAction, recordAudit } from "@/server/audit/record";
-import { NotFoundError, requirePlatformAdmin } from "@/server/auth/roles";
+import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import type { AdminActor } from "./users";
 
 /** The reason is missing, blank or longer than 500 characters. */
@@ -32,8 +32,8 @@ type Change = { from: UserStatus; to: UserStatus; action: AuditAction; endSessio
 
 /**
  * Moves one account from `from` to `to` for an active platform admin (role re-read from the
- * database), in one transaction with its audit event. Swims, points and team memberships are
- * never touched.
+ * locked admin rows), in one transaction with its audit event. Swims, points, XP and team
+ * memberships are never touched.
  */
 async function changeStatus(
   actor: AdminActor,
@@ -42,9 +42,14 @@ async function changeStatus(
   change: Change,
 ): Promise<AccountStatusResult> {
   return db.$transaction(async (tx) => {
+    // Lock every admin row in id order first (as setPlatformAdmin does), then check the caller
+    // against that locked set: admin-state changes serialize on the same rows, so two admins
+    // suspending each other at once cannot leave the platform without an active admin.
+    const admins = await tx.$queryRaw<{ id: string; status: UserStatus }[]>`
+      SELECT "id", "status" FROM "User" WHERE "isPlatformAdmin" = true ORDER BY "id" FOR UPDATE`;
     const actorId = typeof actor?.id === "string" ? actor.id : "";
-    const caller = actorId ? await tx.user.findUnique({ where: { id: actorId } }) : null;
-    requirePlatformAdmin(caller?.status === "ACTIVE" ? caller : null);
+    const caller = admins.find((a) => a.id === actorId && a.status === "ACTIVE");
+    if (!caller) throw new ForbiddenError();
 
     const reason = reasonSchema.safeParse(rawReason);
     if (!reason.success) throw new ReasonRequiredError();
