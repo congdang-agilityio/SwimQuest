@@ -29,6 +29,7 @@
       "REALISTIC_LIMITS_OUT_OF_BOUNDS": "A realistic swim limit is outside the allowed range.",
       "ROUTE_MISSING": "Choose a route.",
       "ROUTE_DISTANCE_INVALID": "Enter a route distance above zero.",
+      "VISIBILITY_MISSING": "Choose who can find the tournament: public or invite link only.",
       "NO_TEAM": "Add at least one team.",
       "UNKNOWN": "Something needs fixing."
     }

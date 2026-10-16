@@ -15,7 +15,14 @@ async function clean() {
 const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
-async function draft(organizerId: string, { withTeam = true, routeDistanceM = 100_000 } = {}) {
+async function draft(
+  organizerId: string,
+  {
+    withTeam = true,
+    routeDistanceM = 100_000,
+    visibility = "INVITE_ONLY" as "PUBLIC" | "INVITE_ONLY" | null,
+  } = {},
+) {
   const tournament = await db.tournament.create({
     data: {
       organizerId,
@@ -25,6 +32,7 @@ async function draft(organizerId: string, { withTeam = true, routeDistanceM = 10
       seasonEndAt: new Date("2026-12-01T00:00:00+07:00"),
       routeId: "route01",
       routeDistanceM,
+      visibility,
     },
   });
   if (withTeam) {
@@ -35,7 +43,13 @@ async function draft(organizerId: string, { withTeam = true, routeDistanceM = 10
   return tournament;
 }
 
-async function setup(options: { withTeam?: boolean; routeDistanceM?: number } = {}) {
+async function setup(
+  options: {
+    withTeam?: boolean;
+    routeDistanceM?: number;
+    visibility?: "PUBLIC" | "INVITE_ONLY" | null;
+  } = {},
+) {
   const organizer = await user("organizer");
   const outsider = await user("outsider");
   const tournament = await draft(organizer.id, options);
@@ -107,6 +121,19 @@ describe("publishTournament", () => {
     expect(stored.status).toBe("DRAFT");
     expect(stored.inviteToken).toBeNull();
     expect(stored.publishedAt).toBeNull();
+  });
+
+  it("refuses a draft without a visibility choice with VISIBILITY_MISSING", async () => {
+    const { organizer, tournament } = await setup({ visibility: null });
+    const result = await publishTournament(organizer.id, tournament.id);
+
+    expect(result).toEqual({
+      ok: false,
+      reason: "PUBLISH_INVALID",
+      issues: [{ code: "VISIBILITY_MISSING", field: "visibility" }],
+    });
+    const stored = await db.tournament.findUniqueOrThrow({ where: { id: tournament.id } });
+    expect(stored.status).toBe("DRAFT");
   });
 
   it("refuses a non-organizer and leaves the draft unpublished", async () => {

@@ -59,6 +59,10 @@ test("draft without teams lists the issue; with a team: preview, publish once, i
   });
   expect(created.status()).toBe(201);
   const { id } = await created.json();
+  const chosen = await page.request.patch(`/api/tournaments/${id}/settings`, {
+    data: { group: "visibility", values: { visibility: "INVITE_ONLY" } },
+  });
+  expect(chosen.ok()).toBe(true);
   const manage = `/tournaments/${id}/manage`;
 
   await page.goto(manage);

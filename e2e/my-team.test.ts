@@ -72,6 +72,10 @@ test("after joining, My Team shows the team, 1 / limit and the player; a verifie
     },
   });
   const { id } = await created.json();
+  const chosen = await page.request.patch(`/api/tournaments/${id}/settings`, {
+    data: { group: "visibility", values: { visibility: "INVITE_ONLY" } },
+  });
+  expect(chosen.ok()).toBe(true);
   await page.request.post(`/api/tournaments/${id}/teams`, {
     data: { name: "Rùa Biển", emblemKey: "turtle", memberLimit: 5 },
   });
