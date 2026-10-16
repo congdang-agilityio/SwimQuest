@@ -217,7 +217,9 @@ describe("awardDistancePoints", () => {
 
     const s = await createSwimFromUpload(me.id, { buffer: file, filename: "swim.fit" });
 
-    const entries = await db.pointsEntry.findMany({ where: { swimResult: { swimId: s.id } } });
+    const entries = await db.pointsEntry.findMany({
+      where: { swimResult: { swimId: s.id }, kind: "DISTANCE" },
+    });
     expect(entries).toHaveLength(2);
     expect(entries).toEqual(
       expect.arrayContaining([

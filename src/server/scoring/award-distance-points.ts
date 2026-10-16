@@ -7,7 +7,11 @@ import type { Tx } from "@/server/checks/run-checks";
  * Serializes the distance awards of one player in one tournament until the transaction ends,
  * so two awards for the same day cannot both read the old daily total.
  */
-async function lockPlayerPoints(tx: Tx, tournamentId: string, userId: string): Promise<void> {
+export async function lockPlayerPoints(
+  tx: Tx,
+  tournamentId: string,
+  userId: string,
+): Promise<void> {
   await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`points:${tournamentId}:${userId}`}))`;
 }
 
