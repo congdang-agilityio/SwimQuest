@@ -82,6 +82,7 @@ model User {
   pushCategories       Json                     @default("{\"INVITATIONS\": true, \"TEAM\": true, \"VERIFICATION\": true, \"MILESTONES\": true}")
   notifications        Notification[]
   pushSubscriptions    PushSubscription[]
+  zaloBots             ZaloBot[]
 }
 
 model Session {
@@ -209,6 +210,8 @@ model Tournament {
   seasonEndProcessedAt       DateTime?             @db.Timestamptz(3)
   /// Set once the start-lock notice has been sent.
   startLockProcessedAt       DateTime?             @db.Timestamptz(3)
+  /// Set once the season-start messages have been queued.
+  seasonStartProcessedAt     DateTime?             @db.Timestamptz(3)
   createdAt                  DateTime              @default(now()) @db.Timestamptz(3)
   updatedAt                  DateTime              @updatedAt @db.Timestamptz(3)
   teams                      Team[]
@@ -219,6 +222,7 @@ model Tournament {
   weekSettlements            WeekSettlement[]
   reviewHelpers              ReviewHelper[]
   badges                     Badge[]
+  zalo                       TournamentZalo?
 
   @@index([organizerId])
 }
@@ -362,6 +366,7 @@ model SwimResult {
   updatedAt     DateTime         @updatedAt @db.Timestamptz(3)
   pointsEntries PointsEntry[]
   disputes      Dispute[]
+  zaloPost      ZaloSwimPost?
 
   @@unique([swimId, tournamentId])
   @@index([tournamentId, status])
@@ -704,4 +709,107 @@ model PushSubscription {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@index([userId])
+}
+
+/// An organizer's Zalo bot; one bot can serve several of the owner's tournaments.
+/// The key and webhook secret are stored only encrypted (by the encryption helper).
+model ZaloBot {
+  id          String           @id @default(cuid())
+  ownerUserId String
+  owner       User             @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  /// Zalo's id for the bot.
+  botId       String
+  botName     String
+  tokenEnc    String
+  /// Last 4 characters of the key, shown to the owner.
+  tokenHint   String
+  /// Public id in the webhook URL.
+  hookId      String           @unique
+  secretEnc   String
+  /// App origin the webhook was registered for.
+  origin      String
+  webhookOk   Boolean          @default(false)
+  /// Linked Zalo group; null until the bot is linked.
+  chatId      String?
+  linkedAt    DateTime?        @db.Timestamptz(3)
+  lastError   String?
+  lastErrorAt DateTime?        @db.Timestamptz(3)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime         @updatedAt @db.Timestamptz(3)
+  tournaments TournamentZalo[]
+  messages    ZaloMessage[]
+
+  @@unique([ownerUserId, botId])
+}
+
+/// A tournament's Zalo settings: which bot posts and which messages are switched on.
+model TournamentZalo {
+  tournamentId       String     @id
+  tournament         Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  zaloBotId          String
+  zaloBot            ZaloBot    @relation(fields: [zaloBotId], references: [id], onDelete: Cascade)
+  notifyNewTeam      Boolean    @default(true)
+  notifyPlayerJoined Boolean    @default(true)
+  notifyPlayerMoved  Boolean    @default(true)
+  notifySeasonStart  Boolean    @default(true)
+  notifyCountedSwims Boolean    @default(true)
+  notifyMilestones   Boolean    @default(true)
+  notifySeasonEnd    Boolean    @default(true)
+  introPostedAt      DateTime?  @db.Timestamptz(3)
+  createdAt          DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime   @updatedAt @db.Timestamptz(3)
+
+  @@index([zaloBotId])
+}
+
+enum ZaloMessageKind {
+  INTRO
+  NEW_TEAM
+  PLAYER_JOINED
+  PLAYER_MOVED
+  SEASON_START
+  COUNTED_SWIM
+  MILESTONE
+  SEASON_END
+}
+
+enum ZaloMessageStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+/// Outbox of messages to post to a Zalo group.
+model ZaloMessage {
+  id        String            @id @default(cuid())
+  zaloBotId String
+  zaloBot   ZaloBot           @relation(fields: [zaloBotId], references: [id], onDelete: Cascade)
+  chatId    String
+  kind      ZaloMessageKind
+  /// Ids and numbers only; the text is built when the message is sent.
+  payload   Json
+  /// Messages that may be merged into one post share a group key.
+  groupKey  String?
+  /// Makes queueing idempotent; null means no dedupe.
+  dedupeKey String?           @unique
+  status    ZaloMessageStatus @default(PENDING)
+  attempts  Int               @default(0)
+  lastError String?
+  createdAt DateTime          @default(now()) @db.Timestamptz(3)
+  sentAt    DateTime?         @db.Timestamptz(3)
+  swimPosts ZaloSwimPost[]
+
+  @@index([groupKey])
+  @@index([status, createdAt])
+}
+
+/// Marks a counted swim result as posted to Zalo, so it is posted at most once.
+model ZaloSwimPost {
+  swimResultId  String      @id
+  swimResult    SwimResult  @relation(fields: [swimResultId], references: [id], onDelete: Cascade)
+  zaloMessageId String
+  zaloMessage   ZaloMessage @relation(fields: [zaloMessageId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now()) @db.Timestamptz(3)
+
+  @@index([zaloMessageId])
 }
