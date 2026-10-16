@@ -35,6 +35,32 @@
   "rules": {
     "longestSwimCounted": "Một buổi bơi được tính tối đa {km} km.",
     "dailyLimit": "Mỗi người chơi được tính tối đa {km} km và điểm tương ứng mỗi ngày.",
-    "swimType": "Loại bơi được tính: {type}."
+    "swimType": "Loại bơi được tính: {type}.",
+    "uploadDeadline": "Buổi bơi phải được tải lên trong vòng {n} ngày kể từ ngày bơi và không muộn hơn {m} ngày sau thời điểm kết thúc mùa giải.",
+    "startChoiceAt": "Việc chọn điểm xuất phát đóng lúc {at}.",
+    "startChoiceAtSeasonStart": "Việc chọn điểm xuất phát đóng khi mùa giải bắt đầu ({at})."
+  },
+  "deadlines": {
+    "title": "Hạn chót",
+    "submissionDays": "Số ngày được tải buổi bơi lên",
+    "submissionDaysHelp": "Buổi bơi phải được tải lên trong vòng số ngày này kể từ ngày bơi (giờ Việt Nam).",
+    "lateUploadDays": "Số ngày được tải lên sau khi mùa giải kết thúc",
+    "lateUploadDaysHelp": "Không thể tải buổi bơi lên muộn hơn số ngày này sau thời điểm kết thúc mùa giải.",
+    "deadlineDate": "Hạn chọn điểm xuất phát: ngày",
+    "deadlineTime": "Hạn chọn điểm xuất phát: giờ",
+    "deadlineHelp": "Giờ Việt Nam. Để trống cả hai ô để việc chọn điểm xuất phát đóng vào lúc mùa giải bắt đầu ({seasonStart}). Không thể muộn hơn lúc mùa giải bắt đầu.",
+    "atSeasonStart": "Dùng lúc mùa giải bắt đầu",
+    "save": "Lưu hạn chót",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu hạn chót.",
+    "locked": "Đã khóa trong mùa giải: không thể thay đổi hạn chót sau khi mùa giải bắt đầu.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa gửi được. Hãy kiểm tra kết nối và thử lại.",
+    "errors": {
+      "DAYS_INVALID": "Hãy nhập số ngày nguyên từ 0 đến 60.",
+      "DEADLINE_INVALID": "Hãy nhập cả ngày và giờ hợp lệ, hoặc để trống cả hai.",
+      "DEADLINE_AFTER_SEASON_START": "Hạn chót không thể muộn hơn lúc mùa giải bắt đầu.",
+      "UNKNOWN": "Giá trị chưa hợp lệ."
+    }
   }
 }
