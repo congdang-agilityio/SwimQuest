@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { createTeam, deleteTeam, listTeamsWithCounts, TeamRuleError, updateTeam } from "./manage";
 
 async function clean() {
+  await db.auditEvent.deleteMany();
   await db.teamMember.deleteMany();
   await db.team.deleteMany();
   await db.tournament.deleteMany();
