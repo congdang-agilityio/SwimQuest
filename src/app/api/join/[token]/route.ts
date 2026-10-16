@@ -14,7 +14,7 @@ const noStore = { "cache-control": "no-store" };
 /**
  * POST /api/join/:token with `{ teamId }`: the session user joins that team at once. 200
  * `{ teamId }`, or `{ teamId, alreadyMember: true }` when already in a team of the tournament;
- * 409 `TEAM_FULL`, 410 `JOIN_CLOSED`, 404 unknown token or team.
+ * 409 `TEAM_FULL`, 410 `JOIN_CLOSED`, 403 `REMOVED_FROM_TOURNAMENT`, 404 unknown token or team.
  */
 export async function POST(request: Request, { params }: Ctx) {
   if (!isSameOrigin(request)) return apiError(403, "FORBIDDEN_ORIGIN");

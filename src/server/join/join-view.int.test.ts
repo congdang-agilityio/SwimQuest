@@ -4,6 +4,8 @@ import {
   addMember,
   BEFORE_START,
   cleanJoinRows,
+  DURING_SEASON,
+  endedMembership,
   SEASON_END,
   SEASON_START,
   tournamentWithTeams,
@@ -61,6 +63,7 @@ describe("getJoinView", () => {
       myTeam: null,
       joiningOpen: true,
       linkState: "ON",
+      blockedReason: null,
     });
   });
 
@@ -98,4 +101,42 @@ describe("getJoinView", () => {
       expect(await getJoinView(player.id, token, BEFORE_START)).toBeNull();
     },
   );
+  it("explains that a player removed after the start cannot join", async () => {
+    const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+    const player = await user("player");
+    const joinedAt = new Date("2026-10-05T00:00:00Z");
+    await endedMembership(
+      teams[0].id,
+      tournament.id,
+      player.id,
+      "REMOVED_AFTER_START",
+      joinedAt,
+      DURING_SEASON,
+    );
+
+    expect(await getJoinView(player.id, token, DURING_SEASON)).toMatchObject({
+      myTeam: null,
+      joiningOpen: false,
+      blockedReason: "REMOVED_FROM_TOURNAMENT",
+    });
+  });
+
+  it("keeps joining open for a player removed before the start", async () => {
+    const { tournament, teams, token } = await tournamentWithTeams("PUBLISHED", [2, 2]);
+    const player = await user("player");
+    const joinedAt = new Date("2026-10-05T00:00:00Z");
+    await endedMembership(
+      teams[0].id,
+      tournament.id,
+      player.id,
+      "REMOVED_BEFORE_START",
+      joinedAt,
+      BEFORE_START,
+    );
+
+    expect(await getJoinView(player.id, token, BEFORE_START)).toMatchObject({
+      joiningOpen: true,
+      blockedReason: null,
+    });
+  });
 });
