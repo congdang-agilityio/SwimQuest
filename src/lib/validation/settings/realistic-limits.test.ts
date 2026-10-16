@@ -4,6 +4,7 @@ import { realisticLimitsSettingsSchema } from "./realistic-limits";
 const starting = realisticLimitsSettingsSchema({
   swimLimitBounds: null,
   extraSlowestPaceSecPer100m: null,
+  minSwimDistanceM: null,
 });
 const errorsOf = (schema: typeof starting, input: unknown) => {
   const parsed = schema.safeParse(input);
@@ -54,6 +55,7 @@ describe("realisticLimitsSettingsSchema", () => {
         longestRealisticSwimM: { min: 10_000, max: 20_000 },
       },
       extraSlowestPaceSecPer100m: null,
+      minSwimDistanceM: null,
     });
     expect(errorsOf(schema, valid)).toEqual({
       longestRealisticSwimKm: "LIMIT_OUT_OF_BOUNDS",
@@ -77,6 +79,7 @@ describe("realisticLimitsSettingsSchema", () => {
         slowestPaceSecPer100m: { min: 100, max: 600 },
       },
       extraSlowestPaceSecPer100m: null,
+      minSwimDistanceM: null,
     });
     expect(errorsOf(schema, { ...valid, fastestPace: "3:00", slowestPace: "3:00" })).toEqual({
       fastestPace: "FASTEST_NOT_FASTER_THAN_SLOWEST",
@@ -90,6 +93,7 @@ describe("realisticLimitsSettingsSchema", () => {
     const schema = realisticLimitsSettingsSchema({
       swimLimitBounds: null,
       extraSlowestPaceSecPer100m: 240,
+      minSwimDistanceM: null,
     });
     expect(errorsOf(schema, { ...valid, slowestPace: "4:00" })).toEqual({
       slowestPace: "EXTRA_PACE_NOT_STRICTER",
@@ -97,6 +101,35 @@ describe("realisticLimitsSettingsSchema", () => {
     });
     expect(schema.parse({ ...valid, slowestPace: "4:01" })).toMatchObject({
       slowestPaceSecPer100m: 241,
+    });
+  });
+
+  it("falls back to the starting bounds for a non-object snapshot or a min above max", () => {
+    for (const swimLimitBounds of ["x", [], 7, { slowestPaceSecPer100m: { min: 500, max: 400 } }]) {
+      const schema = realisticLimitsSettingsSchema({
+        swimLimitBounds,
+        extraSlowestPaceSecPer100m: null,
+        minSwimDistanceM: null,
+      });
+      expect(errorsOf(schema, { ...valid, slowestPace: "10:01" })).toEqual({
+        slowestPace: "LIMIT_OUT_OF_BOUNDS",
+        slowestPaceRange: "3:00-10:00",
+      });
+    }
+  });
+
+  it("refuses a longest swim that the existing extra minimum distance would no longer stay below", () => {
+    const schema = realisticLimitsSettingsSchema({
+      swimLimitBounds: null,
+      extraSlowestPaceSecPer100m: null,
+      minSwimDistanceM: 10_000,
+    });
+    expect(errorsOf(schema, { ...valid, longestRealisticSwimKm: "10" })).toEqual({
+      longestRealisticSwimKm: "EXTRA_DISTANCE_NOT_STRICTER",
+      minSwimDistance: "10",
+    });
+    expect(schema.parse({ ...valid, longestRealisticSwimKm: "10.01" })).toMatchObject({
+      longestRealisticSwimM: 10010,
     });
   });
 

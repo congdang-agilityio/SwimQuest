@@ -6,6 +6,7 @@ export type RealisticLimitsContext = {
   /** Bounds snapshot taken at creation (S-64); null or a broken field uses the starting bounds. */
   swimLimitBounds: unknown;
   extraSlowestPaceSecPer100m: number | null;
+  minSwimDistanceM: number | null;
 };
 
 const isCount = (v: unknown): v is number => Number.isSafeInteger(v) && (v as number) > 0;
@@ -39,8 +40,8 @@ const INPUTS = [
 /**
  * S-93 realistic swim limits (FR-78, FR-85): fastest and slowest pace ("m:ss" per 100 m) and
  * the longest realistic swim (km), each inside the tournament's bounds snapshot. The fastest
- * pace must be faster than the slowest, and an extra slowest pace already set (S-26, BR-25)
- * must stay stricter. A refused bound adds `<field>Range` with the allowed range.
+ * pace must be faster than the slowest, and an extra slowest pace or minimum distance already
+ * set (S-26, BR-25) must stay stricter. A refused bound adds `<field>Range` with the allowed range.
  */
 export const realisticLimitsSettingsSchema = (t: RealisticLimitsContext) =>
   z
@@ -63,6 +64,7 @@ export const realisticLimitsSettingsSchema = (t: RealisticLimitsContext) =>
         } else out[field] = value;
       }
       const { fastestPaceSecPer100m: fast, slowestPaceSecPer100m: slow } = out;
+      const { longestRealisticSwimM: longest } = out;
       if (fast !== undefined && slow !== undefined && fast >= slow)
         issue("fastestPace", "FASTEST_NOT_FASTER_THAN_SLOWEST");
       const extra = t.extraSlowestPaceSecPer100m;
@@ -70,6 +72,12 @@ export const realisticLimitsSettingsSchema = (t: RealisticLimitsContext) =>
         issue("slowestPace", "EXTRA_PACE_NOT_STRICTER");
         // Shows the organizer the extra pace the realistic slowest pace must stay above.
         issue("extraSlowestPace", formatPace(extra));
+      }
+      const min = t.minSwimDistanceM;
+      if (longest !== undefined && min !== null && min >= longest) {
+        issue("longestRealisticSwimKm", "EXTRA_DISTANCE_NOT_STRICTER");
+        // Shows the extra minimum distance (km) the longest realistic swim must stay above.
+        issue("minSwimDistance", String(min / 1000));
       }
       if (ctx.issues.length > 0) return z.NEVER;
       return out as Record<SwimLimitField, number>;

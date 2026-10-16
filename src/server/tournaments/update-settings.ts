@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma, Tournament } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import { isSettingsGroup, SETTINGS_GROUPS, type SettingsGroup } from "@/lib/validation/settings";
 import { requireOrganizer } from "@/server/auth/roles";
@@ -28,11 +28,15 @@ function errorsOf(
   return errors;
 }
 
+const isLocked = (s: SettingsGroup, t: Tournament, now: Date) =>
+  s.seasonLocked && !["DRAFT", "PUBLISHED"].includes(effectiveStatus(t, now));
+
 /**
  * Saves one settings group (story S-23 AC 2, AC 5). Organizer only (throws the role errors of
  * `requireOrganizer`). A season-locked group is refused with SEASON_LOCKED once the tournament is
- * ACTIVE or later; the write is conditional on the stored status and season start, so a
- * concurrent change of them cannot slip through. Returns the stored values (km as metres).
+ * ACTIVE or later; the write is conditional on the stored status, season start and the group's
+ * write guard, so a concurrent change of them cannot slip through; on a miss the tournament is
+ * re-read and checked once more. Returns the stored values (km as metres).
  */
 export async function updateSettings(
   userId: string,
@@ -41,27 +45,31 @@ export async function updateSettings(
   input: unknown,
   now: Date,
 ): Promise<UpdateSettingsResult> {
-  const tournament = await requireOrganizer(userId, tournamentId);
+  let tournament = await requireOrganizer(userId, tournamentId);
   if (!isSettingsGroup(group)) return { ok: false, reason: "UNKNOWN_GROUP" };
   const settings: SettingsGroup = SETTINGS_GROUPS[group];
-
-  const status = effectiveStatus(tournament, now);
-  const locked = settings.seasonLocked && status !== "DRAFT" && status !== "PUBLISHED";
-  if (locked) return { ok: false, reason: "SEASON_LOCKED" };
-
+  if (isLocked(settings, tournament, now)) return { ok: false, reason: "SEASON_LOCKED" };
   if (typeof input !== "object" || input === null || Array.isArray(input))
     return { ok: false, reason: "INVALID", errors: { body: "INVALID_BODY" } };
-  const parsed = (settings.schemaFor?.(tournament) ?? settings.schema).safeParse(input);
-  if (!parsed.success)
-    return { ok: false, reason: "INVALID", errors: errorsOf(parsed.error.issues) };
 
-  const where = settings.seasonLocked ? OPEN_FOR_SEASON_SETTINGS(now) : {};
-  const { count } = await db.tournament.updateMany({
-    where: { id: tournament.id, ...where },
-    data: parsed.data,
-  });
-  if (count === 0) return { ok: false, reason: "SEASON_LOCKED" };
-  return { ok: true, group, values: parsed.data };
+  // A second try re-reads the tournament: a concurrent save may have changed what we checked.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt > 0) {
+      tournament = await requireOrganizer(userId, tournamentId);
+      if (isLocked(settings, tournament, now)) return { ok: false, reason: "SEASON_LOCKED" };
+    }
+    const parsed = (settings.schemaFor?.(tournament) ?? settings.schema).safeParse(input);
+    if (!parsed.success)
+      return { ok: false, reason: "INVALID", errors: errorsOf(parsed.error.issues) };
+    const where = settings.seasonLocked ? OPEN_FOR_SEASON_SETTINGS(now) : {};
+    const guard = settings.writeGuard?.(parsed.data) ?? {};
+    const { count } = await db.tournament.updateMany({
+      where: { AND: [{ id: tournament.id }, where, guard] },
+      data: parsed.data,
+    });
+    if (count > 0) return { ok: true, group, values: parsed.data };
+  }
+  return { ok: false, reason: "SEASON_LOCKED" };
 }
 
 /** Every settings group with its stored values (schema defaults until saved); null if missing. */

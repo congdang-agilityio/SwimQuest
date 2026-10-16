@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { evaluateSwim } from "@/server/checks/standard-checks";
 import { db } from "@/server/db";
 import { updateSettings } from "./update-settings";
@@ -42,6 +42,7 @@ async function setup(status: "DRAFT" | "ACTIVE", extra: Record<string, unknown> 
 }
 
 beforeEach(clean);
+afterEach(() => vi.restoreAllMocks());
 afterAll(async () => {
   await clean();
   await db.$disconnect();
@@ -96,6 +97,49 @@ describe("updateSettings realisticLimits", () => {
       reason: "INVALID",
       errors: { slowestPace: "EXTRA_PACE_NOT_STRICTER", extraSlowestPace: "4:00" },
     });
+  });
+
+  it("refuses a longest swim the stored extra minimum distance would no longer stay below", async () => {
+    const { organizer, t } = await setup("DRAFT", { minSwimDistanceM: 10_000 });
+    const input = { ...LIMITS, longestRealisticSwimKm: "10" };
+    const result = await updateSettings(organizer.id, t.id, "realisticLimits", input, NOW);
+    expect(result).toEqual({
+      ok: false,
+      reason: "INVALID",
+      errors: { longestRealisticSwimKm: "EXTRA_DISTANCE_NOT_STRICTER", minSwimDistance: "10" },
+    });
+  });
+
+  it("re-checks on the fresh row when the extra rules changed after the read; nothing saved", async () => {
+    const { organizer, t } = await setup("DRAFT");
+    const stale = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    await db.tournament.update({ where: { id: t.id }, data: { extraSlowestPaceSecPer100m: 250 } });
+    vi.spyOn(db.tournament, "findUnique").mockResolvedValueOnce(stale);
+    const result = await updateSettings(organizer.id, t.id, "realisticLimits", LIMITS, NOW);
+    expect(result).toEqual({
+      ok: false,
+      reason: "INVALID",
+      errors: { slowestPace: "EXTRA_PACE_NOT_STRICTER", extraSlowestPace: "4:10" },
+    });
+    const row = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    expect(row.slowestPaceSecPer100m).toBe(300);
+  });
+
+  it("extra rules re-check on the fresh row when the realistic limits changed after the read", async () => {
+    const { organizer, t } = await setup("DRAFT");
+    const stale = await db.tournament.findUniqueOrThrow({ where: { id: t.id } });
+    await db.tournament.update({ where: { id: t.id }, data: { longestRealisticSwimM: 8000 } });
+    vi.spyOn(db.tournament, "findUnique").mockResolvedValueOnce(stale);
+    const input = { minSwimDistanceM: "9000", extraSlowestPace: "" };
+    const result = await updateSettings(organizer.id, t.id, "extraRules", input, NOW);
+    expect(result).toEqual({
+      ok: false,
+      reason: "INVALID",
+      errors: { minSwimDistanceM: "EXTRA_DISTANCE_TOO_LARGE" },
+    });
+    expect((await db.tournament.findUniqueOrThrow({ where: { id: t.id } })).minSwimDistanceM).toBe(
+      null,
+    );
   });
 
   it("is refused once the tournament is active", async () => {

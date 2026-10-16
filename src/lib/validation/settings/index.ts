@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import type { z } from "zod";
 import { deadlinesSettingsSchema } from "./deadlines";
 import { extraRulesSettingsSchema } from "./extra-rules";
@@ -22,8 +23,17 @@ export type SettingsGroup = {
     longestRealisticSwimM: number;
     swimLimitBounds: unknown;
     extraSlowestPaceSecPer100m: number | null;
+    minSwimDistanceM: number | null;
   }) => z.ZodType<Record<string, unknown>, unknown>;
+  /**
+   * Stored values the parsed data must still agree with (cross-group rules, BR-25); added to the
+   * save's conditional write so a concurrent save of the other group cannot break the rule.
+   */
+  writeGuard?: (data: Record<string, unknown>) => Prisma.TournamentWhereInput;
 };
+
+const below = (n: unknown) => (typeof n === "number" ? { lt: n } : undefined);
+const above = (n: unknown) => (typeof n === "number" ? { gt: n } : undefined);
 
 export const SETTINGS_GROUPS = {
   swim: {
@@ -40,15 +50,32 @@ export const SETTINGS_GROUPS = {
   extraRules: {
     schema: extraRulesSettingsSchema({ slowestPaceSecPer100m: 300, longestRealisticSwimM: 30000 }),
     schemaFor: (t) => extraRulesSettingsSchema(t),
+    writeGuard: (d) => ({
+      slowestPaceSecPer100m: above(d.extraSlowestPaceSecPer100m),
+      longestRealisticSwimM: above(d.minSwimDistanceM),
+    }),
     columns: ["minSwimDistanceM", "extraSlowestPaceSecPer100m"],
     seasonLocked: true,
   },
   realisticLimits: {
+    // Context-free fallback (starting bounds, no extra rules); the save always uses `schemaFor`.
     schema: realisticLimitsSettingsSchema({
       swimLimitBounds: null,
       extraSlowestPaceSecPer100m: null,
+      minSwimDistanceM: null,
     }),
     schemaFor: (t) => realisticLimitsSettingsSchema(t),
+    writeGuard: (d) => ({
+      AND: [
+        {
+          OR: [
+            { extraSlowestPaceSecPer100m: null },
+            { extraSlowestPaceSecPer100m: below(d.slowestPaceSecPer100m) },
+          ],
+        },
+        { OR: [{ minSwimDistanceM: null }, { minSwimDistanceM: below(d.longestRealisticSwimM) }] },
+      ],
+    }),
     columns: ["fastestPaceSecPer100m", "slowestPaceSecPer100m", "longestRealisticSwimM"],
     seasonLocked: true,
   },
