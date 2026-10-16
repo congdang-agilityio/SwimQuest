@@ -138,7 +138,6 @@ test("a team without a start sees the notice, no path and no ship", async ({ pag
 type Box = { x: number; y: number; width: number; height: number };
 const intersects = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-const DESTINATIONS = ["non_nuoc", "son_thuy", "pham_van_dong", "man_thai", "hon_sup", "ly_son"];
 
 async function seedVoyagePage(page: import("@playwright/test").Page, label: string) {
   const email = `${label}-${stamp}@example.com`;
@@ -188,25 +187,30 @@ async function seedVoyagePage(page: import("@playwright/test").Page, label: stri
 
 async function expectNamesReadable(page: import("@playwright/test").Page) {
   const map = (await page.getByTestId("route-map").boundingBox()) as Box;
+  // Every rendered destination is checked, so a new or missed one cannot hide an overlap.
+  const dests = page.locator('[data-testid^="destination-"]');
+  await expect(dests).toHaveCount(7); // route01 has 7 destinations
+  const slugs: string[] = [];
   const names: Box[] = [];
   const icons: Box[] = [];
-  for (const slug of DESTINATIONS) {
-    const dest = page.getByTestId(`destination-${slug}`);
-    const name = (await dest.locator("span").first().boundingBox()) as Box;
+  for (const dest of await dests.all()) {
+    const slug = (await dest.getAttribute("data-testid"))!.replace("destination-", "");
+    const name = (await dest.getByTestId("landmark-name").boundingBox()) as Box;
     expect(name, `${slug} name`).not.toBeNull();
     expect(name.x, `${slug} left`).toBeGreaterThanOrEqual(map.x);
     expect(name.y, `${slug} top`).toBeGreaterThanOrEqual(map.y);
     expect(name.x + name.width, `${slug} right`).toBeLessThanOrEqual(map.x + map.width);
     expect(name.y + name.height, `${slug} bottom`).toBeLessThanOrEqual(map.y + map.height);
+    slugs.push(slug);
     names.push(name);
     const icon = await dest.locator("img").first().boundingBox();
     if (icon) icons.push(icon);
   }
   for (let i = 0; i < names.length; i++) {
     for (let j = i + 1; j < names.length; j++) {
-      expect(intersects(names[i], names[j]), `${DESTINATIONS[i]}/${DESTINATIONS[j]}`).toBe(false);
+      expect(intersects(names[i], names[j]), `${slugs[i]}/${slugs[j]}`).toBe(false);
     }
-    for (const icon of icons) expect(intersects(names[i], icon), DESTINATIONS[i]).toBe(false);
+    for (const icon of icons) expect(intersects(names[i], icon), slugs[i]).toBe(false);
   }
 }
 
