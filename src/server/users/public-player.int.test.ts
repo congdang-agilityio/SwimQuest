@@ -4,7 +4,7 @@ import { PUBLIC_PLAYER_SELECT, toPublicPlayer } from "./public-player";
 
 describe("public player projection (database)", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });

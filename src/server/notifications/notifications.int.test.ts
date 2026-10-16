@@ -8,7 +8,7 @@ import { assertInternalLink } from "./handlers";
 import { listNotifications, markAllRead, unreadCount } from "./inbox";
 
 async function clean() {
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.domainEvent.deleteMany();
   await db.notification.deleteMany();
   await db.pointsEntry.deleteMany();

@@ -6,7 +6,7 @@ import { AUDIT_ACTIONS, recordAudit } from "./record";
 
 describe("recordAudit (database)", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });

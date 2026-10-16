@@ -16,7 +16,7 @@ const NEW_END_AT = new Date("2026-12-10T20:00:00+07:00");
 type Status = "DRAFT" | "PUBLISHED" | "ACTIVE" | "COMPLETED" | "ARCHIVED";
 
 async function clean() {
-  await db.auditEvent.deleteMany();
+  await db.$executeRaw`TRUNCATE "AuditEvent"`;
   await db.pointsEntry.deleteMany();
   await db.swimResult.deleteMany();
   await db.swim.deleteMany();

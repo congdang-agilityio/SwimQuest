@@ -63,7 +63,7 @@ async function setup() {
 describe("PUT /api/teams/:teamId/captain", () => {
   beforeEach(async () => {
     jar.token = undefined;
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.teamMember.deleteMany();
     await db.team.deleteMany();
     await db.tournament.deleteMany();
@@ -71,7 +71,7 @@ describe("PUT /api/teams/:teamId/captain", () => {
     await db.user.deleteMany();
   });
   afterAll(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.teamMember.deleteMany();
     await db.team.deleteMany();
     await db.tournament.deleteMany();

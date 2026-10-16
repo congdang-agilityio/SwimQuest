@@ -34,7 +34,7 @@ async function expiredToken(userId: string) {
 describe("current user", () => {
   beforeEach(async () => {
     jar.token = undefined;
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });

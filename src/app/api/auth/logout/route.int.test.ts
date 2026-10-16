@@ -24,7 +24,7 @@ async function signedIn() {
 
 describe("POST /api/auth/logout", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });

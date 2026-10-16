@@ -29,7 +29,7 @@ describe("tournament, team and team member schema", () => {
     await db.teamMember.deleteMany();
     await db.team.deleteMany();
     await db.tournament.deleteMany();
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   }

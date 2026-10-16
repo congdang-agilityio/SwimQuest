@@ -28,7 +28,7 @@ function attributes(cookie: string) {
 
 describe("POST /api/auth/signup", () => {
   beforeEach(async () => {
-    await db.auditEvent.deleteMany();
+    await db.$executeRaw`TRUNCATE "AuditEvent"`;
     await db.session.deleteMany();
     await db.user.deleteMany();
   });
