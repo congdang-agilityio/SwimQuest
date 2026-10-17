@@ -1,0 +1,25 @@
+.rules {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+.list {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: 0;
+  padding-left: var(--sq-space-5);
+}
+.route {
+  margin: 0;
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.note {
+  margin: 0;
+  color: var(--sq-text-muted);
+}

@@ -62,5 +62,52 @@
       "DEADLINE_AFTER_SEASON_START": "Hạn chót không thể muộn hơn lúc mùa giải bắt đầu.",
       "UNKNOWN": "Giá trị chưa hợp lệ."
     }
+  },
+  "points": {
+    "title": "Giá trị điểm",
+    "intro": "Giải dùng giá trị của nền tảng, trừ khi bạn thay đổi trước khi mùa giải bắt đầu.",
+    "groups": {
+      "distance": "Quãng đường",
+      "bonuses": "Điểm thưởng",
+      "multipliers": "Hệ số theo tuần"
+    },
+    "fields": {
+      "pointsPerKm": "Điểm mỗi km",
+      "firstSwimBonusPoints": "Thưởng buổi bơi đầu tiên (điểm)",
+      "longSwimTier1M": "Buổi bơi dài 1: từ (m)",
+      "longSwimTier1Points": "Thưởng buổi bơi dài 1 (điểm)",
+      "longSwimTier2M": "Buổi bơi dài 2: từ (m)",
+      "longSwimTier2Points": "Thưởng buổi bơi dài 2 (điểm)",
+      "multiplierTwoDaysPct": "Hệ số khi bơi 2 ngày (%)",
+      "multiplierThreeDaysPct": "Hệ số khi bơi từ 3 ngày (%)",
+      "streakStepPct": "Cộng thêm mỗi tuần liên tiếp (%)",
+      "multiplierMaxPct": "Hệ số tối đa (%)"
+    },
+    "percentHint": "Phần trăm nguyên: 110 nghĩa là x1,10.",
+    "rulesHeading": "Ý nghĩa của các giá trị",
+    "rules": {
+      "perKm": "{points} điểm cho mỗi km được tính.",
+      "firstSwim": "Buổi bơi đầu tiên: +{points} điểm.",
+      "longSwim": "Buổi bơi từ {m, number} m trở lên: +{points} điểm.",
+      "multipliers": "Hệ số tuần: x{two} khi bơi 2 ngày, x{three} khi bơi từ 3 ngày.",
+      "streak": "+{step}% cho mỗi tuần liên tiếp, tối đa x{max}.",
+      "routeLength": "Độ dài lộ trình: {km, number} km x {perKm} điểm mỗi km = {points, number} điểm.",
+      "shipNote": "Điểm làm con tàu di chuyển, không phải số km thật. Điểm thưởng và hệ số cũng cộng điểm, nên đội có thể tới Lý Sơn với ít km thật hơn.",
+      "xpNote": "XP cá nhân luôn dùng giá trị của nền tảng, dù bạn đặt giá trị nào ở đây."
+    },
+    "save": "Lưu giá trị điểm",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu giá trị điểm.",
+    "locked": "Đã khóa trong mùa giải: không thể thay đổi giá trị điểm sau khi mùa giải bắt đầu.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa gửi được. Hãy kiểm tra kết nối và thử lại.",
+    "errors": {
+      "POINTS_REQUIRED": "Hãy nhập một số nguyên.",
+      "POINTS_INVALID": "Hãy nhập số nguyên, không có số thập phân.",
+      "POINTS_OUT_OF_RANGE": "Giá trị nằm ngoài khoảng cho phép.",
+      "TIER_2_NOT_ABOVE_TIER_1": "Buổi bơi dài 2 phải bắt đầu cao hơn buổi bơi dài 1.",
+      "MAX_BELOW_THREE_DAYS": "Hệ số tối đa không được thấp hơn hệ số từ 3 ngày.",
+      "UNKNOWN": "Giá trị này không hợp lệ."
+    }
   }
 }
