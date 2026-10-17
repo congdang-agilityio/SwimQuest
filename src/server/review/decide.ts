@@ -53,7 +53,7 @@ export async function decideFlagged(
     select: { tournamentId: true, userId: true },
   });
   if (!found) throw new NotFoundError();
-  await requireReviewer(reviewerId, found.tournamentId);
+  await requireReviewer(reviewerId, found.tournamentId, { write: true });
 
   const approve = decision?.approve === true;
   let note: string | null = null;

@@ -33,7 +33,7 @@ export async function organizerSetStart(
     teamId.length > 0 &&
     (await db.team.findUnique({ where: { id: teamId }, select: { tournamentId: true } }));
   if (!team) throw new NotFoundError();
-  const tournament = await requireOrganizer(userId, team.tournamentId);
+  const tournament = await requireOrganizer(userId, team.tournamentId, { write: true });
   const route = getRoute(tournament.routeId);
   const valid = route ? startDestinations(route).map((d) => d.slug) : [];
   if (typeof slug !== "string" || !valid.includes(slug)) throw new InvalidStartError();

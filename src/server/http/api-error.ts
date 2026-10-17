@@ -15,6 +15,7 @@ export type ApiErrorCode =
   | "SEASON_LOCKED"
   | "SEASON_ENDED"
   | "ARCHIVED"
+  | "NOT_COMPLETED"
   | "CONFLICT"
   | "START_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
@@ -71,6 +72,7 @@ const messages: Record<ApiErrorCode, string> = {
   SEASON_LOCKED: "These settings cannot be changed after the season has started.",
   SEASON_ENDED: "The season has ended, so its end date can no longer be changed.",
   ARCHIVED: "An archived tournament cannot be edited.",
+  NOT_COMPLETED: "Only a completed tournament can be archived.",
   CONFLICT: "The tournament changed in the meantime. Reload and try again.",
   START_LOCKED: "The team's start is locked and can no longer be changed.",
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",

@@ -10,12 +10,23 @@ export class NotFoundError extends Error {
   readonly status = 404;
   readonly code = "NOT_FOUND";
 }
+/** The tournament is ARCHIVED: nothing about it can change any more (FR-23, story S-35). */
+export class ArchivedError extends Error {
+  readonly status = 409;
+  readonly code = "ARCHIVED";
+}
+type WriteOptions = { write?: boolean };
 const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
 
-export async function requireOrganizer(userId: string, tournamentId: string) {
+export async function requireOrganizer(
+  userId: string,
+  tournamentId: string,
+  { write = false }: WriteOptions = {},
+) {
   const t = isId(tournamentId) && (await db.tournament.findUnique({ where: { id: tournamentId } }));
   if (!t) throw new NotFoundError();
   if (t.organizerId !== userId) throw new ForbiddenError();
+  if (write && t.status === "ARCHIVED") throw new ArchivedError();
   return t;
 }
 
@@ -42,11 +53,19 @@ export async function requireOrganizerOrAdmin(
  * and tournament edits use `requireOrganizer`). Throws NotFoundError for an unknown
  * tournament, else ForbiddenError.
  */
-export async function requireReviewer(userId: string, tournamentId: string) {
+export async function requireReviewer(
+  userId: string,
+  tournamentId: string,
+  { write = false }: WriteOptions = {},
+) {
   const t = isId(tournamentId) && (await db.tournament.findUnique({ where: { id: tournamentId } }));
   if (!t) throw new NotFoundError();
   if (!isId(userId)) throw new ForbiddenError();
-  if (t.organizerId === userId) return t;
+  const open = () => {
+    if (write && t.status === "ARCHIVED") throw new ArchivedError();
+    return t;
+  };
+  if (t.organizerId === userId) return open();
   // One query: the active helper row, joined to an ACTIVE membership in the same tournament.
   const helper = await db.reviewHelper.count({
     where: {
@@ -57,7 +76,7 @@ export async function requireReviewer(userId: string, tournamentId: string) {
     },
   });
   if (helper === 0) throw new ForbiddenError();
-  return t;
+  return open();
 }
 
 export async function isOrganizer(userId: string, tournamentId: string): Promise<boolean> {
@@ -80,6 +99,7 @@ export function requirePlatformAdmin(user: { isPlatformAdmin: boolean } | null):
 
 /** The 403/404 API response for a role error, or null for any other error (rethrow it). */
 export function roleErrorResponse(err: unknown) {
-  const known = err instanceof ForbiddenError || err instanceof NotFoundError;
+  const known =
+    err instanceof ForbiddenError || err instanceof NotFoundError || err instanceof ArchivedError;
   return known ? apiError(err.status, err.code) : null;
 }

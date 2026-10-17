@@ -45,7 +45,7 @@ export async function updateSettings(
   now: Date,
   retry = true,
 ): Promise<UpdateSettingsResult> {
-  const tournament = await requireOrganizer(userId, tournamentId);
+  const tournament = await requireOrganizer(userId, tournamentId, { write: true });
   if (!isSettingsGroup(group)) return { ok: false, reason: "UNKNOWN_GROUP" };
   const settings: SettingsGroup = SETTINGS_GROUPS[group];
 

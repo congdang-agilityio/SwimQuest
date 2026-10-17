@@ -92,7 +92,7 @@ export async function decideDispute(
     select: { swimResult: { select: { tournamentId: true, userId: true } } },
   });
   if (!found) throw new NotFoundError();
-  await requireReviewer(reviewerId, found.swimResult.tournamentId);
+  await requireReviewer(reviewerId, found.swimResult.tournamentId, { write: true });
   const note = parseReason(decision?.reason);
   const accept = decision?.accept === true;
 

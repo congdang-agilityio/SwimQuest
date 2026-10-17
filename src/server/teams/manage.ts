@@ -28,7 +28,7 @@ async function requireTeamOrganizer(userId: string, teamId: string) {
       ? await db.team.findUnique({ where: { id: teamId }, select: { tournamentId: true } })
       : null;
   if (!team) throw new NotFoundError();
-  return requireOrganizer(userId, team.tournamentId);
+  return requireOrganizer(userId, team.tournamentId, { write: true });
 }
 
 /** Locks the team row so member joins and other edits wait until this transaction ends. */
@@ -43,7 +43,7 @@ export async function createTeam(
   tournamentId: string,
   input: unknown,
 ): Promise<WriteResult> {
-  await requireOrganizer(userId, tournamentId);
+  await requireOrganizer(userId, tournamentId, { write: true });
   const parsed = parseTeamInput(input);
   if (!parsed.ok) return parsed;
   return { ok: true, team: await db.team.create({ data: { ...parsed.data, tournamentId } }) };
