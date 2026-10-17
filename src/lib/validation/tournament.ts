@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeDecimal } from "@/lib/decimal-km";
 import { getRoute } from "@/lib/routes";
 import { vnLocalToUtc } from "@/lib/time/vn";
 
@@ -36,7 +37,7 @@ const vnInstant = (invalid: TournamentDraftErrorCode) =>
 
 /** Kilometres as typed (string) or a number: positive, at most 2 decimals; returns metres. */
 const routeDistance = z.unknown().transform((value, ctx) => {
-  const raw = typeof value === "string" ? value.trim() : value;
+  const raw = normalizeDecimal(typeof value === "string" ? value.trim() : value);
   const km = typeof raw === "string" && /^[+-]?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
   let error: TournamentDraftErrorCode | null = null;
   if (raw === undefined || raw === null || raw === "") error = "ROUTE_DISTANCE_REQUIRED";
