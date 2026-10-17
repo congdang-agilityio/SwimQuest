@@ -1,0 +1,122 @@
+/* Finish celebration ("7 Cập bến Lý Sơn" phone panel in the mockup). Every value is a token. */
+
+.finish {
+  order: -1; /* phone: first thing on My Team */
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-raised);
+  color: var(--sq-text-on-dark);
+}
+@media (min-width: 900px) {
+  /* Desktop: right column of the My Team layout, above the start card. */
+  .finish {
+    order: 0;
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 480px;
+  }
+}
+
+.title {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  text-align: center;
+}
+
+/* Lý Sơn scene in a rounded frame; the message sits on its lower edge, fading into the navy. */
+.hero {
+  position: relative;
+  margin: 0 var(--sq-space-3);
+}
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  /* The lower edge melts into the panel instead of ending on a hard frame line. */
+  mask-image: linear-gradient(180deg, black 72%, transparent 100%);
+}
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 36%, var(--sq-navy-900) 88%);
+  pointer-events: none;
+}
+.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.message {
+  position: absolute;
+  inset: auto 0 var(--sq-space-3);
+  z-index: 1;
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0 var(--sq-space-4);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  line-height: 1.25;
+  text-align: center;
+  text-shadow: 0 2px 6px var(--sq-navy-950);
+}
+.gold {
+  color: var(--sq-gold-strong);
+}
+
+/* Emblem on a gold glow, with two completion sparks */
+.crest {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-top: calc(-1 * var(--sq-space-2));
+  padding: var(--sq-space-2) 0 0;
+}
+.crest > span {
+  position: relative;
+  z-index: 1;
+  width: min(230px, 62%);
+}
+.emblem {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(340px, 92%);
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.burstLeft,
+.burstRight {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+}
+.burstLeft {
+  top: 8%;
+  left: 14%;
+}
+.burstRight {
+  top: 30%;
+  right: 12%;
+  width: 36px;
+  height: 36px;
+}
+
+.action {
+  padding: var(--sq-space-4);
+}

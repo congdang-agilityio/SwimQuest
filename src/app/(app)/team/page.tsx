@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamStartCard } from "@/components/starts/team-start-card";
 import styles from "@/components/teams/my-team.module.css";
 import { ButtonLink } from "@/components/ui";
@@ -52,6 +53,7 @@ export default async function TeamPage() {
             </div>
           )}
         </div>
+        {view?.finishedAt && <TeamFinish userId={user.id} />}
         {membership && view && (
           <TeamStartCard
             startSlug={startSlug}
