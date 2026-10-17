@@ -2,8 +2,11 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { OrganizerStartPanel } from "@/components/starts/organizer-start-panel";
 import { RosterList } from "@/components/teams/roster-list";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
+import { getRoute, startDestinations } from "@/lib/routes";
+import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
@@ -26,9 +29,25 @@ export default async function OrganizerTeamPage({
   });
   const team = await db.team.findFirst({
     where: { id: teamId, tournamentId: id },
-    select: { id: true, name: true },
+    select: {
+      id: true,
+      name: true,
+      startDestination: true,
+      startSetBy: true,
+      startSetAt: true,
+      tournament: {
+        select: {
+          routeId: true,
+          status: true,
+          seasonStartAt: true,
+          seasonEndAt: true,
+          startChoiceDeadlineAt: true,
+        },
+      },
+    },
   });
   if (!team) notFound();
+  const route = getRoute(team.tournament.routeId);
   const members = await getTeamRoster(team.id);
   const t = await getTranslations("captain");
   return (
@@ -37,6 +56,17 @@ export default async function OrganizerTeamPage({
         <Link href={`/tournaments/${id}/manage`}>{t("back")}</Link>
       </p>
       <h1>{team.name}</h1>
+      {route && (
+        <OrganizerStartPanel
+          teamId={team.id}
+          starts={startDestinations(route).map((d) => ({ slug: d.slug, nameKey: d.nameKey }))}
+          currentSlug={team.startDestination}
+          setBy={team.startSetBy}
+          setAtIso={team.startSetAt?.toISOString() ?? null}
+          lockAtIso={startLockAt(team.tournament).toISOString()}
+          locked={isStartLocked(team.tournament, new Date())}
+        />
+      )}
       <RosterList
         teamId={team.id}
         members={members.map((m) => ({

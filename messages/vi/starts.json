@@ -31,5 +31,31 @@
   },
   "origin": {
     "automaticAt": "Được gán tự động lúc {setAt} (giờ Việt Nam)"
+  },
+  "organizer": {
+    "title": "Điểm xuất phát",
+    "notChosen": "Chưa chọn: hệ thống sẽ tự gán một điểm xuất phát lúc {deadline} (giờ Việt Nam).",
+    "choose": "Chọn điểm xuất phát",
+    "change": "Đổi điểm xuất phát",
+    "cancel": "Hủy",
+    "save": "Lưu điểm xuất phát",
+    "legend": "Điểm xuất phát của đội này",
+    "lockedSince": "Điểm xuất phát đã khóa từ {lockedAt} (giờ Việt Nam), không thể đổi ở đây nữa.",
+    "deadline": "Có thể đặt đến {deadline} (giờ Việt Nam).",
+    "overrideTitle": "Thay lựa chọn của đội trưởng?",
+    "overrideBody": "Đội trưởng đã chọn {name}. Đặt {newName} sẽ thay lựa chọn đó.",
+    "overrideYes": "Thay",
+    "saved": "Đã đặt điểm xuất phát: {name}.",
+    "unchanged": "{name} đã là điểm xuất phát của đội.",
+    "errors": {
+      "NO_SELECTION": "Hãy chọn một điểm xuất phát.",
+      "INVALID_START": "Không thể chọn điểm xuất phát này.",
+      "START_LOCKED": "Đã khóa chọn điểm xuất phát (từ {lockedAt}).",
+      "GENERIC": "Không lưu được. Vui lòng thử lại."
+    }
+  },
+  "originBy": {
+    "organizer": "Do ban tổ chức đặt",
+    "captain": "Do đội trưởng chọn"
   }
 }

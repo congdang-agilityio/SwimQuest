@@ -1,0 +1,68 @@
+/*
+ * Organizer's "Choose start" panel on the team page. Rows and thumbnails come from
+ * start-picker.module.css; every value comes from src/styles/tokens.css.
+ */
+
+.panel {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.headText {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+.title {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-text-muted);
+}
+.current {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.note {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.actions > * {
+  flex: 1;
+}
+
+.confirm {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  font-size: var(--sq-text-sm);
+}
+.confirmTitle {
+  margin: 0;
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.confirmBody {
+  margin: 0;
+}
