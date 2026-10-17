@@ -11,5 +11,25 @@
       "ARCHIVED": "Archived"
     },
     "settingsLink": "Rules and settings"
+  },
+  "players": {
+    "title": "Players without a team",
+    "empty": "Every player is on a team.",
+    "removed": "Removed after the start",
+    "add": "Add to team",
+    "addFor": "Add {name} to a team",
+    "team": "Team",
+    "choose": "Choose a team",
+    "freePlaces": "{name} ({count, plural, one {# place} other {# places}} free)",
+    "teamFull": "{name} (full)",
+    "confirm": "Confirm",
+    "adding": "Adding...",
+    "cancel": "Cancel",
+    "errors": {
+      "full": "That team is full. Choose another team.",
+      "already": "This player is already on a team.",
+      "failed": "Could not add the player. Try again.",
+      "network": "No connection. Try again."
+    }
   }
 }

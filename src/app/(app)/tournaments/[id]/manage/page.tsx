@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { MockupPicture } from "@/components/art/mockup-picture";
+import { UnassignedPlayers } from "@/components/organizer/unassigned-players";
 import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
 import styles from "@/components/tournaments/manage.module.css";
@@ -20,6 +21,7 @@ import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { pageOrigin } from "@/server/http/request";
+import { listUnassignedPlayers } from "@/server/organizer/unassigned-players";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 
 const STATUS_TONE: Record<TournamentStatus, ChipTone> = {
@@ -45,6 +47,8 @@ export default async function ManageTournamentPage({
   const now = new Date();
   await ensureStartsAssigned(tournament.id, now);
   const { teams, capacity } = await listTeamsWithCounts(tournament.id);
+  const unassigned =
+    tournament.status === "DRAFT" ? [] : await listUnassignedPlayers(user.id, tournament.id);
   const status = effectiveStatus(tournament, now);
   const destinations = getRoute(tournament.routeId)?.destinations ?? [];
   const rows = teams.map((team) => ({
@@ -112,6 +116,20 @@ export default async function ManageTournamentPage({
           enabled={tournament.inviteEnabled}
           url={`${origin}/join/${tournament.inviteToken}`}
           tournamentName={tournament.name}
+        />
+      )}
+      {tournament.status !== "DRAFT" && (
+        <UnassignedPlayers
+          players={unassigned.map((p) => ({
+            id: p.id,
+            displayName: p.displayName,
+            removedAfterStart: p.removedAfterStart,
+          }))}
+          teams={teams.map((team) => ({
+            id: team.id,
+            name: team.name,
+            free: Math.max(0, team.memberLimit - team.memberCount),
+          }))}
         />
       )}
       <TeamList
