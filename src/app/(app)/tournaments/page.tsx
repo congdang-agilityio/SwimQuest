@@ -10,17 +10,23 @@ import { listMyTournaments } from "@/server/home/my-tournaments";
 /** My tournaments ("DANH SÁCH GIẢI ĐẤU" panel): filter pills and card rows. */
 export default async function TournamentsPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/tournaments");
-  const [t, tournaments] = await Promise.all([
+  const [t, tFind, tournaments] = await Promise.all([
     getTranslations("tabs.tournaments"),
+    getTranslations("find"),
     listMyTournaments(user.id, new Date()),
   ]);
   return (
     <main className={styles.screen}>
       <div className={styles.header}>
         <h1 className={styles.title}>{t("title")}</h1>
-        <ButtonLink href="/tournaments/new" size="sm">
-          {t("create")}
-        </ButtonLink>
+        <div className={styles.actions}>
+          <ButtonLink href="/tournaments/find" size="sm" variant="secondary">
+            {tFind("title")}
+          </ButtonLink>
+          <ButtonLink href="/tournaments/new" size="sm">
+            {t("create")}
+          </ButtonLink>
+        </div>
       </div>
       <section className={styles.panel} aria-labelledby="tournament-list-title">
         <div className={styles.panelHeader}>

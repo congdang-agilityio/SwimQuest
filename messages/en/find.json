@@ -1,0 +1,28 @@
+{
+  "title": "Find tournaments",
+  "listTitle": "Tournament list",
+  "searchLabel": "Find tournaments",
+  "searchPlaceholder": "Find tournaments…",
+  "searchButton": "Search",
+  "filterLabel": "Filter tournaments by status",
+  "filter": {
+    "open": "Open",
+    "PUBLISHED": "Joining",
+    "ACTIVE": "Live",
+    "COMPLETED": "Finished"
+  },
+  "status": {
+    "PUBLISHED": "Open to join",
+    "ACTIVE": "In progress",
+    "COMPLETED": "Finished"
+  },
+  "dates": "{start} – {end}",
+  "placesLeft": "{count, plural, =0 {Full} one {# place left} other {# places left}}",
+  "join": "Join",
+  "details": "View details",
+  "empty": "No tournaments match your search.",
+  "emptyHint": "Try another keyword or clear the filters.",
+  "clear": "Clear filters",
+  "more": "Show more",
+  "back": "My tournaments"
+}

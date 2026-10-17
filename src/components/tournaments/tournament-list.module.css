@@ -14,6 +14,12 @@
   justify-content: space-between;
   gap: var(--sq-space-3);
 }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sq-space-2);
+}
 .title {
   margin: 0;
   color: var(--sq-navy-800);
