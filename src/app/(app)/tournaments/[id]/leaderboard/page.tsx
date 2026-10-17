@@ -6,8 +6,11 @@ import styles from "@/components/leaderboard/leaderboard.module.css";
 import { LeaderboardTabs } from "@/components/leaderboard/leaderboard-tabs";
 import { ProgressTable } from "@/components/leaderboard/progress-table";
 import { ValueTable } from "@/components/leaderboard/value-table";
-import { Card, ScreenHeader, SectionHeader } from "@/components/ui";
+import { Card, Chip, ScreenHeader, SectionHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
+import { effectiveStatus, isResultsFinal, uploadWindowEndsAt } from "@/lib/tournaments/lifecycle";
+import { formatVnDateTime } from "@/lib/time/vn";
+import { db } from "@/server/db";
 import { requireUser } from "@/server/auth/current-user";
 import { getBadgesLeaderboard } from "@/server/leaderboard/badges-leaderboard";
 import { getKmLeaderboard, getPointsLeaderboard } from "@/server/leaderboard/points-leaderboard";
@@ -76,6 +79,23 @@ export default async function LeaderboardPage({
   } else {
     content = <ProgressTable rows={await getProgressLeaderboard(user.id, id).catch(guard)} />;
   }
+  // Final once archived or the late-upload window has passed; until then the end of that window.
+  const tournament = await db.tournament.findUnique({
+    where: { id },
+    select: {
+      status: true,
+      seasonStartAt: true,
+      seasonEndAt: true,
+      startChoiceDeadlineAt: true,
+      lateUploadDays: true,
+    },
+  });
+  const now = new Date();
+  const completed = tournament !== null && effectiveStatus(tournament, now) === "COMPLETED";
+  const final =
+    tournament !== null &&
+    (tournament.status === "ARCHIVED" || (completed && isResultsFinal(tournament, now)));
+  const tLifecycle = await getTranslations("lifecycle");
   const tabs = TABS.map((x) => ({
     id: x,
     label: t(`${x}Tab`),
@@ -96,6 +116,17 @@ export default async function LeaderboardPage({
         <Card className={styles.card}>
           <LeaderboardTabs tabs={tabs} active={tab} label={t("tabs")} />
           <div role="tabpanel" id={`${tab}-panel`} aria-labelledby={`${tab}-tab`}>
+            {tournament && (final || completed) && (
+              <p className={styles.finality}>
+                {final ? (
+                  <Chip tone="gold">{tLifecycle("results.final")}</Chip>
+                ) : (
+                  tLifecycle("results.mayChange", {
+                    when: formatVnDateTime(uploadWindowEndsAt(tournament)),
+                  })
+                )}
+              </p>
+            )}
             <p className={styles.intro}>{t(`${tab}Header`)}</p>
             {content}
           </div>

@@ -1,0 +1,20 @@
+{
+  "archive": {
+    "title": "Lưu trữ giải đấu",
+    "hint": "Lưu trữ sẽ đóng giải đấu vĩnh viễn. Kết quả vẫn xem được.",
+    "button": "Lưu trữ",
+    "confirm": "Lưu trữ giải đấu này? Không thể hoàn tác.",
+    "confirmYes": "Đồng ý, lưu trữ",
+    "archiving": "Đang lưu trữ...",
+    "cancel": "Hủy",
+    "errors": {
+      "network": "Không có kết nối. Hãy thử lại.",
+      "notCompleted": "Chỉ có thể lưu trữ giải đấu đã kết thúc.",
+      "failed": "Không thể lưu trữ giải đấu. Hãy thử lại."
+    }
+  },
+  "results": {
+    "final": "Kết quả cuối cùng",
+    "mayChange": "Kết quả có thể còn thay đổi đến {when} (giờ Việt Nam)."
+  }
+}

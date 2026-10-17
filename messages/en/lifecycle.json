@@ -1,0 +1,20 @@
+{
+  "archive": {
+    "title": "Archive tournament",
+    "hint": "Archiving closes the tournament for good. Results stay readable.",
+    "button": "Archive",
+    "confirm": "Archive this tournament? This cannot be undone.",
+    "confirmYes": "Yes, archive",
+    "archiving": "Archiving...",
+    "cancel": "Cancel",
+    "errors": {
+      "network": "No connection. Try again.",
+      "notCompleted": "Only a completed tournament can be archived.",
+      "failed": "Could not archive the tournament. Try again."
+    }
+  },
+  "results": {
+    "final": "Final results",
+    "mayChange": "Results may still change until {when} (Vietnam time)."
+  }
+}
