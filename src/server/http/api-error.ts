@@ -63,6 +63,7 @@ export type ApiErrorCode =
   | "TOURNAMENT_CLOSED"
   | "ZALO_KEY_REJECTED"
   | "ZALO_UNREACHABLE"
+  | "ZALO_NOT_CONFIGURED"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
@@ -128,6 +129,7 @@ const messages: Record<ApiErrorCode, string> = {
   TOURNAMENT_CLOSED: "These settings cannot change on a completed tournament.",
   ZALO_KEY_REJECTED: "Zalo did not accept this bot key. Check it and try again.",
   ZALO_UNREACHABLE: "Zalo could not be reached. Try again later.",
+  ZALO_NOT_CONFIGURED: "Zalo posting is not set up on this server yet.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };

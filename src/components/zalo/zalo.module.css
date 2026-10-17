@@ -1,0 +1,175 @@
+/*
+ * Zalo group settings: an intro card, then foam panels with a navy band (as on the organizer
+ * console and "Tạo giải đấu" in the mockup). Every value comes from src/styles/tokens.css.
+ */
+
+.intro {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-4);
+}
+.introArt {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+.introText {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+  font-size: var(--sq-text-sm);
+}
+.introText p {
+  margin: 0;
+}
+.tournament {
+  overflow-wrap: anywhere;
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+
+.notConfigured {
+  display: grid;
+  gap: var(--sq-space-2);
+  border: 1px solid var(--sq-gold);
+  background: var(--sq-gold-wash);
+  font-size: var(--sq-text-sm);
+}
+.notConfigured p {
+  margin: 0;
+}
+.noticeTitle {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.body {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.body > p {
+  margin: 0;
+}
+
+.bot {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+}
+.bot p {
+  margin: 0;
+}
+.botLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+}
+.botName {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.state {
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-700);
+}
+.muted {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.warning {
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border-radius: var(--sq-radius-sm);
+  background: var(--sq-gold-wash);
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-sm);
+}
+
+.steps {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sq-space-3);
+}
+/* Numbered blue circles, as on the mockup's step row. */
+.stepNumber {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--sq-white);
+  border-radius: 50%;
+  background: var(--sq-gradient-primary);
+  box-shadow: var(--sq-shadow-button);
+  color: var(--sq-white);
+  font-weight: var(--sq-weight-bold);
+}
+.stepText {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+  padding-top: var(--sq-space-1);
+  font-size: var(--sq-text-sm);
+}
+.stepText strong {
+  color: var(--sq-navy-800);
+}
+.stepText span {
+  color: var(--sq-text-muted);
+}
+
+.confirm {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sq-space-3);
+}
+.saved {
+  color: var(--sq-success);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+.error {
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+
+/* Desktop: steps and the key form side by side under the status. */
+@media (min-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

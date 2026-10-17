@@ -1,0 +1,65 @@
+{
+  "open": "Set up the Zalo group",
+  "title": "Zalo group",
+  "intro": "Connect your own Zalo bot so the tournament's Zalo group gets announcements automatically. The bot only posts; it never replies.",
+  "closed": "This tournament has ended, so its Zalo settings can no longer change.",
+  "notConfigured": {
+    "title": "Zalo posting is not set up yet",
+    "body": "This server is not ready to keep Zalo bot keys yet, so a key cannot be saved now. Ask the platform admin to turn on Zalo posting, then come back here."
+  },
+  "status": {
+    "title": "Connection",
+    "none": "No Zalo bot yet. Follow the steps below to connect one.",
+    "keyHint": "Key ending in {hint}",
+    "keySaved": "Key saved",
+    "waitingChip": "Waiting",
+    "connectedChip": "Connected",
+    "waiting": "Waiting for a mention in the group",
+    "connected": "Connected to the group",
+    "connectedSince": "Connected to the group since {date}",
+    "webhookProblem": "Zalo did not accept the link to this app yet, so mentions may not reach us. Save the key again to retry."
+  },
+  "steps": {
+    "title": "Setup steps",
+    "create": {
+      "title": "Create a Zalo bot",
+      "body": "In the Zalo Bot Creator, create a bot for your group and copy its key."
+    },
+    "paste": {
+      "title": "Paste its key here",
+      "body": "Paste the key below and save. We check it with Zalo and keep it encrypted."
+    },
+    "add": {
+      "title": "Add the bot to the group",
+      "body": "In your Zalo group, add the bot as a member."
+    },
+    "mention": {
+      "title": "Mention the bot in the group",
+      "body": "Send a message that mentions the bot (@bot name). The group is then linked and the bot posts the introduction."
+    }
+  },
+  "key": {
+    "title": "Bot key",
+    "replaceTitle": "Change the bot key",
+    "label": "Zalo bot key",
+    "hint": "The key is never shown again after saving; only its last 4 characters are.",
+    "save": "Save key",
+    "saving": "Checking with Zalo…",
+    "saved": "Key saved."
+  },
+  "remove": {
+    "title": "Remove from this tournament",
+    "confirm": "Remove the bot from this tournament? It stops posting this tournament's news. Your other tournaments that use the bot are not affected.",
+    "yes": "Remove",
+    "removing": "Removing…",
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "notConfigured": "Zalo posting is not set up on this server yet. Ask the platform admin.",
+    "rejected": "Zalo did not accept this key. Check it and try again.",
+    "unreachable": "Zalo could not be reached. Try again later.",
+    "closed": "This tournament has ended, so its Zalo settings can no longer change.",
+    "failed": "That did not work. Please try again.",
+    "network": "No connection. Check your network and try again."
+  }
+}

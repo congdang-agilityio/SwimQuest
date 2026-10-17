@@ -42,7 +42,12 @@ function failure(err: unknown) {
     }
   }
   // Zalo is not configured on this server (ZALO_KEY_SECRET missing): never the key's fault.
-  if (err instanceof ZaloSecretError) return apiError(503, "SERVICE_UNAVAILABLE");
+  if (err instanceof ZaloSecretError) {
+    return apiError(
+      503,
+      err.code === "ZALO_NOT_CONFIGURED" ? "ZALO_NOT_CONFIGURED" : "SERVICE_UNAVAILABLE",
+    );
+  }
   throw err;
 }
 

@@ -87,6 +87,7 @@ export default async function ManageTournamentPage({
         published={tournament.status !== "DRAFT"}
         hasInvite={Boolean(showInvite && origin)}
         canEdit={overview.status !== "ARCHIVED"}
+        zalo={user.id === tournament.organizerId}
       />
       {user.id === tournament.organizerId && <ExportButton tournamentId={tournament.id} />}
       {(overview.status === "ACTIVE" || overview.status === "COMPLETED") && (
