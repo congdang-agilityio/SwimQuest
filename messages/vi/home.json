@@ -24,6 +24,8 @@
       "COMPLETED": "Đã kết thúc",
       "ARCHIVED": "Đã lưu trữ"
     },
-    "progressLabel": "Tiến độ của đội"
+    "progressLabel": "Tiến độ của đội",
+    "manage": "Quản lý",
+    "manageFor": "Quản lý {name}"
   }
 }

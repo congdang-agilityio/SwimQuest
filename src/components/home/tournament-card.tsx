@@ -87,6 +87,17 @@ export function TournamentCard({
             {t("addSwim")}
           </ButtonLink>
         )}
+        {!compact && x.isOrganizer && (
+          <ButtonLink
+            href={`/tournaments/${x.id}/manage`}
+            variant="secondary"
+            size="sm"
+            block
+            aria-label={t("manageFor", { name: x.name })}
+          >
+            {t("manage")}
+          </ButtonLink>
+        )}
         {!compact && x.effectiveStatus !== "DRAFT" && (x.isOrganizer || x.isReviewHelper) && (
           <ButtonLink
             href={`/tournaments/${x.id}/manage/review`}
