@@ -1,15 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Button, ButtonLink, SectionHeader } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
+import styles from "./manage.module.css";
 
 type Issue = { code: string; field: string };
 
-const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
-const errorColor = { color: "#b91c1c" };
 const KNOWN = [
   "SEASON_END_NOT_AFTER_START",
   "REALISTIC_LIMITS_OUT_OF_BOUNDS",
@@ -67,48 +66,49 @@ export function PublishPanel({ tournamentId }: { tournamentId: string }) {
   }
 
   return (
-    <section aria-labelledby="publish-title">
-      <h2 id="publish-title">{t("title")}</h2>
-      <Link
-        href={`/tournaments/${tournamentId}/manage/preview`}
-        style={{ ...touch, display: "inline-block" }}
-      >
-        {t("preview")}
-      </Link>{" "}
-      {confirming ? (
-        <span role="alertdialog" aria-label={t("publish")}>
-          {t("confirm")}{" "}
-          <button type="button" onClick={publish} disabled={busy} style={touch}>
-            {busy ? t("publishing") : t("confirmYes")}
-          </button>{" "}
-          <button type="button" onClick={() => setConfirming(false)} disabled={busy} style={touch}>
-            {t("cancel")}
-          </button>
-        </span>
-      ) : (
-        <button type="button" onClick={() => setConfirming(true)} style={touch}>
-          {t("publish")}
-        </button>
-      )}
-      {issues.length > 0 && (
-        <div role="alert" style={errorColor}>
-          <p>{t("fixTitle")}</p>
-          <ul>
-            {issues.map((i, n) => (
-              <li key={`${i.code}-${i.field}-${n}`}>
-                <a href={issueHref(i.field)}>
-                  {t(`issues.${KNOWN.includes(i.code) ? i.code : "UNKNOWN"}`)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {error && (
-        <p role="alert" style={errorColor}>
-          {error === "network" ? t("networkError") : t("failed")}
-        </p>
-      )}
+    <section aria-labelledby="publish-title" className={styles.panel}>
+      <SectionHeader id="publish-title">{t("title")}</SectionHeader>
+      <div className={styles.panelBody}>
+        {confirming ? (
+          <div role="alertdialog" aria-label={t("publish")} className={styles.confirm}>
+            <span>{t("confirm")}</span>
+            <span className={styles.actions}>
+              <Button onClick={publish} disabled={busy}>
+                {busy ? t("publishing") : t("confirmYes")}
+              </Button>
+              <Button variant="secondary" onClick={() => setConfirming(false)} disabled={busy}>
+                {t("cancel")}
+              </Button>
+            </span>
+          </div>
+        ) : (
+          <div className={styles.actions}>
+            <ButtonLink href={`/tournaments/${tournamentId}/manage/preview`} variant="secondary">
+              {t("preview")}
+            </ButtonLink>
+            <Button onClick={() => setConfirming(true)}>{t("publish")}</Button>
+          </div>
+        )}
+        {issues.length > 0 && (
+          <div role="alert" className={styles.issues}>
+            <p>{t("fixTitle")}</p>
+            <ul>
+              {issues.map((i, n) => (
+                <li key={`${i.code}-${i.field}-${n}`}>
+                  <a href={issueHref(i.field)}>
+                    {t(`issues.${KNOWN.includes(i.code) ? i.code : "UNKNOWN"}`)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {error && (
+          <p role="alert" className={styles.error}>
+            {error === "network" ? t("networkError") : t("failed")}
+          </p>
+        )}
+      </div>
     </section>
   );
 }
