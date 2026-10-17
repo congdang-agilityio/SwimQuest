@@ -37,6 +37,9 @@
   "profile": {
     "title": "Bộ sưu tập",
     "team": "Đội {team}",
-    "collectOnly": "Vật phẩm chỉ để sưu tầm và đi theo tiến độ hiện tại của đội: nếu tiến độ giảm, vật phẩm của mốc đó cũng mất."
+    "collectOnly": "Vật phẩm chỉ để sưu tầm, không thể tiêu hay đổi, và đi theo dữ liệu hiện tại: nếu tiến độ của đội giảm hoặc buổi bơi bị thu hồi, vật phẩm tương ứng cũng mất.",
+    "mineTitle": "Vật phẩm của tôi",
+    "pearlWeeks": "Các tuần nhận ngọc trai",
+    "pearlWeek": "Tuần từ {date}"
   }
 }
