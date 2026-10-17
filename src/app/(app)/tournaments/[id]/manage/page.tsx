@@ -13,6 +13,7 @@ import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
 import styles from "@/components/tournaments/manage.module.css";
 import { PublishPanel } from "@/components/tournaments/publish-panel";
+import { ButtonLink, Card } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
@@ -22,6 +23,7 @@ import { pageOrigin } from "@/server/http/request";
 import { getConsoleOverview } from "@/server/organizer/console";
 import { getConsoleTeams } from "@/server/organizer/participation";
 import { listTeamsWithCounts } from "@/server/teams/manage";
+import { hasZaloProblem } from "@/server/zalo/settings";
 
 /**
  * Organizer page: only the organizer (or a platform admin, S-72) sees it; anyone else gets the
@@ -64,6 +66,9 @@ export default async function ManageTournamentPage({
           lockAtIso: startLockAt(tournament).toISOString(),
         };
   const tCommon = await getTranslations("common");
+  const isOrganizer = user.id === tournament.organizerId;
+  const zaloProblem = isOrganizer && (await hasZaloProblem(tournament.id));
+  const tZalo = await getTranslations("zalo");
   const showInvite = tournament.status !== "DRAFT" && Boolean(tournament.inviteToken);
   const origin = showInvite ? pageOrigin(await headers()) : null;
   return (
@@ -82,12 +87,20 @@ export default async function ManageTournamentPage({
           ) : undefined
         }
       />
+      {zaloProblem && (
+        <Card role="alert" className={styles.zaloProblem} data-wide-span>
+          <p>{tZalo("consoleProblem")}</p>
+          <ButtonLink href={`/tournaments/${tournament.id}/manage/zalo`} variant="secondary">
+            {tZalo("title")}
+          </ButtonLink>
+        </Card>
+      )}
       <ConsoleLinks
         tournamentId={tournament.id}
         published={tournament.status !== "DRAFT"}
         hasInvite={Boolean(showInvite && origin)}
         canEdit={overview.status !== "ARCHIVED"}
-        zalo={user.id === tournament.organizerId}
+        zalo={isOrganizer}
       />
       {user.id === tournament.organizerId && <ExportButton tournamentId={tournament.id} />}
       {(overview.status === "ACTIVE" || overview.status === "COMPLETED") && (

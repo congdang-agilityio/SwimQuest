@@ -5,6 +5,7 @@ import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { requireOrganizer } from "@/server/auth/roles";
 import { getMe, setWebhook, ZaloApiError } from "./client";
 import { enqueueIntro } from "./outbox";
+import { switchesOf, ZALO_SWITCH_SELECT, type ZaloSwitches } from "./switch-kinds";
 import { decryptSecret, encryptSecret, keyHint, ZaloSecretError } from "./secret";
 
 export type ZaloSettingsErrorCode =
@@ -48,6 +49,13 @@ export interface ZaloSettings {
   connected: boolean;
   linkedAt: Date | null;
   webhookOk: boolean;
+  /** Message switches of this tournament (S-89 AC 1). */
+  switches: ZaloSwitches;
+  /** The bot's last delivery problem, cleared by the next successful delivery (S-89 AC 3). */
+  lastError: string | null;
+  lastErrorAt: Date | null;
+  /** This tournament's messages that were given up. */
+  failedCount: number;
 }
 
 const KEY_MAX = 256;
@@ -59,6 +67,8 @@ const SETTINGS_SELECT = {
   chatId: true,
   linkedAt: true,
   webhookOk: true,
+  lastError: true,
+  lastErrorAt: true,
 } satisfies Prisma.ZaloBotSelect;
 
 /** Organizer only; refused (ARCHIVED by the role guard, COMPLETED here) once the tournament ended. */
@@ -84,18 +94,48 @@ export async function getZaloSettings(
   tournamentId: string,
 ): Promise<ZaloSettings | null> {
   await requireOrganizer(userId, tournamentId);
+  return readSettings(tournamentId);
+}
+
+/**
+ * Whether the tournament's bot has an open delivery problem, for the organizer console
+ * (S-89 AC 3). Callers check the organizer role first.
+ */
+export async function hasZaloProblem(tournamentId: string): Promise<boolean> {
   const row = await db.tournamentZalo.findUnique({
     where: { tournamentId },
-    select: { zaloBot: { select: SETTINGS_SELECT } },
+    select: { zaloBot: { select: { lastError: true } } },
+  });
+  return Boolean(row?.zaloBot.lastError);
+}
+
+/** The organizer's view of one tournament's bot, switches and delivery problem. */
+async function readSettings(tournamentId: string): Promise<ZaloSettings | null> {
+  const row = await db.tournamentZalo.findUnique({
+    where: { tournamentId },
+    select: { ...ZALO_SWITCH_SELECT, zaloBotId: true, zaloBot: { select: SETTINGS_SELECT } },
   });
   if (!row) return null;
   const bot = row.zaloBot;
+  const failedCount = bot.lastError
+    ? await db.zaloMessage.count({
+        where: {
+          zaloBotId: row.zaloBotId,
+          status: "FAILED",
+          payload: { path: ["tournamentId"], equals: tournamentId },
+        },
+      })
+    : 0;
   return {
     botName: bot.botName,
     keyHint: bot.tokenHint,
     connected: bot.chatId !== null,
     linkedAt: bot.linkedAt,
     webhookOk: bot.webhookOk,
+    switches: switchesOf(row),
+    lastError: bot.lastError,
+    lastErrorAt: bot.lastErrorAt,
+    failedCount,
   };
 }
 
@@ -164,7 +204,7 @@ export async function saveZaloBotKey(
   const now = new Date();
   const problem = { lastError, lastErrorAt: lastError ? now : null };
 
-  return db.$transaction(async (tx) => {
+  await db.$transaction(async (tx) => {
     const bot = await tx.zaloBot.upsert({
       where: { ownerUserId_botId: { ownerUserId: userId, botId } },
       // A concurrent save may have created the bot meanwhile: keep its hook id and secret.
@@ -215,15 +255,10 @@ export async function saveZaloBotKey(
         : {}),
       after: { botName: bot.botName, keyHint: bot.tokenHint },
     });
-
-    return {
-      botName: bot.botName,
-      keyHint: bot.tokenHint,
-      connected: bot.chatId !== null,
-      linkedAt: bot.linkedAt,
-      webhookOk: bot.webhookOk,
-    };
   });
+  const view = await readSettings(tournamentId);
+  if (!view) throw new ZaloSettingsError("NO_BOT"); // Removed concurrently.
+  return view;
 }
 
 /**

@@ -44,6 +44,10 @@ export default async function ZaloGroupPage({ params }: { params: Promise<{ id: 
             connected: zalo.connected,
             linkedAt: zalo.linkedAt?.toISOString() ?? null,
             webhookOk: zalo.webhookOk,
+            switches: zalo.switches,
+            lastError: zalo.lastError,
+            lastErrorAt: zalo.lastErrorAt?.toISOString() ?? null,
+            failedCount: zalo.failedCount,
           }
         }
       />

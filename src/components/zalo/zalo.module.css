@@ -173,3 +173,51 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Message switches (S-89): the introduction row first, always on, then one switch per kind. */
+.always {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+}
+.alwaysLabel {
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.alwaysNote {
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-success);
+}
+.switches {
+  display: grid;
+  gap: var(--sq-space-1);
+}
+
+/* Delivery problem: a red-edged card above the panels. */
+.problem {
+  display: grid;
+  gap: var(--sq-space-2);
+  border: 1px solid var(--sq-danger);
+  background: var(--sq-danger-wash);
+  font-size: var(--sq-text-sm);
+}
+.problem p {
+  margin: 0;
+  color: var(--sq-navy-800);
+}
+.problem .problemMeta {
+  color: var(--sq-text-muted);
+}
+@media (min-width: 1024px) {
+  .switches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--sq-space-6);
+  }
+}

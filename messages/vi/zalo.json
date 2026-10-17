@@ -61,5 +61,56 @@
     "closed": "Giải đấu đã kết thúc nên không thể thay đổi cài đặt Zalo nữa.",
     "failed": "Không thực hiện được. Hãy thử lại.",
     "network": "Không có kết nối. Hãy kiểm tra mạng và thử lại."
-  }
+  },
+  "switches": {
+    "title": "Tin nhắn",
+    "intro": "Chọn những tin bot đăng vào nhóm. Các công tắc chỉ áp dụng cho giải đấu này.",
+    "introMessage": "Lời giới thiệu giải",
+    "always": "Luôn gửi",
+    "saved": "Đã lưu.",
+    "failed": "Chưa lưu được. Hãy thử lại.",
+    "kinds": {
+      "newTeam": {
+        "label": "Đội mới",
+        "hint": "Khi có đội được tạo."
+      },
+      "playerJoined": {
+        "label": "Người chơi tham gia",
+        "hint": "Khi người chơi vào một đội."
+      },
+      "playerMoved": {
+        "label": "Người chơi chuyển đội",
+        "hint": "Khi người chơi được chuyển sang đội khác."
+      },
+      "seasonStart": {
+        "label": "Bắt đầu mùa giải",
+        "hint": "Khi mùa giải bắt đầu."
+      },
+      "countedSwims": {
+        "label": "Lượt bơi được tính",
+        "hint": "Khi một lượt bơi được tính cho đội (tên và quãng đường)."
+      },
+      "milestones": {
+        "label": "Cột mốc",
+        "hint": "Khi một đội đến điểm đến hoặc đạt cột mốc tiến độ."
+      },
+      "seasonEnd": {
+        "label": "Kết thúc mùa giải",
+        "hint": "Khi mùa giải kết thúc, kèm bảng xếp hạng cuối."
+      }
+    }
+  },
+  "problem": {
+    "title": "Không gửi được tin nhắn",
+    "when": "Sự cố gần nhất: {date}",
+    "failedCount": "{count} tin của giải đấu này không gửi được.",
+    "kinds": {
+      "botRemoved": "Bot không còn trong nhóm: hãy thêm lại bot vào nhóm rồi nhắc tên bot.",
+      "unreachable": "Không kết nối được với Zalo. Bot sẽ tự thử lại.",
+      "keyUnreadable": "Khóa bot đã lưu không dùng được nữa: hãy dán lại khóa bên dưới.",
+      "webhook": "Zalo chưa nhận đường dẫn tới ứng dụng: hãy lưu lại khóa để thử lại.",
+      "other": "Zalo từ chối một tin nhắn. Hãy kiểm tra bot còn trong nhóm và khóa còn hiệu lực."
+    }
+  },
+  "consoleProblem": "Không gửi được tin nhắn Zalo. Mở Nhóm Zalo để xem lý do."
 }

@@ -61,5 +61,56 @@
     "closed": "This tournament has ended, so its Zalo settings can no longer change.",
     "failed": "That did not work. Please try again.",
     "network": "No connection. Check your network and try again."
-  }
+  },
+  "switches": {
+    "title": "Messages",
+    "intro": "Choose which messages the bot posts to the group. Switches apply to this tournament only.",
+    "introMessage": "Tournament introduction",
+    "always": "Always sent",
+    "saved": "Saved.",
+    "failed": "That did not save. Please try again.",
+    "kinds": {
+      "newTeam": {
+        "label": "New team",
+        "hint": "When a team is created."
+      },
+      "playerJoined": {
+        "label": "Player joins",
+        "hint": "When a player joins a team."
+      },
+      "playerMoved": {
+        "label": "Player moved",
+        "hint": "When a player is moved to another team."
+      },
+      "seasonStart": {
+        "label": "Season start",
+        "hint": "When the season starts."
+      },
+      "countedSwims": {
+        "label": "Counted swims",
+        "hint": "When a swim counts for a team (names and distances)."
+      },
+      "milestones": {
+        "label": "Milestones",
+        "hint": "When a team reaches a destination or a progress milestone."
+      },
+      "seasonEnd": {
+        "label": "Season end",
+        "hint": "When the season ends, with the final ranking."
+      }
+    }
+  },
+  "problem": {
+    "title": "Messages could not be delivered",
+    "when": "Last problem: {date}",
+    "failedCount": "{count, plural, one {# message} other {# messages}} of this tournament could not be sent.",
+    "kinds": {
+      "botRemoved": "The bot is no longer in the group: add it to the group again, then mention it.",
+      "unreachable": "Zalo could not be reached. The bot will try again by itself.",
+      "keyUnreadable": "The saved bot key can no longer be used: paste the key again below.",
+      "webhook": "Zalo did not accept the link to this app: save the key again to retry.",
+      "other": "Zalo refused a message. Check that the bot is still in the group and its key is still valid."
+    }
+  },
+  "consoleProblem": "Zalo messages could not be delivered. Open Zalo group to see why."
 }

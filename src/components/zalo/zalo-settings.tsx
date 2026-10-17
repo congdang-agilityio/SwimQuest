@@ -6,6 +6,9 @@ import { useFormatter, useTranslations } from "next-intl";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { Button, Card, Chip, Field, SectionHeader } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
+import type { ZaloSwitches } from "@/server/zalo/switch-kinds";
+import { ZaloProblem } from "./zalo-problem";
+import { ZaloSwitchesPanel } from "./zalo-switches";
 import styles from "./zalo.module.css";
 
 /** The organizer's view of the bot: never the key. */
@@ -15,6 +18,10 @@ export type ZaloView = {
   connected: boolean;
   linkedAt: string | null;
   webhookOk: boolean;
+  switches: ZaloSwitches;
+  lastError: string | null;
+  lastErrorAt: string | null;
+  failedCount: number;
 };
 
 type Failure =
@@ -140,6 +147,10 @@ export function ZaloSettingsPanel({
         </Card>
       )}
 
+      {zalo?.lastError && (
+        <ZaloProblem reason={zalo.lastError} at={zalo.lastErrorAt} failedCount={zalo.failedCount} />
+      )}
+
       <section aria-labelledby="zalo-status-title" className={styles.panel}>
         <SectionHeader id="zalo-status-title">{t("status.title")}</SectionHeader>
         <div className={styles.body}>
@@ -206,6 +217,10 @@ export function ZaloSettingsPanel({
           )}
         </div>
       </section>
+
+      {zalo && (
+        <ZaloSwitchesPanel tournamentId={tournamentId} initial={zalo.switches} readOnly={closed} />
+      )}
 
       <section aria-labelledby="zalo-steps-title" className={styles.panel}>
         <SectionHeader id="zalo-steps-title">{t("steps.title")}</SectionHeader>
