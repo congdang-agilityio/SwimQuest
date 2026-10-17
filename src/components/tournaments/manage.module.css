@@ -1,0 +1,164 @@
+/*
+ * Organizer manage page: overview, publish panel and invite link, in the mockup's language
+ * (navy header strip, light cards, navy section bands, pill buttons). Every value comes from
+ * src/styles/tokens.css.
+ */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+/* Navy strip for the phone header, as on Create tournament. */
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+.headerBand a[href] {
+  color: var(--sq-text-on-dark);
+}
+.headerBand h1 {
+  overflow-wrap: anywhere;
+}
+
+/* Overview card: the route's sea scene on top, status and season below. */
+.overview {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+}
+.hero {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sceneFallback {
+  height: 100%;
+  background: var(--sq-gradient-sea);
+}
+.overviewBody {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-4);
+}
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.meta {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.metaLabel {
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.overviewActions {
+  margin-top: var(--sq-space-2);
+}
+
+/* A panel with a navy band header (publish, invite). */
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.panelBody {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.hint {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sq-space-3);
+}
+.actions > * {
+  width: 100%;
+}
+
+/* Publish confirmation: a pale blue box with the question and two pills. */
+.confirm {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+}
+
+/* Problems that block publishing: a pale red card with links to the fields. */
+.issues {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+  font-size: var(--sq-text-sm);
+}
+.issues p {
+  margin: 0;
+  font-weight: var(--sq-weight-bold);
+}
+.issues ul {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: 0;
+  padding-left: var(--sq-space-5);
+}
+.issues a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sq-tap);
+  color: var(--sq-danger);
+  font-weight: var(--sq-weight-semibold);
+}
+.error {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}
+
+/* Invite link: the URL in an input-like field, Copy and Share pills below. */
+.inviteField {
+  font-size: var(--sq-text-sm);
+  text-overflow: ellipsis;
+}
+.status {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-success);
+}
+.statusFailed {
+  color: var(--sq-danger);
+}

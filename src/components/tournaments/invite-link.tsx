@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-
-const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
+import { Button, SectionHeader, controlClass } from "@/components/ui";
+import styles from "./manage.module.css";
 
 /** Copies text with the Clipboard API, falling back to a hidden textarea and `execCommand`. */
 async function copyText(text: string): Promise<boolean> {
@@ -59,30 +59,37 @@ export function InviteLink({ url, tournamentName }: { url: string; tournamentNam
   }
 
   return (
-    <section aria-labelledby="invite-title">
-      <h2 id="invite-title">{t("title")}</h2>
-      <p>{t("hint")}</p>
-      <input
-        ref={input}
-        type="text"
-        readOnly
-        value={url}
-        aria-label={t("label")}
-        style={{ ...touch, width: "100%" }}
-        onFocus={(e) => e.currentTarget.select()}
-      />
-      <button type="button" onClick={copy} style={touch}>
-        {t("copy")}
-      </button>{" "}
-      {canShare && (
-        <button type="button" onClick={share} style={touch}>
-          {t("share")}
-        </button>
-      )}
-      <p role="status">
-        {state === "copied" && t("copied")}
-        {state === "failed" && t("copyFailed")}
-      </p>
+    <section aria-labelledby="invite-title" className={styles.panel}>
+      <SectionHeader id="invite-title">{t("title")}</SectionHeader>
+      <div className={styles.panelBody}>
+        <p className={styles.hint}>{t("hint")}</p>
+        <input
+          ref={input}
+          type="text"
+          readOnly
+          value={url}
+          aria-label={t("label")}
+          className={`${controlClass} ${styles.inviteField}`}
+          onFocus={(e) => e.currentTarget.select()}
+        />
+        <div className={styles.actions}>
+          <Button onClick={copy}>{t("copy")}</Button>
+          {canShare && (
+            <Button variant="secondary" onClick={share}>
+              {t("share")}
+            </Button>
+          )}
+        </div>
+        <p
+          role="status"
+          className={[styles.status, state === "failed" && styles.statusFailed]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          {state === "copied" && t("copied")}
+          {state === "failed" && t("copyFailed")}
+        </p>
+      </div>
     </section>
   );
 }
