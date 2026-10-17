@@ -30,6 +30,7 @@
       "ROUTE_MISSING": "Choose a route.",
       "ROUTE_DISTANCE_INVALID": "Enter a route distance above zero.",
       "NO_TEAM": "Add at least one team.",
+      "VISIBILITY_MISSING": "Choose who can join (visibility).",
       "UNKNOWN": "Something needs fixing."
     }
   },

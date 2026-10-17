@@ -99,6 +99,10 @@ test("the invite link appears only after publishing, built from APP_URL", async 
   await expect(page.getByRole("heading", { name: "Liên kết mời" })).toHaveCount(0);
   await expect(page.getByRole("textbox", { name: "Liên kết mời" })).toHaveCount(0);
 
+  const visible = await page.request.patch(`/api/tournaments/${id}/settings`, {
+    data: { group: "visibility", values: { visibility: "INVITE_ONLY" } },
+  });
+  expect(visible.ok()).toBe(true);
   const published = await page.request.post(`/api/tournaments/${id}/publish`);
   expect(published.ok()).toBe(true);
   const { inviteUrl } = await published.json();

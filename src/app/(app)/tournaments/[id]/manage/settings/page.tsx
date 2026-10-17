@@ -6,6 +6,7 @@ import { ExtraRulesForm } from "@/components/settings/extra-rules-form";
 import { RealisticLimitsForm } from "@/components/settings/realistic-limits-form";
 import { PointValuesForm } from "@/components/settings/point-values-form";
 import styles from "@/components/settings/settings-card.module.css";
+import { VisibilityField } from "@/components/settings/visibility-field";
 import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
 import type { PointValues } from "@/components/tournaments/rules/point-rules";
 import type { SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
@@ -33,6 +34,9 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
     | undefined;
   const extra = settings?.extraRules as
     { minSwimDistanceM: number | null; extraSlowestPaceSecPer100m: number | null } | undefined;
+  const visibility = (
+    settings?.visibility as { visibility: "PUBLIC" | "INVITE_ONLY" | null } | undefined
+  )?.visibility;
   const points = settings?.points as PointValues | undefined;
   const limits = settings?.realisticLimits as
     | {
@@ -61,6 +65,9 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
           backLabel={tCommon("back")}
         />
       </div>
+      <Card as="section" id="visibility" className={styles.card}>
+        <VisibilityField tournamentId={tournament.id} value={visibility ?? null} />
+      </Card>
       <Card as="section" className={styles.card}>
         <SwimSettingsForm tournamentId={tournament.id} values={swim} locked={locked} />
       </Card>

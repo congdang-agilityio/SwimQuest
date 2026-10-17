@@ -102,3 +102,47 @@
     padding: var(--sq-space-6);
   }
 }
+
+/* Visibility choice: two selectable rows, each a radio with its one-line explanation. */
+.choices {
+  display: grid;
+  gap: var(--sq-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sq-space-3);
+  min-height: 44px;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-white);
+  cursor: pointer;
+}
+.choiceOn {
+  border-color: var(--sq-blue-500);
+  background: var(--sq-blue-wash);
+}
+.choice input {
+  margin-top: var(--sq-space-1);
+  accent-color: var(--sq-blue-500);
+}
+.choice input:focus-visible {
+  outline: none;
+  box-shadow: var(--sq-focus-ring);
+}
+.choiceText {
+  display: grid;
+  gap: var(--sq-space-1);
+}
+.choiceText strong {
+  color: var(--sq-navy-800);
+}
+.choiceText span {
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}

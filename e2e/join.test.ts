@@ -79,6 +79,10 @@ test("a new player signs up from the invite link, joins a team and sees it again
     data: { name: "Rùa Biển", emblemKey: "turtle", memberLimit: 5 },
   });
   expect(team.status()).toBe(201);
+  const visible = await page.request.patch(`/api/tournaments/${id}/settings`, {
+    data: { group: "visibility", values: { visibility: "INVITE_ONLY" } },
+  });
+  expect(visible.ok()).toBe(true);
   expect((await page.request.post(`/api/tournaments/${id}/publish`)).ok()).toBe(true);
   const { inviteToken } = await prisma.tournament.findUniqueOrThrow({ where: { id } });
   const link = `/join/${inviteToken}`;

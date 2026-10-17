@@ -26,6 +26,7 @@ async function draft(organizerId: string, { withTeam = true, routeDistanceM = 10
       seasonEndAt: new Date("2026-12-01T00:00:00+07:00"),
       routeId: "route01",
       routeDistanceM,
+      visibility: "INVITE_ONLY",
     },
   });
   if (withTeam) {
