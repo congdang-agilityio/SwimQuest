@@ -11,6 +11,7 @@
   "picker": {
     "title": "Chọn điểm xuất phát",
     "legend": "Điểm xuất phát của đội",
+    "deadline": "Chọn trước {lockAt} (giờ Việt Nam)",
     "distance": "{km, number} km",
     "finish": "Điểm đến",
     "sameFinish": "Tất cả đội cùng đích {finish}",
