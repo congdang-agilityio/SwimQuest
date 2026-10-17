@@ -5,6 +5,9 @@ const state = vi.hoisted(() => ({ headers: new Headers(), requireUser: vi.fn() }
 vi.mock("next/headers", () => ({ headers: async () => state.headers }));
 vi.mock("@/server/auth/current-user", () => ({ requireUser: state.requireUser }));
 vi.mock("@/components/nav/app-nav", () => ({ AppNav: () => null }));
+vi.mock("@/server/profile/my-avatar", () => ({
+  getAvatarFields: async () => ({ avatarImageId: null, avatarDefaultKey: null }),
+}));
 vi.mock("@/server/home/selected-tournament", () => ({ getTournamentSwitcher: async () => null }));
 
 const layout = await import("./layout");
