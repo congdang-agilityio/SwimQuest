@@ -9,6 +9,9 @@ const MY_PROFILE_SELECT = {
   coverImageId: true,
   bio: true,
   regionCode: true,
+  goalsText: true,
+  goalDistanceM: true,
+  disciplines: true,
 } as const;
 
 export type MyProfile = {
@@ -19,6 +22,9 @@ export type MyProfile = {
   coverImageId: string | null;
   bio: string | null;
   regionCode: string | null;
+  goalsText: string | null;
+  goalDistanceM: number | null;
+  disciplines: string[];
 };
 
 export type UpdateMyProfileResult =
