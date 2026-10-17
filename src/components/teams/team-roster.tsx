@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Avatar, Chip } from "@/components/ui";
+import { badgeArt } from "@/lib/art/badge-art";
 import { profileAvatarSrc } from "@/lib/profile-avatar";
 import type { MyTeamMember } from "@/server/teams/my-team-view";
 import { HandoverButton } from "./handover-button";
@@ -20,6 +21,7 @@ export function TeamRoster({
   afterStart?: boolean;
 }) {
   const t = useTranslations("team");
+  const tKind = useTranslations("players");
   return (
     <section aria-labelledby="team-roster-title">
       <h2 id="team-roster-title" className={styles.rosterTitle}>
@@ -42,6 +44,25 @@ export function TeamRoster({
                 <Chip tone="info">{t("level", { level: m.level })}</Chip>
                 <span>{t("points", { points: m.points })}</span>
               </span>
+              {m.badges.length > 0 && (
+                <details className={styles.badges}>
+                  <summary>{t("badgesSummary", { count: m.badges.length })}</summary>
+                  <ul className={styles.badgeList}>
+                    {m.badges.map((b) => {
+                      const art = badgeArt(b.kind);
+                      return (
+                        <li key={b.id} className={styles.badge}>
+                          {art && (
+                            // eslint-disable-next-line @next/next/no-img-element -- small static art
+                            <img src={art.webp} alt="" width={40} height={40} />
+                          )}
+                          <span>{tKind(`kind.${b.kind}`)}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
+              )}
             </span>
             <span className={styles.km}>
               {t("km", { km: Math.round(m.verifiedKm * 100) / 100 })}

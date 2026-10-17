@@ -1,6 +1,7 @@
 {
   "captain": "Đội trưởng",
   "progress": "Tiến độ: {percent}%",
+  "badgesSummary": "Huy hiệu ({count})",
   "points": "{points} điểm",
   "members": "Thành viên: {count} / {limit}",
   "addSwim": "Thêm buổi bơi",

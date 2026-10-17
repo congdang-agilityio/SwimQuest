@@ -352,3 +352,33 @@
   flex-wrap: wrap;
   gap: var(--sq-space-2);
 }
+
+/* This tournament's badges per member */
+.badges {
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.badges summary {
+  cursor: pointer;
+  min-height: 24px;
+}
+.badgeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-3);
+  margin: var(--sq-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-1);
+  text-align: center;
+}
+.badge img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
