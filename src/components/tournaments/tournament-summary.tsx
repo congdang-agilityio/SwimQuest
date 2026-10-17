@@ -1,6 +1,9 @@
 import { useTranslations } from "next-intl";
+import { MockupPicture } from "@/components/art/mockup-picture";
 import { TeamEmblem } from "@/components/teams/team-emblem";
+import { Card, Chip } from "@/components/ui";
 import { utcToVnParts } from "@/lib/time/vn";
+import styles from "./tournament-summary.module.css";
 
 export type SummaryTeam = {
   id: string;
@@ -18,6 +21,8 @@ type Props = {
   routeId: string;
   routeDistanceM: number;
   teams: readonly SummaryTeam[];
+  /** Leave out the team list when the page shows the teams elsewhere (the join picker). */
+  hideTeams?: boolean;
 };
 
 /** Tournament as players see it. Plain props so the join page can reuse it. */
@@ -30,30 +35,49 @@ export function TournamentSummary(props: Props) {
   };
   const km = Number((props.routeDistanceM / 1000).toFixed(3));
   return (
-    <article aria-labelledby="summary-name">
-      <h2 id="summary-name">{props.name}</h2>
-      {props.description && <p>{props.description}</p>}
-      <p>
-        {t("seasonStart")}: {when(props.seasonStartAt)}
-      </p>
-      <p>
-        {t("seasonEnd")}: {when(props.seasonEndAt)} ({t("vietnamTime")})
-      </p>
-      <p>
-        {t("route")}: {r(`${props.routeId}.name`)}, {t("distance", { km })}
-      </p>
-      <h3>{t("teams")}</h3>
-      {props.teams.length === 0 && <p>{t("noTeams")}</p>}
-      <ul>
-        {props.teams.map((team) => (
-          <li key={team.id}>
-            <TeamEmblem emblemKey={team.emblemKey} size={32} alt="" /> <strong>{team.name}</strong>{" "}
-            <span>
-              {team.freePlaces > 0 ? t("placesLeft", { count: team.freePlaces }) : t("full")}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </article>
+    <Card as="article" aria-labelledby="summary-name" className={styles.summary}>
+      {/* The route's destination, Ly Son, as on the mockup's tournament cards. */}
+      <div className={styles.hero}>
+        <MockupPicture
+          artKey="scenes/sea-ly-son-16x9"
+          alt=""
+          className={styles.scene}
+          eager
+          fallback={<div className={styles.sceneFallback} />}
+        />
+      </div>
+      <div className={styles.body}>
+        <h2 id="summary-name" className={styles.name}>
+          {props.name}
+        </h2>
+        {props.description && <p className={styles.description}>{props.description}</p>}
+        <p className={styles.meta}>
+          {t("seasonStart")}: {when(props.seasonStartAt)}
+        </p>
+        <p className={styles.meta}>
+          {t("seasonEnd")}: {when(props.seasonEndAt)} ({t("vietnamTime")})
+        </p>
+        <p className={styles.meta}>
+          {t("route")}: {r(`${props.routeId}.name`)}, {t("distance", { km })}
+        </p>
+        {!props.hideTeams && (
+          <>
+            <h3 className={styles.teamsTitle}>{t("teams")}</h3>
+            {props.teams.length === 0 && <p className={styles.meta}>{t("noTeams")}</p>}
+            <ul className={styles.teams}>
+              {props.teams.map((team) => (
+                <li key={team.id} className={styles.team}>
+                  <TeamEmblem emblemKey={team.emblemKey} size={40} alt="" />
+                  <strong className={styles.teamName}>{team.name}</strong>
+                  <Chip tone={team.freePlaces > 0 ? "info" : "neutral"}>
+                    {team.freePlaces > 0 ? t("placesLeft", { count: team.freePlaces }) : t("full")}
+                  </Chip>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </Card>
   );
 }

@@ -16,7 +16,7 @@
     "addTitle": "Add team",
     "editTitle": "Edit team",
     "name": "Team name",
-    "emblem": "Emblem",
+    "emblem": "Team logo",
     "description": "Description (optional)",
     "memberLimit": "Member limit",
     "save": "Save team",

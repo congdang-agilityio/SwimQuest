@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import { EMBLEM_KEYS } from "@/lib/emblems";
 import { clientFetch } from "@/lib/http/client-fetch";
 import { parseTeamInput, type TeamErrorCode, type TeamField } from "@/lib/validation/team";
+import { Button, Card, Field, TextareaField } from "@/components/ui";
 import { TeamEmblem } from "./team-emblem";
+import styles from "./team-setup.module.css";
 
 export type TeamFormValues = {
   name: string;
@@ -24,10 +26,6 @@ type Props = {
 
 type FieldError = TeamErrorCode | "LIMIT_BELOW_MEMBERS";
 type Errors = Partial<Record<TeamField, FieldError>>;
-
-const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
-const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
-const errorColor = { color: "#b91c1c" };
 
 export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
   const t = useTranslations("teams");
@@ -76,88 +74,86 @@ export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
     setBusy(false);
   }
 
-  const fieldProps = (name: TeamField) => ({
-    "aria-invalid": errors[name] ? (true as const) : undefined,
-    "aria-describedby": errors[name] ? `team-${name}-error` : undefined,
-  });
-  const fieldError = (name: TeamField) =>
-    errors[name] && (
-      <span id={`team-${name}-error`} role="alert" style={errorColor}>
-        {t(`errors.${errors[name]}`)}
-      </span>
-    );
+  const fieldError = (name: TeamField) => (errors[name] ? t(`errors.${errors[name]}`) : undefined);
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-labelledby="team-form-title">
-      <h3 id="team-form-title">{t(initial ? "form.editTitle" : "form.addTitle")}</h3>
-      <p>
-        <label htmlFor="team-name">{t("form.name")}</label>
-        <input
+    <Card>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        aria-labelledby="team-form-title"
+        className={styles.form}
+      >
+        <h3 id="team-form-title" className={styles.formTitle}>
+          {t(initial ? "form.editTitle" : "form.addTitle")}
+        </h3>
+        <Field
           id="team-name"
           name="name"
           type="text"
+          label={t("form.name")}
           defaultValue={initial?.name ?? ""}
-          {...fieldProps("name")}
-          style={control}
+          error={fieldError("name")}
         />
-        {fieldError("name")}
-      </p>
-      <fieldset {...fieldProps("emblemKey")}>
-        <legend>{t("form.emblem")}</legend>
-        {EMBLEM_KEYS.map((key) => (
-          <label
-            key={key}
-            style={{ ...touch, display: "inline-flex", alignItems: "center", gap: 4 }}
-          >
-            <input
-              type="radio"
-              name="emblemKey"
-              value={key}
-              checked={emblem === key}
-              onChange={() => setEmblem(key)}
-              style={touch}
-            />
-            <TeamEmblem emblemKey={key} size={32} alt={t(`emblems.${key}`)} />
-          </label>
-        ))}
-        {fieldError("emblemKey")}
-      </fieldset>
-      <p>
-        <label htmlFor="team-description">{t("form.description")}</label>
-        <textarea
+        <fieldset
+          className={styles.emblems}
+          aria-invalid={errors.emblemKey ? true : undefined}
+          aria-describedby={errors.emblemKey ? "team-emblemKey-error" : undefined}
+        >
+          <legend className={styles.legend}>{t("form.emblem")}</legend>
+          <div className={styles.tiles}>
+            {EMBLEM_KEYS.map((key) => (
+              <label key={key} className={styles.tile}>
+                <input
+                  type="radio"
+                  name="emblemKey"
+                  value={key}
+                  checked={emblem === key}
+                  onChange={() => setEmblem(key)}
+                  className={styles.tileRadio}
+                />
+                <TeamEmblem emblemKey={key} size={48} alt={t(`emblems.${key}`)} />
+              </label>
+            ))}
+          </div>
+          {errors.emblemKey && (
+            <span id="team-emblemKey-error" role="alert" className={styles.error}>
+              {fieldError("emblemKey")}
+            </span>
+          )}
+        </fieldset>
+        <TextareaField
           id="team-description"
           name="description"
+          label={t("form.description")}
           defaultValue={initial?.description ?? ""}
-          {...fieldProps("description")}
-          style={control}
+          error={fieldError("description")}
+          rows={3}
         />
-        {fieldError("description")}
-      </p>
-      <p>
-        <label htmlFor="team-memberLimit">{t("form.memberLimit")}</label>
-        <input
+        <Field
           id="team-memberLimit"
           name="memberLimit"
           type="number"
           inputMode="numeric"
           min={1}
+          label={t("form.memberLimit")}
           defaultValue={initial?.memberLimit ?? ""}
-          {...fieldProps("memberLimit")}
-          style={control}
+          error={fieldError("memberLimit")}
         />
-        {fieldError("memberLimit")}
-      </p>
-      {failed && (
-        <p role="alert" style={errorColor}>
-          {t("errors.GENERIC")}
-        </p>
-      )}
-      <button type="submit" disabled={busy} style={touch}>
-        {t("form.save")}
-      </button>{" "}
-      <button type="button" onClick={onCancel} style={touch}>
-        {t("form.cancel")}
-      </button>
-    </form>
+        {failed && (
+          <p role="alert" className={styles.error}>
+            {t("errors.GENERIC")}
+          </p>
+        )}
+        <div className={styles.actions}>
+          <Button type="submit" disabled={busy} block>
+            {t("form.save")}
+          </Button>
+          <Button variant="ghost" onClick={onCancel} block>
+            {t("form.cancel")}
+          </Button>
+        </div>
+      </form>
+    </Card>
   );
 }

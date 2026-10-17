@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { TeamEmblem } from "./team-emblem";
 import { TeamForm } from "./team-form";
 import { TeamStartStatus } from "./team-start-status";
+import styles from "./team-setup.module.css";
+import { Button, Chip, SectionHeader } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
 
 export type TeamRow = {
@@ -31,9 +33,6 @@ type Props = {
   /** Shows each team's start and lock state; omitted for a draft. */
   startLock?: { locked: boolean; lockAtIso: string };
 };
-
-const touch = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
-const errorColor = { color: "#b91c1c" };
 
 /** Organizer-only team management (rendered by the manage page, which enforces the role). */
 export function TeamList({ tournamentId, teams, capacity, isDraft, startLock }: Props) {
@@ -61,92 +60,99 @@ export function TeamList({ tournamentId, teams, capacity, isDraft, startLock }: 
   }
 
   return (
-    <section aria-labelledby="teams-title">
-      <h2 id="teams-title">{t("manage.title")}</h2>
-      <p>{t("manage.capacity", { count: capacity })}</p>
-      {teams.length === 0 && <p>{t("manage.empty")}</p>}
-      <ul>
-        {teams.map((team) => (
-          <li key={team.id}>
-            {editing === team.id ? (
-              <TeamForm
-                action={{ method: "PATCH", url: `/api/teams/${team.id}` }}
-                initial={{
-                  name: team.name,
-                  emblemKey: team.emblemKey,
-                  description: team.description ?? "",
-                  memberLimit: team.memberLimit,
-                }}
-                onSaved={saved}
-                onCancel={() => setEditing(null)}
-              />
-            ) : (
-              <>
-                <TeamEmblem emblemKey={team.emblemKey} size={32} alt="" />{" "}
-                <strong>
-                  <Link
-                    href={`/tournaments/${tournamentId}/manage/teams/${team.id}`}
-                    style={{ ...touch, display: "inline-block" }}
-                  >
-                    {team.name}
-                  </Link>
-                </strong>{" "}
-                <span>
-                  {t("manage.members", { count: team.memberCount, limit: team.memberLimit })}
-                </span>{" "}
-                {startLock && (
-                  <>
-                    <TeamStartStatus
-                      startNameKey={team.startNameKey ?? null}
-                      autoAssignedAtIso={team.autoAssignedAtIso ?? null}
-                      {...startLock}
-                    />{" "}
-                  </>
-                )}
-                <button type="button" onClick={() => setEditing(team.id)} style={touch}>
-                  {t("manage.edit")}
-                </button>
-                {isDraft && team.memberCount === 0 && (
-                  <>
-                    {" "}
-                    {confirming === team.id ? (
-                      <span role="alertdialog" aria-label={t("manage.delete")}>
-                        {t("manage.deleteConfirm", { name: team.name })}{" "}
-                        <button type="button" onClick={() => remove(team.id)} style={touch}>
-                          {t("manage.deleteConfirmYes")}
-                        </button>{" "}
-                        <button type="button" onClick={() => setConfirming(null)} style={touch}>
-                          {t("manage.cancel")}
-                        </button>
-                      </span>
-                    ) : (
-                      <button type="button" onClick={() => setConfirming(team.id)} style={touch}>
-                        {t("manage.delete")}
-                      </button>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-      {deleteFailed && (
-        <p role="alert" style={errorColor}>
-          {t("manage.deleteFailed")}
+    <section aria-labelledby="teams-title" className={styles.manage}>
+      <SectionHeader id="teams-title">{t("manage.title")}</SectionHeader>
+      <div className={styles.manageBody}>
+        <p className={styles.capacity}>
+          <Chip tone="info">{t("manage.capacity", { count: capacity })}</Chip>
         </p>
-      )}
-      {editing === "new" ? (
-        <TeamForm
-          action={{ method: "POST", url: `/api/tournaments/${tournamentId}/teams` }}
-          onSaved={saved}
-          onCancel={() => setEditing(null)}
-        />
-      ) : (
-        <button type="button" onClick={() => setEditing("new")} style={touch}>
-          {t("manage.add")}
-        </button>
-      )}
+        {teams.length === 0 && <p className={styles.empty}>{t("manage.empty")}</p>}
+        <ul className={styles.rows}>
+          {teams.map((team) => (
+            <li key={team.id} className={editing === team.id ? undefined : styles.row}>
+              {editing === team.id ? (
+                <TeamForm
+                  action={{ method: "PATCH", url: `/api/teams/${team.id}` }}
+                  initial={{
+                    name: team.name,
+                    emblemKey: team.emblemKey,
+                    description: team.description ?? "",
+                    memberLimit: team.memberLimit,
+                  }}
+                  onSaved={saved}
+                  onCancel={() => setEditing(null)}
+                />
+              ) : (
+                <>
+                  <TeamEmblem emblemKey={team.emblemKey} size={48} alt="" />
+                  <span className={styles.rowInfo}>
+                    <strong className={styles.rowName}>
+                      <Link href={`/tournaments/${tournamentId}/manage/teams/${team.id}`}>
+                        {team.name}
+                      </Link>
+                    </strong>
+                    <span className={styles.rowMeta}>
+                      <Chip>
+                        {t("manage.members", { count: team.memberCount, limit: team.memberLimit })}
+                      </Chip>
+                      {startLock && (
+                        <TeamStartStatus
+                          startNameKey={team.startNameKey ?? null}
+                          autoAssignedAtIso={team.autoAssignedAtIso ?? null}
+                          {...startLock}
+                        />
+                      )}
+                    </span>
+                  </span>
+                  <span className={styles.rowActions}>
+                    <Button variant="secondary" size="sm" onClick={() => setEditing(team.id)}>
+                      {t("manage.edit")}
+                    </Button>
+                    {isDraft && team.memberCount === 0 && confirming !== team.id && (
+                      <Button variant="ghost" size="sm" onClick={() => setConfirming(team.id)}>
+                        {t("manage.delete")}
+                      </Button>
+                    )}
+                  </span>
+                  {isDraft && team.memberCount === 0 && confirming === team.id && (
+                    <span
+                      role="alertdialog"
+                      aria-label={t("manage.delete")}
+                      className={styles.confirm}
+                    >
+                      <span>{t("manage.deleteConfirm", { name: team.name })}</span>
+                      <span className={styles.confirmActions}>
+                        <Button size="sm" onClick={() => remove(team.id)}>
+                          {t("manage.deleteConfirmYes")}
+                        </Button>
+                        <Button variant="secondary" size="sm" onClick={() => setConfirming(null)}>
+                          {t("manage.cancel")}
+                        </Button>
+                      </span>
+                    </span>
+                  )}
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+        {deleteFailed && (
+          <p role="alert" className={styles.error}>
+            {t("manage.deleteFailed")}
+          </p>
+        )}
+        {editing === "new" ? (
+          <TeamForm
+            action={{ method: "POST", url: `/api/tournaments/${tournamentId}/teams` }}
+            onSaved={saved}
+            onCancel={() => setEditing(null)}
+          />
+        ) : (
+          <Button block onClick={() => setEditing("new")}>
+            {t("manage.add")}
+          </Button>
+        )}
+      </div>
     </section>
   );
 }

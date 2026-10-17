@@ -24,6 +24,7 @@
   --sq-sky-50: #eaf4fd; /* input fill, inactive segment */
   --sq-sky-100: #d7ebfb; /* input border, dividers */
   --sq-white: #ffffff;
+  --sq-blue-wash: rgb(10 148 254 / 0.08); /* pale fill: selected row (chosen start, chosen team) */
 
   /* Text */
   --sq-text: #0b2a4a; /* navy body text on light surfaces */

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { MockupPicture } from "@/components/art/mockup-picture";
 import { TeamEmblem } from "@/components/teams/team-emblem";
+import { Button, ButtonLink, Card, Chip } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
+import styles from "./join.module.css";
 
 export type PickerTeam = {
   id: string;
@@ -22,8 +24,6 @@ type Props = {
   preselectedId?: string | null;
 };
 
-const tap = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
-
 /** Team choice on the join page: join at once (POST /api/join/:token), or show the current team. */
 export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props) {
   const t = useTranslations("join");
@@ -37,12 +37,13 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
 
   if (myTeam) {
     return (
-      <section>
+      <Card as="section" className={styles.notice}>
+        <MockupPicture artKey="flag" alt="" className={styles.noticeArt} />
         <p>{t("alreadyIn", { team: myTeam.name })}</p>
-        <Link href="/team" style={{ ...tap, display: "inline-block" }}>
+        <ButtonLink href="/team" block>
           {t("goToTeam")}
-        </Link>
-      </section>
+        </ButtonLink>
+      </Card>
     );
   }
 
@@ -63,29 +64,49 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
   }
 
   return (
-    <section aria-labelledby="pick-title">
-      <h2 id="pick-title">{t("chooseTeam")}</h2>
-      {message && <p role="alert">{t(message)}</p>}
-      {!message && chosen && chosenFull && (
-        <p role="status">{t("linkTeamFull", { name: chosen.name })}</p>
+    <section aria-labelledby="pick-title" className={styles.picker}>
+      <h2 id="pick-title" className={styles.pickTitle}>
+        {t("chooseTeam")}
+      </h2>
+      {message && (
+        <p role="alert" className={styles.alert}>
+          {t(message)}
+        </p>
       )}
-      <ul>
+      {!message && chosen && chosenFull && (
+        <p role="status" className={styles.alert}>
+          {t("linkTeamFull", { name: chosen.name })}
+        </p>
+      )}
+      <ul className={styles.teamList}>
         {teams.map((team) => {
           const full = team.freePlaces <= 0;
           const selected = team.id === chosenId && !full;
           return (
-            <li key={team.id} aria-current={selected ? "true" : undefined}>
-              <TeamEmblem emblemKey={team.emblemKey} size={32} alt="" />{" "}
-              <strong>{team.name}</strong> {selected && <em>{t("selected")}</em>}{" "}
-              <span>{full ? t("full") : t("placesLeft", { count: team.freePlaces })}</span>{" "}
-              <button
-                type="button"
+            <li
+              key={team.id}
+              aria-current={selected ? "true" : undefined}
+              className={[styles.teamRow, full && styles.teamRowFull].filter(Boolean).join(" ")}
+            >
+              <TeamEmblem emblemKey={team.emblemKey} size={48} alt="" />
+              <span className={styles.teamInfo}>
+                <strong className={styles.teamName}>{team.name}</strong>
+                <span className={styles.chips}>
+                  <Chip tone={full ? "neutral" : "info"}>
+                    {full ? t("full") : t("placesLeft", { count: team.freePlaces })}
+                  </Chip>
+                  {selected && <Chip tone="success">{t("selected")}</Chip>}
+                </span>
+              </span>
+              <Button
+                size="sm"
+                variant={full ? "secondary" : "primary"}
                 disabled={busy || full}
                 onClick={() => choose(team.id)}
-                style={tap}
+                className={styles.joinButton}
               >
                 {full ? t("fullDisabled") : t("join", { name: team.name })}
-              </button>
+              </Button>
             </li>
           );
         })}

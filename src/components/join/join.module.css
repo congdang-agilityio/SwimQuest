@@ -1,0 +1,141 @@
+/*
+ * Join page ("Tạo đội / Tham gia" phone screen of the mockup): tournament card, team picker and
+ * the closed / invalid / already-in notices. Every value comes from src/styles/tokens.css.
+ */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+/* The light sheet has no dark band, so the phone header gets its own navy strip. */
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+
+/* Closed, invalid and already-in states */
+.notice {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-6) var(--sq-space-4);
+  text-align: center;
+}
+.notice p {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-medium);
+}
+.noticeArt {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.eligibility h3 {
+  margin: 0 0 var(--sq-space-2);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+.eligibility p {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+
+/* Team picker */
+.picker {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+
+.pickTitle {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+}
+
+.alert {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+
+.teamList {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One team as a card row: emblem, name with places, join button. */
+.teamRow {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 2px solid transparent;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+
+/* The team named by the link, as the mockup's selected start. */
+.teamRow[aria-current="true"] {
+  border-color: var(--sq-blue-500);
+  background: var(--sq-blue-wash);
+}
+
+.teamRowFull {
+  opacity: 0.75;
+}
+
+.teamInfo {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+
+.teamName {
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-1);
+}
+
+.joinButton {
+  max-width: 12rem;
+  white-space: normal;
+  text-align: center;
+}
+
+/* Phone width: the button takes its own line under the name. */
+@media (max-width: 479px) {
+  .teamRow {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+  .joinButton {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+  }
+}
