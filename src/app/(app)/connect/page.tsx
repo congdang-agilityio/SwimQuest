@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { ScreenHeader } from "@/components/ui";
 import { SafetyReminder } from "@/components/safety/safety-reminder";
+import { ComingSoonSources } from "@/components/swims/coming-soon-sources";
 import { UploadForm } from "@/components/swims/upload-form";
 import styles from "@/components/swims/swims.module.css";
 
@@ -14,6 +15,7 @@ export default async function ConnectPage() {
       </div>
       <SafetyReminder />
       <UploadForm />
+      <ComingSoonSources />
     </main>
   );
 }

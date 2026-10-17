@@ -39,5 +39,16 @@
       "notSwim": "Không phải buổi bơi"
     },
     "open": "Mở buổi bơi"
+  },
+  "sources": {
+    "title": "Nguồn ghi nhận",
+    "comingSoon": "Sắp ra mắt",
+    "note": "{source} sắp ra mắt. Hiện bạn tải lên tệp GPX hoặc FIT ở trên.",
+    "names": {
+      "strava": "Strava",
+      "garmin": "Garmin",
+      "coros": "Coros",
+      "suunto": "Suunto"
+    }
   }
 }

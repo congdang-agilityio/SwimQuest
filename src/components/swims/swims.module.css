@@ -325,3 +325,61 @@
     max-width: 640px;
   }
 }
+
+/* Coming-soon activity sources ("Nguồn ghi nhận" row) */
+.sourcesTitle {
+  margin: 0 0 var(--sq-space-3);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+}
+.sources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.source {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-1);
+  width: 100%;
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-3) var(--sq-space-2);
+  border: 1px dashed var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  color: var(--sq-text-muted);
+  font: inherit;
+  cursor: not-allowed;
+}
+.source:focus-visible {
+  outline: none;
+  box-shadow: var(--sq-focus-ring);
+}
+.sourceName {
+  font-weight: var(--sq-weight-bold);
+}
+.sourceBadge {
+  padding: 2px var(--sq-space-2);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-white);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-medium);
+}
+.sourcesNote {
+  margin: var(--sq-space-3) 0 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.sourcesNote:empty {
+  display: none;
+}
+@media (min-width: 480px) {
+  .sources {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
