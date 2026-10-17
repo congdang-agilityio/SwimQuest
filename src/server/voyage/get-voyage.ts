@@ -1,4 +1,4 @@
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembership } from "@/server/home/selected-tournament";
 import { getTeamPoints } from "@/server/scoring/team-points";
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { getRoute } from "@/lib/routes";
@@ -25,8 +25,11 @@ export type Voyage = {
 };
 
 /** Voyage data for the player's current team; always computed from current points. */
-export async function getVoyage(userId: string): Promise<Voyage | null> {
-  const current = await getCurrentMembership(userId);
+export async function getVoyage(
+  userId: string,
+  selectedTournamentId?: string | null,
+): Promise<Voyage | null> {
+  const current = await getSelectedMembership(userId, selectedTournamentId);
   if (!current) return null;
   const { tournament, team } = current;
   const route = getRoute(tournament.routeId);

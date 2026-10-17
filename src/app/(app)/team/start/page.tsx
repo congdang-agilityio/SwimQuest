@@ -8,11 +8,11 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute, startDestinations } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 
 export default async function TeamStartPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team/start");
-  const membership = await getCurrentMembership(user.id);
+  const membership = await getSelectedMembershipFromCookie(user.id);
   const route = membership ? getRoute(membership.tournament.routeId) : null;
   if (!membership || !route) return <JoinGuidance />;
   const { team, tournament } = membership;

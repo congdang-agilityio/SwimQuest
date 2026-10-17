@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { FinishLostNotice } from "@/components/finish/finish-lost-notice";
@@ -10,6 +10,7 @@ import styles from "@/components/voyage/voyage.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import { requireUser } from "@/server/auth/current-user";
+import { SELECTED_TOURNAMENT_COOKIE } from "@/server/home/selected-tournament";
 import { getVoyage } from "@/server/voyage/get-voyage";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export default async function VoyagePage() {
     getTranslations("tabs.voyage"),
     getTranslations("voyage"),
     getTranslations("leaderboard"),
-    getVoyage(user.id),
+    getVoyage(user.id, (await cookies()).get(SELECTED_TOURNAMENT_COOKIE)?.value),
   ]);
   if (!voyage) {
     return (

@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { ButtonLink } from "@/components/ui";
 import { getRoute } from "@/lib/routes";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 import { hasSeen } from "@/server/moments/seen";
 import { FinishCrest } from "./finish-crest";
 import styles from "./finish.module.css";
@@ -20,7 +20,7 @@ export async function TeamFinish({
   /** Home: show the panel only until this finish has been seen (Voyage and My Team keep it). */
   onlyUnseen?: boolean;
 }) {
-  const current = await getCurrentMembership(userId);
+  const current = await getSelectedMembershipFromCookie(userId);
   const finishedAt = current?.team.finishedAt;
   if (!current || !finishedAt) return null;
   const { team, tournament } = current;

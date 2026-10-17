@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getRoute } from "@/lib/routes";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 import { hasSeen } from "@/server/moments/seen";
 import { FinishLostClose } from "./finish-lost-close";
 import styles from "./finish.module.css";
@@ -11,7 +11,7 @@ import styles from "./finish.module.css";
  * `finish-lost:<team>:<finishLostAt>` seen, so a later withdrawal shows it again.
  */
 export async function FinishLostNotice({ userId }: { userId: string }) {
-  const current = await getCurrentMembership(userId);
+  const current = await getSelectedMembershipFromCookie(userId);
   const lostAt = current?.team.finishLostAt;
   if (!current || !lostAt || current.team.finishedAt) return null;
   const momentKey = `finish-lost:${current.team.id}:${lostAt.getTime()}`;

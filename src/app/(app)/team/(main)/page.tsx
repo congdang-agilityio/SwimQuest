@@ -12,7 +12,7 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { getMyPoints } from "@/server/scoring/my-points";
 import { listTeamsWithCounts } from "@/server/teams/manage";
@@ -26,12 +26,12 @@ export default async function TeamPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team");
   const t = await getTranslations("tabs.team");
   const tTeam = await getTranslations("team");
-  let membership = await getCurrentMembership(user.id);
+  let membership = await getSelectedMembershipFromCookie(user.id);
   // Catch up the automatic assignment right after the deadline, before the scheduler runs.
   if (membership && (await ensureStartsAssigned(membership.tournament.id, new Date())) > 0) {
-    membership = await getCurrentMembership(user.id);
+    membership = await getSelectedMembershipFromCookie(user.id);
   }
-  const view = membership ? await getMyTeamView(user.id) : null;
+  const view = membership ? await getMyTeamView(user.id, membership.tournament.id) : null;
   const removal = membership ? null : await getLastRemoval(user.id);
   const myPoints = membership ? await getMyPoints(user.id, membership.tournament.id) : null;
   const status = membership ? effectiveStatus(membership.tournament, new Date()) : null;

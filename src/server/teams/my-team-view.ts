@@ -1,6 +1,6 @@
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { db } from "@/server/db";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembership } from "@/server/home/selected-tournament";
 import { getPlayerTotals, getTeamPoints } from "@/server/scoring/team-points";
 import { getLevels } from "@/server/xp/level";
 import {
@@ -38,8 +38,11 @@ export type MyTeamView = {
  * contributions are always included (Q-31); users are read with `PUBLIC_PLAYER_SELECT`, so
  * no email leaves this function (NFR-05). Returns null without a current team.
  */
-export async function getMyTeamView(userId: string): Promise<MyTeamView | null> {
-  const current = await getCurrentMembership(userId);
+export async function getMyTeamView(
+  userId: string,
+  selectedTournamentId?: string | null,
+): Promise<MyTeamView | null> {
+  const current = await getSelectedMembership(userId, selectedTournamentId);
   if (!current) return null;
   const { tournament, team } = current;
 

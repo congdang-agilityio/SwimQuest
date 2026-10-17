@@ -7,11 +7,11 @@ import { CaptainTeamEdit } from "@/components/teams/captain-team-edit";
 import { ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
-import { getCurrentMembership } from "@/server/home/my-tournaments";
+import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 
 export default async function EditTeamPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team/edit");
-  const membership = await getCurrentMembership(user.id);
+  const membership = await getSelectedMembershipFromCookie(user.id);
   if (!membership) return <JoinGuidance />;
   const { team } = membership;
   if (team.captainUserId !== user.id) return <AccessDenied />;
