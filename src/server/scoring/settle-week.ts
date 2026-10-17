@@ -1,6 +1,7 @@
 import type { SwimResult, Tournament } from "@prisma/client";
 import { activeDays, extraPoints, weeklyMultiplierPct } from "@/lib/scoring/weekly-multiplier";
 import { previousWeekStart, vnWeekRange, vnWeekStart } from "@/lib/time/vn";
+import { onWeekSettled } from "@/server/badges/weekly-badges";
 import type { Tx } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
 import { updateTeamProgress } from "@/server/progress/update-team-progress";
@@ -103,6 +104,7 @@ export async function settleWeek(tournamentId: string, week: string, now = new D
       for (const { userId } of players) {
         for (const team of await applyWeeks(tx, t, userId, [week], now)) teams.add(team);
       }
+      await onWeekSettled(tx, tournamentId, week);
       for (const team of [...teams].sort()) await updateTeamProgress(tx, tournamentId, team, now);
       return true;
     },
