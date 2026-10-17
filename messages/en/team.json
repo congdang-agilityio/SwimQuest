@@ -5,5 +5,7 @@
   "members": "Members: {count} / {limit}",
   "addSwim": "Add swim",
   "rosterTitle": "Members",
-  "km": "{km} km"
+  "km": "{km} km",
+  "level": "Lv {level}",
+  "progressLabel": "Team progress"
 }

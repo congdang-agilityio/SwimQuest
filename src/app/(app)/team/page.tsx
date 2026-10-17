@@ -2,6 +2,8 @@ import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { TeamStartCard } from "@/components/starts/team-start-card";
+import styles from "@/components/teams/my-team.module.css";
+import { ButtonLink } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
@@ -15,45 +17,60 @@ import { TeamRoster } from "@/components/teams/team-roster";
 export default async function TeamPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team");
   const t = await getTranslations("tabs.team");
+  const tTeam = await getTranslations("team");
   let membership = await getCurrentMembership(user.id);
   // Catch up the automatic assignment right after the deadline, before the scheduler runs.
   if (membership && (await ensureStartsAssigned(membership.tournament.id, new Date())) > 0) {
     membership = await getCurrentMembership(user.id);
   }
   const view = membership ? await getMyTeamView(user.id) : null;
+  const startSlug = membership?.team.startDestination ?? null;
   return (
     <main>
-      <h1>{t("title")}</h1>
-      {membership && view ? (
-        <>
-          <TeamHeader
-            team={view.team}
-            captainName={view.captain?.displayName ?? null}
-            progressBp={view.progress.progressBp}
-            teamPoints={view.teamPoints}
-            memberCount={view.memberCount}
-          >
-            <TeamStartCard
-              startNameKey={
-                getRoute(membership.tournament.routeId)?.destinations.find(
-                  (d) => d.slug === membership.team.startDestination,
-                )?.nameKey ?? null
-              }
-              isCaptain={membership.team.captainUserId === user.id}
-              lockAtIso={startLockAt(membership.tournament).toISOString()}
-              locked={isStartLocked(membership.tournament, new Date())}
-              autoAssignedAtIso={
-                membership.team.startSetBy === "AUTOMATIC"
-                  ? (membership.team.startSetAt?.toISOString() ?? null)
-                  : null
-              }
-            />
-          </TeamHeader>
-          <TeamRoster members={view.roster} />
-        </>
-      ) : (
-        <JoinGuidance />
-      )}
+      <div className={styles.layout}>
+        <div className={styles.panel}>
+          <h1 className={styles.title}>{t("title")}</h1>
+          {membership && view ? (
+            <>
+              <TeamHeader
+                team={view.team}
+                captainName={view.captain?.displayName ?? null}
+                progressBp={view.progress.progressBp}
+                teamPoints={view.teamPoints}
+                memberCount={view.memberCount}
+              />
+              <TeamRoster members={view.roster} />
+              <div className={styles.footer}>
+                <ButtonLink href="/connect" variant="primary" block>
+                  {tTeam("addSwim")}
+                </ButtonLink>
+              </div>
+            </>
+          ) : (
+            <div className={styles.empty}>
+              <JoinGuidance />
+            </div>
+          )}
+        </div>
+        {membership && view && (
+          <TeamStartCard
+            startSlug={startSlug}
+            startNameKey={
+              getRoute(membership.tournament.routeId)?.destinations.find(
+                (d) => d.slug === startSlug,
+              )?.nameKey ?? null
+            }
+            isCaptain={membership.team.captainUserId === user.id}
+            lockAtIso={startLockAt(membership.tournament).toISOString()}
+            locked={isStartLocked(membership.tournament, new Date())}
+            autoAssignedAtIso={
+              membership.team.startSetBy === "AUTOMATIC"
+                ? (membership.team.startSetAt?.toISOString() ?? null)
+                : null
+            }
+          />
+        )}
+      </div>
     </main>
   );
 }

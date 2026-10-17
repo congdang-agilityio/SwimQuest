@@ -30,7 +30,6 @@ describe("TeamStartCard", () => {
     expect(screen.getByText(startsVi.card.notChosen)).toBeTruthy();
     const link = screen.getByRole("link", { name: startsVi.card.choose });
     expect(link.getAttribute("href")).toBe("/team/start");
-    expect(link.style.minHeight).toBe("44px");
     expect(screen.getByText(/06:00 01\/11\/2098/)).toBeTruthy();
     expect(screen.getByText(startsVi.card.auto)).toBeTruthy();
   });

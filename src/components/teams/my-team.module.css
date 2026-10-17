@@ -1,0 +1,203 @@
+/* My Team ("ĐỘI CỦA TÔI" panel in the mockup). Layout only; every value is a design token. */
+
+.layout {
+  display: grid;
+  gap: var(--sq-space-4);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
+    gap: var(--sq-space-6);
+  }
+}
+
+/* The phone panel: navy band and hero on top, white roster below. */
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-raised);
+}
+.title {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  background: var(--sq-navy-800);
+  border-bottom: 1px solid var(--sq-navy-600);
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.empty {
+  padding: var(--sq-space-4);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  gap: var(--sq-space-4);
+  padding: var(--sq-space-5) var(--sq-space-4) var(--sq-space-4);
+  color: var(--sq-text-on-dark);
+}
+.identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  align-items: center;
+}
+.emblem {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--sq-navy-700);
+  box-shadow: var(--sq-shadow-glow);
+}
+.emblem > img,
+.emblem > svg {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+}
+.teamName {
+  margin: 0;
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+  margin: var(--sq-space-2) 0 0;
+}
+.memberChip {
+  padding: var(--sq-space-1) var(--sq-space-3);
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-navy-800);
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-sm);
+}
+.memberChip svg {
+  width: 18px;
+  height: 18px;
+  color: var(--sq-gold);
+}
+.muted {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+.pointsChip {
+  padding: 2px var(--sq-space-3);
+  border-radius: var(--sq-radius-pill);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+}
+
+/* Roster: "Thành viên" tab label on the navy band, then the white list */
+.rosterTitle {
+  display: inline-block;
+  margin: 0 var(--sq-space-4);
+  padding: var(--sq-space-2) var(--sq-space-1);
+  border-bottom: 3px solid var(--sq-ocean);
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+}
+.list {
+  margin: 0;
+  padding: var(--sq-space-2) var(--sq-space-4);
+  list-style: none;
+  border-radius: var(--sq-radius-lg) var(--sq-radius-lg) 0 0;
+  background: var(--sq-white);
+  color: var(--sq-text);
+}
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--sq-space-3);
+  align-items: center;
+  min-height: 64px;
+  padding: var(--sq-space-3) 0;
+}
+.row + .row {
+  border-top: 1px solid var(--sq-sky-100);
+}
+.who {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+.name {
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+  overflow-wrap: anywhere;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.km {
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  white-space: nowrap;
+}
+
+/* Footer action (the mockup's "Mời thành viên" slot) */
+.footer {
+  padding: var(--sq-space-2) var(--sq-space-4) var(--sq-space-5);
+  background: var(--sq-white);
+}
+
+/* Start card */
+.start {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.startHead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sq-space-3);
+  align-items: center;
+}
+.startArt {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-gradient-sea);
+  object-fit: cover;
+  box-shadow: var(--sq-shadow-card);
+}
+.startTitle {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.startName {
+  margin: var(--sq-space-1) 0 0;
+  color: var(--sq-text);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+}
+.note {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
