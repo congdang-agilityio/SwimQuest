@@ -8,11 +8,17 @@ import { enqueueIntro } from "./outbox";
 import { decryptSecret, encryptSecret, keyHint, ZaloSecretError } from "./secret";
 
 export type ZaloSettingsErrorCode =
-  "INVALID_KEY" | "INVALID_ORIGIN" | "TOURNAMENT_CLOSED" | "ZALO_KEY_REJECTED" | "ZALO_UNREACHABLE";
+  | "INVALID_KEY"
+  | "INVALID_ORIGIN"
+  | "NO_BOT"
+  | "TOURNAMENT_CLOSED"
+  | "ZALO_KEY_REJECTED"
+  | "ZALO_UNREACHABLE";
 
 const MESSAGES: Record<ZaloSettingsErrorCode, string> = {
   INVALID_KEY: "This is not a Zalo bot key",
   INVALID_ORIGIN: "The app origin for the webhook is not a valid http(s) origin",
+  NO_BOT: "This tournament has no Zalo bot",
   TOURNAMENT_CLOSED: "Zalo settings cannot change on a completed tournament",
   ZALO_KEY_REJECTED: "Zalo did not accept this key",
   ZALO_UNREACHABLE: "Zalo could not be reached, try again later",
@@ -20,11 +26,18 @@ const MESSAGES: Record<ZaloSettingsErrorCode, string> = {
 
 /** A refused Zalo settings change. Messages never carry the key. */
 export class ZaloSettingsError extends Error {
-  readonly status: 400 | 409 | 503;
+  readonly status: 400 | 404 | 409 | 503;
   constructor(readonly code: ZaloSettingsErrorCode) {
     super(MESSAGES[code]);
     this.name = "ZaloSettingsError";
-    this.status = code === "TOURNAMENT_CLOSED" ? 409 : code === "ZALO_UNREACHABLE" ? 503 : 400;
+    this.status =
+      code === "TOURNAMENT_CLOSED"
+        ? 409
+        : code === "ZALO_UNREACHABLE"
+          ? 503
+          : code === "NO_BOT"
+            ? 404
+            : 400;
   }
 }
 
@@ -49,7 +62,7 @@ const SETTINGS_SELECT = {
 } satisfies Prisma.ZaloBotSelect;
 
 /** Organizer only; refused (ARCHIVED by the role guard, COMPLETED here) once the tournament ended. */
-async function requireOpenTournament(userId: string, tournamentId: string) {
+export async function requireOpenTournament(userId: string, tournamentId: string) {
   const t = await requireOrganizer(userId, tournamentId, { write: true });
   if (t.status === "COMPLETED") throw new ZaloSettingsError("TOURNAMENT_CLOSED");
   return t;

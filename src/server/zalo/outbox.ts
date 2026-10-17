@@ -2,6 +2,7 @@ import type { Prisma, ZaloMessageKind } from "@prisma/client";
 import { after } from "next/server";
 import { db } from "@/server/db";
 import { deliverPendingZalo } from "./deliver";
+import { SWITCH_FOR_KIND, ZALO_SWITCH_SELECT } from "./switch-kinds";
 
 type Tx = Parameters<Parameters<typeof db.$transaction>[0]>[0];
 
@@ -29,7 +30,11 @@ export interface EnqueueZaloInput {
 
 /**
  * Queues a Zalo message inside the caller's (game) transaction, so it exists only if the game
- * change commits. Does nothing when the tournament has no bot or its bot has no linked group.
+ * change commits. Does nothing when the tournament has no bot, its bot has no linked group, or
+ * the organizer switched this kind off for the tournament (S-89 AC 2). The switch is per
+ * tournament, so a counted swim of a tournament with counted swims off is left out of a group
+ * post while another tournament on the same bot still adds its part. The introduction has no
+ * switch.
  * Delivery runs after the response (`after()`), or on the next tick outside a request; it never
  * runs in the caller's transaction, so a Zalo problem can never undo or delay game data.
  * Returns whether a message was queued or merged.
@@ -38,10 +43,12 @@ export async function enqueueZalo(tx: Tx, input: EnqueueZaloInput): Promise<bool
   const { tournamentId, kind, payload, dedupeKey, swimResultId } = input;
   const settings = await tx.tournamentZalo.findUnique({
     where: { tournamentId },
-    select: { zaloBot: { select: { id: true, chatId: true } } },
+    select: { ...ZALO_SWITCH_SELECT, zaloBot: { select: { id: true, chatId: true } } },
   });
   const bot = settings?.zaloBot;
   if (!bot?.chatId) return false;
+  const column = SWITCH_FOR_KIND[kind];
+  if (column && !settings?.[column]) return false;
   const groupKey =
     typeof input.groupKey === "function" ? input.groupKey(bot.chatId) : input.groupKey;
   if (swimResultId) {
