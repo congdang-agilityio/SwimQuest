@@ -93,7 +93,7 @@ describe("TeamPicker", () => {
     expect(screen.queryByRole("status")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Join Turtles" }));
     await waitFor(() => expect(push).toHaveBeenCalledWith("/team"));
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ teamId: "a" });
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ teamId: "a", fromTeamLink: true });
   });
 
   it("says the linked team is full and still lets the player choose another", async () => {
