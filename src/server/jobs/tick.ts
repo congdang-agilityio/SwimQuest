@@ -1,3 +1,4 @@
+import { processSeasonEnd } from "@/server/badges/season-badge";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { sendPendingPushes, type PushRunCounts } from "@/server/push/send";
@@ -119,6 +120,36 @@ export async function runDueWeekSettlements(now: Date): Promise<WeekSettlementCo
         console.error(`tick: week ${week} settlement failed for tournament ${t.id}`, error);
         break;
       }
+    }
+  }
+  return counts;
+}
+
+/**
+ * Processes the season end (S-50) once for every tournament that became COMPLETED (season end
+ * passed, not draft or archived): the Season badge and `SEASON_ENDED`. Runs after the week
+ * settlements; a failing tournament is logged and retried on the next tick.
+ */
+export async function runDueSeasonEnds(
+  now: Date,
+): Promise<{ tournaments: number; failed: number }> {
+  assertValidDate(now);
+  const due = await db.tournament.findMany({
+    where: {
+      status: { in: ["PUBLISHED", "ACTIVE", "COMPLETED"] },
+      seasonEndAt: { lte: now },
+      seasonEndProcessedAt: null,
+    },
+    select: { id: true },
+    orderBy: { id: "asc" },
+  });
+  const counts = { tournaments: 0, failed: 0 };
+  for (const { id } of due) {
+    try {
+      if ((await processSeasonEnd(id, now)) !== null) counts.tournaments += 1;
+    } catch (error) {
+      counts.failed += 1;
+      console.error(`tick: season end failed for tournament ${id}`, error);
     }
   }
   return counts;
