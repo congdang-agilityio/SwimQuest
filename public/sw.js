@@ -1,7 +1,6 @@
 /*
- * SwimQuest service worker: offline fallback, static asset cache (#386) and the last copy of
- * pages already opened (#818). Push handling (S-67) extends this same worker; do not register a
- * second one.
+ * SwimQuest service worker: offline fallback, static asset cache (#386), the last copy of
+ * pages already opened (#818) and push notifications (S-67, #387). Do not register a second one.
  *
  * Privacy: build output (/_next/static), cut art (/art), icons and the public /offline page are
  * cached for everyone. A page's HTML is kept only when the server tagged it with the session it
@@ -163,4 +162,49 @@ self.addEventListener("fetch", (event) => {
   } else if (STATIC_PREFIXES.some((p) => url.pathname.startsWith(p)) && !url.search) {
     event.respondWith(staleWhileRevalidate(request));
   }
+});
+
+/** Same-origin path of a push link; anything else opens the home page. */
+function pushTarget(url) {
+  try {
+    const target = new URL(url || "/", self.location.origin);
+    return target.origin === self.location.origin ? target.href : self.location.origin + "/";
+  } catch {
+    return self.location.origin + "/";
+  }
+}
+
+/** A push carries `{ title, body, url }` only (#385); show it as a notification. */
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { body: event.data ? event.data.text() : "" };
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title || "SwimQuest", {
+      body: data.body || "",
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      data: { url: pushTarget(data.url) },
+    }),
+  );
+});
+
+/** Tapping the notification focuses an open SwimQuest window on its page, or opens a new one. */
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = pushTarget(event.notification.data && event.notification.data.url);
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      const open = windows.find((w) => new URL(w.url).origin === self.location.origin);
+      if (!open) return self.clients.openWindow(url);
+      // navigate() works only on windows this worker controls; fall back to a new window.
+      return open
+        .navigate(url)
+        .then((w) => (w || open).focus())
+        .catch(() => self.clients.openWindow(url));
+    }),
+  );
 });

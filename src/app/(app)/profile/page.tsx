@@ -78,6 +78,31 @@ export default async function ProfilePage() {
             />
           </svg>
         </Link>
+        <Link href="/profile/notifications" className={styles.row}>
+          <span className={styles.rowIcon}>
+            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15l1.5-2ZM10 20.5a2 2 0 0 0 4 0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          <span className={styles.rowLabel}>{t("profile.notifications")}</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M9 5l7 7-7 7"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
         <Link href="/profile/security" className={styles.row}>
           <span className={styles.rowIcon}>
             <NavIcon name="profile" />

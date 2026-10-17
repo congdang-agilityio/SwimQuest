@@ -34,5 +34,31 @@
       "badgeEarned": "Bạn nhận được một huy hiệu mới.",
       "levelUp": "Bạn đã lên cấp {level}."
     }
+  },
+  "settings": {
+    "title": "Cài đặt thông báo",
+    "push": {
+      "title": "Thông báo đẩy",
+      "intro": "Nhận tin về các lượt bơi và đội của bạn trên điện thoại này, kể cả khi đã đóng SwimQuest.",
+      "label": "Thông báo đẩy trên thiết bị này",
+      "checking": "Đang kiểm tra thiết bị này…",
+      "on": "Đang bật. Thiết bị này nhận thông báo đẩy.",
+      "off": "Đang tắt. Bật lên để nhận tin trên thiết bị này.",
+      "offHere": "Hiện chưa dùng được trên thiết bị này.",
+      "otherDevices": "Công tắc này chỉ đổi thiết bị này. Điện thoại và trình duyệt khác của bạn giữ cài đặt riêng.",
+      "unavailableTitle": "Thông báo đẩy chưa sẵn sàng",
+      "unavailable": "SwimQuest chưa gửi được thông báo đẩy. Bạn vẫn xem được mọi cập nhật trong danh sách Thông báo.",
+      "unsupportedTitle": "Trình duyệt này không nhận được thông báo đẩy",
+      "unsupported": {
+        "ios": "Trên iPhone hoặc iPad, thông báo đẩy cần iOS 16.4 trở lên và SwimQuest nằm trên Màn hình chính. Trong Safari, chạm Chia sẻ, chọn Thêm vào MH chính, mở SwimQuest từ biểu tượng mới rồi bật thông báo đẩy tại đây.",
+        "zalo": "Bạn đang mở SwimQuest trong Zalo, nơi không hiện được thông báo đẩy. Chạm menu ..., chọn Mở bằng trình duyệt, rồi bật thông báo đẩy ở đó.",
+        "browser": "Hãy mở SwimQuest bằng Chrome, Edge, Firefox hoặc Safari bản mới để bật thông báo đẩy."
+      },
+      "blockedTitle": "Thông báo đang bị chặn",
+      "blocked": "Bạn đã chặn thông báo của SwimQuest. Chạm biểu tượng ổ khóa cạnh địa chỉ trang, mở Cài đặt trang web, đặt Thông báo thành Cho phép rồi tải lại trang. Với ứng dụng đã cài trên iPhone, vào Cài đặt > Thông báo > SwimQuest.",
+      "dismissed": "Bạn chưa cho phép thông báo. Hãy thử lại và chọn Cho phép.",
+      "failed": "Không đổi được thông báo đẩy trên thiết bị này. Hãy thử lại.",
+      "loadFailed": "Không kiểm tra được thông báo đẩy trên thiết bị này. Hãy tải lại trang."
+    }
   }
 }
