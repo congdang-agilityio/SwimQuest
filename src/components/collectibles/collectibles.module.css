@@ -204,3 +204,14 @@
   color: var(--sq-text-muted);
   font-size: var(--sq-text-xs);
 }
+
+/* Personal collectibles: three tiles with a big count. */
+.mineGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.count {
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-black);
+  line-height: 1.1;
+}
