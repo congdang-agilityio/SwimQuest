@@ -21,5 +21,16 @@
     "chestMissing": "{chest}: not reached yet",
     "chestNew": "Just opened!",
     "collectOnly": "Collectibles are for collecting only: they add no points, don't change the voyage, and can't be spent or traded."
+  },
+  "mine": {
+    "title": "My collectibles",
+    "pearl": "Pearls",
+    "starfish": "Starfish",
+    "coin": "Coins",
+    "count": "{label}: {count}",
+    "pearlHint": "A week with 3+ swim days",
+    "starfishHint": "Each long-swim bonus",
+    "coinHint": "1 coin per km",
+    "collectOnly": "For collecting only; they can't be spent or traded."
   }
 }
