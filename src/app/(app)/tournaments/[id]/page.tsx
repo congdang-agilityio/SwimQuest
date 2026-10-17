@@ -52,6 +52,7 @@ export default async function TournamentDetailsPage({
             seasonEndAt={details.seasonEndAt}
             routeId={details.routeId}
             routeDistanceM={details.routeDistanceM}
+            reportTournamentId={details.organizer.id === user.id ? undefined : details.id}
           />
           <DetailsTeams teams={details.teams} />
           <RulesSection

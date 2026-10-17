@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { MockupPicture } from "@/components/art/mockup-picture";
+import { ReportButton } from "@/components/reports/report-button";
 import { Chip, type ChipTone } from "@/components/ui";
 import type { TournamentStatus } from "@/lib/tournaments/lifecycle";
 import { formatVnDateTime } from "@/lib/time/vn";
@@ -14,6 +15,8 @@ const STATUS_TONE: Record<TournamentStatus, ChipTone> = {
 };
 
 type Props = {
+  /** Set to show "Report" (not for the organizer): the tournament id. */
+  reportTournamentId?: string;
   name: string;
   description: string;
   organizerName: string;
@@ -47,6 +50,9 @@ export function DetailsHeader(props: Props) {
           <Chip tone={STATUS_TONE[props.status]}>{t(`status.${props.status}`)}</Chip>
         </div>
         {props.description && <p className={styles.description}>{props.description}</p>}
+        {props.reportTournamentId && (
+          <ReportButton targetType="TOURNAMENT" targetId={props.reportTournamentId} />
+        )}
       </div>
       <dl className={styles.facts}>
         <div className={styles.fact}>
