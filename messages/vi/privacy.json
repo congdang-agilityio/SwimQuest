@@ -1,0 +1,36 @@
+{
+  "title": "Quyền riêng tư",
+  "fields": {
+    "title": "Ai được xem gì",
+    "displayName": "Tên hiển thị",
+    "avatar": "Ảnh đại diện và ảnh bìa",
+    "bio": "Giới thiệu",
+    "region": "Khu vực",
+    "goals": "Mục tiêu",
+    "stats": "Thống kê bơi",
+    "badges": "Huy hiệu"
+  },
+  "levels": {
+    "PUBLIC": "Công khai",
+    "MEMBERS": "Chỉ thành viên",
+    "PRIVATE": "Riêng tư"
+  },
+  "explain": {
+    "title": "Ý nghĩa các mức",
+    "PUBLIC": "Ai có đường dẫn cũng xem được.",
+    "MEMBERS": "Chỉ người chơi cùng tham gia một giải với bạn.",
+    "PRIVATE": "Chỉ mình bạn."
+  },
+  "email": {
+    "title": "Email",
+    "note": "Email của bạn luôn riêng tư. Không ai khác xem được."
+  },
+  "saved": "Đã lưu.",
+  "failed": "Không lưu được thay đổi. Vui lòng thử lại.",
+  "loadFailed": "Không tải được cài đặt quyền riêng tư của bạn.",
+  "preview": {
+    "title": "Xem trước",
+    "body": "Xem hồ sơ của bạn như người chơi khác thấy.",
+    "link": "Xem trước hồ sơ công khai"
+  }
+}

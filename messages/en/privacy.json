@@ -1,0 +1,36 @@
+{
+  "title": "Privacy",
+  "fields": {
+    "title": "Who can see what",
+    "displayName": "Display name",
+    "avatar": "Photo and cover",
+    "bio": "About me",
+    "region": "Region",
+    "goals": "Goals",
+    "stats": "Swim stats",
+    "badges": "Badges"
+  },
+  "levels": {
+    "PUBLIC": "Public",
+    "MEMBERS": "Members only",
+    "PRIVATE": "Private"
+  },
+  "explain": {
+    "title": "What the levels mean",
+    "PUBLIC": "Anyone with the link can see it.",
+    "MEMBERS": "Only players who share a tournament with you.",
+    "PRIVATE": "Only you."
+  },
+  "email": {
+    "title": "Email",
+    "note": "Your email is always private. Nobody else can see it."
+  },
+  "saved": "Saved.",
+  "failed": "We could not save that change. Please try again.",
+  "loadFailed": "We could not load your privacy settings.",
+  "preview": {
+    "title": "Preview",
+    "body": "See your profile the way other players see it.",
+    "link": "Preview public profile"
+  }
+}
