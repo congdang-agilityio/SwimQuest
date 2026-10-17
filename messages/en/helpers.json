@@ -1,0 +1,25 @@
+{
+  "title": "Review helpers",
+  "note": "A review helper can decide flagged swims and disputes of this tournament, and nothing else. They cannot change the tournament, its teams or its settings.",
+  "listTitle": "Current helpers",
+  "empty": "No review helpers yet.",
+  "remove": "Remove",
+  "removeFor": "Remove {name} as review helper",
+  "removeConfirm": "Remove {name} as review helper? They lose access to the review queue at once.",
+  "removeYes": "Yes, remove",
+  "removing": "Removing...",
+  "cancel": "Cancel",
+  "addTitle": "Appoint a helper",
+  "noPlayers": "No other players of this tournament to appoint.",
+  "player": "Player",
+  "choose": "Choose a player",
+  "appoint": "Appoint",
+  "appointing": "Appointing...",
+  "errors": {
+    "notPlayer": "That person is not an active player of this tournament.",
+    "already": "That player is already a review helper.",
+    "notHelper": "That player is no longer a review helper.",
+    "failed": "Could not save the change. Try again.",
+    "network": "No connection. Check your network and try again."
+  }
+}

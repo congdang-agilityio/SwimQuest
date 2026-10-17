@@ -1,0 +1,69 @@
+/* Review helpers: a note card, then foam panels with a navy band and light rows. */
+
+.note {
+  display: grid;
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+}
+.note p {
+  margin: 0;
+}
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.body {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.empty {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.list {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+}
+.line {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.confirm,
+.picker {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sq-space-3);
+}
+.error {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}
