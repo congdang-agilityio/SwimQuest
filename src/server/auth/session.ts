@@ -40,12 +40,23 @@ export async function createSession(userId: string, now: Date = new Date()) {
  * session has expired, or the user is not ACTIVE. Refreshes `lastSeenAt` at most once per hour.
  */
 export async function findValidSession(token: string, now: Date = new Date()) {
+  const found = await resolveSession(token, now);
+  return !found || "suspended" in found ? null : found;
+}
+
+/**
+ * Like `findValidSession`, but tells a live session of a SUSPENDED user apart from no session:
+ * `{ suspended: true }` then, so guards can refuse with ACCOUNT_SUSPENDED instead of a login.
+ */
+export async function resolveSession(token: string, now: Date = new Date()) {
   if (typeof token !== "string" || !TOKEN_PATTERN.test(token)) return null;
   const session = await db.session.findUnique({
     where: { tokenHash: hashToken(token) },
     select: { id: true, userId: true, expiresAt: true, user: { select: publicUserSelect } },
   });
-  if (!session || session.expiresAt <= now || session.user.status !== "ACTIVE") return null;
+  if (!session || session.expiresAt <= now) return null;
+  if (session.user.status === "SUSPENDED") return { suspended: true as const };
+  if (session.user.status !== "ACTIVE") return null;
 
   const staleBefore = new Date(now.getTime() - LAST_SEEN_REFRESH_MS);
   await db.session.updateMany({

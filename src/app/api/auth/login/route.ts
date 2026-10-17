@@ -9,7 +9,8 @@ export const dynamic = "force-dynamic";
 
 /**
  * POST /api/auth/login: signs an active user in with a new session cookie. Every credential
- * failure (unknown email, wrong password, non-active account) gets the same 401 body.
+ * failure (unknown email, wrong password, non-active account) gets the same 401 body, except the
+ * correct password on a suspended account, which gets 403 ACCOUNT_SUSPENDED.
  */
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return apiError(403, "FORBIDDEN_ORIGIN");
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
   const result = await logIn(json.body);
   if (!result.ok) {
     if (result.reason === "INVALID_INPUT") return apiError(400, "VALIDATION_FAILED");
+    if (result.reason === "ACCOUNT_SUSPENDED") return apiError(403, "ACCOUNT_SUSPENDED");
     return apiError(401, "INVALID_CREDENTIALS");
   }
 

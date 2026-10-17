@@ -134,7 +134,7 @@ describe("POST /api/auth/login", () => {
     expect(params(DUMMY_PASSWORD_HASH)).toBe(params(passwordHash));
   });
 
-  it.each(["SUSPENDED", "DELETION_PENDING", "DELETED"] as const)(
+  it.each(["DELETION_PENDING", "DELETED"] as const)(
     "gives a %s user with the right password the same 401",
     async (status) => {
       await makeUser(status);
