@@ -1,0 +1,24 @@
+{
+  "title": "Tournament details",
+  "panelTitle": "Tournament information",
+  "status": {
+    "DRAFT": "Draft",
+    "PUBLISHED": "Open for joining",
+    "ACTIVE": "In progress",
+    "COMPLETED": "Completed",
+    "ARCHIVED": "Archived"
+  },
+  "organizer": "Organizer",
+  "seasonStart": "Starts",
+  "seasonEnd": "Ends",
+  "vietnamTime": "Vietnam time, UTC+7",
+  "route": "Route",
+  "distance": "{km} km",
+  "teams": "Teams",
+  "noTeams": "No teams yet.",
+  "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+  "full": "Full",
+  "join": "Join",
+  "leaderboard": "Leaderboard",
+  "actions": "Tournament actions"
+}

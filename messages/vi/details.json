@@ -1,0 +1,24 @@
+{
+  "title": "Chi tiết giải đấu",
+  "panelTitle": "Thông tin giải đấu",
+  "status": {
+    "DRAFT": "Bản nháp",
+    "PUBLISHED": "Đang mở đăng ký",
+    "ACTIVE": "Đang diễn ra",
+    "COMPLETED": "Đã kết thúc",
+    "ARCHIVED": "Đã lưu trữ"
+  },
+  "organizer": "Ban tổ chức",
+  "seasonStart": "Bắt đầu",
+  "seasonEnd": "Kết thúc",
+  "vietnamTime": "Giờ Việt Nam, UTC+7",
+  "route": "Tuyến đường",
+  "distance": "{km} km",
+  "teams": "Các đội",
+  "noTeams": "Chưa có đội nào.",
+  "placesLeft": "{count, plural, other {Còn # chỗ}}",
+  "full": "Đã đầy",
+  "join": "Tham gia",
+  "leaderboard": "Bảng xếp hạng",
+  "actions": "Thao tác với giải đấu"
+}
