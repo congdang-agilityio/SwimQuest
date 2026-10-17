@@ -11,5 +11,19 @@
   "routeKm": "Km lộ trình",
   "kmValue": "{km} km",
   "yourTeam": "Đội của bạn",
-  "panelTitle": "Bảng xếp hạng đội"
+  "panelTitle": "Bảng xếp hạng đội",
+  "pointsTab": "Điểm",
+  "kmTab": "Tổng km",
+  "badgesTab": "Huy hiệu",
+  "pointsHeader": "Xếp hạng theo điểm của đội, gồm cả điểm thưởng.",
+  "kmHeader": "Tổng km đã xác minh được tính, không gồm điểm thưởng.",
+  "badgesHeader": "Xếp hạng theo số huy hiệu đang có của các thành viên.",
+  "pointsCaption": "Xếp hạng các đội theo điểm",
+  "kmCaption": "Xếp hạng các đội theo tổng km",
+  "badgesCaption": "Xếp hạng các đội theo huy hiệu",
+  "points": "Điểm",
+  "totalKm": "Tổng km",
+  "badges": "Huy hiệu",
+  "pointsValue": "{count, plural, other {# điểm}}",
+  "badgesValue": "{count, plural, other {# huy hiệu}}"
 }
