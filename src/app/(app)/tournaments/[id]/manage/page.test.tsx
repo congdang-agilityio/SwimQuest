@@ -67,6 +67,7 @@ vi.mock("@/server/organizer/participation", () => ({
 vi.mock("@/components/organizer/unassigned-players", () => ({
   UnassignedPlayers: () => <div>unassigned</div>,
 }));
+vi.mock("@/server/zalo/settings", () => ({ hasZaloProblem: async () => false }));
 vi.mock("@/components/teams/team-list", () => ({ TeamList: () => <div>teams</div> }));
 vi.mock("@/components/tournaments/invite-link", () => ({
   InviteLink: ({ url }: { url: string }) => <div data-testid="invite">{url}</div>,
