@@ -42,3 +42,19 @@
   color: var(--sq-text-muted);
   font-size: var(--sq-text-xs);
 }
+.weeks {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+}
+.weeks summary {
+  min-height: 24px;
+  cursor: pointer;
+  color: var(--sq-navy-700);
+  font-weight: var(--sq-weight-bold);
+}
+.weeks ul {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: var(--sq-space-2) 0 0;
+  padding-left: var(--sq-space-4);
+}
