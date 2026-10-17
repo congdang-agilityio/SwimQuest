@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { RouteFields } from "./route-fields";
 import styles from "./create-tournament.module.css";
@@ -13,6 +14,29 @@ import { parseTournamentDraft, type TournamentDraftErrors } from "@/lib/validati
 const routes = listRoutes();
 type Season = { date: string; time: string };
 const empty: Season = { date: "", time: "" };
+
+const ZALO_REASONS: Record<string, string> = {
+  ZALO_NOT_CONFIGURED: "notConfigured",
+  ZALO_KEY_REJECTED: "rejected",
+  VALIDATION_FAILED: "rejected",
+  ZALO_UNREACHABLE: "unreachable",
+};
+
+/** Saves the bot key on a new tournament; resolves to the reason key when it fails. */
+async function saveZaloKey(tournamentId: string, key: string): Promise<string | null> {
+  try {
+    const res = await clientFetch(`/api/tournaments/${encodeURIComponent(tournamentId)}/zalo`, {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ key }),
+    });
+    if (res.ok) return null;
+    const code: unknown = (await res.json().catch(() => null))?.error?.code;
+    return (typeof code === "string" && ZALO_REASONS[code]) || "failed";
+  } catch {
+    return "network";
+  }
+}
 
 /** Edit mode (S-34): the stored values, and which season fields are locked and so read-only. */
 export type EditTournament = {
@@ -29,6 +53,7 @@ export type EditTournament = {
 
 export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
   const t = useTranslations("tournaments");
+  const tZalo = useTranslations("zalo");
   const [errors, setErrors] = useState<TournamentDraftErrors>({});
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -38,6 +63,10 @@ export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
     seasonEnd: edit?.seasonEnd ?? empty,
   });
   const [routeId, setRouteId] = useState(routes[0].id);
+  // Kept out of the FormData so the key is never part of the tournament request.
+  const [zaloKey, setZaloKey] = useState("");
+  /** The tournament exists but its Zalo key was not saved: why, and where to fix it. */
+  const [zaloFailure, setZaloFailure] = useState<{ id: string; reason: string } | null>(null);
 
   /** A picked date pre-fills the default time (00:00 / 23:59) unless a time is already there. */
   function setPart(key: keyof typeof season, patch: Partial<Season>) {
@@ -64,6 +93,7 @@ export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
     }
     setFailed(false);
     setConflict(null);
+    setZaloFailure(null);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
     setBusy(true);
@@ -89,7 +119,17 @@ export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
         return;
       }
       if (res.status === 201) {
-        window.location.assign(`/tournaments/${encodeURIComponent((await res.json()).id)}/manage`);
+        const id: string = (await res.json()).id;
+        const key = zaloKey.trim();
+        // The tournament exists either way; a bad key can be fixed on the Zalo page.
+        const reason = key ? await saveZaloKey(id, key) : null;
+        if (reason) {
+          setZaloKey("");
+          setZaloFailure({ id, reason });
+          setBusy(false);
+          return;
+        }
+        window.location.assign(`/tournaments/${encodeURIComponent(id)}/manage`);
         return;
       }
       if (edit && res.status === 409) {
@@ -201,9 +241,34 @@ export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
               onChange={setRouteId}
               errors={{ routeId: text("routeId"), routeDistanceKm: text("routeDistanceKm") }}
             />
+            <h2 className={styles.heading}>{t("create.zaloHeading")}</h2>
+            <Field
+              id="zaloKey"
+              type="password"
+              label={t("create.fields.zaloKey")}
+              hint={t("create.zaloHint")}
+              value={zaloKey}
+              onChange={(e) => setZaloKey(e.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+            />
           </>
         )}
       </Card>
+      {zaloFailure && (
+        <div role="alert" className={styles.formError}>
+          <p>{t("create.zaloFailed", { reason: tZalo(`errors.${zaloFailure.reason}`) })}</p>
+          <p>
+            <Link href={`/tournaments/${encodeURIComponent(zaloFailure.id)}/manage/zalo`}>
+              {t("create.zaloFix")}
+            </Link>
+            {" · "}
+            <Link href={`/tournaments/${encodeURIComponent(zaloFailure.id)}/manage`}>
+              {t("create.zaloSkip")}
+            </Link>
+          </p>
+        </div>
+      )}
       {conflict && (
         <p role="alert" className={styles.formError}>
           {t(`edit.conflicts.${conflict}`)}
@@ -214,7 +279,7 @@ export function CreateTournamentForm({ edit }: { edit?: EditTournament }) {
           {t("errors.GENERIC")}
         </p>
       )}
-      <Button type="submit" variant="primary" block disabled={busy}>
+      <Button type="submit" variant="primary" block disabled={busy || Boolean(zaloFailure)}>
         {edit ? t("edit.submit") : t("create.submit")}
       </Button>
     </form>

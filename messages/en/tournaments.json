@@ -10,8 +10,14 @@
       "seasonStart": "Season start",
       "seasonEnd": "Season end",
       "date": "Date",
-      "timeVn": "Time (Vietnam time, UTC+7)"
-    }
+      "timeVn": "Time (Vietnam time, UTC+7)",
+      "zaloKey": "Zalo bot key"
+    },
+    "zaloHeading": "Zalo bot (optional)",
+    "zaloHint": "The bot posts this tournament to your players' Zalo group. You can also add the key later on the Zalo page.",
+    "zaloFailed": "The tournament was created, but the Zalo bot key was not saved: {reason}",
+    "zaloFix": "Open the Zalo page to try again",
+    "zaloSkip": "Continue without the bot"
   },
   "edit": {
     "title": "Edit tournament",

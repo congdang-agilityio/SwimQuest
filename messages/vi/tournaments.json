@@ -10,8 +10,14 @@
       "seasonStart": "Bắt đầu mùa giải",
       "seasonEnd": "Kết thúc mùa giải",
       "date": "Ngày",
-      "timeVn": "Giờ (giờ Việt Nam, UTC+7)"
-    }
+      "timeVn": "Giờ (giờ Việt Nam, UTC+7)",
+      "zaloKey": "Khóa bot Zalo"
+    },
+    "zaloHeading": "Bot Zalo (không bắt buộc)",
+    "zaloHint": "Bot đăng tin giải đấu này vào nhóm Zalo của người chơi. Bạn cũng có thể thêm khóa sau ở trang Zalo.",
+    "zaloFailed": "Đã tạo giải đấu nhưng chưa lưu được khóa bot Zalo: {reason}",
+    "zaloFix": "Mở trang Zalo để thử lại",
+    "zaloSkip": "Tiếp tục không có bot"
   },
   "edit": {
     "title": "Sửa giải đấu",
