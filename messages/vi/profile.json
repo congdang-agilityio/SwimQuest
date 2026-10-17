@@ -92,5 +92,11 @@
     "title": "Huy hiệu",
     "empty": "Chưa có huy hiệu. Hãy tham gia giải đấu để nhận huy hiệu đầu tiên.",
     "reason": "Lý do: {reason}"
+  },
+  "leave": {
+    "title": "Bỏ các thay đổi?",
+    "body": "Bạn có thay đổi chưa lưu trong hồ sơ. Nếu rời đi bây giờ, các thay đổi sẽ bị mất.",
+    "keep": "Tiếp tục chỉnh sửa",
+    "discard": "Bỏ thay đổi"
   }
 }

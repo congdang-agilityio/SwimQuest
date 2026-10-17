@@ -1,0 +1,29 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--sq-space-4);
+  background: var(--sq-scrim);
+}
+.dialog {
+  display: grid;
+  gap: var(--sq-space-3);
+  width: min(100%, 24rem);
+  box-shadow: var(--sq-shadow-raised);
+}
+.title {
+  margin: 0;
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-lg);
+}
+.body {
+  margin: 0;
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+}
+.actions {
+  display: grid;
+  gap: var(--sq-space-2);
+}
