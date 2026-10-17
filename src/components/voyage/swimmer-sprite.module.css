@@ -16,6 +16,16 @@
   animation: bob 1.6s ease-in-out infinite alternate;
 }
 
+/* The energy orb floats above the swimmer's head. */
+.swimmer .orb {
+  position: absolute;
+  left: 10%;
+  top: -75%;
+  width: 80%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
 @keyframes glide {
   from {
     transform: translateX(-6%);

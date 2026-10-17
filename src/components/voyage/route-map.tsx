@@ -20,6 +20,8 @@ export type RouteMapProps = {
   start: { slug: string; automaticAtIso: string | null } | null;
   progress: { progressBp: number; routeKmReached: number; routeKmTotal: number };
   ship: { x: number; y: number } | null;
+  /** The viewer's weekly multiplier is active: their swimmer shows the energy orb. */
+  energyOrb?: boolean;
 };
 
 // Names sit right of their pin, as on the mockup map; near the right edge they sit above it.
@@ -49,6 +51,7 @@ export function RouteMap({
   start,
   progress,
   ship,
+  energyOrb = false,
 }: RouteMapProps) {
   const t = useTranslations();
   const label = t("voyage.progress", {
@@ -136,6 +139,7 @@ export function RouteMap({
                 y={ship.y}
                 alt={t("voyage.ship", { team: teamName })}
                 tier={tier}
+                energyOrb={energyOrb}
               />
             )}
           </div>
