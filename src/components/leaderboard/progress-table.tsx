@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Chip } from "@/components/ui";
 import { TeamEmblem } from "@/components/teams/team-emblem";
+import { mockupArt } from "@/lib/art/mockup-art";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import styles from "./leaderboard.module.css";
 
@@ -13,9 +14,12 @@ export type ProgressTableRow = {
   isMyTeam: boolean;
 };
 
-/** Ranks 1–3 show the gold, silver and bronze medals cut from the mockup. */
-const MEDAL_COUNT = 3;
-const medalSrc = (rank: number) => `/art/mockup/screen-leaderboard/medal-${rank}.png`;
+/** Ranks 1–3 show the gold, silver and bronze medals cut from the asset sheets (art group G2). */
+const MEDAL_KEYS = ["medals/medal-gold", "medals/medal-silver", "medals/medal-bronze"];
+const medalSrc = (index: number) => {
+  const key = MEDAL_KEYS[index];
+  return key ? mockupArt(key)?.webp : undefined;
+};
 
 /** Progress tab: rows arrive already ranked by the service; the table keeps that order. */
 export function ProgressTable({ rows }: { rows: ProgressTableRow[] }) {
@@ -47,10 +51,10 @@ export function ProgressTable({ rows }: { rows: ProgressTableRow[] }) {
             className={row.isMyTeam ? styles.mine : undefined}
           >
             <td className={styles.rankCell}>
-              {i < MEDAL_COUNT ? (
+              {medalSrc(i) ? (
                 <span className={styles.medal}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- tiny static PNG */}
-                  <img src={medalSrc(i + 1)} alt="" width={32} height={34} />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- tiny static image */}
+                  <img src={medalSrc(i)} alt="" width={36} height={36} />
                   <span className={styles.visuallyHidden}>{i + 1}</span>
                 </span>
               ) : (

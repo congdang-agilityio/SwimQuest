@@ -1,0 +1,110 @@
+[
+  {
+    "key": "medals/medal-bronze",
+    "file": "/art/mockup/medals/medal-bronze.png",
+    "webp": "/art/mockup/medals/medal-bronze.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2132,
+      338,
+      121,
+      185
+    ],
+    "alt": {
+      "vi": "Huy chương đồng",
+      "en": "Bronze medal"
+    }
+  },
+  {
+    "key": "medals/medal-silver",
+    "file": "/art/mockup/medals/medal-silver.png",
+    "webp": "/art/mockup/medals/medal-silver.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2270,
+      337,
+      121,
+      185
+    ],
+    "alt": {
+      "vi": "Huy chương bạc",
+      "en": "Silver medal"
+    }
+  },
+  {
+    "key": "medals/medal-gold",
+    "file": "/art/mockup/medals/medal-gold.png",
+    "webp": "/art/mockup/medals/medal-gold.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2403,
+      338,
+      120,
+      185
+    ],
+    "alt": {
+      "vi": "Huy chương vàng",
+      "en": "Gold medal"
+    }
+  },
+  {
+    "key": "medals/trophy-rank-1",
+    "file": "/art/mockup/medals/trophy-rank-1.png",
+    "webp": "/art/mockup/medals/trophy-rank-1.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      2307,
+      1039,
+      149,
+      149
+    ],
+    "alt": {
+      "vi": "Cúp hạng 1",
+      "en": "Rank 1 trophy"
+    }
+  },
+  {
+    "key": "medals/trophy-rank-2",
+    "file": "/art/mockup/medals/trophy-rank-2.png",
+    "webp": "/art/mockup/medals/trophy-rank-2.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      2218,
+      1128,
+      115,
+      119
+    ],
+    "alt": {
+      "vi": "Cúp hạng 2",
+      "en": "Rank 2 trophy"
+    }
+  },
+  {
+    "key": "medals/trophy-rank-3",
+    "file": "/art/mockup/medals/trophy-rank-3.png",
+    "webp": "/art/mockup/medals/trophy-rank-3.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      2441,
+      1128,
+      115,
+      119
+    ],
+    "alt": {
+      "vi": "Cúp hạng 3",
+      "en": "Rank 3 trophy"
+    }
+  }
+]

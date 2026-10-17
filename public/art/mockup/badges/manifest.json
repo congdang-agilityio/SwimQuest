@@ -1,0 +1,326 @@
+[
+  {
+    "key": "badges/badge-shield-wave",
+    "file": "/art/mockup/badges/badge-shield-wave.png",
+    "webp": "/art/mockup/badges/badge-shield-wave.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2076,
+      74,
+      115,
+      133
+    ],
+    "alt": {
+      "vi": "Huy hiệu khiên sóng nước",
+      "en": "Shield badge with waves"
+    }
+  },
+  {
+    "key": "badges/badge-shield-swimmer",
+    "file": "/art/mockup/badges/badge-shield-swimmer.png",
+    "webp": "/art/mockup/badges/badge-shield-swimmer.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2202,
+      73,
+      107,
+      135
+    ],
+    "alt": {
+      "vi": "Huy hiệu khiên vận động viên",
+      "en": "Shield badge with a swimmer"
+    }
+  },
+  {
+    "key": "badges/badge-shield-island",
+    "file": "/art/mockup/badges/badge-shield-island.png",
+    "webp": "/art/mockup/badges/badge-shield-island.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2321,
+      75,
+      111,
+      133
+    ],
+    "alt": {
+      "vi": "Huy hiệu khiên hòn đảo",
+      "en": "Shield badge with an island"
+    }
+  },
+  {
+    "key": "badges/badge-shield-lighthouse",
+    "file": "/art/mockup/badges/badge-shield-lighthouse.png",
+    "webp": "/art/mockup/badges/badge-shield-lighthouse.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2443,
+      74,
+      107,
+      134
+    ],
+    "alt": {
+      "vi": "Huy hiệu khiên hải đăng",
+      "en": "Shield badge with a lighthouse"
+    }
+  },
+  {
+    "key": "badges/badge-coin-star",
+    "file": "/art/mockup/badges/badge-coin-star.png",
+    "webp": "/art/mockup/badges/badge-coin-star.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2083,
+      218,
+      106,
+      108
+    ],
+    "alt": {
+      "vi": "Huy hiệu ngôi sao",
+      "en": "Star coin badge"
+    }
+  },
+  {
+    "key": "badges/badge-coin-trophy",
+    "file": "/art/mockup/badges/badge-coin-trophy.png",
+    "webp": "/art/mockup/badges/badge-coin-trophy.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2203,
+      216,
+      111,
+      111
+    ],
+    "alt": {
+      "vi": "Huy hiệu cúp",
+      "en": "Trophy coin badge"
+    }
+  },
+  {
+    "key": "badges/badge-coin-anchor",
+    "file": "/art/mockup/badges/badge-coin-anchor.png",
+    "webp": "/art/mockup/badges/badge-coin-anchor.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2323,
+      218,
+      107,
+      110
+    ],
+    "alt": {
+      "vi": "Huy hiệu mỏ neo",
+      "en": "Anchor coin badge"
+    }
+  },
+  {
+    "key": "badges/badge-coin-crown",
+    "file": "/art/mockup/badges/badge-coin-crown.png",
+    "webp": "/art/mockup/badges/badge-coin-crown.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      2440,
+      218,
+      110,
+      108
+    ],
+    "alt": {
+      "vi": "Huy hiệu vương miện",
+      "en": "Crown coin badge"
+    }
+  },
+  {
+    "key": "badges/badge-participation",
+    "file": "/art/mockup/badges/badge-participation.png",
+    "webp": "/art/mockup/badges/badge-participation.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1499,
+      601,
+      102,
+      116
+    ],
+    "alt": {
+      "vi": "Huy hiệu Tham gia",
+      "en": "Participation badge"
+    }
+  },
+  {
+    "key": "badges/badge-explorer",
+    "file": "/art/mockup/badges/badge-explorer.png",
+    "webp": "/art/mockup/badges/badge-explorer.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1614,
+      601,
+      99,
+      116
+    ],
+    "alt": {
+      "vi": "Huy hiệu Khám phá",
+      "en": "Explorer badge"
+    }
+  },
+  {
+    "key": "badges/badge-conqueror",
+    "file": "/art/mockup/badges/badge-conqueror.png",
+    "webp": "/art/mockup/badges/badge-conqueror.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1723,
+      601,
+      97,
+      115
+    ],
+    "alt": {
+      "vi": "Huy hiệu Chinh phục",
+      "en": "Conqueror badge"
+    }
+  },
+  {
+    "key": "badges/badge-season",
+    "file": "/art/mockup/badges/badge-season.png",
+    "webp": "/art/mockup/badges/badge-season.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1829,
+      601,
+      97,
+      115
+    ],
+    "alt": {
+      "vi": "Huy hiệu Mùa giải",
+      "en": "Season badge"
+    }
+  },
+  {
+    "key": "badges/badge-teamwork",
+    "file": "/art/mockup/badges/badge-teamwork.png",
+    "webp": "/art/mockup/badges/badge-teamwork.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1937,
+      601,
+      98,
+      116
+    ],
+    "alt": {
+      "vi": "Huy hiệu Đồng đội",
+      "en": "Teamwork badge"
+    }
+  },
+  {
+    "key": "badges/badge-persistence",
+    "file": "/art/mockup/badges/badge-persistence.png",
+    "webp": "/art/mockup/badges/badge-persistence.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      2046,
+      601,
+      98,
+      116
+    ],
+    "alt": {
+      "vi": "Huy hiệu Kiên trì",
+      "en": "Persistence badge"
+    }
+  },
+  {
+    "key": "badges/badge-training",
+    "file": "/art/mockup/badges/badge-training.png",
+    "webp": "/art/mockup/badges/badge-training.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1511,
+      777,
+      124,
+      145
+    ],
+    "alt": {
+      "vi": "Huy hiệu Tập luyện",
+      "en": "Training badge"
+    }
+  },
+  {
+    "key": "badges/badge-milestone",
+    "file": "/art/mockup/badges/badge-milestone.png",
+    "webp": "/art/mockup/badges/badge-milestone.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1661,
+      777,
+      126,
+      144
+    ],
+    "alt": {
+      "vi": "Huy hiệu Cột mốc",
+      "en": "Milestone badge"
+    }
+  },
+  {
+    "key": "badges/badge-beyond-limits",
+    "file": "/art/mockup/badges/badge-beyond-limits.png",
+    "webp": "/art/mockup/badges/badge-beyond-limits.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1813,
+      777,
+      125,
+      145
+    ],
+    "alt": {
+      "vi": "Huy hiệu Vượt giới hạn",
+      "en": "Beyond limits badge"
+    }
+  },
+  {
+    "key": "badges/badge-legend",
+    "file": "/art/mockup/badges/badge-legend.png",
+    "webp": "/art/mockup/badges/badge-legend.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1964,
+      769,
+      138,
+      153
+    ],
+    "alt": {
+      "vi": "Huy hiệu Huyền thoại",
+      "en": "Legend badge"
+    }
+  }
+]

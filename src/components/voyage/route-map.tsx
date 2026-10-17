@@ -3,6 +3,7 @@ import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { landmarkArt, ROUTE01_ART } from "@/lib/art/route01-art";
 import { formatProgressPct } from "@/lib/scoring/progress";
+import { shipTier } from "@/lib/scoring/ship-tier";
 import { ShipMarker } from "./ship-marker";
 import styles from "./voyage.module.css";
 
@@ -89,7 +90,14 @@ export function RouteMap({
             </span>
           </div>
         ))}
-        {ship && <ShipMarker x={ship.x} y={ship.y} alt={t("voyage.ship", { team: teamName })} />}
+        {ship && (
+          <ShipMarker
+            x={ship.x}
+            y={ship.y}
+            tier={shipTier(progress.progressBp)}
+            alt={t("voyage.ship", { team: teamName })}
+          />
+        )}
       </div>
       {ship && (
         <strong

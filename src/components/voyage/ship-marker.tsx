@@ -1,21 +1,25 @@
 import { ArtImage } from "@/components/art/art-image";
 import { shipArt } from "@/lib/art/route01-art";
+import type { ShipTier } from "@/lib/scoring/ship-tier";
 import styles from "./voyage.module.css";
 
 type Props = {
   x: number;
   y: number;
   alt: string;
+  /** Ship tier from the team's progress (lib/scoring/ship-tier). */
+  tier?: ShipTier;
 };
 
 // Ship box width as a share of the map width.
 const BOX_PCT = 12;
 
-/** The team's tier 1 ship on the map. The progress label is rendered by RouteMap. */
-export function ShipMarker({ x, y, alt }: Props) {
+/** The team's ship on the map, drawn for its current tier. The progress label is rendered by RouteMap. */
+export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
   return (
     <div
       data-testid="ship"
+      data-tier={tier}
       style={{
         position: "absolute",
         left: `${x}%`,
@@ -28,7 +32,7 @@ export function ShipMarker({ x, y, alt }: Props) {
       }}
     >
       <ArtImage
-        art={shipArt(1)}
+        art={shipArt(tier)}
         alt={alt}
         className={styles.ship}
         fallback={
