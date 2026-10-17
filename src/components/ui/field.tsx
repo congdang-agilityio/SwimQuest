@@ -11,6 +11,8 @@ type FieldShell = {
   label: ReactNode;
   /** Error text; sets aria-invalid and links it with aria-describedby. */
   error?: ReactNode;
+  /** Help text under the control, linked with aria-describedby (`<id>-hint`). */
+  hint?: ReactNode;
   /** Use on the dark page (auth screens); labels turn light. */
   onDark?: boolean;
   className?: string;
@@ -20,6 +22,7 @@ function Shell({
   id,
   label,
   error,
+  hint,
   onDark,
   className,
   children,
@@ -30,6 +33,11 @@ function Shell({
         {label}
       </label>
       {children}
+      {hint && (
+        <small id={`${id}-hint`} className={styles.hint}>
+          {hint}
+        </small>
+      )}
       {error && (
         <span id={`${id}-error`} role="alert" className={styles.error}>
           {error}
@@ -39,11 +47,12 @@ function Shell({
   );
 }
 
-function a11y(id: string, error: ReactNode) {
+function a11y(id: string, error: ReactNode, hint?: ReactNode) {
+  const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ");
   return {
     id,
     "aria-invalid": error ? true : undefined,
-    "aria-describedby": error ? `${id}-error` : undefined,
+    "aria-describedby": describedBy || undefined,
   } as const;
 }
 
@@ -52,13 +61,14 @@ export function Field({
   id,
   label,
   error,
+  hint,
   onDark,
   className,
   ...input
 }: FieldShell & Omit<InputHTMLAttributes<HTMLInputElement>, "id">) {
   return (
-    <Shell id={id} label={label} error={error} onDark={onDark} className={className}>
-      <input className={styles.control} {...input} {...a11y(id, error)} />
+    <Shell id={id} label={label} error={error} hint={hint} onDark={onDark} className={className}>
+      <input className={styles.control} {...input} {...a11y(id, error, hint)} />
     </Shell>
   );
 }
@@ -67,13 +77,14 @@ export function TextareaField({
   id,
   label,
   error,
+  hint,
   onDark,
   className,
   ...input
 }: FieldShell & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "id">) {
   return (
-    <Shell id={id} label={label} error={error} onDark={onDark} className={className}>
-      <textarea className={styles.control} {...input} {...a11y(id, error)} />
+    <Shell id={id} label={label} error={error} hint={hint} onDark={onDark} className={className}>
+      <textarea className={styles.control} {...input} {...a11y(id, error, hint)} />
     </Shell>
   );
 }
@@ -82,13 +93,14 @@ export function SelectField({
   id,
   label,
   error,
+  hint,
   onDark,
   className,
   ...input
 }: FieldShell & Omit<SelectHTMLAttributes<HTMLSelectElement>, "id">) {
   return (
-    <Shell id={id} label={label} error={error} onDark={onDark} className={className}>
-      <select className={styles.control} {...input} {...a11y(id, error)} />
+    <Shell id={id} label={label} error={error} hint={hint} onDark={onDark} className={className}>
+      <select className={styles.control} {...input} {...a11y(id, error, hint)} />
     </Shell>
   );
 }
