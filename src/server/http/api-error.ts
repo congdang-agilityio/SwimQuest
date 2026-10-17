@@ -34,6 +34,7 @@ export type ApiErrorCode =
   | "NO_INVITE_LINK"
   | "TEAM_FULL"
   | "ALREADY_MEMBER"
+  | "SEASON_STARTED"
   | "REMOVED_FROM_TOURNAMENT"
   | "LAST_ADMIN"
   | "REASON_REQUIRED"
@@ -81,6 +82,7 @@ const messages: Record<ApiErrorCode, string> = {
   NO_INVITE_LINK: "This tournament has no invite link yet. Publish it first.",
   TEAM_FULL: "This team is full. Choose another team.",
   ALREADY_MEMBER: "You are already in a team of this tournament.",
+  SEASON_STARTED: "The season has started, so only the organizer can move players now.",
   REMOVED_FROM_TOURNAMENT: "You were removed from this tournament and cannot join it again.",
   LAST_ADMIN: "The last platform admin role cannot be removed.",
   REASON_REQUIRED: "Give a short reason (at most 300 characters) to reject this swim.",
