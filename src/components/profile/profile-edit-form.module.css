@@ -120,3 +120,20 @@
   background: var(--sq-white);
   box-shadow: var(--sq-shadow-card);
 }
+.notice {
+  margin: 0;
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+}
+.formError {
+  display: grid;
+  gap: var(--sq-space-2);
+  justify-items: start;
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+}

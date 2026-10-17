@@ -1,11 +1,11 @@
 {
   "view": {
     "edit": "Edit profile",
-    "noBio": "No bio yet.",
+    "noBio": "No bio yet. Tap Edit profile to add one.",
     "coverAlt": "Cover image",
     "avatarAlt": "Avatar",
     "goalsTitle": "Goals (not verified)",
-    "goalsEmpty": "No goals set yet.",
+    "goalsEmpty": "No goals set yet. Tap Edit profile to add your goals.",
     "goalDistance": "Goal distance: {km} km",
     "goalDistanceM": "Goal distance: {m} m"
   },
@@ -40,7 +40,9 @@
     "goalDistanceHint": "Optional. Type it with a unit, like 800 m or 2.5 km.",
     "goalDistancePlaceholder": "2.5 km",
     "disciplines": "Disciplines",
-    "disciplinesHint": "Pick any that you enjoy."
+    "disciplinesHint": "Pick any that you enjoy.",
+    "offlineNotice": "You are offline; your changes are kept. Save when you are back online.",
+    "retry": "Retry"
   },
   "defaults": {
     "dolphin": "Dolphin",
@@ -65,7 +67,9 @@
     "GENERIC": "Could not save your profile. Try again.",
     "GOALS_TOO_LONG": "Goals can be up to {max} characters.",
     "GOAL_DISTANCE_INVALID": "Type a distance like 800 m or 2.5 km (up to 1,000 km).",
-    "DISCIPLINE_UNKNOWN": "Pick disciplines from the list."
+    "DISCIPLINE_UNKNOWN": "Pick disciplines from the list.",
+    "OFFLINE": "You are offline; your changes are kept. Retry when you are back online.",
+    "SERVER": "The server had a problem (error {status}). Your changes are kept; retry to send them again."
   },
   "disciplines": {
     "POOL": "Pool",
