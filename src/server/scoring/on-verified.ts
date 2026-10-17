@@ -7,21 +7,34 @@ import { awardDistancePoints } from "./award-distance-points";
 import { syncSwimXp } from "@/server/xp/sync-swim-xp";
 import { recalculateSettledWeek } from "./settle-week";
 
+export type TeamRef = { tournamentId: string; teamId: string };
+
 /**
- * The single hook for a newly VERIFIED result, run inside the caller's transaction: award the
- * distance points (S-13), the first-swim and long-swim bonuses (S-20) and the personal badges
- * (S-48, no points), then refresh the team's progress and finish (S-19). A result of an already
- * settled week recalculates that week's multiplier (S-21); every team whose points changed is
- * refreshed in ascending order. The swim earns its platform XP once, whatever tournament (S-51).
+ * What a newly VERIFIED result earns, inside the caller's transaction: distance points (S-13),
+ * bonuses (S-20), personal badges (S-48), a settled week's multiplier (S-21) and the swim's XP
+ * once (S-51). Returns the teams whose points changed, for one `refreshTeams` at the end.
  */
-export async function onVerified(tx: Tx, result: SwimResult, now: Date = new Date()) {
-  if (result.status !== "VERIFIED") return;
+export async function awardVerified(tx: Tx, result: SwimResult, now: Date): Promise<TeamRef[]> {
+  if (result.status !== "VERIFIED") return [];
   await awardDistancePoints(tx, result);
   await awardBonuses(tx, result);
   await checkPersonalBadgesOnVerified(tx, result);
   await syncSwimXp(tx, result.swimId);
   const teams = await recalculateSettledWeek(tx, result, now);
-  for (const teamId of [...new Set([result.teamId, ...teams])].sort()) {
-    await updateTeamProgress(tx, result.tournamentId, teamId, now);
+  const { tournamentId } = result;
+  return [result.teamId, ...teams].map((teamId) => ({ tournamentId, teamId }));
+}
+
+/** Refreshes each team's progress (S-19) once, in ascending `teamId` order (lock order). */
+export async function refreshTeams(tx: Tx, teams: TeamRef[], now: Date): Promise<void> {
+  const byId = new Map(teams.map((t) => [t.teamId, t.tournamentId]));
+  const ordered = [...byId].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  for (const [teamId, tournamentId] of ordered) {
+    await updateTeamProgress(tx, tournamentId, teamId, now);
   }
+}
+
+/** The hook for one newly VERIFIED result (a review approval): award, then refresh. */
+export async function onVerified(tx: Tx, result: SwimResult, now: Date = new Date()) {
+  await refreshTeams(tx, await awardVerified(tx, result, now), now);
 }

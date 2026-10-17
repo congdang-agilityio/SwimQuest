@@ -2,7 +2,7 @@ import type { Swim, SwimResult, Tournament } from "@prisma/client";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
-import { onVerified as awardAndUpdateProgress } from "@/server/scoring/on-verified";
+import { awardVerified, refreshTeams, type TeamRef } from "@/server/scoring/on-verified";
 import { findDuplicateOf } from "./duplicates";
 import type { Reason, ReasonCode } from "./reasons";
 import { evaluateRules } from "./rule-checks";
@@ -14,12 +14,12 @@ export type Tx = Parameters<
 >[0];
 
 export type RunChecksHooks = {
-  /** Called inside the transaction for each VERIFIED result, with the checks' `now`. */
-  onVerified?: (tx: Tx, result: SwimResult, now: Date) => Promise<void>;
+  /** Called inside the transaction for each VERIFIED result; returns teams to refresh at the end. */
+  onVerified?: (tx: Tx, result: SwimResult, now: Date) => Promise<TeamRef[] | void>;
 };
 
 /** By default a verified result gets its points (S-13) and its team's progress (S-19). */
-const defaultHooks: Required<RunChecksHooks> = { onVerified: awardAndUpdateProgress };
+const defaultHooks: Required<RunChecksHooks> = { onVerified: awardVerified };
 
 /**
  * Serializes the uploads of one player until the transaction ends, so two uploads at the same
@@ -48,9 +48,9 @@ export async function runChecks(
     include: { tournament: true },
     orderBy: { joinedAt: "asc" },
   });
-  // Lock order: onVerified locks each team row until the transaction ends, so teams are handled
-  // in ascending teamId order (plain string comparison). Two uploads that touch the same teams
-  // then lock them in the same order and cannot deadlock (see updateTeamProgress).
+  // Lock order: the changed teams of all memberships are refreshed once at the end, ascending by
+  // teamId (plain string comparison), so two uploads, or an upload and a team move, lock team
+  // rows in the same order and cannot deadlock (see updateTeamProgress).
   const active = memberships
     .filter((m) => {
       const status = effectiveStatus(m.tournament, now);
@@ -63,6 +63,7 @@ export async function runChecks(
     await tx.swim.update({ where: { id: swim.id }, data: { duplicateOfId } });
   }
 
+  const changed: TeamRef[] = [];
   for (const m of active) {
     const { status, reasons } = duplicateOfId
       ? { status: "DUPLICATE" as const, reasons: ["DUPLICATE_OF_EARLIER_SWIM"] as ReasonCode[] }
@@ -89,8 +90,9 @@ export async function runChecks(
         previousStatus: null,
       },
     });
-    if (status === "VERIFIED") await onVerified(tx, result, now);
+    if (status === "VERIFIED") changed.push(...((await onVerified(tx, result, now)) ?? []));
   }
+  await refreshTeams(tx, changed, now);
 }
 
 /** Standard checks first; only a swim that passes them is checked against the rules. */
