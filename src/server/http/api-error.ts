@@ -19,6 +19,7 @@ export type ApiErrorCode =
   | "NOT_COMPLETED"
   | "CONFLICT"
   | "START_LOCKED"
+  | "START_NOT_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
   | "INVALID_START"
@@ -80,6 +81,7 @@ const messages: Record<ApiErrorCode, string> = {
   NOT_COMPLETED: "Only a completed tournament can be archived.",
   CONFLICT: "The tournament changed in the meantime. Reload and try again.",
   START_LOCKED: "The team's start is locked and can no longer be changed.",
+  START_NOT_LOCKED: "The start is not locked yet; change it the normal way.",
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
   INVALID_START: "Choose one of the route's start destinations.",
