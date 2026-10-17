@@ -323,6 +323,19 @@
       "SWIM": "Lượt bơi",
       "SWIM_RESULT": "Kết quả bơi",
       "REPORT": "Báo cáo"
+    },
+    "detail": {
+      "title": "Sự kiện kiểm toán",
+      "changes": "Giá trị cũ và mới",
+      "field": "Trường",
+      "old": "Giá trị cũ",
+      "new": "Giá trị mới",
+      "status": "Trạng thái",
+      "changed": "Đã đổi",
+      "unchanged": "Không đổi",
+      "none": "không có",
+      "value": "(giá trị)",
+      "noValues": "Không ghi nhận giá trị cũ hoặc mới."
     }
   }
 }

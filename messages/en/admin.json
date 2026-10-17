@@ -323,6 +323,19 @@
       "SWIM": "Swim",
       "SWIM_RESULT": "Swim result",
       "REPORT": "Report"
+    },
+    "detail": {
+      "title": "Audit event",
+      "changes": "Old and new values",
+      "field": "Field",
+      "old": "Old value",
+      "new": "New value",
+      "status": "Status",
+      "changed": "Changed",
+      "unchanged": "Unchanged",
+      "none": "none",
+      "value": "(value)",
+      "noValues": "No old or new values were recorded."
     }
   }
 }
