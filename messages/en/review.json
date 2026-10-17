@@ -58,5 +58,10 @@
   },
   "disputes": {
     "title": "{count, plural, one {# dispute} other {# disputes}} to decide"
+  },
+  "member": {
+    "title": "Results in this tournament",
+    "empty": "This member has no results in this tournament yet.",
+    "points": "{points} pts"
   }
 }

@@ -79,6 +79,7 @@ export default async function OrganizerTeamPage({
       )}
       <RosterList
         teamId={team.id}
+        memberHref={(userId) => `/tournaments/${id}/manage/teams/${team.id}/members/${userId}`}
         afterStart={!["DRAFT", "PUBLISHED"].includes(effectiveStatus(team.tournament, new Date()))}
         moveTargets={others.map((o) => ({
           id: o.id,

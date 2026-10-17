@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MakeCaptainButton } from "./make-captain-button";
 import { RemoveMemberButton } from "./remove-member-button";
@@ -11,6 +12,7 @@ export function RosterList({
   members,
   moveTargets,
   afterStart = false,
+  memberHref,
 }: {
   teamId: string;
   members: readonly RosterRow[];
@@ -18,6 +20,8 @@ export function RosterList({
   moveTargets?: readonly MoveTarget[];
   /** The tournament has started: Remove then warns that the swims stay with the team. */
   afterStart?: boolean;
+  /** Link of a member's results page; omit for plain names. */
+  memberHref?: (userId: string) => string;
 }) {
   const t = useTranslations("captain");
   return (
@@ -27,7 +31,11 @@ export function RosterList({
       <ul>
         {members.map((m) => (
           <li key={m.id}>
-            <span>{m.displayName}</span>{" "}
+            {memberHref ? (
+              <Link href={memberHref(m.id)}>{m.displayName}</Link>
+            ) : (
+              <span>{m.displayName}</span>
+            )}{" "}
             {m.isCaptain ? (
               <strong>
                 <span aria-hidden="true">★</span> {t("captain")}
