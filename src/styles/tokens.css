@@ -24,6 +24,13 @@
   --sq-sky-50: #eaf4fd; /* input fill, inactive segment */
   --sq-sky-100: #d7ebfb; /* input border, dividers */
   --sq-white: #ffffff;
+  --sq-ink: #0b0b0f; /* black pill behind brand marks */
+  --sq-brand-google-blue: #4285f4; /* brand marks of the coming-soon sign-in providers */
+  --sq-brand-google-red: #ea4335;
+  --sq-brand-google-yellow: #fbbc05;
+  --sq-brand-google-green: #34a853;
+  --sq-brand-facebook: #1877f2;
+  --sq-brand-strava: #fc4c02;
   --sq-blue-wash: rgb(10 148 254 / 0.08); /* pale fill: selected row (chosen start, chosen team) */
   --sq-glass: rgb(1 33 61 / 0.72); /* translucent dark panel over art (welcome steps) */
   --sq-glass-edge: rgb(127 211 240 / 0.35); /* light rim of the mockup's phone panels */
