@@ -1,0 +1,51 @@
+{
+  "title": "Metrics",
+  "back": "Back",
+  "intro": "Aggregated numbers for your tournament. They show counts and team names only: no player names, emails or GPS data.",
+  "tabsLabel": "Metrics views",
+  "tabs": { "overview": "Overview", "fairness": "Fairness" },
+  "empty": {
+    "title": "No swims yet",
+    "body": "Figures appear here once players upload their first swims."
+  },
+  "participation": {
+    "title": "Participation",
+    "membersJoined": "Members joined",
+    "weekly": {
+      "title": "Weekly active swimmers",
+      "hint": "Players with a verified swim of 500 m or more, per week (Monday to Sunday, Vietnam time).",
+      "week": "Week of {date}",
+      "weekHeader": "Week",
+      "swimmers": "Swimmers",
+      "empty": "The season has not started yet."
+    },
+    "teams": {
+      "title": "Active members per team this week",
+      "team": "Team",
+      "active": "Active members",
+      "empty": "No teams yet."
+    }
+  },
+  "verification": {
+    "title": "Verification",
+    "hint": "Share of swim results by outcome.",
+    "status": "Outcome",
+    "count": "Results",
+    "share": "Share",
+    "statuses": {
+      "VERIFIED": "Verified",
+      "FLAGGED": "Flagged",
+      "REJECTED": "Rejected",
+      "DUPLICATE": "Duplicate",
+      "DISPUTED": "Disputed",
+      "OTHER": "Other"
+    },
+    "shareValue": "{pct}%",
+    "median": {
+      "title": "Median time to decision",
+      "minutes": "Half of the swims were decided within {minutes} minutes of upload.",
+      "hours": "Half of the swims were decided within {hours} h {minutes} min of upload.",
+      "none": "No swim has been decided yet."
+    }
+  }
+}

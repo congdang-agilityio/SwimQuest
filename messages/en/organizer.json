@@ -81,7 +81,8 @@
     },
     "links": {
       "title": "Organizer links",
-      "invite": "Invite link"
+      "invite": "Invite link",
+      "metrics": "Metrics"
     },
     "export": {
       "title": "Export",
