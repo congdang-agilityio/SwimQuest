@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { TeamEmblem } from "@/components/teams/team-emblem";
@@ -38,8 +39,7 @@ export function TournamentCard({
         <div className={styles.row}>
           <span className={styles.thumb}>
             {/* Cut from the mockup's "Giải đấu đang tham gia" row. */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- static art, already sized */}
-            <img
+            <SafeImg
               className={styles.thumbArt}
               src="/art/mockup/screen-home/tournament-thumb.png"
               alt=""

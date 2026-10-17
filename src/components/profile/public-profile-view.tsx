@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Avatar, Card, Chip, SectionHeader } from "@/components/ui";
 import { ReportButton } from "@/components/reports/report-button";
@@ -104,10 +105,7 @@ export function PublicProfileView({
                 const art = badgeArt(b.kind);
                 return (
                   <li key={b.id} className={styles.badge}>
-                    {art && (
-                      // eslint-disable-next-line @next/next/no-img-element -- small static art
-                      <img src={art.webp} alt="" width={64} height={64} />
-                    )}
+                    {art && <SafeImg src={art.webp} alt="" width={64} height={64} />}
                     <span className={styles.badgeKind}>{t(`kind.${b.kind}`)}</span>
                     <span className={styles.badgeTour}>{b.tournament.name}</span>
                   </li>

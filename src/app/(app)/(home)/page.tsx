@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import { headers } from "next/headers";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
@@ -44,8 +45,7 @@ export default async function HomePage() {
         </div>
         <div className={styles.heroArt}>
           {/* Cut from the mockup's "TRANG CHỦ" hero card (island and lighthouse). */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- static art, already sized */}
-          <img
+          <SafeImg
             className={styles.scene}
             src="/art/mockup/screen-home/home-hero.png"
             alt=""

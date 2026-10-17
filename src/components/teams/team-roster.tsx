@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Avatar, Chip } from "@/components/ui";
@@ -52,10 +53,7 @@ export function TeamRoster({
                       const art = badgeArt(b.kind);
                       return (
                         <li key={b.id} className={styles.badge}>
-                          {art && (
-                            // eslint-disable-next-line @next/next/no-img-element -- small static art
-                            <img src={art.webp} alt="" width={40} height={40} />
-                          )}
+                          {art && <SafeImg src={art.webp} alt="" width={40} height={40} />}
                           <span>{tKind(`kind.${b.kind}`)}</span>
                         </li>
                       );

@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import { useTranslations } from "next-intl";
 import { Chip } from "@/components/ui";
 import { mockupArt } from "@/lib/art/mockup-art";
@@ -22,10 +23,7 @@ export function FinishedLabel({ finishedAt, onDark }: { finishedAt: Date; onDark
   return (
     <span className={styles.label} data-testid="finished-label">
       <Chip tone="gold" className={styles.chip}>
-        {badge && (
-          // eslint-disable-next-line @next/next/no-img-element -- tiny static image
-          <img src={badge} alt="" width={16} height={16} />
-        )}
+        {badge && <SafeImg src={badge} alt="" width={16} height={16} />}
         <span>{t("finished")}</span>
       </Chip>
       <time

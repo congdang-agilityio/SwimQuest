@@ -1,3 +1,6 @@
+"use client";
+
+import { useCallback, useState } from "react";
 import styles from "./ui.module.css";
 
 type AvatarProps = {
@@ -18,6 +21,18 @@ function initials(name: string) {
 }
 
 export function Avatar({ name, src, size = 40, decorative = false }: AvatarProps) {
+  // A missing or broken image falls back to the initials (a server-rendered <img> can fail
+  // before React attaches onError, so a completed image with no pixels counts as failed).
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const failed = !!src && failedSrc === src;
+  const fail = useCallback(() => setFailedSrc(src ?? null), [src]);
+  const checkLoaded = useCallback(
+    (img: HTMLImageElement | null) => {
+      if (img && img.complete && img.naturalWidth === 0) fail();
+    },
+    [fail],
+  );
+  const showImage = !!src && !failed;
   return (
     <span
       className={styles.avatar}
@@ -26,11 +41,11 @@ export function Avatar({ name, src, size = 40, decorative = false }: AvatarProps
       aria-label={decorative ? undefined : name}
       aria-hidden={decorative ? true : undefined}
       // Initials are drawn by CSS so they never leak into the text of a parent link or summary.
-      data-initials={src ? undefined : initials(name)}
+      data-initials={showImage ? undefined : initials(name)}
     >
-      {src && (
+      {showImage && (
         // eslint-disable-next-line @next/next/no-img-element -- user avatars are small and already sized
-        <img src={src} alt="" />
+        <img ref={checkLoaded} src={src} alt="" onError={fail} />
       )}
     </span>
   );
