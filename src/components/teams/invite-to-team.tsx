@@ -4,10 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { copyText } from "@/components/tournaments/invite-link";
 import { Button } from "@/components/ui";
+import { reportTelemetry } from "@/lib/telemetry/report";
 import styles from "./my-team.module.css";
 
 /** "Mời thành viên": opens the team's invite link with Copy and (when supported) Share. */
-export function InviteToTeam({ url, teamName }: { url: string; teamName: string }) {
+export function InviteToTeam({
+  url,
+  teamName,
+  teamId,
+}: {
+  url: string;
+  teamName: string;
+  teamId: string;
+}) {
   const t = useTranslations("team.invite");
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
@@ -16,15 +25,22 @@ export function InviteToTeam({ url, teamName }: { url: string; teamName: string 
   const [canShare, setCanShare] = useState(false);
   useEffect(() => setCanShare(typeof navigator.share === "function"), []);
 
+  /** Tells the server a captain shared the link; the server ignores anyone else. */
+  function reportShare() {
+    reportTelemetry(`invite:${teamId}`, { kind: "INVITE_SHARED", teamId });
+  }
+
   async function copy() {
     const ok = await copyText(url);
     if (!ok) input.current?.select();
     setState(ok ? "copied" : "failed");
+    if (ok) reportShare();
   }
 
   async function share() {
     try {
       await navigator.share({ title: teamName, text: t("shareText", { team: teamName }), url });
+      reportShare();
     } catch {
       // the user closed the share sheet: nothing to do
     }

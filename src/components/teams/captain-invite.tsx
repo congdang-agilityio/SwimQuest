@@ -10,5 +10,7 @@ export async function CaptainInvite({ userId }: { userId: string }) {
   const origin = pageOrigin(await headers());
   if (!membership || !origin) return null;
   const url = await getCaptainInviteLink(userId, membership.team.id, origin);
-  return url ? <InviteToTeam url={url} teamName={membership.team.name} /> : null;
+  return url ? (
+    <InviteToTeam url={url} teamName={membership.team.name} teamId={membership.team.id} />
+  ) : null;
 }
