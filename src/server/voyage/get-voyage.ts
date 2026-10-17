@@ -1,3 +1,5 @@
+import { getPersonalCollectibles } from "@/server/collectibles/personal";
+import { db } from "@/server/db";
 import { getSelectedMembership } from "@/server/home/selected-tournament";
 import { getTeamPoints } from "@/server/scoring/team-points";
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
@@ -22,6 +24,8 @@ export type Voyage = {
   path: MapPoint[] | null;
   progress: RouteProgress;
   ship: MapPoint | null;
+  /** The viewer's swimmer shows the energy orb: 2+ active days this Vietnam week. */
+  energyOrb: boolean;
 };
 
 /** Voyage data for the player's current team; always computed from current points. */
@@ -42,6 +46,8 @@ export async function getVoyage(
     routeDistanceM: tournament.routeDistanceM,
     pointsPerKm: tournament.pointsPerKm,
   });
+
+  const orbs = await getPersonalCollectibles(db, tournament.id, [userId], new Date());
 
   const destinations = route.destinations.map((d) => ({
     slug: d.slug,
@@ -66,5 +72,6 @@ export async function getVoyage(
     path,
     progress,
     ship: path ? pointAlongPath(path, Math.min(1, progress.progressBp / 10000), MAP_ASPECT) : null,
+    energyOrb: orbs.get(userId)?.energyOrb ?? false,
   };
 }

@@ -2,6 +2,7 @@ import type { BadgeKind } from "@prisma/client";
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { canSeeField, resolvePrivacy, type Relation } from "@/lib/privacy";
 import { listMembersBadges } from "@/server/badges/list";
+import { getPersonalCollectibles } from "@/server/collectibles/personal";
 import { db } from "@/server/db";
 import { getSelectedMembership } from "@/server/home/selected-tournament";
 import { getPlayerTotals, getTeamPoints } from "@/server/scoring/team-points";
@@ -19,6 +20,8 @@ export type MyTeamMember = PublicPlayer & {
   level: number;
   /** This tournament's active badges; empty when none or when the member keeps them private. */
   badges: { id: string; kind: BadgeKind }[];
+  /** Shows the energy orb this Vietnam week (2+ active days); a state, not a collectible. */
+  energyOrb: boolean;
 };
 
 export type MyTeamView = {
@@ -65,6 +68,12 @@ export async function getMyTeamView(
     tournament.id,
     members.map((m) => m.user.id),
   );
+  const orbs = await getPersonalCollectibles(
+    db,
+    tournament.id,
+    members.map((m) => m.user.id),
+    new Date(),
+  );
   const roster = members.map(({ user }): MyTeamMember => {
     const t = totals.get(user.id) ?? { points: 0, countedM: 0 };
     // The viewer is on this team, so every other member is a teammate (privacy: badges).
@@ -79,6 +88,7 @@ export async function getMyTeamView(
       badges: showBadges
         ? (badgeMap.get(user.id) ?? []).map((b) => ({ id: b.id, kind: b.kind }))
         : [],
+      energyOrb: orbs.get(user.id)?.energyOrb ?? false,
     };
   });
   // By PointsEntry.teamId (#206): a removed member's swims stay with the team.
