@@ -268,6 +268,14 @@ describe("getSettings", () => {
       realisticLimits: LIMIT_DEFAULTS,
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
+      optional: {
+        bannerImageId: null,
+        logoImageId: null,
+        rulesUrl: null,
+        eligibilityNotes: null,
+        contactChannel: null,
+        rulesText: null,
+      },
     });
     await updateSettings(user.id, t.id, "swim", INPUT, BEFORE);
     await expect(getSettings(t.id)).resolves.toEqual({
@@ -277,6 +285,14 @@ describe("getSettings", () => {
       realisticLimits: LIMIT_DEFAULTS,
       points: POINT_DEFAULTS,
       visibility: { visibility: null },
+      optional: {
+        bannerImageId: null,
+        logoImageId: null,
+        rulesUrl: null,
+        eligibilityNotes: null,
+        contactChannel: null,
+        rulesText: null,
+      },
     });
   });
 
