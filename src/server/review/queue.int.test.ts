@@ -209,6 +209,8 @@ describe("reasonOf", () => {
     ["SWIM_TYPE_NOT_ACCEPTED", s(1000, 1800), { limit: null, value: null }],
     ["UPLOADED_AFTER_DEADLINE", s(1000, 1800), { limit: null, value: null }],
     ["UPLOAD_WINDOW_CLOSED", s(1000, 1800), { limit: null, value: null }],
+    ["MIN_DISTANCE_MISSED", s(1000, 1800), { limit: null, value: null }],
+    ["EXTRA_PACE_MISSED", s(1000, 1800), { limit: null, value: null }],
   ] as const;
 
   it.each(cases)("gives %s its exact limit and value", (code, swim, params) => {

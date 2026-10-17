@@ -3,7 +3,14 @@ import { vnDayKey } from "@/lib/time/vn";
 import type { Reason } from "./reasons";
 
 /** The swim facts the rule checks read; `createdAt` is the upload time. */
-export type RuleSwim = { swimType: SwimType; startedAt: Date; createdAt: Date };
+export type RuleSwim = {
+  swimType: SwimType;
+  startedAt: Date;
+  createdAt: Date;
+  /** Whole metres; the standard checks already refused a swim without a usable distance. */
+  distanceM: number | null;
+  durationS: number;
+};
 
 /** The organizer's rules of one tournament. */
 export type RuleTournament = {
@@ -13,6 +20,10 @@ export type RuleTournament = {
   /** M: days after the season end time an upload still counts. */
   lateUploadDays: number;
   seasonEndAt: Date;
+  /** Extra rule (S-27): shortest swim that counts, in metres; null means off. */
+  minSwimDistanceM: number | null;
+  /** Extra rule (S-27): slowest pace per 100 m that counts, in seconds; null means off. */
+  extraSlowestPaceSecPer100m: number | null;
 };
 
 const ACCEPTED: Record<SwimTypeAllowed, readonly SwimType[]> = {
@@ -30,6 +41,10 @@ const ACCEPTED: Record<SwimTypeAllowed, readonly SwimType[]> = {
  * Deadlines (S-24): an upload on a Vietnam calendar day more than N days after the swim's
  * Vietnam date misses the submission deadline; an upload at or after the season end time plus
  * M days misses the upload window (the moment results become final).
+ *
+ * Extra rules (S-27), when set: a swim shorter than the minimum distance, or slower than the
+ * extra slowest pace, misses the rule (both limits inclusive). The realistic slowest pace is a
+ * standard check and runs first, so a swim outside it is flagged for review instead.
  */
 export function evaluateRules(swim: RuleSwim, tournament: RuleTournament): { missed: Reason[] } {
   const missed: Reason[] = [];
@@ -48,6 +63,19 @@ export function evaluateRules(swim: RuleSwim, tournament: RuleTournament): { mis
   const windowEnd = tournament.seasonEndAt.getTime() + tournament.lateUploadDays * 86_400_000;
   if (swim.createdAt.getTime() >= windowEnd) {
     missed.push({ code: "UPLOAD_WINDOW_CLOSED", params: { days: tournament.lateUploadDays } });
+  }
+  const distanceM = swim.distanceM;
+  if (distanceM !== null && distanceM > 0) {
+    const minM = tournament.minSwimDistanceM;
+    if (minM !== null && distanceM < minM) {
+      missed.push({ code: "MIN_DISTANCE_MISSED", params: { limitM: minM, valueM: distanceM } });
+    }
+    const limitSec = tournament.extraSlowestPaceSecPer100m;
+    // Compared without dividing, like the standard pace check, so a swim on the limit counts.
+    if (limitSec !== null && swim.durationS * 100 > distanceM * limitSec) {
+      const valueSec = Math.round((swim.durationS * 100) / distanceM);
+      missed.push({ code: "EXTRA_PACE_MISSED", params: { limitSec, valueSec } });
+    }
   }
   return { missed };
 }
