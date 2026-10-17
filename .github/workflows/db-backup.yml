@@ -1,0 +1,80 @@
+name: Production DB backup
+
+# Daily encrypted pg_dump of the production database. See docs/ops/backup-restore.md.
+# The repository is public: artifacts are readable by anyone, so the dump is
+# encrypted with GPG (AES256) before upload and never stored in clear text.
+on:
+  schedule:
+    - cron: "0 19 * * *" # 19:00 UTC = 02:00 Vietnam time
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - name: Check secrets
+        run: |
+          missing=0
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Secret PROD_DATABASE_URL is not set. See docs/ops/backup-restore.md."
+            missing=1
+          fi
+          if [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "::error::Secret BACKUP_PASSPHRASE is not set. See docs/ops/backup-restore.md."
+            missing=1
+          fi
+          exit "$missing"
+
+      - name: Install PostgreSQL 17 client
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+          pg_dump --version
+
+      - name: Dump and encrypt
+        id: dump
+        run: |
+          set -euo pipefail
+          umask 077
+          stamp="$(date -u +%Y-%m-%d)"
+          echo "date=${stamp}" >> "$GITHUB_OUTPUT"
+          mkdir -p out
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+
+          pg_dump --format=custom --no-owner --no-acl --file="$tmp/dump.pgdump" "$DATABASE_URL"
+          [ -s "$tmp/dump.pgdump" ] || { echo "::error::pg_dump produced an empty file"; exit 1; }
+
+          out="out/swimquest-prod-${stamp}.pgdump.gpg"
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --symmetric --cipher-algo AES256 \
+            --passphrase-fd 0 --output "$out" "$tmp/dump.pgdump"
+          [ -s "$out" ] || { echo "::error::encrypted file is empty"; exit 1; }
+
+          # Verify: decrypt a temporary copy and make sure pg_restore can read it.
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --decrypt --passphrase-fd 0 \
+            --output "$tmp/verify.pgdump" "$out"
+          pg_restore --list "$tmp/verify.pgdump" > /dev/null
+          echo "Backup verified: $(stat -c %s "$out") bytes encrypted"
+
+      - name: Upload encrypted backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: swimquest-prod-${{ steps.dump.outputs.date }}
+          path: out/swimquest-prod-${{ steps.dump.outputs.date }}.pgdump.gpg
+          retention-days: 30
+          if-no-files-found: error
