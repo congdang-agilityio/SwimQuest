@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
-import { MockupPicture } from "@/components/art/mockup-picture";
 import { ReportButton } from "@/components/reports/report-button";
+import { TournamentBanner } from "@/components/tournaments/tournament-banner";
 import { Chip, type ChipTone } from "@/components/ui";
 import type { TournamentStatus } from "@/lib/tournaments/lifecycle";
 import { formatVnDateTime } from "@/lib/time/vn";
@@ -18,6 +18,8 @@ type Props = {
   /** Set to show "Report" (not for the organizer): the tournament id. */
   reportTournamentId?: string;
   name: string;
+  /** Uploaded banner image; without it the template shows. */
+  bannerImageId?: string | null;
   description: string;
   organizerName: string;
   status: TournamentStatus;
@@ -35,17 +37,12 @@ export function DetailsHeader(props: Props) {
   const km = Number((props.routeDistanceM / 1000).toFixed(3));
   return (
     <>
-      <MockupPicture
-        artKey="scenes/sea-ly-son-16x9"
-        alt=""
-        className={styles.hero}
-        eager
-        fallback={<div className={styles.heroFallback} />}
+      <TournamentBanner
+        name={props.name}
+        bannerImageId={props.bannerImageId}
+        headingId="details-name"
       />
       <div className={styles.head}>
-        <h2 id="details-name" className={styles.name}>
-          {props.name}
-        </h2>
         <div className={styles.chips}>
           <Chip tone={STATUS_TONE[props.status]}>{t(`status.${props.status}`)}</Chip>
         </div>

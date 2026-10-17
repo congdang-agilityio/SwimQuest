@@ -13,6 +13,9 @@
   border-bottom: 1px solid rgb(10 77 128 / 0.6);
 }
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-2);
   font-size: var(--sq-text-xl);
   font-weight: var(--sq-weight-black);
   font-style: italic;
@@ -20,6 +23,12 @@
   color: var(--sq-white);
   text-decoration: none;
   text-shadow: 0 2px 8px rgb(0 174 239 / 0.45);
+}
+.logo {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 2px 6px rgb(0 174 239 / 0.45));
 }
 .actions {
   display: flex;

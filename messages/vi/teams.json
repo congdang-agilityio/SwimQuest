@@ -28,7 +28,9 @@
     "wave": "Sóng",
     "anchor": "Neo",
     "shell": "Vỏ sò",
-    "star": "Sao"
+    "star": "Sao",
+    "lighthouse": "Hải đăng",
+    "fish": "Cá hề"
   },
   "errors": {
     "NAME_REQUIRED": "Nhập tên đội.",

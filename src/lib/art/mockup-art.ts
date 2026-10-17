@@ -1,3 +1,5 @@
+import type { ArtAsset } from "@/lib/art/route01-art";
+
 /**
  * Registry of the art cut from the stakeholder asset sheets (#703, spec: requirement asset sheets A/B).
  *
@@ -79,4 +81,15 @@ export function landmarkKey(slug: string): string | undefined {
 /** Alt text in the UI locale (vi is the default language). */
 export function mockupAlt(asset: MockupAsset, locale: string): string {
   return locale.startsWith("en") ? asset.alt.en : asset.alt.vi;
+}
+
+/** Registry art as `ArtImage` input: WebP first, the PNG if that fails, then the caller's fallback. */
+export function toArtAsset(art: MockupAsset): ArtAsset {
+  return {
+    key: art.key,
+    path: art.webp,
+    fallbackPath: art.file,
+    source: "cut-out",
+    replacementNeed: `${art.width}x${art.height}, transparent, no text`,
+  };
 }

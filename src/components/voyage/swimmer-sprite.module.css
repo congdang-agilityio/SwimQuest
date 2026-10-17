@@ -1,0 +1,42 @@
+/* Sits behind the ship's stern (the ship sails right), lower in the water, and swims along. */
+.swimmer {
+  position: absolute;
+  right: 72%;
+  bottom: -6%;
+  width: 82%;
+  pointer-events: none;
+  animation: glide 3.2s ease-in-out infinite alternate;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgb(1 33 61 / 0.45));
+  animation: bob 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes glide {
+  from {
+    transform: translateX(-6%);
+  }
+  to {
+    transform: translateX(6%);
+  }
+}
+
+@keyframes bob {
+  from {
+    transform: translateY(-3%) rotate(-2deg);
+  }
+  to {
+    transform: translateY(4%) rotate(2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swimmer,
+  .image {
+    animation: none;
+  }
+}

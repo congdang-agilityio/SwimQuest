@@ -33,11 +33,11 @@ const type = (label: string, value: string) =>
   fireEvent.change(screen.getByLabelText(label), { target: { value } });
 
 describe("TeamForm", () => {
-  it("offers the six emblems and shows field errors with aria when empty", () => {
+  it("offers the eight emblems and shows field errors with aria when empty", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     setup();
-    expect(screen.getAllByRole("radio")).toHaveLength(6);
+    expect(screen.getAllByRole("radio")).toHaveLength(8);
     submit();
     const name = screen.getByLabelText(vi_.form.name);
     expect(name.getAttribute("aria-invalid")).toBe("true");
