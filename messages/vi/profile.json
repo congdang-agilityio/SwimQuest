@@ -3,7 +3,11 @@
     "edit": "Sửa hồ sơ",
     "noBio": "Chưa có giới thiệu.",
     "coverAlt": "Ảnh bìa",
-    "avatarAlt": "Ảnh đại diện"
+    "avatarAlt": "Ảnh đại diện",
+    "goalsTitle": "Mục tiêu (chưa xác minh)",
+    "goalsEmpty": "Chưa đặt mục tiêu.",
+    "goalDistance": "Quãng đường mục tiêu: {km} km",
+    "goalDistanceM": "Quãng đường mục tiêu: {m} m"
   },
   "edit": {
     "title": "Sửa hồ sơ",
@@ -27,7 +31,16 @@
     "uploaded": "Ảnh đã sẵn sàng. Bấm Lưu để giữ lại.",
     "save": "Lưu",
     "saving": "Đang lưu…",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "swimming": "Hồ sơ bơi",
+    "goals": "Mục tiêu",
+    "goalsHint": "Không bắt buộc. Tối đa {max} ký tự.",
+    "goalsPlaceholder": "Bơi 2 km mỗi tuần cùng một người bạn ở hồ bơi",
+    "goalDistance": "Quãng đường mục tiêu",
+    "goalDistanceHint": "Không bắt buộc. Nhập kèm đơn vị, ví dụ 800 m hoặc 2,5 km.",
+    "goalDistancePlaceholder": "2,5 km",
+    "disciplines": "Bộ môn",
+    "disciplinesHint": "Chọn những bộ môn bạn thích."
   },
   "defaults": {
     "dolphin": "Cá heo",
@@ -49,6 +62,17 @@
     "UNKNOWN_FIELD": "Biểu mẫu có phần không nhận ra được. Hãy tải lại trang.",
     "IMAGE_TOO_LARGE": "Ảnh lớn hơn 2 MB.",
     "IMAGE_TYPE_NOT_ALLOWED": "Hãy dùng ảnh PNG, JPEG hoặc WebP.",
-    "GENERIC": "Không lưu được hồ sơ. Hãy thử lại."
+    "GENERIC": "Không lưu được hồ sơ. Hãy thử lại.",
+    "GOALS_TOO_LONG": "Mục tiêu tối đa {max} ký tự.",
+    "GOAL_DISTANCE_INVALID": "Nhập quãng đường như 800 m hoặc 2,5 km (tối đa 1.000 km).",
+    "DISCIPLINE_UNKNOWN": "Hãy chọn bộ môn trong danh sách."
+  },
+  "disciplines": {
+    "POOL": "Hồ bơi",
+    "OPEN_WATER": "Nước mở",
+    "FREESTYLE": "Bơi sải",
+    "BREASTSTROKE": "Bơi ếch",
+    "BACKSTROKE": "Bơi ngửa",
+    "BUTTERFLY": "Bơi bướm"
   }
 }

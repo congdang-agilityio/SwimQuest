@@ -1,0 +1,21 @@
+.block {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  background: var(--sq-white);
+}
+.text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.muted {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}

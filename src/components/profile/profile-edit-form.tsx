@@ -7,7 +7,8 @@ import { DEFAULT_AVATAR_KEYS } from "@/lib/default-avatars";
 import { clientFetch } from "@/lib/http/client-fetch";
 import { defaultAvatarSrc, imageSrc } from "@/lib/profile-avatar";
 import { REGIONS } from "@/lib/regions";
-import { BIO_MAX, DISPLAY_NAME_MAX } from "@/lib/validation/profile";
+import { goalDistanceText, parseGoalDistance } from "@/lib/goal-distance";
+import { BIO_MAX, DISCIPLINES, DISPLAY_NAME_MAX, GOALS_MAX } from "@/lib/validation/profile";
 import type { MyProfile } from "@/server/profile/my-profile";
 import styles from "./profile-edit-form.module.css";
 
@@ -23,10 +24,14 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
   const t = useTranslations("profile.edit");
   const te = useTranslations("profile.defaults");
   const tr = useTranslations("profile.errors");
+  const td = useTranslations("profile.disciplines");
   const locale = useLocale() === "en" ? "en" : "vi";
   const [displayName, setDisplayName] = useState(profile.displayName);
   const [bio, setBio] = useState(profile.bio ?? "");
   const [regionCode, setRegionCode] = useState(profile.regionCode ?? "");
+  const [goalsText, setGoalsText] = useState(profile.goalsText ?? "");
+  const [goalDistance, setGoalDistance] = useState(goalDistanceText(profile.goalDistanceM, locale));
+  const [disciplines, setDisciplines] = useState<string[]>(profile.disciplines);
   const [avatarImageId, setAvatarImageId] = useState(profile.avatarImageId);
   const [avatarDefaultKey, setAvatarDefaultKey] = useState(profile.avatarDefaultKey);
   const [coverImageId, setCoverImageId] = useState(profile.coverImageId);
@@ -70,6 +75,11 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setErrors({});
+    const goalDistanceM = goalDistance.trim() === "" ? null : parseGoalDistance(goalDistance);
+    if (goalDistance.trim() !== "" && goalDistanceM === null) {
+      setErrors({ goalDistanceM: "GOAL_DISTANCE_INVALID" });
+      return;
+    }
     setBusy(true);
     try {
       const res = await clientFetch("/api/me/profile", {
@@ -79,6 +89,9 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
           displayName,
           bio: bio.trim() === "" ? null : bio,
           regionCode: regionCode || null,
+          goalsText: goalsText.trim() === "" ? null : goalsText,
+          goalDistanceM,
+          disciplines,
           avatarImageId,
           avatarDefaultKey: avatarImageId ? undefined : avatarDefaultKey,
           coverImageId,
@@ -221,6 +234,63 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
         ))}
       </SelectField>
 
+      <fieldset className={styles.group}>
+        <legend className={styles.legend}>{t("swimming")}</legend>
+        <TextareaField
+          id="profile-goals"
+          name="goalsText"
+          label={t("goals")}
+          hint={`${t("goalsHint", { max: GOALS_MAX })} ${t("bioCounter", { count: goalsText.length, max: GOALS_MAX })}`}
+          placeholder={t("goalsPlaceholder")}
+          value={goalsText}
+          rows={3}
+          onChange={(e) => setGoalsText(e.target.value)}
+          error={message(errors.goalsText, GOALS_MAX)}
+        />
+        <Field
+          id="profile-goal-distance"
+          name="goalDistance"
+          label={t("goalDistance")}
+          hint={t("goalDistanceHint")}
+          placeholder={t("goalDistancePlaceholder")}
+          value={goalDistance}
+          inputMode="decimal"
+          autoComplete="off"
+          onChange={(e) => setGoalDistance(e.target.value)}
+          error={message(errors.goalDistanceM)}
+        />
+        <p className={styles.sub} id="profile-disciplines-label">
+          {t("disciplines")}
+        </p>
+        <div
+          className={styles.disciplines}
+          role="group"
+          aria-labelledby="profile-disciplines-label"
+        >
+          {DISCIPLINES.map((d) => (
+            <button
+              key={d}
+              type="button"
+              className={styles.toggle}
+              aria-pressed={disciplines.includes(d)}
+              onClick={() =>
+                setDisciplines((list) =>
+                  list.includes(d) ? list.filter((x) => x !== d) : [...list, d],
+                )
+              }
+            >
+              {td(d)}
+            </button>
+          ))}
+        </div>
+        <p className={styles.hint}>{t("disciplinesHint")}</p>
+        {errors.disciplines && (
+          <span role="alert" className={styles.error}>
+            {message(errors.disciplines)}
+          </span>
+        )}
+      </fieldset>
+
       {errors.form && (
         <p role="alert" className={styles.error}>
           {message(errors.form)}
@@ -242,6 +312,9 @@ const KNOWN_ERRORS: ReadonlySet<string> = new Set([
   "DISPLAY_NAME_REQUIRED",
   "DISPLAY_NAME_TOO_LONG",
   "BIO_TOO_LONG",
+  "GOALS_TOO_LONG",
+  "GOAL_DISTANCE_INVALID",
+  "DISCIPLINE_UNKNOWN",
   "REGION_UNKNOWN",
   "AVATAR_UNKNOWN",
   "IMAGE_INVALID",

@@ -3,7 +3,11 @@
     "edit": "Edit profile",
     "noBio": "No bio yet.",
     "coverAlt": "Cover image",
-    "avatarAlt": "Avatar"
+    "avatarAlt": "Avatar",
+    "goalsTitle": "Goals (not verified)",
+    "goalsEmpty": "No goals set yet.",
+    "goalDistance": "Goal distance: {km} km",
+    "goalDistanceM": "Goal distance: {m} m"
   },
   "edit": {
     "title": "Edit profile",
@@ -27,7 +31,16 @@
     "uploaded": "Photo ready. Save to keep it.",
     "save": "Save",
     "saving": "Saving…",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "swimming": "Swimming profile",
+    "goals": "Goals",
+    "goalsHint": "Optional. Up to {max} characters.",
+    "goalsPlaceholder": "Swim 2 km a week with a friend in the pool",
+    "goalDistance": "Goal distance",
+    "goalDistanceHint": "Optional. Type it with a unit, like 800 m or 2.5 km.",
+    "goalDistancePlaceholder": "2.5 km",
+    "disciplines": "Disciplines",
+    "disciplinesHint": "Pick any that you enjoy."
   },
   "defaults": {
     "dolphin": "Dolphin",
@@ -49,6 +62,17 @@
     "UNKNOWN_FIELD": "Something in the form was not recognised. Reload the page.",
     "IMAGE_TOO_LARGE": "The image is larger than 2 MB.",
     "IMAGE_TYPE_NOT_ALLOWED": "Use a PNG, JPEG or WebP image.",
-    "GENERIC": "Could not save your profile. Try again."
+    "GENERIC": "Could not save your profile. Try again.",
+    "GOALS_TOO_LONG": "Goals can be up to {max} characters.",
+    "GOAL_DISTANCE_INVALID": "Type a distance like 800 m or 2.5 km (up to 1,000 km).",
+    "DISCIPLINE_UNKNOWN": "Pick disciplines from the list."
+  },
+  "disciplines": {
+    "POOL": "Pool",
+    "OPEN_WATER": "Open water",
+    "FREESTYLE": "Freestyle",
+    "BREASTSTROKE": "Breaststroke",
+    "BACKSTROKE": "Backstroke",
+    "BUTTERFLY": "Butterfly"
   }
 }
