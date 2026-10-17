@@ -77,7 +77,20 @@ export async function getJoinView(
   if (!isTokenShaped(token)) return null;
   const t = await db.tournament.findUnique({ where: { inviteToken: token } });
   if (!t) return null;
+  return buildJoinView(userId, t, t.inviteEnabled, now);
+}
 
+/**
+ * The join view of tournament `t` for `userId`. `canEnter` is whether the entry point itself lets
+ * the player in (the invite link is switched on, or the tournament is public); `linkState`
+ * reports the invite link switch either way.
+ */
+export async function buildJoinView(
+  userId: string,
+  t: Tournament,
+  canEnter: boolean,
+  now: Date,
+): Promise<JoinView> {
   const [{ teams }, myTeam, removed] = await Promise.all([
     listTeamsWithCounts(t.id),
     findMyTeam(userId, t.id),
@@ -100,7 +113,7 @@ export async function getJoinView(
       return { id, name, emblemKey, description, memberCount, memberLimit, full };
     }),
     myTeam,
-    joiningOpen: !removed && t.inviteEnabled && isJoiningOpen(t, now),
+    joiningOpen: !removed && canEnter && t.archivedAt === null && isJoiningOpen(t, now),
     linkState: t.inviteEnabled ? "ON" : "OFF",
     blockedReason: removed ? "REMOVED_FROM_TOURNAMENT" : null,
   };

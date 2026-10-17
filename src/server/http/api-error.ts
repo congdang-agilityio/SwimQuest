@@ -37,6 +37,7 @@ export type ApiErrorCode =
   | "ALREADY_MEMBER"
   | "SEASON_STARTED"
   | "REMOVED_FROM_TOURNAMENT"
+  | "NOT_PUBLIC"
   | "LAST_ADMIN"
   | "CANNOT_SUSPEND_SELF"
   | "INVALID_STATE"
@@ -95,6 +96,7 @@ const messages: Record<ApiErrorCode, string> = {
   ALREADY_MEMBER: "You are already in a team of this tournament.",
   SEASON_STARTED: "The season has started, so only the organizer can move players now.",
   REMOVED_FROM_TOURNAMENT: "You were removed from this tournament and cannot join it again.",
+  NOT_PUBLIC: "This tournament can only be joined through its invite link.",
   LAST_ADMIN: "The last platform admin role cannot be removed.",
   CANNOT_SUSPEND_SELF: "You cannot suspend your own account.",
   INVALID_STATE: "The account is not in a state that allows this change. Reload and try again.",
