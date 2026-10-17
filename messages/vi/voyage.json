@@ -21,5 +21,6 @@
     "hon_sup": "Đà Nẵng",
     "cu_lao_cham": "Quảng Nam",
     "ly_son": "Quảng Ngãi"
-  }
+  },
+  "tierUp": "Tàu của đội đã lên bậc {tier}!"
 }

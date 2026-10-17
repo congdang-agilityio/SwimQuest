@@ -1,0 +1,80 @@
+/* Ship tier upgrade moment on Voyage: the new ship on a gold glow, with bursts and a caption. */
+.upgrade {
+  display: grid;
+  gap: var(--sq-space-2);
+  justify-items: center;
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-navy-800);
+  box-shadow: var(--sq-shadow-card);
+}
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(220px, 70%);
+  aspect-ratio: 4 / 3;
+}
+.stage > span {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+}
+.ship {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.glow,
+.ring,
+.burstLeft,
+.burstRight {
+  position: absolute;
+  pointer-events: none;
+}
+.glow {
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.75;
+}
+.ring {
+  bottom: 0;
+  left: 50%;
+  width: 90%;
+  height: auto;
+  transform: translateX(-50%);
+  opacity: 0.85;
+}
+.burstLeft,
+.burstRight {
+  width: 44px;
+  height: 44px;
+}
+.burstLeft {
+  top: 0;
+  left: 4%;
+}
+.burstRight {
+  top: 18%;
+  right: 2%;
+  width: 34px;
+  height: 34px;
+}
+.caption {
+  margin: 0;
+  color: var(--sq-gold-strong);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  text-align: center;
+}
+
+/* Reduced motion: the caption only. */
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    display: none;
+  }
+}
