@@ -34,5 +34,31 @@
       "badgeEarned": "You earned a new badge.",
       "levelUp": "You reached level {level}."
     }
+  },
+  "settings": {
+    "title": "Notification settings",
+    "push": {
+      "title": "Push notifications",
+      "intro": "Get alerts about your swims and team on this phone, even when SwimQuest is closed.",
+      "label": "Push on this device",
+      "checking": "Checking this device…",
+      "on": "On. This device gets push notifications.",
+      "off": "Off. Turn on to get alerts on this device.",
+      "offHere": "Not available on this device right now.",
+      "otherDevices": "This switch only changes this device. Your other phones and browsers keep their own setting.",
+      "unavailableTitle": "Push is not available yet",
+      "unavailable": "SwimQuest cannot send push notifications yet. You can still find every update in the Notifications list.",
+      "unsupportedTitle": "This browser cannot get push notifications",
+      "unsupported": {
+        "ios": "On iPhone or iPad, push needs iOS 16.4 or later and SwimQuest on your Home Screen. In Safari, tap Share, then Add to Home Screen, open SwimQuest from the new icon and turn push on here.",
+        "zalo": "You opened SwimQuest inside Zalo, which cannot show push notifications. Tap the ... menu, choose Open in browser, then turn push on there.",
+        "browser": "Open SwimQuest in a recent Chrome, Edge, Firefox or Safari to turn push on."
+      },
+      "blockedTitle": "Notifications are blocked",
+      "blocked": "You blocked notifications for SwimQuest. Tap the lock or site icon next to the address, open Site settings, set Notifications to Allow, then reload this page. In the installed iPhone app, go to Settings > Notifications > SwimQuest.",
+      "dismissed": "Notifications were not allowed. Try again and choose Allow.",
+      "failed": "Could not change push on this device. Try again.",
+      "loadFailed": "Could not check push on this device. Reload the page to try again."
+    }
   }
 }

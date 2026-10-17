@@ -296,3 +296,64 @@ a.dark {
   font-size: var(--sq-text-sm);
   font-weight: var(--sq-weight-bold);
 }
+
+/* Switch row: label and hint on the left, an on/off track on the right (role="switch"). */
+.switchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: var(--sq-tap);
+}
+.switchText {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.switchLabel {
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+.switchHint {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.switch {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-sky-100);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+  transition: transform 0.15s ease;
+}
+.switch[aria-checked="true"] {
+  background: var(--sq-gradient-primary);
+}
+.switch[aria-checked="true"]::before {
+  transform: translateX(20px);
+}
+.switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.switch:focus-visible {
+  outline: none;
+  box-shadow: var(--sq-focus-ring);
+}

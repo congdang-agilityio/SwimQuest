@@ -6,3 +6,4 @@ export { Field, SelectField, TextareaField, controlClass } from "./field";
 export { ProgressBar } from "./progress-bar";
 export { ScreenHeader } from "./screen-header";
 export { Tabs, type TabItem } from "./tabs";
+export { Switch } from "./switch";
