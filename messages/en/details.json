@@ -20,5 +20,11 @@
   "full": "Full",
   "join": "Join",
   "leaderboard": "Leaderboard",
-  "actions": "Tournament actions"
+  "actions": "Tournament actions",
+  "rules": "Rules",
+  "rulesSwims": "Counted swims",
+  "rulesDeadlines": "Deadlines",
+  "rulesPoints": "How points work",
+  "rulesLimits": "Realistic limits",
+  "rulesExtra": "Extra swim rules"
 }

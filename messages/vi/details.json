@@ -20,5 +20,11 @@
   "full": "Đã đầy",
   "join": "Tham gia",
   "leaderboard": "Bảng xếp hạng",
-  "actions": "Thao tác với giải đấu"
+  "actions": "Thao tác với giải đấu",
+  "rules": "Luật chơi",
+  "rulesSwims": "Bài bơi được tính",
+  "rulesDeadlines": "Hạn nộp",
+  "rulesPoints": "Cách tính điểm",
+  "rulesLimits": "Giới hạn thực tế",
+  "rulesExtra": "Luật bơi bổ sung"
 }
