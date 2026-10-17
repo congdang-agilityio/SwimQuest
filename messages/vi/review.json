@@ -58,5 +58,10 @@
   },
   "disputes": {
     "title": "{count, plural, other {# khiếu nại}} cần quyết định"
+  },
+  "member": {
+    "title": "Kết quả trong giải đấu này",
+    "empty": "Thành viên này chưa có kết quả nào trong giải đấu.",
+    "points": "{points} điểm"
   }
 }

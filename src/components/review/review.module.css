@@ -184,3 +184,51 @@
   font-size: var(--sq-text-sm);
   color: var(--sq-text-muted);
 }
+
+/* Member results (S-48): rows like the swim list of #692, with the status chip and points. */
+.resultRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: 64px;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+  color: var(--sq-text);
+  text-decoration: none;
+}
+[data-surface="light"] a.resultRow {
+  color: var(--sq-text);
+}
+a.resultRow:hover {
+  box-shadow: var(--sq-shadow-glow);
+}
+.rowMain {
+  display: grid;
+  gap: var(--sq-space-1);
+  justify-items: start;
+  min-width: 0;
+}
+.rowDate {
+  font-weight: var(--sq-weight-semibold);
+}
+.rowStatus {
+  white-space: normal;
+}
+.rowFigures {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+}
+.rowDistance {
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+  color: var(--sq-navy-700);
+}
+.rowPoints {
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+  font-variant-numeric: tabular-nums;
+}
