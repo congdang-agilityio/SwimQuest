@@ -28,7 +28,12 @@ function setup(
 ) {
   render(
     <NextIntlClientProvider locale="en" messages={{ join: en }}>
-      <TeamPicker token="tok" teams={teams} myTeam={myTeam} preselectedId={preselectedId} />
+      <TeamPicker
+        submitUrl="/api/join/tok"
+        teams={teams}
+        myTeam={myTeam}
+        preselectedId={preselectedId}
+      />
     </NextIntlClientProvider>,
   );
 }
