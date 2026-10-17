@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
+import { StateCard } from "@/components/states/state-card";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { MyPointsCard } from "@/components/scoring/my-points-card";
 import { FinishLostNotice } from "@/components/finish/finish-lost-notice";
@@ -15,7 +16,7 @@ import { getCurrentMembership } from "@/server/home/my-tournaments";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { getMyPoints } from "@/server/scoring/my-points";
 import { listTeamsWithCounts } from "@/server/teams/manage";
-import { getMyTeamView } from "@/server/teams/my-team-view";
+import { getLastRemoval, getMyTeamView } from "@/server/teams/my-team-view";
 import { TeamHeader } from "@/components/teams/team-header";
 import { LeaveSwitchActions } from "@/components/teams/leave-switch-actions";
 import { TeamRoster } from "@/components/teams/team-roster";
@@ -30,6 +31,7 @@ export default async function TeamPage() {
     membership = await getCurrentMembership(user.id);
   }
   const view = membership ? await getMyTeamView(user.id) : null;
+  const removal = membership ? null : await getLastRemoval(user.id);
   const myPoints = membership ? await getMyPoints(user.id, membership.tournament.id) : null;
   const status = membership ? effectiveStatus(membership.tournament, new Date()) : null;
   const beforeStart = status === "DRAFT" || status === "PUBLISHED";
@@ -81,6 +83,18 @@ export default async function TeamPage() {
             </>
           ) : (
             <div className={styles.empty}>
+              {removal && (
+                <StateCard
+                  art="items/message-bottle"
+                  role="status"
+                  titleId="removed-title"
+                  title={tTeam("removed.title", { team: removal.teamName })}
+                  body={tTeam(removal.afterStart ? "removed.afterStart" : "removed.beforeStart", {
+                    team: removal.teamName,
+                    tournament: removal.tournamentName,
+                  })}
+                />
+              )}
               <JoinGuidance />
             </div>
           )}

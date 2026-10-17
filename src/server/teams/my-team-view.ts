@@ -90,3 +90,38 @@ export async function getMyTeamView(userId: string): Promise<MyTeamView | null> 
     roster,
   };
 }
+
+export type LastRemoval = {
+  teamName: string;
+  tournamentName: string;
+  afterStart: boolean;
+  at: Date;
+};
+
+/**
+ * The removal My Team explains to a player without a team (story S-43 AC 4): their latest
+ * membership ended by an organizer's removal and they have no active membership since.
+ */
+export async function getLastRemoval(userId: string): Promise<LastRemoval | null> {
+  const latest = await db.teamMember.findFirst({
+    where: { userId },
+    orderBy: [{ joinedAt: "desc" }, { id: "desc" }],
+    select: {
+      status: true,
+      endReason: true,
+      endedAt: true,
+      team: { select: { name: true } },
+      tournament: { select: { name: true } },
+    },
+  });
+  if (!latest || latest.status !== "REMOVED") return null;
+  if (latest.endReason !== "REMOVED_BEFORE_START" && latest.endReason !== "REMOVED_AFTER_START") {
+    return null;
+  }
+  return {
+    teamName: latest.team.name,
+    tournamentName: latest.tournament.name,
+    afterStart: latest.endReason === "REMOVED_AFTER_START",
+    at: latest.endedAt ?? new Date(0),
+  };
+}
