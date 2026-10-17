@@ -37,6 +37,8 @@ export type ApiErrorCode =
   | "SEASON_STARTED"
   | "REMOVED_FROM_TOURNAMENT"
   | "LAST_ADMIN"
+  | "CANNOT_SUSPEND_SELF"
+  | "INVALID_STATE"
   | "REASON_REQUIRED"
   | "ALREADY_DECIDED"
   | "DISPUTE_OPEN"
@@ -91,6 +93,8 @@ const messages: Record<ApiErrorCode, string> = {
   SEASON_STARTED: "The season has started, so only the organizer can move players now.",
   REMOVED_FROM_TOURNAMENT: "You were removed from this tournament and cannot join it again.",
   LAST_ADMIN: "The last platform admin role cannot be removed.",
+  CANNOT_SUSPEND_SELF: "You cannot suspend your own account.",
+  INVALID_STATE: "The account is not in a state that allows this change. Reload and try again.",
   REASON_REQUIRED: "Give a short reason (at most 300 characters) to reject this swim.",
   ALREADY_DECIDED: "This swim has already been decided.",
   DISPUTE_OPEN: "This swim already has an open dispute.",
