@@ -214,6 +214,31 @@
   font-size: var(--sq-text-sm);
   color: var(--sq-text-muted);
 }
+.decision {
+  display: grid;
+  gap: var(--sq-space-1);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-danger-wash);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+}
+.decisionTitle {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+}
+.decisionText {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
+  overflow-wrap: anywhere;
+}
+.decisionDate {
+  margin: 0;
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
 .muted {
   margin: 0;
   font-size: var(--sq-text-sm);

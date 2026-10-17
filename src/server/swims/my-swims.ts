@@ -51,6 +51,10 @@ export type MySwimResultDto = Omit<SwimResultDto, "reasons"> & {
   /** Known reasons only: plain codes, or `{ code, params }` from rule checks. */
   reasons: (ReasonCode | Reason)[];
   points: SwimPointsBreakdown;
+  /** The reviewer's reason (rejected or revoked results); owner only. */
+  decisionNote: string | null;
+  /** UTC instant (ISO 8601) of the decision. */
+  decidedAt: string | null;
 };
 /** `total` is the net of all ledger entries (reversals included); the rest are per kind. */
 export type SwimPointsBreakdown = {
@@ -144,6 +148,8 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
         select: {
           ...swimDtoInclude.results.select,
           pointsEntries: { select: { kind: true, points: true } },
+          decisionNote: true,
+          decidedAt: true,
         },
       },
     },
@@ -158,6 +164,8 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
       displayStatus: DISPLAY_STATUS[r.status],
       reasons: r.reasons.filter(isKnownReason),
       points: breakdown(swim.results[i].pointsEntries),
+      decisionNote: swim.results[i].decisionNote,
+      decidedAt: swim.results[i].decidedAt?.toISOString() ?? null,
     })),
   };
 }
