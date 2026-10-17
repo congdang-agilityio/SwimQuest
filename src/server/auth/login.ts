@@ -23,12 +23,13 @@ export type LoginResult =
       locale: string | null;
       sessionToken: string;
     }
-  | { ok: false; reason: "INVALID_INPUT" | "INVALID_CREDENTIALS" };
+  | { ok: false; reason: "INVALID_INPUT" | "INVALID_CREDENTIALS" | "ACCOUNT_SUSPENDED" };
 
 /**
  * Signs in an ACTIVE user by email (case-insensitive) and password and creates a new session.
- * An unknown email, a wrong password and a non-active account all return INVALID_CREDENTIALS,
- * and each runs exactly one argon2 verify.
+ * An unknown email, a wrong password and any other non-active account return INVALID_CREDENTIALS;
+ * only the correct password on a SUSPENDED account returns ACCOUNT_SUSPENDED (no session is
+ * created), so the account state never leaks without the password. Each runs one argon2 verify.
  */
 export async function logIn(input: unknown): Promise<LoginResult> {
   const parsed = loginSchema.safeParse(input);
@@ -40,9 +41,9 @@ export async function logIn(input: unknown): Promise<LoginResult> {
     select: { id: true, displayName: true, status: true, passwordHash: true, locale: true },
   });
   const matches = await verifyPassword(user?.passwordHash ?? DUMMY_PASSWORD_HASH, password);
-  if (!user || !matches || user.status !== "ACTIVE") {
-    return { ok: false, reason: "INVALID_CREDENTIALS" };
-  }
+  if (!user || !matches) return { ok: false, reason: "INVALID_CREDENTIALS" };
+  if (user.status === "SUSPENDED") return { ok: false, reason: "ACCOUNT_SUSPENDED" };
+  if (user.status !== "ACTIVE") return { ok: false, reason: "INVALID_CREDENTIALS" };
 
   const { token } = await createSession(user.id);
   return {
