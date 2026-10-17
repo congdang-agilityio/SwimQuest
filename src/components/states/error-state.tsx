@@ -1,18 +1,23 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import styles from "./states.module.css";
+import { Button } from "@/components/ui";
+import { StateCard } from "./state-card";
 
 /** Plain-language error with a retry button. */
 export function ErrorState({ onRetry }: { onRetry: () => void }) {
   const t = useTranslations("states.error");
   return (
-    <section role="alert">
-      <h2>{t("title")}</h2>
-      <p>{t("body")}</p>
-      <button type="button" className={styles.tap} onClick={onRetry}>
+    <StateCard
+      art="effects/wave"
+      role="alert"
+      titleId="state-error"
+      title={t("title")}
+      body={t("body")}
+    >
+      <Button block onClick={onRetry}>
         {t("retry")}
-      </button>
-    </section>
+      </Button>
+    </StateCard>
   );
 }

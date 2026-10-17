@@ -1,6 +1,10 @@
 {
-  "loading": { "label": "Loading" },
-  "empty": { "title": "Nothing here yet" },
+  "loading": {
+    "label": "Loading"
+  },
+  "empty": {
+    "title": "Nothing here yet"
+  },
   "error": {
     "title": "Something went wrong",
     "body": "We could not load this. Please try again.",
@@ -9,6 +13,11 @@
   "accessDenied": {
     "title": "You do not have access",
     "body": "You are not allowed to view this page.",
+    "home": "Back to Home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "We could not find that page. It may have moved.",
     "home": "Back to Home"
   }
 }
