@@ -19,6 +19,7 @@
   --sq-sand: #f5e6c8;
   --sq-gold: #ffd166;
   --sq-gold-strong: #f5ca30; /* highlight titles ("Hải Trình Mùa Đông 2026") */
+  --sq-gold-wash: rgb(255 209 102 / 0.28); /* pale gold fill: my-team leaderboard row */
   --sq-foam: #f4fbff; /* card surface */
   --sq-sky-50: #eaf4fd; /* input fill, inactive segment */
   --sq-sky-100: #d7ebfb; /* input border, dividers */
