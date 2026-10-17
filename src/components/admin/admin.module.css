@@ -164,3 +164,24 @@
   font-size: var(--sq-text-sm);
   font-weight: var(--sq-weight-semibold);
 }
+.reportCard {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-foam);
+}
+.reportText {
+  margin: 0;
+  color: var(--sq-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.link {
+  color: var(--sq-navy-800);
+  text-decoration: underline;
+}
+.filters ul {
+  flex-wrap: wrap;
+}

@@ -2,7 +2,8 @@
   "title": "Quản trị",
   "sections": {
     "users": "Người dùng",
-    "swimLimits": "Giới hạn bơi"
+    "swimLimits": "Giới hạn bơi",
+    "reports": "Báo cáo"
   },
   "users": {
     "title": "Người dùng",
@@ -150,6 +151,55 @@
       "NOT_FASTER_THAN_SLOWEST": "Tốc độ nhanh nhất phải nhanh hơn tốc độ chậm nhất.",
       "REQUIRED": "Nhập lý do.",
       "UNKNOWN": "Giá trị này không hợp lệ."
+    }
+  },
+  "reports": {
+    "title": "Báo cáo",
+    "back": "Quay lại",
+    "listTitle": "Báo cáo",
+    "filterLabel": "Lọc theo trạng thái",
+    "filter": {
+      "ALL": "Tất cả",
+      "OPEN": "Đang mở",
+      "HANDLED": "Đã xử lý",
+      "DISMISSED": "Đã bỏ qua"
+    },
+    "status": {
+      "OPEN": "Đang mở",
+      "HANDLED": "Đã xử lý",
+      "DISMISSED": "Đã bỏ qua"
+    },
+    "targetType": {
+      "PLAYER": "Người chơi",
+      "TEAM": "Đội",
+      "TOURNAMENT": "Giải đấu",
+      "SWIM": "Buổi bơi"
+    },
+    "targetUnknown": "Mục này không còn nữa",
+    "reportedBy": "Người báo cáo",
+    "sentAt": "Gửi lúc",
+    "internalNote": "Ghi chú nội bộ (chỉ quản trị viên)",
+    "close": {
+      "HANDLED": "Đánh dấu đã xử lý",
+      "DISMISSED": "Bỏ qua"
+    },
+    "noteLabel": "Ghi chú nội bộ",
+    "noteHint": "Bắt buộc, tối đa {max} ký tự. Chỉ quản trị viên thấy, người báo cáo không thấy.",
+    "confirmYes": "Lưu",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "empty": "Không có báo cáo nào.",
+    "loading": "Đang tải...",
+    "loadMore": "Xem thêm",
+    "retry": "Thử lại",
+    "loadError": "Không tải được báo cáo. Kiểm tra kết nối và thử lại.",
+    "errors": {
+      "REASON_REQUIRED": "Nhập ghi chú từ 1 đến 500 ký tự.",
+      "ALREADY_DECIDED": "Báo cáo này đã được đóng. Danh sách đã được làm mới.",
+      "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+      "NOT_FOUND": "Báo cáo này không còn tồn tại.",
+      "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
+      "failed": "Không đóng được báo cáo. Vui lòng thử lại."
     }
   }
 }
