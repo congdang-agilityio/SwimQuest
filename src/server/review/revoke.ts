@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { SwimResultStatus } from "@prisma/client";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
+import { reevaluatePersonalBadges } from "@/server/badges/personal-rules";
 import { ForbiddenError, NotFoundError, requireReviewer } from "@/server/auth/roles";
 import { lockPlayerSwims, type Tx } from "@/server/checks/run-checks";
 import { vnWeekStart } from "@/lib/time/vn";
@@ -65,12 +66,13 @@ async function reversePoints(tx: Tx, resultId: string, tournamentId: string, use
  * A reviewer of the result's tournament (or a platform admin with `asAdmin`) revokes one VERIFIED
  * result with a reason (S-46, 1-300 characters after trimming). In one transaction: the result
  * becomes REVOKED with the reason as `decisionNote`; one REVERSAL entry removes its points and
- * bonuses; a settled week's multiplier is recalculated (#219); the swim's XP is removed when it
- * counts in no other tournament (#284); each changed team's progress is refreshed in ascending
- * order and may lose its finish (SWIM_REVOKED); `SWIM_REVOKED` is audited and
- * `SWIM_RESULT_CHANGED` emitted. The same swim's results in other tournaments are untouched.
+ * bonuses; a settled week's multiplier is recalculated (#219); personal badges whose rule no
+ * longer holds are removed (#307); the swim's XP is removed when it counts in no other tournament
+ * (#284); each changed team's progress is refreshed in ascending order and may lose its finish
+ * (SWIM_REVOKED); `SWIM_REVOKED` is audited and `SWIM_RESULT_CHANGED` emitted. The same swim's
+ * results in other tournaments are untouched.
  * Lock order as `decideFlagged`: the player's `swims:<userId>` lock, the result row, points,
- * XP, then team rows. Throws NotFoundError, ForbiddenError, ReasonRequiredError and
+ * badges, XP, then team rows. Throws NotFoundError, ForbiddenError, ReasonRequiredError and
  * NotRevokableError.
  */
 export async function revokeResult(
@@ -106,6 +108,7 @@ export async function revokeResult(
     const swim = await tx.swim.findUniqueOrThrow({ where: { id: result.swimId } });
     const week = vnWeekStart(swim.startedAt);
     const weekTeams = await recalculatePlayerWeek(tx, tournamentId, userId, week, now);
+    await reevaluatePersonalBadges(tx, tournamentId, userId);
     await syncSwimXp(tx, result.swimId);
     const teams = new Set([result.teamId, ...weekTeams, ...(reversedTeam ? [reversedTeam] : [])]);
     for (const teamId of [...teams].sort()) {
