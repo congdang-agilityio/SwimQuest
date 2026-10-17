@@ -27,7 +27,7 @@ type Props = {
   bell?: ReactNode;
 };
 
-export function AppNav({ displayName, isPlatformAdmin, switcher, bell }: Props) {
+export function AppNav({ displayName, avatarSrc, isPlatformAdmin, switcher, bell }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
