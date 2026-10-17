@@ -60,7 +60,12 @@ export default async function TeamPage() {
                 memberCount={view.memberCount}
                 finishedAt={view.finishedAt}
               />
-              <TeamRoster members={view.roster} />
+              <TeamRoster
+                members={view.roster}
+                handoverTeamId={
+                  membership.team.captainUserId === user.id ? membership.team.id : undefined
+                }
+              />
               <div className={styles.footer}>
                 <ButtonLink href="/connect" variant="primary" block>
                   {tTeam("addSwim")}

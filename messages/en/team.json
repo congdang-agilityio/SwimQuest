@@ -48,5 +48,18 @@
       "notMember": "You are not a member of this team any more.",
       "failed": "Something went wrong. Please try again."
     }
+  },
+  "handover": {
+    "make": "Make captain",
+    "makeFor": "Make {name} captain",
+    "title": "Make {name} captain?",
+    "body": "{name} will get the captain tools and you will lose them. Only the new captain can hand them back.",
+    "confirm": "Yes, make captain",
+    "cancel": "Cancel",
+    "error": {
+      "forbidden": "Only the captain can do this.",
+      "notMember": "That player is no longer an active member of the team.",
+      "failed": "Something went wrong. Please try again."
+    }
   }
 }
