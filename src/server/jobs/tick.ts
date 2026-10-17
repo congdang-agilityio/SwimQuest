@@ -1,5 +1,6 @@
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
+import { sendPendingPushes, type PushRunCounts } from "@/server/push/send";
 import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
 import { dueXpWeeks, settleXpWeek } from "@/server/xp/settle-xp-week";
@@ -155,4 +156,9 @@ export async function ensureStartsAssigned(tournamentId: string, now: Date): Pro
     console.error(`ensureStartsAssigned: catch-up failed for tournament ${tournamentId}`, error);
     return 0;
   }
+}
+
+/** Retries notifications not pushed yet (e.g. the server stopped before `after()` ran). */
+export async function runPendingPushes(): Promise<PushRunCounts> {
+  return sendPendingPushes(500);
 }

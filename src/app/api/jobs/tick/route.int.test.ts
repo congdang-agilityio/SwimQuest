@@ -77,6 +77,7 @@ describe("POST /api/jobs/tick", () => {
       startAssignments: { tournaments: 1, assigned: 1, failed: 0 },
       weekSettlements: { weeks: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
+      pushes: { sent: 0, removed: 0, failed: 0 },
     });
     expect(await startOf(team.id)).not.toBeNull();
   });
@@ -92,6 +93,7 @@ describe("POST /api/jobs/tick", () => {
       startAssignments: { tournaments: 0, assigned: 0, failed: 0 },
       weekSettlements: { weeks: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
+      pushes: { sent: 0, removed: 0, failed: 0 },
     });
     expect(await startOf(team.id)).toBe(first);
     expect(await db.auditEvent.count()).toBe(1);

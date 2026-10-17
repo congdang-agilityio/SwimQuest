@@ -84,5 +84,8 @@
       "failed": "Không lưu được. Hãy thử lại.",
       "loadFailed": "Không tải được các loại thông báo. Hãy tải lại trang."
     }
+  },
+  "push": {
+    "title": "SwimQuest"
   }
 }

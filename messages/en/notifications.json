@@ -84,5 +84,8 @@
       "failed": "Could not save. Try again.",
       "loadFailed": "Could not load your categories. Reload the page to try again."
     }
+  },
+  "push": {
+    "title": "SwimQuest"
   }
 }
