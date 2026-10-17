@@ -48,6 +48,35 @@
       "past": "Done",
       "future": "Upcoming",
       "pending": "Pending"
+    },
+    "teams": {
+      "title": "Teams and players",
+      "empty": "No teams yet.",
+      "members": "{count}/{limit} members",
+      "free": "{count, plural, =0 {Full} one {# place free} other {# places free}}",
+      "captain": "Captain: {name}",
+      "noCaptain": "No captain yet",
+      "captainTag": "Captain",
+      "membersOf": "Members of {name}",
+      "unassigned": "{count, plural, one {# player} other {# players}} without a team",
+      "allAssigned": "Every player is on a team."
+    },
+    "starts": {
+      "title": "Team starts",
+      "empty": "No teams yet.",
+      "locked": "Choice locked",
+      "open": "Choice open",
+      "lockedAt": "at {at} (Vietnam time)",
+      "openUntil": "until {at} (Vietnam time)",
+      "none": "No start yet",
+      "autoAt": "Gets one automatically at {at} (Vietnam time)",
+      "due": "Being assigned automatically",
+      "draftHint": "Captains choose after publishing",
+      "setBy": {
+        "CAPTAIN": "By the captain",
+        "ORGANIZER": "By the organizer",
+        "AUTOMATIC": "Assigned automatically"
+      }
     }
   }
 }

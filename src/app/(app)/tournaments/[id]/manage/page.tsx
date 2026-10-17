@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ConsoleHeader } from "@/components/organizer/console-header";
 import consoleStyles from "@/components/organizer/console.module.css";
+import { StartsSection } from "@/components/organizer/starts-section";
+import { TeamsSection } from "@/components/organizer/teams-section";
 import { UnassignedPlayers } from "@/components/organizer/unassigned-players";
 import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
@@ -16,7 +18,7 @@ import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { pageOrigin } from "@/server/http/request";
 import { getConsoleOverview } from "@/server/organizer/console";
-import { listUnassignedPlayers } from "@/server/organizer/unassigned-players";
+import { getConsoleTeams } from "@/server/organizer/participation";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 
 /** Organizer page: only the organizer sees it; anyone else gets the not-found page (S-04 AC 5). */
@@ -34,10 +36,13 @@ export default async function ManageTournamentPage({
   const now = new Date();
   // Assigns starts due at the lock first, so the team list below shows them.
   const overview = await getConsoleOverview(user.id, tournament.id, now);
-  const { teams, capacity } = await listTeamsWithCounts(tournament.id);
-  const unassigned =
-    tournament.status === "DRAFT" ? [] : await listUnassignedPlayers(user.id, tournament.id);
+  const [{ teams, capacity }, consoleTeams] = await Promise.all([
+    listTeamsWithCounts(tournament.id),
+    getConsoleTeams(user.id, tournament.id, now),
+  ]);
+  const unassigned = tournament.status === "DRAFT" ? [] : consoleTeams.unassignedPlayers;
   const destinations = getRoute(tournament.routeId)?.destinations ?? [];
+  const nameKeys = Object.fromEntries(destinations.map((d) => [d.slug, d.nameKey]));
   const rows = teams.map((team) => ({
     ...team,
     startNameKey: destinations.find((d) => d.slug === team.startDestination)?.nameKey ?? null,
@@ -91,6 +96,18 @@ export default async function ManageTournamentPage({
             )}
           </div>
         }
+      />
+      <TeamsSection
+        tournamentId={tournament.id}
+        teams={consoleTeams.teams}
+        unassignedCount={unassigned.length}
+      />
+      <StartsSection
+        tournamentId={tournament.id}
+        starts={overview.starts}
+        locked={overview.startsLocked}
+        lockAt={tournament.status === "DRAFT" ? null : overview.timeline.startChoiceLocksAt}
+        nameKeys={nameKeys}
       />
       {showInvite && origin && (
         <InviteLink
