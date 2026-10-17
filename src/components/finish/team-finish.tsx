@@ -12,7 +12,14 @@ import styles from "./finish.module.css";
  * finished the route. Presentational only: it reads `team.finishedAt`, nothing is scored here.
  * The crest sparkles once per finish (SeenMoment key `finish:<team>:<finishedAt>`).
  */
-export async function TeamFinish({ userId }: { userId: string }) {
+export async function TeamFinish({
+  userId,
+  onlyUnseen = false,
+}: {
+  userId: string;
+  /** Home: show the panel only until this finish has been seen (Voyage and My Team keep it). */
+  onlyUnseen?: boolean;
+}) {
   const current = await getCurrentMembership(userId);
   const finishedAt = current?.team.finishedAt;
   if (!current || !finishedAt) return null;
@@ -26,6 +33,7 @@ export async function TeamFinish({ userId }: { userId: string }) {
   const place = finishKey ? tAll(finishKey) : "";
   const momentKey = `finish:${team.id}:${finishedAt.getTime()}`;
   const seen = await hasSeen(userId, momentKey);
+  if (onlyUnseen && seen) return null;
 
   return (
     <section

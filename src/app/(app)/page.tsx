@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { TeamFinish } from "@/components/finish/team-finish";
 import { TournamentCard } from "@/components/home/tournament-card";
 import { Avatar, ButtonLink, Card } from "@/components/ui";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
@@ -45,6 +46,11 @@ export default async function HomePage() {
           </div>
         </div>
       </Card>
+
+      {/* First open after the team finished: the "Cập bến Lý Sơn" celebration, once per finish. */}
+      <div className={styles.finishSlot}>
+        <TeamFinish userId={user.id} onlyUnseen />
+      </div>
 
       <Card as="section" className={styles.stats} aria-label={t("stats.label")}>
         <dl className={styles.statList}>

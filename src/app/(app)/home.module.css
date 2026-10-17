@@ -6,6 +6,17 @@
   margin: 0 auto;
 }
 
+/* Wraps TeamFinish: undo its My Team column placement so it is a plain block on Home. */
+.finishSlot:empty {
+  display: none;
+}
+.finishSlot > section {
+  order: 0;
+  grid-column: auto;
+  grid-row: auto;
+  max-width: none;
+}
+
 /* Hero: profile row over the island art, brand in white, active tournament in gold. */
 .home .hero {
   display: grid;
