@@ -98,7 +98,7 @@ export default async function ManageTournamentPage({
             {when(tournament.seasonStartAt)} - {when(tournament.seasonEndAt)} (
             {t("manage.vietnamTime")})
           </p>
-          <div className={styles.overviewActions}>
+          <div className={`${styles.overviewActions} ${styles.actions}`}>
             <ButtonLink
               href={`/tournaments/${tournament.id}/manage/settings`}
               variant="secondary"
@@ -106,6 +106,11 @@ export default async function ManageTournamentPage({
             >
               {t("manage.settingsLink")}
             </ButtonLink>
+            {tournament.status !== "DRAFT" && (
+              <ButtonLink href={`/tournaments/${tournament.id}/manage/review`} block>
+                {t("manage.reviewLink")}
+              </ButtonLink>
+            )}
           </div>
         </div>
       </Card>

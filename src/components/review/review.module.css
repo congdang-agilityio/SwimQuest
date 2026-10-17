@@ -1,0 +1,155 @@
+/*
+ * Review queue (S-43) in the mockup's language: navy header strip, light cards, chips for the
+ * status and the failed checks, the swim result rows of #692 and pill buttons. Every value comes
+ * from src/styles/tokens.css.
+ */
+
+.intro {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+.intro p {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.count {
+  justify-self: start;
+}
+
+.list {
+  display: grid;
+  gap: var(--sq-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  gap: var(--sq-space-4);
+}
+.itemHead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.player {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+
+/* Shape on the left of the facts on wider screens, above them on a phone. */
+.body {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+@media (min-width: 560px) {
+  .body {
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+  }
+  .shape {
+    height: auto;
+    aspect-ratio: 1;
+  }
+}
+
+.shape {
+  display: grid;
+  place-items: center;
+  height: 180px;
+  overflow: hidden;
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-sky);
+}
+.svg {
+  width: 100%;
+  height: 100%;
+}
+.line {
+  fill: none;
+  stroke: var(--sq-blue-600);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.start {
+  fill: var(--sq-success);
+}
+.end {
+  fill: var(--sq-coral);
+}
+.noShape {
+  margin: 0;
+  padding: var(--sq-space-4);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+  text-align: center;
+}
+
+.reasons {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+.reasonsTitle {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.reasons ul {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reasonChip {
+  padding: var(--sq-space-1) var(--sq-space-3);
+  font-size: var(--sq-text-sm);
+  line-height: var(--sq-leading);
+  white-space: normal;
+}
+
+.decision {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--sq-space-3);
+}
+.actions > * {
+  width: 100%;
+}
+
+/* Reject confirmation: a pale blue box with the reason and two pills, as Publish on #724. */
+.confirm {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+}
+
+.done {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-success);
+}
+.error {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}

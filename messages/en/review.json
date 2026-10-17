@@ -1,0 +1,48 @@
+{
+  "title": "Review queue",
+  "intro": "Flagged swims of this tournament. Approve the genuine ones; reject the doubtful ones with a short reason the player will see.",
+  "count": "{count, plural, one {# swim to review} other {# swims to review}}",
+  "empty": {
+    "title": "No swims to review",
+    "body": "Flagged swims of this tournament will appear here."
+  },
+  "item": {
+    "flagged": "Flagged",
+    "date": "Date",
+    "distance": "Distance",
+    "duration": "Duration",
+    "pace": "Pace",
+    "type": "Swim type",
+    "failed": "Failed checks",
+    "shape": "Shape of the swim",
+    "noShape": "No track recorded"
+  },
+  "reasons": {
+    "PACE_TOO_FAST": "Fastest pace {limit} per 100 m, this swim {value}",
+    "PACE_TOO_SLOW": "Slowest pace {limit} per 100 m, this swim {value}",
+    "DISTANCE_TOO_LONG": "Longest swim {limit}, this swim {value}",
+    "OUTSIDE_SEASON": "Season {start} to {end}, this swim started {value}",
+    "NO_DISTANCE": "No usable distance, this swim {value}",
+    "NOT_A_SWIM": "Not a swimming activity, this file: {value}",
+    "UNKNOWN": "Check failed: {code}"
+  },
+  "decision": {
+    "approve": "Approve",
+    "approveFor": "Approve the swim by {name}",
+    "reject": "Reject",
+    "rejectFor": "Reject the swim by {name}",
+    "reason": "Reason for the player",
+    "reasonHint": "The player sees this reason. Up to 300 characters.",
+    "reasonRequired": "Enter a reason to reject this swim.",
+    "confirmReject": "Reject swim",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "approved": "Approved. Updating the queue...",
+    "rejected": "Rejected. Updating the queue...",
+    "errors": {
+      "already": "This swim was already decided. Updating the queue...",
+      "failed": "Could not save the decision. Try again.",
+      "network": "No connection. Try again."
+    }
+  }
+}
