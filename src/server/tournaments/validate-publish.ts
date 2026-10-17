@@ -1,5 +1,6 @@
 import { getRoute } from "@/lib/routes";
 import { SWIM_LIMIT_BOUNDS, type SwimLimitField } from "@/lib/swim-limits";
+import { boundOf } from "@/lib/validation/settings/realistic-limits";
 
 export type PublishIssueCode =
   | "SEASON_END_NOT_AFTER_START"
@@ -16,8 +17,11 @@ export type PublishCandidate = {
   seasonEndAt: Date;
   routeId: string;
   routeDistanceM: number;
+  /** Bounds snapshot taken at creation; null or broken uses the starting bounds. */
+  swimLimitBounds?: unknown;
 } & Record<SwimLimitField, number>;
 
+/** Checked against the tournament's own bounds snapshot (S-64), so later admin changes never reach it. */
 const LIMIT_FIELDS = Object.keys(SWIM_LIMIT_BOUNDS) as SwimLimitField[];
 
 /** A route that can be published: known, with exactly one finish (FR-22, BR-01). */
@@ -39,7 +43,7 @@ export function validateForPublish(t: PublishCandidate, teams: readonly unknown[
   }
   for (const field of LIMIT_FIELDS) {
     const value = t[field];
-    const { min, max } = SWIM_LIMIT_BOUNDS[field];
+    const { min, max } = boundOf(t.swimLimitBounds, field);
     if (!Number.isFinite(value) || value < min || value > max) {
       issues.push({ code: "REALISTIC_LIMITS_OUT_OF_BOUNDS", field });
     }
