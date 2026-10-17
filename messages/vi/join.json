@@ -21,5 +21,6 @@
   "offTitle": "Liên kết này không còn dùng được",
   "offBody": "Ban tổ chức đã tắt liên kết mời này. Hãy xin liên kết mới.",
   "removedTitle": "Bạn đã bị gỡ khỏi giải đấu này",
-  "removedBody": "Ban tổ chức đã gỡ bạn khỏi {tournament} sau khi giải bắt đầu, nên bạn không thể tham gia lại bằng liên kết này."
+  "removedBody": "Ban tổ chức đã gỡ bạn khỏi {tournament} sau khi giải bắt đầu, nên bạn không thể tham gia lại bằng liên kết này.",
+  "eligibilityNotChecked": "Ghi chú của ban tổ chức. Ứng dụng không kiểm tra mục này."
 }

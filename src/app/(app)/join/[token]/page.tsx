@@ -94,6 +94,8 @@ export default async function JoinPage({
         seasonEndAt={tournament.seasonEndAt}
         routeId={tournament.routeId}
         routeDistanceM={tournament.routeDistanceM}
+        bannerImageId={tournament.bannerImageId}
+        logoImageId={tournament.logoImageId}
         teams={freeTeams}
         // The picker below lists the same teams with their places; show them once.
         hideTeams={!closed}
@@ -123,7 +125,8 @@ export default async function JoinPage({
       {tournament.eligibilityNotes && (
         <Card as="section" className={styles.eligibility}>
           <h3>{t("eligibility")}</h3>
-          <p>{tournament.eligibilityNotes}</p>
+          <p className={styles.eligibilityNotes}>{tournament.eligibilityNotes}</p>
+          <p className={styles.eligibilityNote}>{t("eligibilityNotChecked")}</p>
         </Card>
       )}
     </main>

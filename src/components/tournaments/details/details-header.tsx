@@ -3,6 +3,7 @@ import { ReportButton } from "@/components/reports/report-button";
 import { TournamentBanner } from "@/components/tournaments/tournament-banner";
 import { Chip, type ChipTone } from "@/components/ui";
 import type { TournamentStatus } from "@/lib/tournaments/lifecycle";
+import { imageSrc } from "@/lib/profile-avatar";
 import { formatVnDateTime } from "@/lib/time/vn";
 import styles from "./details.module.css";
 
@@ -20,6 +21,8 @@ type Props = {
   name: string;
   /** Uploaded banner image; without it the template shows. */
   bannerImageId?: string | null;
+  /** Uploaded logo, shown beside the status. */
+  logoImageId?: string | null;
   description: string;
   organizerName: string;
   status: TournamentStatus;
@@ -34,6 +37,7 @@ export function DetailsHeader(props: Props) {
   const t = useTranslations("details");
   const r = useTranslations("routes");
   const when = (value: Date) => formatVnDateTime(new Date(value));
+  const logo = imageSrc(props.logoImageId);
   const km = Number((props.routeDistanceM / 1000).toFixed(3));
   return (
     <>
@@ -44,6 +48,10 @@ export function DetailsHeader(props: Props) {
       />
       <div className={styles.head}>
         <div className={styles.chips}>
+          {logo && (
+            // eslint-disable-next-line @next/next/no-img-element -- organizer upload, served by the images API
+            <img src={logo} alt="" className={styles.logo} />
+          )}
           <Chip tone={STATUS_TONE[props.status]}>{t(`status.${props.status}`)}</Chip>
         </div>
         {props.description && <p className={styles.description}>{props.description}</p>}

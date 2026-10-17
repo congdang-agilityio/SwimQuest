@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { Card, Chip } from "@/components/ui";
+import { imageSrc } from "@/lib/profile-avatar";
 import { utcToVnParts } from "@/lib/time/vn";
 import styles from "./tournament-summary.module.css";
 
@@ -23,6 +24,9 @@ type Props = {
   teams: readonly SummaryTeam[];
   /** Leave out the team list when the page shows the teams elsewhere (the join picker). */
   hideTeams?: boolean;
+  /** The organizer's uploaded banner and logo; without a banner the sea template shows. */
+  bannerImageId?: string | null;
+  logoImageId?: string | null;
 };
 
 /** Tournament as players see it. Plain props so the join page can reuse it. */
@@ -33,23 +37,36 @@ export function TournamentSummary(props: Props) {
     const { date, time } = utcToVnParts(new Date(value));
     return `${time} ${date}`;
   };
+  const banner = imageSrc(props.bannerImageId);
+  const logo = imageSrc(props.logoImageId);
   const km = Number((props.routeDistanceM / 1000).toFixed(3));
   return (
     <Card as="article" aria-labelledby="summary-name" className={styles.summary}>
       {/* The route's destination, Ly Son, as on the mockup's tournament cards. */}
       <div className={styles.hero}>
-        <MockupPicture
-          artKey="scenes/sea-ly-son-16x9"
-          alt=""
-          className={styles.scene}
-          eager
-          fallback={<div className={styles.sceneFallback} />}
-        />
+        {banner ? (
+          // eslint-disable-next-line @next/next/no-img-element -- organizer upload, served by the images API
+          <img src={banner} alt="" className={styles.scene} />
+        ) : (
+          <MockupPicture
+            artKey="scenes/sea-ly-son-16x9"
+            alt=""
+            className={styles.scene}
+            eager
+            fallback={<div className={styles.sceneFallback} />}
+          />
+        )}
       </div>
       <div className={styles.body}>
-        <h2 id="summary-name" className={styles.name}>
-          {props.name}
-        </h2>
+        <div className={styles.nameRow}>
+          {logo && (
+            // eslint-disable-next-line @next/next/no-img-element -- organizer upload, served by the images API
+            <img src={logo} alt="" className={styles.logo} />
+          )}
+          <h2 id="summary-name" className={styles.name}>
+            {props.name}
+          </h2>
+        </div>
         {props.description && <p className={styles.description}>{props.description}</p>}
         <p className={styles.meta}>
           {t("seasonStart")}: {when(props.seasonStartAt)}

@@ -21,5 +21,6 @@
   "offTitle": "This link no longer works",
   "offBody": "The organizer switched this invite link off. Ask them for a new one.",
   "removedTitle": "You were removed from this tournament",
-  "removedBody": "The organizer removed you from {tournament} after it started, so you cannot join it again through this link."
+  "removedBody": "The organizer removed you from {tournament} after it started, so you cannot join it again through this link.",
+  "eligibilityNotChecked": "The organizer's note. The app does not check it."
 }

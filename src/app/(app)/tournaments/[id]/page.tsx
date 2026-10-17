@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { DetailsHeader } from "@/components/tournaments/details/details-header";
 import { DetailsTeams } from "@/components/tournaments/details/details-teams";
+import { TournamentExtras } from "@/components/tournaments/tournament-extras";
 import { RulesSection } from "@/components/tournaments/details/rules-section";
 import styles from "@/components/tournaments/details/details.module.css";
 import { ButtonLink, Card, ScreenHeader, SectionHeader } from "@/components/ui";
@@ -46,6 +47,7 @@ export default async function TournamentDetailsPage({
           <DetailsHeader
             name={details.name}
             bannerImageId={details.bannerImageId}
+            logoImageId={details.logoImageId}
             description={details.description}
             organizerName={details.organizer.displayName}
             status={details.status}
@@ -54,6 +56,11 @@ export default async function TournamentDetailsPage({
             routeId={details.routeId}
             routeDistanceM={details.routeDistanceM}
             reportTournamentId={details.organizer.id === user.id ? undefined : details.id}
+          />
+          <TournamentExtras
+            rulesUrl={details.rulesUrl}
+            contactChannel={details.contactChannel}
+            eligibilityNotes={details.eligibilityNotes}
           />
           <DetailsTeams teams={details.teams} />
           <RulesSection
