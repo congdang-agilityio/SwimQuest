@@ -2,6 +2,7 @@ import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
+import { dueXpWeeks, settleXpWeek } from "@/server/xp/settle-xp-week";
 
 export type StartAssignmentCounts = { tournaments: number; assigned: number; failed: number };
 
@@ -117,6 +118,24 @@ export async function runDueWeekSettlements(now: Date): Promise<WeekSettlementCo
         console.error(`tick: week ${week} settlement failed for tournament ${t.id}`, error);
         break;
       }
+    }
+  }
+  return counts;
+}
+
+/** Settles the ended weeks' platform XP multiplier (S-51), oldest first; stops at a failure. */
+export async function runDueXpWeekSettlements(
+  now: Date,
+): Promise<{ players: number; failed: number }> {
+  assertValidDate(now);
+  const counts = { players: 0, failed: 0 };
+  for (const week of await dueXpWeeks(now)) {
+    try {
+      counts.players += await settleXpWeek(week, now);
+    } catch (error) {
+      counts.failed += 1;
+      console.error(`tick: XP week ${week} settlement failed`, error);
+      break;
     }
   }
   return counts;
