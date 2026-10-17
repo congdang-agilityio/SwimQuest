@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Avatar, Chip } from "@/components/ui";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
@@ -29,7 +30,9 @@ export function TeamRoster({
           <li key={m.id} className={styles.row}>
             <Avatar name={m.displayName} src={mockupMemberAvatar(m.id)} size={44} decorative />
             <span className={styles.who}>
-              <span className={styles.name}>{m.displayName}</span>
+              <Link href={`/players/${m.id}`} className={styles.name}>
+                {m.displayName}
+              </Link>
               <span className={styles.tags}>
                 {m.isCaptain && (
                   <Chip tone="gold">

@@ -1,0 +1,30 @@
+{
+  "title": "Player profile",
+  "hiddenName": "Player",
+  "bioTitle": "About",
+  "goalsTitle": "Goals",
+  "goalDistance": "{km} km",
+  "statsTitle": "Verified results",
+  "swims": "Swims",
+  "distance": "Distance",
+  "km": "km",
+  "activeDays": "Active days",
+  "tournaments": "Tournaments",
+  "teams": "Teams",
+  "badgesStat": "Badges",
+  "badgesTitle": "Badges",
+  "noBadges": "No badges yet.",
+  "badgeAlt": "{tournament} badge",
+  "preview": "You are viewing your profile as others see it.",
+  "region": "Region: {name}",
+  "kind": {
+    "PARTICIPATION": "Participation",
+    "EXPLORER": "Explorer",
+    "PERSEVERANCE": "Perseverance",
+    "TEAMWORK": "Teamwork",
+    "CONQUEROR": "Conqueror",
+    "SEASON": "Season",
+    "SPECIAL": "Special",
+    "LY_SON": "Ly Son"
+  }
+}

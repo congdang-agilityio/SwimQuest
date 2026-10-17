@@ -1,0 +1,121 @@
+/* Public player profile. Same language as My Profile: navy hero, white cards. Tokens only. */
+.page {
+  display: grid;
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.preview {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-sky-100);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+.page .hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-5) var(--sq-space-4);
+  background: var(--sq-navy-800);
+  box-shadow: var(--sq-shadow-raised);
+}
+.name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.region {
+  font-size: var(--sq-text-sm);
+  opacity: 0.85;
+}
+.page .block {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  background: var(--sq-white);
+}
+.text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.page .stats {
+  padding: var(--sq-space-4) 0;
+  background: var(--sq-white);
+}
+.statsTitle {
+  margin: 0 var(--sq-space-4) var(--sq-space-3);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+}
+.statList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sq-space-3) 0;
+  margin: 0;
+}
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--sq-space-1);
+  padding: 0 var(--sq-space-3);
+  text-align: center;
+}
+.stat dt {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.stat dd {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-1);
+  text-align: center;
+}
+.badge img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+.badgeKind {
+  font-weight: var(--sq-weight-bold);
+  font-size: var(--sq-text-sm);
+}
+.badgeTour {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  overflow-wrap: anywhere;
+}

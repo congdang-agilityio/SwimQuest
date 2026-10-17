@@ -1,0 +1,30 @@
+{
+  "title": "Hồ sơ người chơi",
+  "hiddenName": "Người chơi",
+  "bioTitle": "Giới thiệu",
+  "goalsTitle": "Mục tiêu",
+  "goalDistance": "{km} km",
+  "statsTitle": "Thành tích đã xác minh",
+  "swims": "Lượt bơi",
+  "distance": "Quãng đường",
+  "km": "km",
+  "activeDays": "Ngày bơi",
+  "tournaments": "Giải đấu",
+  "teams": "Đội",
+  "badgesStat": "Huy hiệu",
+  "badgesTitle": "Huy hiệu",
+  "noBadges": "Chưa có huy hiệu nào.",
+  "badgeAlt": "Huy hiệu {tournament}",
+  "preview": "Bạn đang xem hồ sơ như người khác thấy.",
+  "region": "Khu vực: {name}",
+  "kind": {
+    "PARTICIPATION": "Tham gia",
+    "EXPLORER": "Nhà thám hiểm",
+    "PERSEVERANCE": "Bền bỉ",
+    "TEAMWORK": "Đồng đội",
+    "CONQUEROR": "Chinh phục",
+    "SEASON": "Mùa giải",
+    "SPECIAL": "Đặc biệt",
+    "LY_SON": "Lý Sơn"
+  }
+}
