@@ -1,0 +1,13 @@
+{
+  "myPoints": {
+    "title": "My points",
+    "total": "Total",
+    "distance": "Distance",
+    "bonuses": "Bonuses",
+    "multiplier": "Multipliers",
+    "weeksTitle": "Weekly multipliers",
+    "week": "Week of {date}: {days, plural, one {# active day} other {# active days}}, x{multiplier}, +{points} points",
+    "rule": "Swim on 2 or more days in a week to earn a multiplier on that week's distance points. Weeks without one are not shown.",
+    "none": "No weekly multiplier earned yet."
+  }
+}

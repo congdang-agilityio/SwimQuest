@@ -1,0 +1,13 @@
+{
+  "myPoints": {
+    "title": "Điểm của tôi",
+    "total": "Tổng",
+    "distance": "Quãng đường",
+    "bonuses": "Thưởng",
+    "multiplier": "Hệ số tuần",
+    "weeksTitle": "Hệ số theo tuần",
+    "week": "Tuần {date}: {days} ngày bơi, x{multiplier}, +{points} điểm",
+    "rule": "Bơi từ 2 ngày trở lên trong tuần để được nhân hệ số cho điểm quãng đường của tuần đó. Tuần không có hệ số sẽ không hiển thị.",
+    "none": "Chưa có hệ số tuần nào."
+  }
+}

@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { MyPointsCard } from "@/components/scoring/my-points-card";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamStartCard } from "@/components/starts/team-start-card";
 import styles from "@/components/teams/my-team.module.css";
@@ -11,6 +12,7 @@ import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
+import { getMyPoints } from "@/server/scoring/my-points";
 import { getMyTeamView } from "@/server/teams/my-team-view";
 import { TeamHeader } from "@/components/teams/team-header";
 import { TeamRoster } from "@/components/teams/team-roster";
@@ -25,6 +27,7 @@ export default async function TeamPage() {
     membership = await getCurrentMembership(user.id);
   }
   const view = membership ? await getMyTeamView(user.id) : null;
+  const myPoints = membership ? await getMyPoints(user.id, membership.tournament.id) : null;
   const startSlug = membership?.team.startDestination ?? null;
   return (
     <main>
@@ -54,6 +57,7 @@ export default async function TeamPage() {
           )}
         </div>
         {view?.finishedAt && <TeamFinish userId={user.id} />}
+        {myPoints && <MyPointsCard points={myPoints} />}
         {membership && view && (
           <TeamStartCard
             startSlug={startSlug}
