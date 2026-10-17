@@ -1,0 +1,16 @@
+.form {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.status {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-success);
+}
+.problem {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-danger);
+}
