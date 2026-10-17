@@ -19,5 +19,10 @@
     "title": "Không tìm thấy trang",
     "body": "Chúng tôi không tìm thấy trang này. Có thể trang đã được chuyển đi.",
     "home": "Về Trang chủ"
+  },
+  "offline": {
+    "title": "Bạn đang ngoại tuyến",
+    "body": "Không có kết nối mạng nên chưa mở được trang này. Hãy kiểm tra kết nối rồi thử lại.",
+    "retry": "Thử lại"
   }
 }

@@ -4,6 +4,7 @@ const PUBLIC_PATHS = [
   "/signup",
   "/forgot-password",
   "/welcome",
+  "/offline",
   "/api/health",
   "/api/locale",
 ];
@@ -11,7 +12,7 @@ const PUBLIC_PATHS = [
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 /** Folders whose contents (not the folder itself) are public: auth API, build output, `public/`. */
 const PUBLIC_DIRS = ["/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
-const PUBLIC_FILES = new Set(["/manifest.webmanifest", "/favicon.ico", "/robots.txt"]);
+const PUBLIC_FILES = new Set(["/manifest.webmanifest", "/favicon.ico", "/robots.txt", "/sw.js"]);
 
 /** Request header in which middleware passes the original path and query to the `(app)` layout. */
 export const NEXT_PATH_HEADER = "x-sq-next-path";
