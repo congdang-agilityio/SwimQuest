@@ -107,6 +107,13 @@ export function StartPicker({
       ) : (
         readOnly && <Card className={styles.note}>{t("starts.picker.readOnly")}</Card>
       )}
+      {!locked && (
+        <p className={styles.deadline}>
+          <Chip tone="info">
+            {t("starts.picker.deadline", { lockAt: formatVnDateTime(new Date(lockAtIso)) })}
+          </Chip>
+        </p>
+      )}
       <fieldset
         className={styles.list}
         aria-invalid={error ? true : undefined}

@@ -11,6 +11,7 @@
   "picker": {
     "title": "Choose start",
     "legend": "Your team's start",
+    "deadline": "Choose before {lockAt} (Vietnam time)",
     "distance": "{km, number} km",
     "finish": "Finish",
     "sameFinish": "Every team finishes at {finish}",
