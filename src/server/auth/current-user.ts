@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextResponse } from "next/server";
-import { safeNextPath } from "@/lib/auth/public-paths";
+import { safeNextPath, WELCOME_PATH } from "@/lib/auth/public-paths";
 import { apiError } from "../http/api-error";
 import { SESSION_COOKIE } from "./cookie";
 import { deleteSession, resolveSession } from "./session";
@@ -48,9 +48,11 @@ function pathOf(nextPath: string): string {
 }
 
 /**
- * For pages: the signed-in user, or a redirect to `/login?next=<nextPath>`. A suspended user's
- * session is deleted and they are sent to `/login?suspended=1`. A user with a temporary password
- * is sent to `NEW_PASSWORD_PATH` from any other page.
+ * For pages: the signed-in user, or a redirect to `/login?next=<nextPath>`; at the bare main
+ * address (`/`, no query) an expired or unknown session counts as signed out and goes to the
+ * welcome page. A suspended user's session is deleted and they are sent to
+ * `/login?suspended=1`. A user with a temporary password is sent to `NEW_PASSWORD_PATH` from
+ * any other page.
  */
 export async function requireUser(nextPath: string): Promise<CurrentUser> {
   const found = await lookUpSession();
@@ -59,6 +61,7 @@ export async function requireUser(nextPath: string): Promise<CurrentUser> {
     redirect("/login?suspended=1");
   }
   if (found.kind === "none") {
+    if (nextPath === "/") redirect(WELCOME_PATH);
     redirect(`/login?next=${encodeURIComponent(safeNextPath(nextPath))}`);
   }
   if (found.user.mustChangePassword && pathOf(nextPath) !== NEW_PASSWORD_PATH) {

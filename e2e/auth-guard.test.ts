@@ -20,7 +20,7 @@ test("a forged session cookie is checked in the database and sent to login", asy
 });
 
 test("protected responses are never cached", async ({ request, baseURL }) => {
-  const res = await request.get("/", {
+  const res = await request.get("/swims", {
     maxRedirects: 0,
     headers: { cookie: `sq_session=${"x".repeat(43)}` },
   });

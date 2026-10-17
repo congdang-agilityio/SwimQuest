@@ -14,6 +14,9 @@ const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 const PUBLIC_DIRS = ["/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
 const PUBLIC_FILES = new Set(["/manifest.webmanifest", "/favicon.ico", "/robots.txt", "/sw.js"]);
 
+/** Visitors who open the main address (Home, `/` without a query) without a valid session see this page (S-70). */
+export const WELCOME_PATH = "/welcome";
+
 /** Request header in which middleware passes the original path and query to the `(app)` layout. */
 export const NEXT_PATH_HEADER = "x-sq-next-path";
 

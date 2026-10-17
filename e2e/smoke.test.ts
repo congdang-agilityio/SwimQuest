@@ -5,8 +5,8 @@ test("health endpoint responds OK", async ({ request }) => {
   expect(res.ok()).toBe(true);
 });
 
-test("home page loads for a signed-out visitor as the login redirect", async ({ request }) => {
+test("the main address sends a signed-out visitor to the welcome page", async ({ request }) => {
   const res = await request.get("/", { maxRedirects: 0 });
   expect(res.status()).toBe(307);
-  expect(res.headers()["location"]).toContain("/login?next=%2F");
+  expect(new URL(res.headers()["location"] ?? "", "http://x").pathname).toBe("/welcome");
 });
