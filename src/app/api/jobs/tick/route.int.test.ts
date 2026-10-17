@@ -80,6 +80,7 @@ describe("POST /api/jobs/tick", () => {
       seasonEnds: { tournaments: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
       pushes: { sent: 0, removed: 0, failed: 0 },
+      zalo: { sent: 0, retried: 0, failed: 0 },
     });
     expect(await startOf(team.id)).not.toBeNull();
   });
@@ -98,6 +99,7 @@ describe("POST /api/jobs/tick", () => {
       seasonEnds: { tournaments: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
       pushes: { sent: 0, removed: 0, failed: 0 },
+      zalo: { sent: 0, retried: 0, failed: 0 },
     });
     expect(await startOf(team.id)).toBe(first);
     expect(await db.auditEvent.count()).toBe(1);
