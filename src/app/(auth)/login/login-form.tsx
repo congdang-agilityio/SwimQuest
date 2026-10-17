@@ -80,6 +80,11 @@ export function LoginForm({ next, suspended = false }: { next?: string; suspende
           onDark
         />
       ))}
+      <p className={styles.forgot}>
+        <a href="/forgot-password" className={styles.link}>
+          {t("login.forgot")}
+        </a>
+      </p>
       {problem && (
         <p role="alert" className={styles.problem}>
           {problem === "suspended"

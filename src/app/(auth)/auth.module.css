@@ -87,3 +87,40 @@
   color: var(--sq-ocean);
   font-weight: var(--sq-weight-semibold);
 }
+/* Forgot-password link under the password field, right-aligned like the mockup's helper links. */
+.forgot {
+  margin: calc(-1 * var(--sq-space-2)) 0 var(--sq-space-3);
+  text-align: right;
+}
+/* Forgot-password help page. */
+.help {
+  margin: 0 0 var(--sq-space-4);
+  color: var(--sq-text-on-dark-muted);
+  line-height: 1.5;
+}
+.contactCard {
+  margin: 0 0 var(--sq-space-4);
+  padding: var(--sq-space-4);
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-navy-700);
+}
+.contactCard .help {
+  margin: 0;
+}
+.contactLabel {
+  margin: 0 0 var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sq-ocean);
+}
+.contact {
+  margin: 0;
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
