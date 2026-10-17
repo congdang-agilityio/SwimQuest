@@ -315,7 +315,9 @@
       "REVIEW_HELPER_APPOINTED": "Chỉ định người hỗ trợ duyệt",
       "REVIEW_HELPER_REMOVED": "Gỡ người hỗ trợ duyệt",
       "SPECIAL_BADGE_GIVEN": "Trao huy hiệu đặc biệt",
-      "REPORT_CLOSED": "Đóng báo cáo"
+      "REPORT_CLOSED": "Đóng báo cáo",
+      "ZALO_BOT_SET": "Cài bot Zalo",
+      "ZALO_BOT_REMOVED": "Gỡ bot Zalo"
     },
     "entities": {
       "TEAM": "Đội",
