@@ -26,5 +26,11 @@
   "rulesDeadlines": "Hạn nộp",
   "rulesPoints": "Cách tính điểm",
   "rulesLimits": "Giới hạn thực tế",
-  "rulesExtra": "Luật bơi bổ sung"
+  "rulesExtra": "Luật bơi bổ sung",
+  "extras": {
+    "rulesUrl": "Liên kết thể lệ",
+    "contactChannel": "Liên hệ",
+    "eligibilityNotes": "Ai có thể tham gia",
+    "notChecked": "Ứng dụng không kiểm tra mục này."
+  }
 }

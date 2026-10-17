@@ -26,5 +26,11 @@
   "rulesDeadlines": "Deadlines",
   "rulesPoints": "How points work",
   "rulesLimits": "Realistic limits",
-  "rulesExtra": "Extra swim rules"
+  "rulesExtra": "Extra swim rules",
+  "extras": {
+    "rulesUrl": "Rules link",
+    "contactChannel": "Contact",
+    "eligibilityNotes": "Who can join",
+    "notChecked": "The app does not check this."
+  }
 }

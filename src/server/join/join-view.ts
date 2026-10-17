@@ -10,6 +10,7 @@ export type JoinView = {
     Tournament,
     "id" | "name" | "description" | "seasonStartAt" | "seasonEndAt" | "eligibilityNotes"
   > &
+    Pick<Tournament, "bannerImageId" | "logoImageId"> &
     Pick<Tournament, "routeId" | "routeDistanceM"> & { status: TournamentStatus };
   teams: (Pick<Team, "id" | "name" | "emblemKey" | "description" | "memberLimit"> & {
     memberCount: number;
@@ -105,6 +106,8 @@ export async function buildJoinView(
       seasonStartAt: t.seasonStartAt,
       seasonEndAt: t.seasonEndAt,
       eligibilityNotes: t.eligibilityNotes,
+      bannerImageId: t.bannerImageId,
+      logoImageId: t.logoImageId,
       routeId: t.routeId,
       routeDistanceM: t.routeDistanceM,
     },

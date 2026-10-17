@@ -139,3 +139,14 @@
     max-width: none;
   }
 }
+
+/* The organizer's own words: plain text, line breaks kept, long words wrapped. */
+.eligibility .eligibilityNotes {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  color: var(--sq-text);
+}
+.eligibility .eligibilityNote {
+  margin-top: var(--sq-space-2);
+  font-size: var(--sq-text-xs);
+}

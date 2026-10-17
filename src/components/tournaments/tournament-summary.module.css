@@ -76,3 +76,21 @@
   overflow-wrap: anywhere;
   font-size: var(--sq-text-sm);
 }
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.nameRow .name {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.logo {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--sq-radius-md);
+  object-fit: cover;
+}
