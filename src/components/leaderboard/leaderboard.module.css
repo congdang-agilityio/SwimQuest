@@ -41,11 +41,11 @@
 }
 .tab {
   display: flex;
-  flex: 0 1 33%;
+  flex: 1 1 0;
   align-items: center;
   justify-content: center;
   min-height: var(--sq-tap);
-  padding: var(--sq-space-2) var(--sq-space-4);
+  padding: var(--sq-space-2) var(--sq-space-2);
   border: 1px solid var(--sq-sky-100);
   border-radius: var(--sq-radius-pill);
   background: var(--sq-sky-50);
@@ -53,6 +53,7 @@
   font-size: var(--sq-text-sm);
   font-weight: var(--sq-weight-semibold);
   white-space: nowrap;
+  text-decoration: none;
 }
 .tab[aria-selected="true"] {
   border-color: transparent;

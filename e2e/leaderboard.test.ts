@@ -107,6 +107,14 @@ test("two teams with points are ranked and my team is tagged; outsiders get not-
   await expect(rows.nth(2)).toContainText("Đội của bạn");
   await expect(rows.nth(1)).not.toContainText("Đội của bạn");
 
+  await page.getByRole("tab", { name: "Điểm" }).click();
+  await expect(page.getByRole("tab", { name: "Điểm" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("row").nth(1)).toContainText("400 điểm");
+  await page.getByRole("tab", { name: "Tổng km" }).click();
+  await expect(page.getByRole("tab", { name: "Tổng km" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("row").nth(1)).toContainText("km");
+  await expect(page.getByTestId("your-team-tag")).toBeVisible();
+
   const ctx = await browser.newContext();
   const page2 = await ctx.newPage();
   await signUp(page2, outsider);

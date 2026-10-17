@@ -11,5 +11,19 @@
   "routeKm": "Route km",
   "kmValue": "{km} km",
   "yourTeam": "Your team",
-  "panelTitle": "Team leaderboard"
+  "panelTitle": "Team leaderboard",
+  "pointsTab": "Points",
+  "kmTab": "Total km",
+  "badgesTab": "Badges",
+  "pointsHeader": "Ranks teams by team points, bonuses included.",
+  "kmHeader": "Verified km that count, without bonuses.",
+  "badgesHeader": "Ranks teams by the badges their members hold.",
+  "pointsCaption": "Teams ranked by points",
+  "kmCaption": "Teams ranked by total km",
+  "badgesCaption": "Teams ranked by badges",
+  "points": "Points",
+  "totalKm": "Total km",
+  "badges": "Badges",
+  "pointsValue": "{count, plural, one {# point} other {# points}}",
+  "badgesValue": "{count, plural, one {# badge} other {# badges}}"
 }
