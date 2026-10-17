@@ -1,0 +1,36 @@
+.panel {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.given {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.reason {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.confirmText {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.heading {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.actions {
+  display: flex;
+  gap: var(--sq-space-2);
+  flex-wrap: wrap;
+}
+.problem {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-danger);
+}

@@ -1,0 +1,21 @@
+{
+  "special": {
+    "title": "Special badge",
+    "give": "Give Special badge",
+    "reasonLabel": "Why does this player get it?",
+    "reasonHint": "A short reason, up to 200 characters. The player will see it.",
+    "confirmTitle": "Give the Special badge?",
+    "confirmText": "This can only be done once and cannot be undone here.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "given": "Special badge given",
+    "givenReason": "Reason: {reason}",
+    "errors": {
+      "REASON_LENGTH": "Write a reason of 1 to 200 characters.",
+      "NOT_A_PLAYER": "This person is not a player in this tournament.",
+      "ALREADY_AWARDED": "This player already has the Special badge.",
+      "ARCHIVED": "This tournament is archived.",
+      "GENERIC": "Could not give the badge. Try again."
+    }
+  }
+}
