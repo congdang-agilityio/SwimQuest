@@ -12,9 +12,18 @@ const PUBLIC_PATHS = [
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 /**
  * Folders whose contents (not the folder itself) are public: auth API, build output, `public/`,
- * and the shared team finish pages `/finish/<token>` (S-82).
+ * the shared team finish pages `/finish/<token>` (S-82) and the Zalo webhook, which checks its
+ * own secret (S-85).
  */
-const PUBLIC_DIRS = ["/finish/", "/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
+const PUBLIC_DIRS = [
+  "/finish/",
+  "/api/auth/",
+  "/api/zalo/webhook/",
+  "/api/images/",
+  "/_next/",
+  "/icons/",
+  "/art/",
+];
 const PUBLIC_FILES = new Set([
   "/manifest.webmanifest",
   "/favicon.ico",
