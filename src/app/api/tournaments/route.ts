@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { requireApiUser } from "@/server/auth/current-user";
 import { apiError } from "@/server/http/api-error";
+import { quotaErrorResponse } from "@/server/tournaments/quota-response";
 import { isSameOrigin, readJson } from "@/server/http/request";
 import { createDraft } from "@/server/tournaments/create";
-import { QuotaError } from "@/server/tournaments/quota";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,8 @@ export async function POST(request: Request) {
   try {
     result = await createDraft(auth.user.id, json.body);
   } catch (error) {
-    if (error instanceof QuotaError) return apiError(409, "QUOTA_REACHED");
+    const response = quotaErrorResponse(error);
+    if (response) return response;
     throw error;
   }
   if (!result.ok) return apiError(400, "VALIDATION_FAILED", result.errors);

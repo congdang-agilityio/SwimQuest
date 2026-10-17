@@ -35,6 +35,11 @@ export type ApiErrorCode =
   | "REASON_REQUIRED"
   | "ALREADY_DECIDED"
   | "QUOTA_REACHED"
+  | "QUOTA_NOT_REACHED"
+  | "REQUEST_PENDING"
+  | "REQUEST_DECIDED"
+  | "INVALID_REASON"
+  | "INVALID_STATUS"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
@@ -72,6 +77,11 @@ const messages: Record<ApiErrorCode, string> = {
   REASON_REQUIRED: "Give a short reason (at most 300 characters) to reject this swim.",
   ALREADY_DECIDED: "This swim has already been decided.",
   QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
+  QUOTA_NOT_REACHED: "You can request more tournaments only after reaching your limit.",
+  REQUEST_PENDING: "You already have a pending request.",
+  REQUEST_DECIDED: "This request has already been decided.",
+  INVALID_REASON: "Give a short reason (1 to 500 characters).",
+  INVALID_STATUS: "The status filter is not valid.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };
