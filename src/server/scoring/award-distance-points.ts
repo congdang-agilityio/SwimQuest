@@ -41,7 +41,7 @@ export async function awardDistancePoints(tx: Tx, result: SwimResult): Promise<v
   });
   const vnDay = vnDayKey(swim.startedAt);
   const today = await tx.pointsEntry.aggregate({
-    where: { tournamentId, userId, vnDay, kind: "DISTANCE" },
+    where: { tournamentId, userId, vnDay, kind: { in: ["DISTANCE", "REVERSAL"] } },
     _sum: { countedM: true },
   });
   const { countedM, points } = countDistance({

@@ -180,14 +180,14 @@ describe("getMySwim", () => {
         status: "VERIFIED",
         displayStatus: "verified",
         reasons: [],
-        points: { distance: 10, firstSwimBonus: 20, longSwimBonus: 0, total: 30 },
+        points: { distance: 10, firstSwimBonus: 20, longSwimBonus: 0, reversal: 0, total: 30 },
       },
       {
         tournamentName: "Beta",
         status: "RULE_MISSED",
         displayStatus: "ruleMissed",
         reasons: ["PACE_TOO_SLOW"],
-        points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, total: 0 },
+        points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, reversal: 0, total: 0 },
       },
     ]);
     expect(JSON.stringify(dto)).not.toContain("track");
@@ -222,7 +222,42 @@ describe("getMySwim", () => {
       distance: 32,
       firstSwimBonus: 20,
       longSwimBonus: 25,
+      reversal: 0,
       total: 77,
+    });
+  });
+
+  it("shows a revoked swim's reversal and puts reversal and weekly entries in the total", async () => {
+    const me = await user("me");
+    const a = await tournamentWith(me.id, "Alpha");
+    const s = await swim(me.id, new Date("2026-06-01T06:00:00+07:00"));
+    const ra = await db.swimResult.create({
+      data: {
+        swimId: s.id,
+        tournamentId: a.t.id,
+        teamId: a.team.id,
+        userId: me.id,
+        status: "REVOKED",
+        reasons: [],
+        countedM: 3200,
+      },
+    });
+    const entry = { tournamentId: a.t.id, userId: me.id, teamId: a.team.id, vnDay: "2026-06-01" };
+    for (const [kind, points] of [
+      ["DISTANCE", 32],
+      ["FIRST_SWIM_BONUS", 20],
+      ["WEEKLY_MULTIPLIER", 3],
+      ["REVERSAL", -52],
+    ] as const) {
+      await db.pointsEntry.create({ data: { ...entry, swimResultId: ra.id, kind, points } });
+    }
+    const dto = await getMySwim(me.id, s.id);
+    expect(dto?.results[0].points).toEqual({
+      distance: 32,
+      firstSwimBonus: 20,
+      longSwimBonus: 0,
+      reversal: -52,
+      total: 3,
     });
   });
 

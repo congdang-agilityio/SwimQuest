@@ -10,6 +10,7 @@
     "distancePoints": "Distance points: {points}",
     "firstSwimBonus": "First-swim bonus: +{points}",
     "longSwimBonus": "Long-swim bonus: +{points}",
+    "reversal": "Reversed: {points}",
     "points": "Points earned here: {points}"
   }
 }

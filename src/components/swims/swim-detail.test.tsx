@@ -37,7 +37,7 @@ const swim: MySwimDto = {
       displayStatus: "verified",
       reasons: [],
       rules,
-      points: { distance: 12, firstSwimBonus: 0, longSwimBonus: 0, total: 12 },
+      points: { distance: 12, firstSwimBonus: 0, longSwimBonus: 0, reversal: 0, total: 12 },
     },
     {
       tournamentId: "b",
@@ -46,7 +46,7 @@ const swim: MySwimDto = {
       displayStatus: "waitingForReview",
       reasons: ["PACE_TOO_FAST"],
       rules,
-      points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, total: 0 },
+      points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, reversal: 0, total: 0 },
     },
   ],
 };
@@ -81,7 +81,7 @@ describe("SwimDetail", () => {
       results: [
         {
           ...swim.results[0],
-          points: { distance: 32, firstSwimBonus: 20, longSwimBonus: 25, total: 77 },
+          points: { distance: 32, firstSwimBonus: 20, longSwimBonus: 25, reversal: 0, total: 77 },
         },
         swim.results[0],
       ],
@@ -95,6 +95,23 @@ describe("SwimDetail", () => {
     expect(full.textContent).toContain("Points earned here: 77");
     expect(plain.textContent).toContain("Distance points: 12");
     expect(plain.textContent).not.toContain("bonus");
+  });
+  it("shows a reversal line only when the points were reversed", () => {
+    setup({
+      results: [
+        {
+          ...swim.results[0],
+          points: { distance: 32, firstSwimBonus: 20, longSwimBonus: 0, reversal: -52, total: 0 },
+        },
+        swim.results[0],
+      ],
+    });
+    const [revoked, plain] = screen
+      .getAllByRole("listitem")
+      .filter((li) => li.querySelector("strong"));
+    expect(revoked.textContent).toContain("Reversed: -52");
+    expect(revoked.textContent).toContain("Points earned here: 0");
+    expect(plain.textContent).not.toContain("Reversed");
   });
   it("has no swim-level status row", () => {
     setup();
