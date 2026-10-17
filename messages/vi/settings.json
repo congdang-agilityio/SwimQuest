@@ -109,5 +109,39 @@
       "MAX_BELOW_THREE_DAYS": "Hệ số tối đa không được thấp hơn hệ số từ 3 ngày.",
       "UNKNOWN": "Giá trị này không hợp lệ."
     }
+  },
+  "extraRules": {
+    "title": "Luật bơi bổ sung",
+    "intro": "Không bắt buộc. Để trống cả hai nếu không có luật bổ sung.",
+    "legend": "Giới hạn mỗi buổi bơi",
+    "fields": {
+      "minSwimDistanceM": "Quãng đường tối thiểu mỗi buổi bơi (m)",
+      "extraSlowestPace": "Tốc độ chậm nhất (m:ss mỗi 100 m)"
+    },
+    "hints": {
+      "minSwimDistanceM": "Để trống = không có mức tối thiểu.",
+      "extraSlowestPace": "Để trống = không giới hạn. Phải nhanh hơn {pace} /100m."
+    },
+    "rulesHeading": "Ý nghĩa của các luật",
+    "rules": {
+      "none": "Không có luật bổ sung: mọi buổi bơi hợp lệ đều được tính.",
+      "minDistance": "Mỗi buổi bơi phải dài ít nhất {m, number} m.",
+      "pace": "Mỗi buổi bơi phải nhanh bằng hoặc hơn {pace} /100m.",
+      "consequence": "Buổi bơi không đạt một luật sẽ không được tính trong giải này và chỉ có thể khiếu nại."
+    },
+    "save": "Lưu luật bổ sung",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu luật bổ sung.",
+    "locked": "Đã khóa trong mùa giải: không thể thay đổi luật bổ sung sau khi mùa giải bắt đầu.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa gửi được. Hãy kiểm tra kết nối và thử lại.",
+    "errors": {
+      "DISTANCE_INVALID": "Nhập số mét nguyên.",
+      "DISTANCE_NOT_POSITIVE": "Quãng đường phải lớn hơn 0.",
+      "EXTRA_DISTANCE_TOO_LARGE": "Quãng đường phải nhỏ hơn buổi bơi dài nhất hợp lý.",
+      "PACE_INVALID": "Nhập tốc độ dạng m:ss, ví dụ 3:00.",
+      "EXTRA_PACE_NOT_STRICTER": "Tốc độ phải nhanh hơn tốc độ chậm nhất hợp lý của giải, {pace} /100m.",
+      "UNKNOWN": "Giá trị này không hợp lệ."
+    }
   }
 }

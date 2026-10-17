@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { DeadlineSettingsForm } from "@/components/settings/deadline-settings-form";
+import { ExtraRulesForm } from "@/components/settings/extra-rules-form";
 import { PointValuesForm } from "@/components/settings/point-values-form";
 import styles from "@/components/settings/settings-card.module.css";
 import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
@@ -27,6 +28,8 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
   const deadlines = settings?.deadlines as
     | { submissionDays: number; lateUploadDays: number; startChoiceDeadlineAt: Date | null }
     | undefined;
+  const extra = settings?.extraRules as
+    { minSwimDistanceM: number | null; extraSlowestPaceSecPer100m: number | null } | undefined;
   const points = settings?.points as PointValues | undefined;
   if (!swim || !deadlines) notFound();
   const status = effectiveStatus(tournament, new Date());
@@ -63,6 +66,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
             tournamentId={tournament.id}
             values={points}
             routeDistanceM={tournament.routeDistanceM}
+            locked={locked}
+          />
+        </Card>
+      )}
+      {extra && (
+        <Card as="section" className={styles.card}>
+          <ExtraRulesForm
+            tournamentId={tournament.id}
+            values={extra}
+            slowestPaceSecPer100m={tournament.slowestPaceSecPer100m}
             locked={locked}
           />
         </Card>
