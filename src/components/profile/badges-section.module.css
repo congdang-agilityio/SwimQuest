@@ -1,0 +1,38 @@
+.block {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  background: var(--sq-white);
+}
+.empty {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sq-space-4) var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-1);
+  min-width: 0;
+  text-align: center;
+}
+.tournament {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-sm);
+}
+.date,
+.reason {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  overflow-wrap: anywhere;
+}

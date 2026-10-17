@@ -1,28 +1,35 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
+import { BadgesSection } from "@/components/profile/badges-section";
 import { ProfileSection } from "@/components/profile/profile-section";
+import { StatsSection } from "@/components/profile/stats-section";
 import { Card, ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
+import { db } from "@/server/db";
+import { listUserBadges } from "@/server/badges/list";
 import { getMyProfile } from "@/server/profile/my-profile";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./profile.module.css";
 
 export default async function ProfilePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/profile");
-  const [t, home, format, stats, profile] = await Promise.all([
+  const [t, stats, profile, badges] = await Promise.all([
     getTranslations("nav"),
-    getTranslations("home"),
-    getFormatter(),
     getPlayerStats(user.id),
     getMyProfile(user.id),
+    listUserBadges(user.id),
   ]);
   if (!profile) notFound();
-  const km = format.number(stats.verifiedDistanceM / 1000, { maximumFractionDigits: 1 });
+  const teams = await db.team.findMany({
+    where: { id: { in: stats.currentProgress.map((p) => p.teamId) } },
+    select: { id: true, name: true },
+  });
+  const teamNames = Object.fromEntries(teams.map((team) => [team.id, team.name]));
   return (
     <main className={styles.profile}>
       <div className={styles.headerBand}>
@@ -31,23 +38,9 @@ export default async function ProfilePage() {
 
       <ProfileSection profile={profile} />
 
-      <Card as="section" className={styles.stats} aria-label={home("stats.label")}>
-        <dl className={styles.statList}>
-          <div className={styles.stat}>
-            <dt>{home("stats.distance")}</dt>
-            <dd>
-              <span className={styles.statValue}>{km}</span>{" "}
-              <span className={styles.statUnit}>{home("stats.km")}</span>
-            </dd>
-          </div>
-          <div className={styles.stat}>
-            <dt>{home("stats.badges")}</dt>
-            <dd>
-              <span className={styles.statValue}>{format.number(stats.badges)}</span>
-            </dd>
-          </div>
-        </dl>
-      </Card>
+      <StatsSection stats={stats} teamNames={teamNames} />
+
+      <BadgesSection badges={badges} />
 
       <Card className={styles.rows}>
         <Link href="/swims" className={styles.row}>

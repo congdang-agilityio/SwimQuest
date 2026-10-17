@@ -1,21 +1,10 @@
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Avatar, Card, Chip, SectionHeader } from "@/components/ui";
+import { badgeArt } from "@/lib/art/badge-art";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
-import { mockupArt } from "@/lib/art/mockup-art";
 import { regionName } from "@/lib/regions";
 import type { PublicProfile } from "@/server/profile/public-profile";
 import styles from "./public-profile-view.module.css";
-
-const BADGE_ART: Record<string, string> = {
-  PARTICIPATION: "badges/badge-participation",
-  EXPLORER: "badges/badge-explorer",
-  PERSEVERANCE: "badges/badge-persistence",
-  TEAMWORK: "badges/badge-teamwork",
-  CONQUEROR: "badges/badge-conqueror",
-  SEASON: "badges/badge-season",
-  SPECIAL: "badges/badge-legend",
-  LY_SON: "badges/badge-shield-lighthouse",
-};
 
 /**
  * A player's profile as the viewer may see it. A part the viewer may not see arrives as null and
@@ -106,7 +95,7 @@ export function PublicProfileView({
           ) : (
             <ul className={styles.grid}>
               {badges.map((b) => {
-                const art = mockupArt(BADGE_ART[b.kind] ?? "badges/badge-participation");
+                const art = badgeArt(b.kind);
                 return (
                   <li key={b.id} className={styles.badge}>
                     {art && (

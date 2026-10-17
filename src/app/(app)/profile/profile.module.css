@@ -6,44 +6,6 @@
   margin: 0 auto;
 }
 
-.profile .stats {
-  padding: var(--sq-space-4) 0;
-  background: var(--sq-white);
-}
-.statList {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: 0;
-}
-.stat {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: flex-end;
-  gap: var(--sq-space-1);
-  padding: 0 var(--sq-space-4);
-}
-.stat + .stat {
-  border-left: 1px solid var(--sq-sky-100);
-}
-.stat dt {
-  color: var(--sq-text-muted);
-  font-size: var(--sq-text-sm);
-  font-weight: var(--sq-weight-medium);
-}
-.stat dd {
-  margin: 0;
-  color: var(--sq-navy-700);
-  line-height: 1.1;
-}
-.statValue {
-  font-size: var(--sq-text-2xl);
-  font-weight: var(--sq-weight-bold);
-}
-.statUnit {
-  font-size: var(--sq-text-md);
-  font-weight: var(--sq-weight-semibold);
-}
-
 .profile .rows {
   padding: 0;
   background: var(--sq-white);
