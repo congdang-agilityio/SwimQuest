@@ -160,3 +160,13 @@
     padding-right: var(--sq-space-8);
   }
 }
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  min-height: var(--sq-tap);
+  padding: 0 var(--sq-space-2);
+  color: var(--sq-navy-700);
+  font-weight: var(--sq-weight-semibold);
+  text-decoration: none;
+}

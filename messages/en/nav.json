@@ -19,5 +19,8 @@
     "kicker": "Your tournament",
     "label": "Switch tournament",
     "error": "Could not switch tournament. Try again."
+  },
+  "account": {
+    "myProfile": "My Profile"
   }
 }

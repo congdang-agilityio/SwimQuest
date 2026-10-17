@@ -1,0 +1,43 @@
+.hero {
+  display: grid;
+  overflow: hidden;
+  padding: 0;
+  background: var(--sq-navy-800);
+  box-shadow: var(--sq-shadow-raised);
+}
+.cover {
+  width: 100%;
+  height: 112px;
+  object-fit: cover;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-5) var(--sq-space-4);
+  text-align: center;
+}
+.cover + .body {
+  margin-top: -36px;
+  padding-top: 0;
+}
+.name {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+}
+.region {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+.bio {
+  max-width: 100%;
+  margin: 0 0 var(--sq-space-2);
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-md);
+  white-space: pre-line;
+}

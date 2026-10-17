@@ -6,24 +6,6 @@
   margin: 0 auto;
 }
 
-.profile .hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sq-space-3);
-  padding: var(--sq-space-5) var(--sq-space-4);
-  background: var(--sq-navy-800);
-  box-shadow: var(--sq-shadow-raised);
-}
-.name {
-  max-width: 100%;
-  overflow: hidden;
-  font-size: var(--sq-text-xl);
-  font-weight: var(--sq-weight-bold);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .profile .stats {
   padding: var(--sq-space-4) 0;
   background: var(--sq-white);

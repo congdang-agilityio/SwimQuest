@@ -23,10 +23,10 @@ function setup(pathname: string, isPlatformAdmin = false) {
 }
 
 describe("AppNav", () => {
-  it("shows the five destinations", () => {
+  it("shows the five destinations after the account menu link", () => {
     setup("/");
     const links = screen.getAllByRole("link").map((a) => a.getAttribute("href"));
-    expect(links).toEqual(["/", "/tournaments", "/team", "/voyage", "/profile"]);
+    expect(links).toEqual(["/profile", "/", "/tournaments", "/team", "/voyage", "/profile"]);
   });
 
   it("marks only the current tab with aria-current=page", () => {
