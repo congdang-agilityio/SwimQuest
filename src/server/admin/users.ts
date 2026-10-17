@@ -121,8 +121,9 @@ export async function setPlatformAdmin(
   const value = z.boolean().parse(isAdmin);
   return db.$transaction(async (tx) => {
     // Lock every admin row so concurrent removals cannot leave the platform without an admin.
+    // ORDER BY "id" is the lock order suspendUser/reactivateUser use, so they cannot deadlock.
     const admins = await tx.$queryRaw<{ id: string; status: UserStatus }[]>`
-      SELECT "id", "status" FROM "User" WHERE "isPlatformAdmin" = true FOR UPDATE`;
+      SELECT "id", "status" FROM "User" WHERE "isPlatformAdmin" = true ORDER BY "id" FOR UPDATE`;
     const active = admins.filter((a) => a.status === "ACTIVE");
     if (!active.some((a) => a.id === actor?.id)) throw new ForbiddenError();
 
