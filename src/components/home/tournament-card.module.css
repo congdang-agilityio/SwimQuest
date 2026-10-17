@@ -1,0 +1,69 @@
+/* A tournament row inside the dark "Giải đấu đang tham gia" card. */
+.card {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) 0;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-width: 0;
+}
+.thumb {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-gradient-sea);
+  box-shadow: var(--sq-shadow-card);
+}
+.thumbArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+/* My team's emblem pinned to the thumbnail corner. */
+.emblem {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.name {
+  margin: 0;
+  overflow: hidden;
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dates,
+.muted {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+  margin: var(--sq-space-1) 0 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-xs);
+}

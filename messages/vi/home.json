@@ -1,5 +1,12 @@
 {
-  "title": "Giải đấu của tôi",
+  "title": "Giải đấu đang tham gia",
+  "voyageMap": "Bản đồ hải trình",
+  "stats": {
+    "label": "Thành tích của tôi",
+    "distance": "Tổng quãng đường",
+    "km": "km",
+    "badges": "Huy hiệu"
+  },
   "card": {
     "team": "Đội: {name}",
     "emblemAlt": "Biểu tượng đội {name}",
@@ -13,6 +20,7 @@
       "ACTIVE": "Đang diễn ra",
       "COMPLETED": "Đã kết thúc",
       "ARCHIVED": "Đã lưu trữ"
-    }
+    },
+    "progressLabel": "Tiến độ của đội"
   }
 }

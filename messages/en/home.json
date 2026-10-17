@@ -1,5 +1,12 @@
 {
-  "title": "My tournaments",
+  "title": "Tournaments I'm in",
+  "voyageMap": "Voyage map",
+  "stats": {
+    "label": "My stats",
+    "distance": "Total distance",
+    "km": "km",
+    "badges": "Badges"
+  },
   "card": {
     "team": "Team: {name}",
     "emblemAlt": "Emblem of team {name}",
@@ -13,6 +20,7 @@
       "ACTIVE": "In progress",
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
-    }
+    },
+    "progressLabel": "Team progress"
   }
 }

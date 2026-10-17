@@ -9,6 +9,12 @@ function homeLanding(page: Page): Promise<Response> {
   );
 }
 
+/** Signs out from the account menu in the top bar. */
+async function logout(page: Page) {
+  await page.locator("summary").click();
+  await page.getByRole("button", { name: "Đăng xuất" }).click();
+}
+
 /** The home page `/` really exists: no error status, no 404 text, the app heading shows. */
 async function expectHomePage(page: Page, landing: Response) {
   expect(new URL(page.url()).pathname).toBe("/");
@@ -34,7 +40,7 @@ test("login returns to the requested page; logout leaves no protected page in hi
   await page.waitForURL((url) => url.pathname === "/" && url.search === "");
   await expectHomePage(page, await signedInLanding);
 
-  await page.getByRole("button", { name: "Đăng xuất" }).click();
+  await logout(page);
   await page.waitForURL((url) => url.pathname === "/login");
 
   await page.getByLabel("Email").fill(email);
@@ -44,7 +50,7 @@ test("login returns to the requested page; logout leaves no protected page in hi
   await page.waitForURL((url) => url.pathname === "/" && url.search === "");
   await expectHomePage(page, await loginLanding);
 
-  await page.getByRole("button", { name: "Đăng xuất" }).click();
+  await logout(page);
   await page.waitForURL((url) => url.pathname === "/login");
 
   await page.goto("/?from=login");
@@ -61,7 +67,7 @@ test("login returns to the requested page; logout leaves no protected page in hi
   await page.waitForURL((url) => url.pathname === "/" && url.search === "?from=login");
   await expect(page.getByRole("heading", { name: "SwimQuest" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Đăng xuất" }).click();
+  await logout(page);
   await page.waitForURL((url) => url.pathname === "/login");
   await page.goBack();
   await page.waitForURL((url) => url.pathname === "/login" || url.pathname === "/");

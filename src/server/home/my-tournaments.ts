@@ -7,6 +7,8 @@ export type MyTournament = {
   id: string;
   name: string;
   effectiveStatus: TournamentStatus;
+  seasonStartAt: Date;
+  seasonEndAt: Date;
   isOrganizer: boolean;
   team: { id: string; name: string; emblemKey: string } | null;
   /** Team progress in basis points; null when there is no team or its start is not chosen yet. */
@@ -73,6 +75,8 @@ export async function listMyTournaments(userId: string, now: Date): Promise<MyTo
         id: t.id,
         name: t.name,
         effectiveStatus: effectiveStatus(t, now),
+        seasonStartAt: t.seasonStartAt,
+        seasonEndAt: t.seasonEndAt,
         isOrganizer: t.organizerId === userId,
         team,
         progressBp,
