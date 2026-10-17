@@ -75,6 +75,7 @@ export default async function ManageTournamentPage({
         tournamentId={tournament.id}
         published={tournament.status !== "DRAFT"}
         hasInvite={Boolean(showInvite && origin)}
+        canEdit={overview.status !== "ARCHIVED"}
       />
       {(overview.status === "ACTIVE" || overview.status === "COMPLETED") && (
         <ProgressSection tournamentId={tournament.id} teams={consoleTeams.teams} />

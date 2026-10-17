@@ -10,6 +10,7 @@
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
     },
+    "editLink": "Edit tournament",
     "settingsLink": "Rules and settings",
     "reviewLink": "Review queue",
     "helpersLink": "Review helpers"

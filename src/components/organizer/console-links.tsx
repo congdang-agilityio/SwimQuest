@@ -8,10 +8,12 @@ type Props = {
   published: boolean;
   /** The invite link panel is on this page. */
   hasInvite: boolean;
+  /** Details can still be edited (not archived). */
+  canEdit?: boolean;
 };
 
 /** Organizer links of the console (S-65 AC 5): review queue, settings, invite link, helpers. */
-export function ConsoleLinks({ tournamentId, published, hasInvite }: Props) {
+export function ConsoleLinks({ tournamentId, published, hasInvite, canEdit = false }: Props) {
   const t = useTranslations("organizer");
   const base = `/tournaments/${tournamentId}/manage`;
   return (
@@ -21,6 +23,11 @@ export function ConsoleLinks({ tournamentId, published, hasInvite }: Props) {
         {published && (
           <ButtonLink href={`${base}/review`} block>
             {t("manage.reviewLink")}
+          </ButtonLink>
+        )}
+        {canEdit && (
+          <ButtonLink href={`${base}/edit`} variant="secondary" block>
+            {t("manage.editLink")}
           </ButtonLink>
         )}
         <ButtonLink href={`${base}/settings`} variant="secondary" block>
