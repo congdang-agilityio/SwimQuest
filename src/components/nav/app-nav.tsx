@@ -19,6 +19,8 @@ import styles from "./app-nav.module.css";
  */
 type Props = {
   displayName: string;
+  /** The player's uploaded or default-key picture; initials show when there is none. */
+  avatarSrc?: string | null;
   isPlatformAdmin: boolean;
   /** Two or more active tournaments: the switcher shows in the left rail from 768 px. */
   switcher?: TournamentSwitcherData | null;
@@ -26,7 +28,7 @@ type Props = {
   bell?: ReactNode;
 };
 
-export function AppNav({ displayName, isPlatformAdmin, switcher, bell }: Props) {
+export function AppNav({ displayName, avatarSrc, isPlatformAdmin, switcher, bell }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
@@ -38,7 +40,7 @@ export function AppNav({ displayName, isPlatformAdmin, switcher, bell }: Props) 
           {bell}
           <details className={styles.account}>
             <summary className={styles.accountSummary}>
-              <Avatar name={displayName} size={32} decorative />
+              <Avatar name={displayName} src={avatarSrc} size={32} decorative />
               {displayName}
             </summary>
             <div className={styles.menu} data-surface="light">

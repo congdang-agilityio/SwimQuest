@@ -4,20 +4,22 @@ import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TournamentCard } from "@/components/home/tournament-card";
 import { Avatar, ButtonLink, Card } from "@/components/ui";
-import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
+import { profileAvatarSrc } from "@/lib/profile-avatar";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { listMyTournaments, splitTournaments } from "@/server/home/my-tournaments";
+import { getAvatarFields } from "@/server/profile/my-avatar";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./home.module.css";
 
 export default async function HomePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/");
-  const [t, format, tournaments, stats] = await Promise.all([
+  const [t, format, tournaments, stats, avatar] = await Promise.all([
     getTranslations("home"),
     getFormatter(),
     listMyTournaments(user.id, new Date()),
     getPlayerStats(user.id),
+    getAvatarFields(user.id),
   ]);
   const { active, past } = splitTournaments(tournaments);
   const featured = active.find((x) => x.effectiveStatus === "ACTIVE") ?? active[0];
@@ -26,7 +28,12 @@ export default async function HomePage() {
     <main className={styles.home}>
       <Card tone="dark" as="section" className={styles.hero} aria-labelledby="home-title">
         <div className={styles.profile}>
-          <Avatar name={user.displayName} src={mockupMemberAvatar(user.id)} size={56} decorative />
+          <Avatar
+            name={user.displayName}
+            src={profileAvatarSrc({ id: user.id, ...avatar })}
+            size={56}
+            decorative
+          />
           <span className={styles.name}>{user.displayName}</span>
         </div>
         <div className={styles.heroArt}>
