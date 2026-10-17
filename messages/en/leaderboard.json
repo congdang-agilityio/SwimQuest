@@ -10,5 +10,6 @@
   "progress": "Progress",
   "routeKm": "Route km",
   "kmValue": "{km} km",
-  "yourTeam": "Your team"
+  "yourTeam": "Your team",
+  "panelTitle": "Team leaderboard"
 }

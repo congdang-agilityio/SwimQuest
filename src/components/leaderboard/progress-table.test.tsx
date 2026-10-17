@@ -52,7 +52,7 @@ describe("ProgressTable", () => {
     const mine = screen.getByTestId("leaderboard-row-b");
     expect(mine.textContent).toContain("Đội của bạn");
     expect(mine.getAttribute("aria-current")).toBe("true");
-    expect(mine.style.fontWeight).toBe("700");
+    expect(mine.getAttribute("data-my-team")).toBe("true");
     expect(screen.getByTestId("leaderboard-row-a").getAttribute("aria-current")).toBeNull();
   });
 });

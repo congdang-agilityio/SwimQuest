@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import styles from "@/components/leaderboard/leaderboard.module.css";
 import { ProgressTable } from "@/components/leaderboard/progress-table";
+import { Card, ScreenHeader, SectionHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import {
@@ -22,18 +24,34 @@ export default async function LeaderboardPage({ params }: { params: Promise<{ id
     throw err;
   });
   const t = await getTranslations("leaderboard");
+  const tCommon = await getTranslations("common");
   return (
-    <main>
-      <h1>{t("title")}</h1>
-      {/* Only the Progress tab exists for now; more tabs join this list later (S-22). */}
-      <div role="tablist" aria-label={t("tabs")}>
-        <span role="tab" aria-selected="true" aria-controls="progress-panel" id="progress-tab">
-          {t("progressTab")}
-        </span>
+    <main className={styles.screen}>
+      <div className={styles.headerBand}>
+        <ScreenHeader title={t("title")} backHref="/voyage" backLabel={tCommon("back")} />
       </div>
-      <section role="tabpanel" id="progress-panel" aria-labelledby="progress-tab">
-        <p>{t("progressHeader")}</p>
-        <ProgressTable rows={rows} />
+      <section className={styles.panel} aria-labelledby="leaderboard-panel-title">
+        <div className={styles.panelHeader}>
+          <SectionHeader id="leaderboard-panel-title">{t("panelTitle")}</SectionHeader>
+        </div>
+        <Card className={styles.card}>
+          {/* Only the Progress tab exists for now; more tabs join this list later (S-22). */}
+          <div role="tablist" aria-label={t("tabs")} className={styles.tablist}>
+            <span
+              role="tab"
+              aria-selected="true"
+              aria-controls="progress-panel"
+              id="progress-tab"
+              className={styles.tab}
+            >
+              {t("progressTab")}
+            </span>
+          </div>
+          <div role="tabpanel" id="progress-panel" aria-labelledby="progress-tab">
+            <p className={styles.intro}>{t("progressHeader")}</p>
+            <ProgressTable rows={rows} />
+          </div>
+        </Card>
       </section>
     </main>
   );

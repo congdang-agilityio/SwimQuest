@@ -1,0 +1,217 @@
+/* Leaderboard ("BẢNG XẾP HẠNG ĐỘI" panel). Every value comes from src/styles/tokens.css. */
+
+.screen {
+  display: grid;
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+/* The light sheet has no dark band, so the phone header gets its own navy strip. */
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+/* The light sheet turns links blue; the back chevron stays white on the navy band. */
+.headerBand a {
+  color: var(--sq-text-on-dark);
+}
+
+.panel {
+  display: grid;
+}
+
+/* The navy band only shows on desktop, where the screen reads as a dashboard panel. */
+.panelHeader {
+  display: none;
+}
+
+.card {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4) var(--sq-space-3);
+}
+
+/* Segmented control: same look as the shared Tabs, kept as role="tab" for the tab pattern. */
+.tablist {
+  display: flex;
+  gap: var(--sq-space-2);
+}
+.tab {
+  display: flex;
+  flex: 0 1 33%;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-sky-50);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  white-space: nowrap;
+}
+.tab[aria-selected="true"] {
+  border-color: transparent;
+  background: var(--sq-gradient-primary);
+  color: var(--sq-white);
+  box-shadow: var(--sq-shadow-button);
+}
+
+.intro {
+  margin: 0 0 var(--sq-space-3);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+
+/* Table: real table semantics, drawn as card rows with dividers. */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.table th[scope="col"] {
+  padding: 0 var(--sq-space-1) var(--sq-space-2);
+  border-bottom: 1px solid var(--sq-sky-100);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: start;
+}
+.table th.num {
+  text-align: end;
+}
+.table td,
+.table th[scope="row"] {
+  padding: var(--sq-space-3) var(--sq-space-1);
+  border-bottom: 1px solid var(--sq-sky-100);
+  vertical-align: middle;
+}
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.rankCell {
+  width: 40px;
+  text-align: center;
+}
+.rank {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+}
+.medal {
+  display: inline-grid;
+  place-items: center;
+}
+.medal > img {
+  display: block;
+  width: 32px;
+  height: auto;
+}
+
+.team {
+  font-weight: var(--sq-weight-semibold);
+  text-align: start;
+}
+.teamInner {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-2);
+}
+.emblem {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border: 2px solid var(--sq-white);
+  border-radius: 50%;
+  background: var(--sq-sky-50);
+  box-shadow: var(--sq-shadow-card);
+}
+.emblem > * {
+  width: 100%;
+  height: 100%;
+}
+.name {
+  display: grid;
+  gap: 2px;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-sm);
+  line-height: 1.25;
+}
+.name > span:first-child {
+  overflow-wrap: anywhere;
+}
+.yourTeam {
+  justify-self: start;
+  white-space: nowrap;
+}
+
+.pct {
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+  text-align: end;
+  white-space: nowrap;
+}
+.km {
+  width: 1%;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-medium);
+  text-align: end;
+  white-space: nowrap;
+}
+
+/* My team: pale gold row with rounded ends, instead of an outline. */
+.mine > * {
+  background: var(--sq-gold-wash);
+}
+.mine > :first-child {
+  border-radius: var(--sq-radius-md) 0 0 var(--sq-radius-md);
+}
+.mine > :last-child {
+  border-radius: 0 var(--sq-radius-md) var(--sq-radius-md) 0;
+}
+.table tr.mine > * {
+  border-bottom-color: transparent;
+}
+
+/* Desktop: the screen reads as a dashboard panel under the navy band. */
+@media (min-width: 768px) {
+  .screen {
+    max-width: 640px;
+  }
+  .card {
+    padding: var(--sq-space-4);
+  }
+  .name {
+    font-size: var(--sq-text-md);
+  }
+  .panelHeader {
+    display: block;
+  }
+  .panelHeader + .card {
+    border-radius: 0 0 var(--sq-radius-lg) var(--sq-radius-lg);
+  }
+}
