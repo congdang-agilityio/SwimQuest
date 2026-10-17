@@ -5,6 +5,8 @@ import {
 } from "@/lib/tournaments/lifecycle";
 import { tournamentDraftFieldsSchema } from "@/lib/validation/tournament";
 import { requireOrganizerOrAdmin } from "@/server/auth/roles";
+import { changedFields } from "@/server/audit/diff";
+import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { db } from "@/server/db";
 
 const detailsSchema = tournamentDraftFieldsSchema
@@ -85,14 +87,29 @@ export async function updateDetails(
     return invalid({ seasonEnd: "SEASON_END_NOT_AFTER_NOW" });
 
   const data = { name, description, seasonStartAt: seasonStart, seasonEndAt: seasonEnd };
-  const { count } = await db.tournament.updateMany({
-    where: {
-      id: t.id,
-      status: t.status,
-      seasonStartAt: t.seasonStartAt,
-      seasonEndAt: t.seasonEndAt,
-    },
-    data,
+  const changes = changedFields(t, data);
+  const audited = t.status !== "DRAFT" && Object.keys(changes.after).length > 0;
+  const count = await db.$transaction(async (tx) => {
+    const { count } = await tx.tournament.updateMany({
+      where: {
+        id: t.id,
+        status: t.status,
+        seasonStartAt: t.seasonStartAt,
+        seasonEndAt: t.seasonEndAt,
+      },
+      data,
+    });
+    if (count > 0 && audited)
+      await recordAudit(tx, {
+        actor: { type: "USER", userId: user?.id ?? "" },
+        action: AUDIT_ACTIONS.TOURNAMENT_UPDATED,
+        entityType: "Tournament",
+        entityId: t.id,
+        tournamentId: t.id,
+        before: changes.before,
+        after: changes.after,
+      });
+    return count;
   });
   if (count === 0) return { ok: false, reason: "CONFLICT" };
   const { id, startChoiceDeadlineAt } = t;
