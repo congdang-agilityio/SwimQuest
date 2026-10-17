@@ -1,0 +1,38 @@
+{
+  "title": "Thông báo",
+  "bell": "Thông báo",
+  "bellUnread": "Thông báo, {count} chưa đọc",
+  "empty": "Chưa có gì mới. Tin về các lượt bơi và đội của bạn sẽ hiện ở đây.",
+  "more": "Xem cũ hơn",
+  "loading": "Đang tải…",
+  "error": "Không tải được thông báo. Hãy thử lại.",
+  "unread": "Mới",
+  "unknown": "Bạn có một cập nhật mới.",
+  "types": {
+    "swim": {
+      "verified": "Lượt bơi của bạn đã được xác minh.",
+      "flagged": "Lượt bơi của bạn cần ban tổ chức xem kỹ hơn.",
+      "rejected": "Lượt bơi của bạn bị từ chối. Mở ra để xem lý do.",
+      "revoked": "Kết quả lượt bơi của bạn đã bị thu hồi.",
+      "ruleMissed": "Lượt bơi của bạn chưa đạt quy định của giải.",
+      "disputeDecided": "Khiếu nại của bạn đã có kết quả."
+    },
+    "team": {
+      "invited": "Bạn đã được thêm vào một đội.",
+      "joined": "Bạn đã tham gia một đội.",
+      "moved": "Bạn đã được chuyển sang đội khác.",
+      "removed": "Bạn đã bị xóa khỏi đội.",
+      "captainSet": "Đội trưởng của đội bạn đã thay đổi.",
+      "startChosen": "Đội của bạn đã chọn điểm xuất phát.",
+      "startAssigned": "Đội của bạn đã được gán điểm xuất phát.",
+      "startLocked": "Điểm xuất phát của đội bạn đã được khóa."
+    },
+    "milestone": {
+      "destinationPassed": "Đội của bạn đã đi qua {destination}.",
+      "finished": "Đội của bạn đã về đích!",
+      "finishLost": "Đội của bạn không còn ở đích nữa.",
+      "badgeEarned": "Bạn nhận được một huy hiệu mới.",
+      "levelUp": "Bạn đã lên cấp {level}."
+    }
+  }
+}

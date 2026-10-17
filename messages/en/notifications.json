@@ -1,0 +1,38 @@
+{
+  "title": "Notifications",
+  "bell": "Notifications",
+  "bellUnread": "Notifications, {count} unread",
+  "empty": "Nothing new yet. News about your swims and team shows up here.",
+  "more": "Show older",
+  "loading": "Loading…",
+  "error": "Could not load notifications. Try again.",
+  "unread": "New",
+  "unknown": "You have a new update.",
+  "types": {
+    "swim": {
+      "verified": "Your swim was verified.",
+      "flagged": "Your swim needs a closer look by the organizer.",
+      "rejected": "Your swim was rejected. Open it to see why.",
+      "revoked": "Your swim result was revoked.",
+      "ruleMissed": "Your swim did not meet the tournament rules.",
+      "disputeDecided": "Your dispute was decided."
+    },
+    "team": {
+      "invited": "You were added to a team.",
+      "joined": "You joined a team.",
+      "moved": "You were moved to another team.",
+      "removed": "You were removed from your team.",
+      "captainSet": "Your team captain changed.",
+      "startChosen": "Your team chose its starting point.",
+      "startAssigned": "Your team was given a starting point.",
+      "startLocked": "Your team's starting point is now locked."
+    },
+    "milestone": {
+      "destinationPassed": "Your team passed {destination}.",
+      "finished": "Your team reached the finish!",
+      "finishLost": "Your team is no longer at the finish.",
+      "badgeEarned": "You earned a new badge.",
+      "levelUp": "You reached level {level}."
+    }
+  }
+}

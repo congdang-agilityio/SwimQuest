@@ -21,6 +21,11 @@
   text-decoration: none;
   text-shadow: 0 2px 8px rgb(0 174 239 / 0.45);
 }
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-2);
+}
 .account {
   position: relative;
 }

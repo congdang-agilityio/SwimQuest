@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Avatar } from "@/components/ui";
 import { NavIcon } from "./nav-icon";
@@ -20,9 +21,11 @@ type Props = {
   isPlatformAdmin: boolean;
   /** Two or more active tournaments: the switcher shows in the left rail from 768 px. */
   switcher?: TournamentSwitcherData | null;
+  /** Notification bell (server-rendered), shown beside the account menu. */
+  bell?: ReactNode;
 };
 
-export function AppNav({ displayName, isPlatformAdmin, switcher }: Props) {
+export function AppNav({ displayName, isPlatformAdmin, switcher, bell }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
@@ -30,22 +33,25 @@ export function AppNav({ displayName, isPlatformAdmin, switcher }: Props) {
     <>
       <div className={styles.topBar}>
         <span className={styles.brand}>{tc("appName")}</span>
-        <details className={styles.account}>
-          <summary className={styles.accountSummary}>
-            <Avatar name={displayName} size={32} decorative />
-            {displayName}
-          </summary>
-          <div className={styles.menu} data-surface="light">
-            <Link
-              href="/profile"
-              className={styles.menuLink}
-              onClick={(e) => e.currentTarget.closest("details")?.removeAttribute("open")}
-            >
-              {t("account.myProfile")}
-            </Link>
-            <LogoutButton />
-          </div>
-        </details>
+        <div className={styles.actions}>
+          {bell}
+          <details className={styles.account}>
+            <summary className={styles.accountSummary}>
+              <Avatar name={displayName} size={32} decorative />
+              {displayName}
+            </summary>
+            <div className={styles.menu} data-surface="light">
+              <Link
+                href="/profile"
+                className={styles.menuLink}
+                onClick={(e) => e.currentTarget.closest("details")?.removeAttribute("open")}
+              >
+                {t("account.myProfile")}
+              </Link>
+              <LogoutButton />
+            </div>
+          </details>
+        </div>
       </div>
       <nav className={styles.nav} aria-label={t("label")}>
         {switcher && <TournamentSwitcher {...switcher} placement="rail" />}

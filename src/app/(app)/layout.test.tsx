@@ -42,6 +42,7 @@ describe("(app) layout", () => {
     const tree = await layout.default({ children: null });
     const nav = tree.props.children[0];
     expect(nav.props).toEqual({
+      bell: expect.anything(),
       displayName: "Admin An",
       isPlatformAdmin: true,
       switcher: null,
