@@ -1,0 +1,31 @@
+{
+  "title": "Cập bến {place}",
+  "metaTitle": "{team} đã cập bến {place} · SwimQuest",
+  "metaDescription": "Đội {team} đã hoàn thành hải trình {place} trong giải {tournament} trên SwimQuest.",
+  "lostMetaTitle": "{team} · SwimQuest",
+  "congrats": "Chúc mừng!",
+  "done": "{team} đã hoàn thành",
+  "voyage": "Hải trình {place}",
+  "badgeAlt": "Huy hiệu Hoàn thành: {place}",
+  "emblemAlt": "Biểu tượng đội {team}",
+  "tournament": "Giải {tournament}",
+  "route": "Lộ trình",
+  "routeLeg": "{start} → {finish}",
+  "date": "Ngày cập bến",
+  "total": "Tổng của đội",
+  "km": "{km} km",
+  "points": "{points} điểm",
+  "members": "Thuyền viên",
+  "anonymous": "Một vận động viên",
+  "lostTitle": "Đội không còn ở {place}",
+  "lostBody": "Đội {team} từng cập bến {place}, nhưng một điều chỉnh sau đó đã đưa đội lùi lại dưới vạch đích.",
+  "lostDate": "Từ {date}",
+  "invite": "Bơi cùng đồng đội, cùng nhau vượt biển tới Lý Sơn.",
+  "cta": "Khám phá SwimQuest",
+  "share": {
+    "button": "Chia sẻ thành tích",
+    "text": "Đội {team} đã cập bến {place} trên SwimQuest!",
+    "copied": "Đã chép liên kết",
+    "failed": "Không chia sẻ được. Hãy thử lại."
+  }
+}

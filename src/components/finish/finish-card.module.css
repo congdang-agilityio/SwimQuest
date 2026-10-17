@@ -1,0 +1,151 @@
+/* Public finish page (S-82): the "Cập bến Lý Sơn" phone panel plus the team's facts. Tokens only. */
+
+.page {
+  min-height: 100dvh;
+  padding: var(--sq-space-4);
+  background: var(--sq-navy-950);
+}
+
+.brand {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto var(--sq-space-3);
+  max-width: 480px;
+}
+.brand img {
+  display: block;
+  width: 148px;
+  height: auto;
+}
+
+.card {
+  display: grid;
+  margin: 0 auto;
+  max-width: 480px;
+  overflow: hidden;
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-raised);
+  color: var(--sq-text-on-dark);
+}
+
+.facts {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: var(--sq-space-3) var(--sq-space-3) 0;
+  padding: var(--sq-space-4);
+  border: 1px solid var(--sq-glass-edge);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-glass);
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.team p {
+  margin: 0;
+}
+.teamName {
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+}
+.muted {
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+
+.list {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+}
+.list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sq-space-3);
+  padding-top: var(--sq-space-2);
+  border-top: 1px solid var(--sq-glass-edge);
+}
+.list dt {
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+.list dd {
+  display: grid;
+  margin: 0;
+  font-weight: var(--sq-weight-semibold);
+  text-align: right;
+}
+.leg {
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-regular);
+}
+.total {
+  color: var(--sq-gold-strong);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+}
+
+.crew {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+.crewTitle {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-regular);
+}
+.members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2) var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.member {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+}
+
+.invite {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  text-align: center;
+}
+.invite p {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+}
+
+.lostBody {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-2);
+  padding: 0 var(--sq-space-4);
+  text-align: center;
+}
+.lostBody p {
+  margin: 0;
+}
+
+/* Share button on the finish panel */
+.share {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+.status {
+  margin: 0;
+  min-height: 1.25em;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+  text-align: center;
+}

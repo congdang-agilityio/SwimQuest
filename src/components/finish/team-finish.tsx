@@ -1,10 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { MockupPicture } from "@/components/art/mockup-picture";
-import { ButtonLink } from "@/components/ui";
 import { getRoute } from "@/lib/routes";
+import { getOrCreateFinishShare } from "@/server/finish/share";
 import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 import { hasSeen } from "@/server/moments/seen";
 import { FinishCrest } from "./finish-crest";
+import { ShareFinishButton } from "./share-finish-button";
 import styles from "./finish.module.css";
 
 /**
@@ -24,10 +25,11 @@ export async function TeamFinish({
   const finishedAt = current?.team.finishedAt;
   if (!current || !finishedAt) return null;
   const { team, tournament } = current;
-  const [t, tAll, tl] = await Promise.all([
+  const [t, tAll, ts, share] = await Promise.all([
     getTranslations("team.finish"),
     getTranslations(),
-    getTranslations("leaderboard"),
+    getTranslations("share"),
+    getOrCreateFinishShare(userId, team.id),
   ]);
   const finishKey = getRoute(tournament.routeId)?.destinations.find((d) => d.isFinish)?.nameKey;
   const place = finishKey ? tAll(finishKey) : "";
@@ -56,9 +58,18 @@ export async function TeamFinish({
       </div>
       <FinishCrest momentKey={momentKey} play={!seen} alt={t("badgeAlt", { place })} />
       <div className={styles.action}>
-        <ButtonLink href={`/tournaments/${tournament.id}/leaderboard`} variant="primary" block>
-          {tl("link")}
-        </ButtonLink>
+        {share.ok && (
+          <ShareFinishButton
+            path={`/finish/${share.token}`}
+            title={ts("title", { place })}
+            text={ts("share.text", { team: team.name, place })}
+            labels={{
+              button: ts("share.button"),
+              copied: ts("share.copied"),
+              failed: ts("share.failed"),
+            }}
+          />
+        )}
       </div>
     </section>
   );
