@@ -23,7 +23,7 @@ const user = (n: string) =>
   db.user.create({ data: { email: `${n}@example.com`, passwordHash: "h", displayName: n } });
 
 type TournamentOpts = {
-  status?: "DRAFT" | "PUBLISHED" | "ACTIVE" | "COMPLETED";
+  status?: "DRAFT" | "PUBLISHED" | "ACTIVE" | "COMPLETED" | "ARCHIVED";
   slowestPaceSecPer100m?: number;
   memberStatus?: "ACTIVE" | "LEFT";
 };
@@ -240,11 +240,11 @@ describe("runChecks on upload", () => {
     expect(toOwnerSwimDto(swim).results).toEqual([]);
   });
 
-  it("skips tournaments the player left and ones that are draft or completed", async () => {
+  it("skips tournaments the player left and ones that are draft or archived", async () => {
     const me = await user("me");
     await tournamentWith(me.id, "Left", { memberStatus: "LEFT" });
     await tournamentWith(me.id, "Draft", { status: "DRAFT" });
-    await tournamentWith(me.id, "Completed", { status: "COMPLETED" });
+    await tournamentWith(me.id, "Archived", { status: "ARCHIVED" });
     const active = await tournamentWith(me.id, "Active", { status: "ACTIVE" });
     const swim = await upload(me.id, fit("2026-06-01T06:00:00+07:00", 1800));
 

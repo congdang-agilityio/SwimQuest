@@ -1,5 +1,5 @@
 import type { Swim, SwimResult, Tournament } from "@prisma/client";
-import { effectiveStatus } from "@/lib/tournaments/lifecycle";
+import { effectiveStatus, uploadWindowEndsAt } from "@/lib/tournaments/lifecycle";
 import type { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { awardVerified, refreshTeams, type TeamRef } from "@/server/scoring/on-verified";
@@ -30,8 +30,25 @@ export async function lockPlayerSwims(tx: Tx, userId: string): Promise<void> {
 }
 
 /**
+ * Whether a swim gets a result in a tournament at `now` (S-12, S-33): while it is PUBLISHED or
+ * ACTIVE, and once COMPLETED only during the late-upload window (S-24) and only for a swim that
+ * started before the season end time. DRAFT and ARCHIVED tournaments take no new results, nor
+ * does a completed one after its window: results are final then, so a too-late upload gets no
+ * result rather than UPLOAD_WINDOW_CLOSED.
+ */
+function takesSwim(tournament: Tournament, swim: Swim, now: Date): boolean {
+  const status = effectiveStatus(tournament, now);
+  if (status === "PUBLISHED" || status === "ACTIVE") return true;
+  if (status !== "COMPLETED") return false;
+  return (
+    now.getTime() < uploadWindowEndsAt(tournament).getTime() &&
+    swim.startedAt.getTime() < tournament.seasonEndAt.getTime()
+  );
+}
+
+/**
  * Checks a stored swim in every tournament where its player has an ACTIVE membership and the
- * tournament is PUBLISHED or ACTIVE at `now` (S-12). A duplicate of an earlier swim gets
+ * tournament takes the swim at `now` (see takesSwim). A duplicate of an earlier swim gets
  * `duplicateOfId` and a DUPLICATE result per tournament; the original is never touched.
  * Otherwise each tournament gets FLAGGED from its own standard checks; a swim that passes them
  * gets RULE_MISSED (no review, no points) when it misses a tournament rule, else VERIFIED.
@@ -52,10 +69,7 @@ export async function runChecks(
   // teamId (plain string comparison), so two uploads, or an upload and a team move, lock team
   // rows in the same order and cannot deadlock (see updateTeamProgress).
   const active = memberships
-    .filter((m) => {
-      const status = effectiveStatus(m.tournament, now);
-      return status === "PUBLISHED" || status === "ACTIVE";
-    })
+    .filter((m) => takesSwim(m.tournament, swim, now))
     .sort((a, b) => (a.teamId < b.teamId ? -1 : a.teamId > b.teamId ? 1 : 0));
 
   const duplicateOfId = await findDuplicateOf(tx, swim.userId, swim, swim.id);

@@ -1,5 +1,6 @@
 import type { SwimType, SwimTypeAllowed } from "@prisma/client";
 import { vnDayKey } from "@/lib/time/vn";
+import { uploadWindowEndsAt } from "@/lib/tournaments/lifecycle";
 import type { Reason } from "./reasons";
 
 /** The swim facts the rule checks read; `createdAt` is the upload time. */
@@ -40,7 +41,9 @@ const ACCEPTED: Record<SwimTypeAllowed, readonly SwimType[]> = {
  *
  * Deadlines (S-24): an upload on a Vietnam calendar day more than N days after the swim's
  * Vietnam date misses the submission deadline; an upload at or after the season end time plus
- * M days misses the upload window (the moment results become final).
+ * M days misses the upload window (the moment results become final). runChecks already skips a
+ * tournament whose window has closed, so a too-late upload gets no result there; this rule
+ * stays as a guard for a check run with an earlier `now` than the upload time.
  *
  * Extra rules (S-27), when set: a swim shorter than the minimum distance, or slower than the
  * extra slowest pace, misses the rule (both limits inclusive). The realistic slowest pace is a
@@ -59,9 +62,7 @@ export function evaluateRules(swim: RuleSwim, tournament: RuleTournament): { mis
       params: { days: tournament.submissionDays, swimDate },
     });
   }
-  // Same window as uploadWindowEndsAt: results are final from that moment.
-  const windowEnd = tournament.seasonEndAt.getTime() + tournament.lateUploadDays * 86_400_000;
-  if (swim.createdAt.getTime() >= windowEnd) {
+  if (swim.createdAt.getTime() >= uploadWindowEndsAt(tournament).getTime()) {
     missed.push({ code: "UPLOAD_WINDOW_CLOSED", params: { days: tournament.lateUploadDays } });
   }
   const distanceM = swim.distanceM;
