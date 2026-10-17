@@ -62,10 +62,13 @@ export async function movePlayer(
     const members = await tx.teamMember.count({ where: { teamId: toTeamId, status: "ACTIVE" } });
     if (members >= target.memberLimit) throw new TeamFullError();
 
-    await tx.teamMember.update({
-      where: { id: member.id },
+    // Conditional on the row still being ACTIVE in the old team: if anything ended it after the
+    // read above, the move rolls back instead of reporting success for a move that did not happen.
+    const { count: ended } = await tx.teamMember.updateMany({
+      where: { id: member.id, teamId: fromTeamId, status: "ACTIVE" },
       data: { status: "LEFT", endReason: "MOVED", endedAt: now },
     });
+    if (ended !== 1) throw new NotAMemberError();
     const joined = await tx.teamMember.create({
       data: { teamId: toTeamId, tournamentId, userId, joinedAt: now },
     });
