@@ -10,6 +10,8 @@ type Props = {
   alt: string;
   /** Ship tier from the team's progress (lib/scoring/ship-tier). */
   tier?: ShipTier;
+  /** The viewer's swimmer shows the energy orb (weekly multiplier active). */
+  energyOrb?: boolean;
 };
 
 // Ship box width as a share of the map width.
@@ -19,7 +21,7 @@ const BOX_PCT = 11;
  * The team's ship on the map drawn for its current tier (G2 art), with a swimmer gliding beside
  * it. The progress label is rendered by RouteMap.
  */
-export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
+export function ShipMarker({ x, y, alt, tier = 1, energyOrb = false }: Props) {
   return (
     <div
       data-testid="ship"
@@ -36,7 +38,7 @@ export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
         width: `${BOX_PCT}%`,
       }}
     >
-      <SwimmerSprite />
+      <SwimmerSprite energyOrb={energyOrb} />
       <ArtImage
         art={shipArt(tier)}
         alt={alt}
