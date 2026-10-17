@@ -63,6 +63,26 @@ export const zaloHandlers: Handlers = {
       },
     });
   },
+  /**
+   * A result that starts to count (VERIFIED at upload, or later on approval) is posted once
+   * (`ZaloSwimPost`); every other status posts nothing. The results of one swim in several
+   * tournaments posting to the same group merge into one message, a part per tournament.
+   */
+  SWIM_RESULT_CHANGED: async (tx, p) => {
+    if (p.status !== "VERIFIED" || p.previousStatus === "VERIFIED") return;
+    await enqueueZalo(tx, {
+      tournamentId: p.tournamentId,
+      kind: "COUNTED_SWIM",
+      payload: {
+        tournamentId: p.tournamentId,
+        resultId: p.resultId,
+        swimId: p.swimId,
+        userId: p.userId,
+      },
+      groupKey: (chatId) => `swim:${p.swimId}:${chatId}`,
+      swimResultId: p.resultId,
+    });
+  },
   SEASON_STARTED: async (tx, p) => {
     await enqueueZalo(tx, {
       tournamentId: p.tournamentId,

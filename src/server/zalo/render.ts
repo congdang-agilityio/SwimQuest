@@ -1,5 +1,6 @@
 import type { Prisma, ZaloMessageKind } from "@prisma/client";
 import { renderIntro } from "./messages/intro";
+import { renderCountedSwim } from "./messages/swim";
 import {
   renderNewTeam,
   renderPlayerJoined,
@@ -23,6 +24,7 @@ const RENDERERS: Partial<Record<ZaloMessageKind, ZaloRenderer>> = {
   PLAYER_JOINED: renderPlayerJoined,
   PLAYER_MOVED: renderPlayerMoved,
   SEASON_START: renderSeasonStart,
+  COUNTED_SWIM: renderCountedSwim,
 };
 
 /** Whether this kind can be sent yet; messages of other kinds wait in the queue. */
