@@ -13,6 +13,8 @@
     "legend": "Điểm xuất phát của đội",
     "distance": "{km, number} km",
     "finish": "Điểm đến",
+    "sameFinish": "Tất cả đội cùng đích {finish}",
+    "sameFinishNote": "(điểm cuối không đổi)",
     "readOnly": "Chỉ đội trưởng mới chọn được điểm xuất phát.",
     "lockedSince": "Điểm xuất phát đã khóa từ {lockedAt} (giờ Việt Nam). Không thể đổi nữa.",
     "back": "Về trang Đội của tôi",
