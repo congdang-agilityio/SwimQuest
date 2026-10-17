@@ -1,11 +1,14 @@
 import { headers } from "next/headers";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { DeadlineSettingsForm } from "@/components/settings/deadline-settings-form";
+import { PointValuesForm } from "@/components/settings/point-values-form";
+import styles from "@/components/settings/settings-card.module.css";
 import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
+import type { PointValues } from "@/components/tournaments/rules/point-rules";
 import type { SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
+import { Card, ScreenHeader } from "@/components/ui";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
@@ -24,27 +27,46 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
   const deadlines = settings?.deadlines as
     | { submissionDays: number; lateUploadDays: number; startChoiceDeadlineAt: Date | null }
     | undefined;
+  const points = settings?.points as PointValues | undefined;
   if (!swim || !deadlines) notFound();
   const status = effectiveStatus(tournament, new Date());
   const locked = status !== "DRAFT" && status !== "PUBLISHED";
   const t = await getTranslations("settings");
+  const tCommon = await getTranslations("common");
   return (
-    <main>
-      <h1>{t("page.title")}</h1>
-      <p>
-        <Link href={`/tournaments/${tournament.id}/manage`}>{t("page.back")}</Link>
-      </p>
-      <SwimSettingsForm tournamentId={tournament.id} values={swim} locked={locked} />
-      <DeadlineSettingsForm
-        tournamentId={tournament.id}
-        values={{
-          submissionDays: deadlines.submissionDays,
-          lateUploadDays: deadlines.lateUploadDays,
-          startChoiceDeadlineAt: deadlines.startChoiceDeadlineAt?.toISOString() ?? null,
-          seasonStartAt: tournament.seasonStartAt.toISOString(),
-        }}
-        locked={locked}
-      />
+    <main className={styles.screen}>
+      <div className={styles.headerBand}>
+        <ScreenHeader
+          title={t("page.title")}
+          backHref={`/tournaments/${tournament.id}/manage`}
+          backLabel={tCommon("back")}
+        />
+      </div>
+      <Card as="section" className={styles.card}>
+        <SwimSettingsForm tournamentId={tournament.id} values={swim} locked={locked} />
+      </Card>
+      <Card as="section" className={styles.card}>
+        <DeadlineSettingsForm
+          tournamentId={tournament.id}
+          values={{
+            submissionDays: deadlines.submissionDays,
+            lateUploadDays: deadlines.lateUploadDays,
+            startChoiceDeadlineAt: deadlines.startChoiceDeadlineAt?.toISOString() ?? null,
+            seasonStartAt: tournament.seasonStartAt.toISOString(),
+          }}
+          locked={locked}
+        />
+      </Card>
+      {points && (
+        <Card as="section" className={styles.card}>
+          <PointValuesForm
+            tournamentId={tournament.id}
+            values={points}
+            routeDistanceM={tournament.routeDistanceM}
+            locked={locked}
+          />
+        </Card>
+      )}
     </main>
   );
 }

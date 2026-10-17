@@ -62,5 +62,52 @@
       "DEADLINE_AFTER_SEASON_START": "The deadline cannot be after the season start.",
       "UNKNOWN": "This value is not valid."
     }
+  },
+  "points": {
+    "title": "Point values",
+    "intro": "The platform values apply unless you change them before the season starts.",
+    "groups": {
+      "distance": "Distance",
+      "bonuses": "Bonuses",
+      "multipliers": "Weekly multipliers"
+    },
+    "fields": {
+      "pointsPerKm": "Points per km",
+      "firstSwimBonusPoints": "First swim bonus (points)",
+      "longSwimTier1M": "Long swim 1: from (m)",
+      "longSwimTier1Points": "Long swim 1 bonus (points)",
+      "longSwimTier2M": "Long swim 2: from (m)",
+      "longSwimTier2Points": "Long swim 2 bonus (points)",
+      "multiplierTwoDaysPct": "Multiplier, 2 active days (%)",
+      "multiplierThreeDaysPct": "Multiplier, 3+ active days (%)",
+      "streakStepPct": "Extra per streak week (%)",
+      "multiplierMaxPct": "Maximum multiplier (%)"
+    },
+    "percentHint": "Whole percent: 110 means x1.10.",
+    "rulesHeading": "What this means",
+    "rules": {
+      "perKm": "{points} points for every km counted.",
+      "firstSwim": "First swim: +{points} points.",
+      "longSwim": "A swim of {m, number} m or more: +{points} points.",
+      "multipliers": "Weekly multiplier: x{two} with 2 active days, x{three} with 3 or more.",
+      "streak": "+{step}% for each streak week, up to x{max}.",
+      "routeLength": "Route length: {km, number} km x {perKm} points per km = {points, number} points.",
+      "shipNote": "Points move the ship, not real km. Bonuses and multipliers add points too, so a team may reach Lý Sơn with fewer real km.",
+      "xpNote": "Personal XP always uses the platform values, whatever you set here."
+    },
+    "save": "Save point values",
+    "saving": "Saving...",
+    "saved": "Point values saved.",
+    "locked": "Locked for the season: the point values cannot change once the season has started.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "POINTS_REQUIRED": "Enter a whole number.",
+      "POINTS_INVALID": "Enter a whole number, no decimals.",
+      "POINTS_OUT_OF_RANGE": "This value is outside the allowed range.",
+      "TIER_2_NOT_ABOVE_TIER_1": "Long swim 2 must start above long swim 1.",
+      "MAX_BELOW_THREE_DAYS": "The maximum cannot be below the 3+ days multiplier.",
+      "UNKNOWN": "This value is not valid."
+    }
   }
 }
