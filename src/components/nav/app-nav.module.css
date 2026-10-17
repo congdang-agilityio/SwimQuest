@@ -68,6 +68,15 @@
   color: var(--sq-text);
   box-shadow: var(--sq-shadow-raised);
 }
+.menuLanguage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-text-muted);
+}
 .nav {
   position: fixed;
   inset: auto 0 0 0;

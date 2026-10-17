@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { LanguageSwitch } from "@/components/i18n/language-switch";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
 import { BadgesSection } from "@/components/profile/badges-section";
@@ -19,8 +20,9 @@ import styles from "./profile.module.css";
 
 export default async function ProfilePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/profile");
-  const [t, stats, profile, badges] = await Promise.all([
+  const [t, tc, stats, profile, badges] = await Promise.all([
     getTranslations("nav"),
+    getTranslations("common"),
     getPlayerStats(user.id),
     getMyProfile(user.id),
     listUserBadges(user.id),
@@ -138,6 +140,11 @@ export default async function ProfilePage() {
       </Card>
 
       <InstallApp />
+
+      <div className={styles.language}>
+        <span>{tc("language.label")}</span>
+        <LanguageSwitch />
+      </div>
 
       <div className={styles.logout}>
         <LogoutButton block />

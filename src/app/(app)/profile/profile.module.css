@@ -29,6 +29,15 @@
   font-weight: var(--sq-weight-semibold);
 }
 
+.language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+  padding: 0 var(--sq-space-2);
+  color: var(--sq-navy-700);
+  font-weight: var(--sq-weight-semibold);
+}
 .logout {
   display: grid;
 }

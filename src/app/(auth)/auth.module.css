@@ -29,6 +29,11 @@
 }
 .welcome,
 .brand,
+.language {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: var(--sq-space-2);
+}
 .tagline {
   margin: 0;
 }

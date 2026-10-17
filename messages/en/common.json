@@ -1,5 +1,9 @@
 {
   "appName": "SwimQuest",
   "tagline": "Your team's swimming expedition",
-  "back": "Back"
+  "back": "Back",
+  "language": {
+    "label": "Language",
+    "failed": "Could not change the language. Try again."
+  }
 }

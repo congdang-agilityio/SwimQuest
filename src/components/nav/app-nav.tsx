@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { LanguageSwitch } from "@/components/i18n/language-switch";
 import { Avatar } from "@/components/ui";
 import { NavIcon } from "./nav-icon";
 import { TournamentSwitcher } from "./tournament-switcher";
@@ -48,6 +49,10 @@ export function AppNav({ displayName, isPlatformAdmin, switcher, bell }: Props) 
               >
                 {t("account.myProfile")}
               </Link>
+              <div className={styles.menuLanguage}>
+                <span>{tc("language.label")}</span>
+                <LanguageSwitch />
+              </div>
               <LogoutButton />
             </div>
           </details>

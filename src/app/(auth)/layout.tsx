@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
+import { LanguageSwitch } from "@/components/i18n/language-switch";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { OceanHero } from "@/components/art/ocean-hero";
 import styles from "./auth.module.css";
@@ -15,6 +16,9 @@ export default async function AuthLayout({ children }: { children: ReactNode }) 
   return (
     <main className={styles.page}>
       <div className={styles.column}>
+        <div className={styles.language}>
+          <LanguageSwitch tone="dark" />
+        </div>
         <OceanHero />
         <div className={styles.brandBlock}>
           <p className={styles.welcome}>{t("hero.welcome")}</p>
