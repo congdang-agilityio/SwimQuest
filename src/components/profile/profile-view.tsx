@@ -4,13 +4,24 @@ import { useLocale, useTranslations } from "next-intl";
 import { Avatar, Button, Card } from "@/components/ui";
 import { imageSrc, profileAvatarSrc } from "@/lib/profile-avatar";
 import { regionName } from "@/lib/regions";
+import type { PlayerLevel } from "@/server/xp/level";
 import type { MyProfile } from "@/server/profile/my-profile";
+import { LevelChip } from "@/components/xp/level-chip";
 import { SwimmingProfile } from "./swimming-profile";
 import styles from "./profile-view.module.css";
 
 /** My Profile in view mode: cover, avatar, name, city/region and bio. */
-export function ProfileView({ profile, onEdit }: { profile: MyProfile; onEdit: () => void }) {
+export function ProfileView({
+  profile,
+  level,
+  onEdit,
+}: {
+  profile: MyProfile;
+  level: PlayerLevel;
+  onEdit: () => void;
+}) {
   const t = useTranslations("profile.view");
+  const tx = useTranslations("xp");
   const locale = useLocale() === "en" ? "en" : "vi";
   const cover = imageSrc(profile.coverImageId);
   const region = regionName(profile.regionCode, locale);
@@ -24,11 +35,14 @@ export function ProfileView({ profile, onEdit }: { profile: MyProfile; onEdit: (
         <div className={styles.body}>
           <Avatar name={profile.displayName} src={profileAvatarSrc(profile)} size={72} decorative />
           <h2 className={styles.name}>{profile.displayName}</h2>
+          <LevelChip level={level.level} />
+          <p className={styles.xp}>{tx("toNext", { xp: level.xpToNext, next: level.level + 1 })}</p>
           {region && <p className={styles.region}>{region}</p>}
           <p className={styles.bio}>{profile.bio || t("noBio")}</p>
           <Button variant="secondary" size="sm" onClick={onEdit}>
             {t("edit")}
           </Button>
+          <p className={styles.xpNote}>{tx("note")}</p>
         </div>
       </Card>
       <SwimmingProfile profile={profile} locale={locale} />

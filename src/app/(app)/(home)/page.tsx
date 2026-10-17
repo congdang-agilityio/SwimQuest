@@ -4,22 +4,25 @@ import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TournamentCard } from "@/components/home/tournament-card";
 import { Avatar, ButtonLink, Card } from "@/components/ui";
+import { LevelChip } from "@/components/xp/level-chip";
 import { profileAvatarSrc } from "@/lib/profile-avatar";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { listMyTournaments, splitTournaments } from "@/server/home/my-tournaments";
 import { getAvatarFields } from "@/server/profile/my-avatar";
+import { getLevels } from "@/server/xp/level";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./home.module.css";
 
 export default async function HomePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/");
-  const [t, format, tournaments, stats, avatar] = await Promise.all([
+  const [t, format, tournaments, stats, avatar, levels] = await Promise.all([
     getTranslations("home"),
     getFormatter(),
     listMyTournaments(user.id, new Date()),
     getPlayerStats(user.id),
     getAvatarFields(user.id),
+    getLevels([user.id]),
   ]);
   const { active, past } = splitTournaments(tournaments);
   const featured = active.find((x) => x.effectiveStatus === "ACTIVE") ?? active[0];
@@ -34,7 +37,10 @@ export default async function HomePage() {
             size={56}
             decorative
           />
-          <span className={styles.name}>{user.displayName}</span>
+          <div className={styles.who}>
+            <span className={styles.name}>{user.displayName}</span>
+            <LevelChip level={levels.get(user.id)?.level ?? 1} short />
+          </div>
         </div>
         <div className={styles.heroArt}>
           {/* Cut from the mockup's "TRANG CHỦ" hero card (island and lighthouse). */}

@@ -1,0 +1,6 @@
+{
+  "level": "Level {level}",
+  "levelShort": "Lv. {level}",
+  "toNext": "{xp} XP to level {next}",
+  "note": "Levels are just for fun and give no advantage in the game."
+}

@@ -41,3 +41,12 @@
   font-size: var(--sq-text-md);
   white-space: pre-line;
 }
+.xp,
+.xpNote {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-sm);
+}
+.xp {
+  color: var(--sq-gold-strong);
+}
