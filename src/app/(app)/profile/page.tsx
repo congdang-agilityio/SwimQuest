@@ -31,8 +31,6 @@ export default async function ProfilePage() {
 
       <ProfileSection profile={profile} />
 
-      {/* "Swimming profile" section (swim goals, #265) goes here. */}
-
       <Card as="section" className={styles.stats} aria-label={home("stats.label")}>
         <dl className={styles.statList}>
           <div className={styles.stat}>

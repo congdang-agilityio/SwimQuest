@@ -99,3 +99,24 @@
   display: grid;
   gap: var(--sq-space-2);
 }
+.disciplines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.toggle {
+  min-height: var(--sq-tap);
+  padding: 0 var(--sq-space-4);
+  border: 2px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-sky-50);
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  cursor: pointer;
+}
+.toggle[aria-pressed="true"] {
+  border-color: var(--sq-blue-600);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
