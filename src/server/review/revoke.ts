@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { SwimResultStatus } from "@prisma/client";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { reevaluatePersonalBadges } from "@/server/badges/personal-rules";
-import { ForbiddenError, NotFoundError, requireReviewer } from "@/server/auth/roles";
+import { ArchivedError, ForbiddenError, NotFoundError, requireReviewer } from "@/server/auth/roles";
 import { lockPlayerSwims, type Tx } from "@/server/checks/run-checks";
 import { vnWeekStart } from "@/lib/time/vn";
 import { db } from "@/server/db";
@@ -27,10 +27,18 @@ const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
 
 type LockedResult = { id: string; status: SwimResultStatus };
 
-/** Only a platform admin (role read from the database) may use the `asAdmin` override (S-72). */
-async function requireAdmin(actorId: string): Promise<void> {
+/**
+ * Only an active platform admin (role read from the database) may use the `asAdmin` override
+ * (S-72), and never on a result of an ARCHIVED tournament (FR-23), like the reviewer path.
+ */
+async function requireAdmin(actorId: string, tournamentId: string): Promise<void> {
   const actor = isId(actorId) && (await db.user.findUnique({ where: { id: actorId } }));
-  if (!actor || !actor.isPlatformAdmin) throw new ForbiddenError();
+  if (!actor || !actor.isPlatformAdmin || actor.status !== "ACTIVE") throw new ForbiddenError();
+  const t = await db.tournament.findUnique({
+    where: { id: tournamentId },
+    select: { status: true },
+  });
+  if (t?.status === "ARCHIVED") throw new ArchivedError();
 }
 
 /**
@@ -72,8 +80,8 @@ async function reversePoints(tx: Tx, resultId: string, tournamentId: string, use
  * (SWIM_REVOKED); `SWIM_REVOKED` is audited and `SWIM_RESULT_CHANGED` emitted. The same swim's
  * results in other tournaments are untouched.
  * Lock order as `decideFlagged`: the player's `swims:<userId>` lock, the result row, points,
- * badges, XP, then team rows. Throws NotFoundError, ForbiddenError, ReasonRequiredError and
- * NotRevokableError.
+ * badges, XP, then team rows. Throws NotFoundError, ForbiddenError, ArchivedError,
+ * ReasonRequiredError and NotRevokableError.
  */
 export async function revokeResult(
   actorId: string,
@@ -87,7 +95,7 @@ export async function revokeResult(
     select: { tournamentId: true, userId: true },
   });
   if (!found) throw new NotFoundError();
-  if (asAdmin) await requireAdmin(actorId);
+  if (asAdmin) await requireAdmin(actorId, found.tournamentId);
   else await requireReviewer(actorId, found.tournamentId, { write: true });
   const note = reasonSchema.safeParse(reason);
   if (!note.success) throw new ReasonRequiredError();

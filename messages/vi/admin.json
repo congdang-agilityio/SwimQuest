@@ -97,6 +97,13 @@
         "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
         "failed": "Không đặt lại được mật khẩu. Vui lòng thử lại."
       }
+    },
+    "results": {
+      "title": "Kết quả bơi",
+      "help": "Kết quả ở mọi giải đấu, mới nhất trước. Như một điều chỉnh ngoại lệ, bạn có thể thu hồi một buổi bơi đã xác minh kèm lý do; việc thu hồi giống như người duyệt thu hồi và được ghi lại với tên bạn.",
+      "empty": "Người dùng này chưa có kết quả bơi nào.",
+      "line": "{team} · {date} · {km} km",
+      "archived": "Đã lưu trữ"
     }
   },
   "contact": {

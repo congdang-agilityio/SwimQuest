@@ -97,6 +97,13 @@
         "network": "Could not reach the server. Check your connection and try again.",
         "failed": "Could not reset the password. Please try again."
       }
+    },
+    "results": {
+      "title": "Swim results",
+      "help": "Results in every tournament, newest first. As an exceptional correction you can revoke a verified swim with a reason; it is reversed as a reviewer revoke and recorded with your name.",
+      "empty": "This user has no swim results yet.",
+      "line": "{team} · {date} · {km} km",
+      "archived": "Archived"
     }
   },
   "contact": {

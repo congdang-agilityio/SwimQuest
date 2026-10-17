@@ -185,3 +185,11 @@
 .filters ul {
   flex-wrap: wrap;
 }
+.resultRow {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-foam);
+}
