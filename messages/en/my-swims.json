@@ -1,7 +1,8 @@
 {
   "title": "My swims",
   "empty": "You have no swims yet.",
-  "add": "Add a swim",
+  "add": "Upload your first swim",
+  "emptyBody": "Upload a swim from your watch or add one by hand to start earning points.",
   "more": "More",
   "loading": "Loading…",
   "error": "Could not load more swims. Please try again.",

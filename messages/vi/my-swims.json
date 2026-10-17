@@ -1,7 +1,8 @@
 {
   "title": "Các lần bơi của tôi",
   "empty": "Bạn chưa có buổi bơi nào.",
-  "add": "Thêm buổi bơi",
+  "add": "Tải lên buổi bơi đầu tiên",
+  "emptyBody": "Tải buổi bơi từ đồng hồ hoặc thêm thủ công để bắt đầu tích điểm.",
   "more": "Xem thêm",
   "loading": "Đang tải…",
   "error": "Không tải thêm được các buổi bơi. Vui lòng thử lại.",

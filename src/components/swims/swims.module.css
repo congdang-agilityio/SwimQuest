@@ -314,17 +314,6 @@
 .chevron {
   color: var(--sq-blue-500);
 }
-.empty {
-  display: grid;
-  justify-items: center;
-  gap: var(--sq-space-4);
-  text-align: center;
-}
-.empty h2 {
-  margin: 0;
-  font-size: var(--sq-text-lg);
-  font-weight: var(--sq-weight-bold);
-}
 .listAlert {
   margin: 0;
   color: var(--sq-danger);
