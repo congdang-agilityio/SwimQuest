@@ -6,7 +6,7 @@ import { OrganizerStartPanel } from "@/components/starts/organizer-start-panel";
 import { RosterList } from "@/components/teams/roster-list";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute, startDestinations } from "@/lib/routes";
-import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
+import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
@@ -79,6 +79,7 @@ export default async function OrganizerTeamPage({
       )}
       <RosterList
         teamId={team.id}
+        afterStart={!["DRAFT", "PUBLISHED"].includes(effectiveStatus(team.tournament, new Date()))}
         moveTargets={others.map((o) => ({
           id: o.id,
           name: o.name,

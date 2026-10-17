@@ -65,6 +65,7 @@ export default async function TeamPage() {
                 handoverTeamId={
                   membership.team.captainUserId === user.id ? membership.team.id : undefined
                 }
+                afterStart={!beforeStart}
               />
               <div className={styles.footer}>
                 <ButtonLink href="/connect" variant="primary" block>

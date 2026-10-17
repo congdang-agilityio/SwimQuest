@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { MakeCaptainButton } from "./make-captain-button";
+import { RemoveMemberButton } from "./remove-member-button";
 import { MoveMemberDialog, type MoveTarget } from "./move-member-dialog";
 
 export type RosterRow = { id: string; displayName: string; isCaptain: boolean };
@@ -9,11 +10,14 @@ export function RosterList({
   teamId,
   members,
   moveTargets,
+  afterStart = false,
 }: {
   teamId: string;
   members: readonly RosterRow[];
   /** Other teams of the tournament with their free places; omit to hide Move. */
   moveTargets?: readonly MoveTarget[];
+  /** The tournament has started: Remove then warns that the swims stay with the team. */
+  afterStart?: boolean;
 }) {
   const t = useTranslations("captain");
   return (
@@ -31,6 +35,12 @@ export function RosterList({
             ) : (
               <MakeCaptainButton teamId={teamId} userId={m.id} name={m.displayName} />
             )}
+            <RemoveMemberButton
+              teamId={teamId}
+              userId={m.id}
+              name={m.displayName}
+              afterStart={afterStart}
+            />
             {moveTargets && (
               <MoveMemberDialog
                 teamId={teamId}

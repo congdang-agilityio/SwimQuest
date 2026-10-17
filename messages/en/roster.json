@@ -17,5 +17,19 @@
     "TEAM_FULL": "That team is full now. Pick another team.",
     "FORBIDDEN": "Only the organizer can move players.",
     "GENERIC": "Could not move the player. Try again."
+  },
+  "remove": {
+    "action": "Remove",
+    "for": "Remove {name} from the team",
+    "title": "Remove {name} from the team?",
+    "bodyBeforeStart": "{name} leaves the team and can join another team before the tournament starts.",
+    "bodyAfterStart": "{name} leaves the team and the tournament, and cannot rejoin through the link. Their swims and points stay with the team.",
+    "confirm": "Yes, remove",
+    "cancel": "Cancel",
+    "error": {
+      "forbidden": "Only the captain or organizer can remove players.",
+      "notMember": "That player is no longer an active member of the team.",
+      "failed": "Could not remove the player. Try again."
+    }
   }
 }
