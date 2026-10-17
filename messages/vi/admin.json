@@ -3,7 +3,8 @@
   "sections": {
     "users": "Người dùng",
     "swimLimits": "Giới hạn bơi",
-    "reports": "Báo cáo"
+    "reports": "Báo cáo",
+    "tournamentRequests": "Yêu cầu thêm giải đấu"
   },
   "users": {
     "title": "Người dùng",
@@ -200,6 +201,31 @@
       "NOT_FOUND": "Báo cáo này không còn tồn tại.",
       "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
       "failed": "Không đóng được báo cáo. Vui lòng thử lại."
+    }
+  },
+  "tournamentRequests": {
+    "title": "Yêu cầu thêm giải đấu",
+    "back": "Quay lại",
+    "listTitle": "Yêu cầu đang chờ",
+    "sentAt": "Gửi lúc",
+    "approve": "Duyệt",
+    "reject": "Từ chối",
+    "confirmReject": "Từ chối yêu cầu",
+    "reasonLabel": "Lý do gửi người chơi",
+    "reasonHint": "Bắt buộc, tối đa {max} ký tự. Người chơi sẽ thấy lý do này.",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "empty": "Không có yêu cầu nào đang chờ.",
+    "loading": "Đang tải...",
+    "retry": "Thử lại",
+    "loadError": "Không tải được danh sách. Kiểm tra kết nối và thử lại.",
+    "errors": {
+      "INVALID_REASON": "Hãy nhập lý do từ 1 đến 500 ký tự.",
+      "REQUEST_DECIDED": "Yêu cầu này đã được xử lý. Danh sách đã được làm mới.",
+      "FORBIDDEN": "Bạn không có quyền làm việc này.",
+      "NOT_FOUND": "Yêu cầu này không còn tồn tại.",
+      "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
+      "failed": "Không lưu được quyết định. Hãy thử lại."
     }
   }
 }

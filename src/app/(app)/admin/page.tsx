@@ -10,6 +10,7 @@ const SECTIONS = [
   { key: "users", href: "/admin/users" },
   { key: "swimLimits", href: "/admin/swim-limits" },
   { key: "reports", href: "/admin/reports" },
+  { key: "tournamentRequests", href: "/admin/tournament-requests" },
 ] as const;
 
 export default async function AdminPage() {
