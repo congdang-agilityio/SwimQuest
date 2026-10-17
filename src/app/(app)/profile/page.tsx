@@ -81,6 +81,22 @@ export default async function ProfilePage() {
             />
           </svg>
         </Link>
+        <Link href="/profile/security" className={styles.row}>
+          <span className={styles.rowIcon}>
+            <NavIcon name="profile" />
+          </span>
+          <span className={styles.rowLabel}>{t("profile.security")}</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M9 5l7 7-7 7"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
       </Card>
 
       <div className={styles.logout}>
