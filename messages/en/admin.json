@@ -4,7 +4,8 @@
     "users": "Users",
     "swimLimits": "Swim limits",
     "reports": "Reports",
-    "tournamentRequests": "Tournament requests"
+    "tournamentRequests": "Tournament requests",
+    "audit": "Audit log"
   },
   "users": {
     "title": "Users",
@@ -259,6 +260,69 @@
       "forbidden": "Only a platform admin can make this correction.",
       "network": "Could not reach the server. Check your connection and try again.",
       "failed": "Could not change the start. Please try again."
+    }
+  },
+  "audit": {
+    "title": "Audit log",
+    "back": "Back",
+    "empty": "No audit events match these filters.",
+    "older": "Older events",
+    "system": "System",
+    "filters": {
+      "title": "Filters",
+      "any": "Any",
+      "tournament": "Tournament",
+      "action": "Action",
+      "user": "User ID",
+      "userHint": "Matches the person who acted or the user it was done to. Find IDs on the Users page.",
+      "from": "From date",
+      "to": "To date",
+      "apply": "Apply filters",
+      "clear": "Clear filters"
+    },
+    "cols": {
+      "time": "Time (Vietnam)",
+      "actor": "Actor",
+      "action": "Action",
+      "target": "Target",
+      "reason": "Reason"
+    },
+    "actions": {
+      "TEAM_CAPTAIN_SET": "Captain appointed",
+      "TEAM_CAPTAIN_HANDOVER": "Captain handover",
+      "TEAM_DETAILS_UPDATED": "Team details updated",
+      "TEAM_START_AUTO_ASSIGNED": "Team start auto-assigned",
+      "TEAM_START_SET_BY_ORGANIZER": "Team start set by organizer",
+      "TEAM_MEMBER_REMOVED": "Team member removed",
+      "PLAYER_MOVED": "Player moved",
+      "PLAYER_ADDED_BY_ORGANIZER": "Player added by organizer",
+      "INVITE_LINK_SWITCHED": "Invite link switched",
+      "INVITE_LINK_REPLACED": "Invite link replaced",
+      "ADMIN_ROLE_CHANGED": "Admin role changed",
+      "TOURNAMENT_UPDATED": "Tournament updated",
+      "TOURNAMENT_ARCHIVED": "Tournament archived",
+      "PASSWORD_CHANGED": "Password changed",
+      "SWIM_LIMITS_CHANGED": "Swim limits changed",
+      "ACCOUNT_SUSPENDED": "Account suspended",
+      "ACCOUNT_REACTIVATED": "Account reactivated",
+      "PASSWORD_RESET_BY_ADMIN": "Password reset by admin",
+      "ADMIN_CONTACT_CHANGED": "Admin contact changed",
+      "SWIM_REVIEWED": "Swim reviewed",
+      "DISPUTE_DECIDED": "Dispute decided",
+      "SWIM_REVOKED": "Swim revoked",
+      "QUOTA_REQUEST_DECIDED": "Quota request decided",
+      "REVIEW_HELPER_APPOINTED": "Review helper appointed",
+      "REVIEW_HELPER_REMOVED": "Review helper removed",
+      "SPECIAL_BADGE_GIVEN": "Special badge given",
+      "REPORT_CLOSED": "Report closed"
+    },
+    "entities": {
+      "TEAM": "Team",
+      "TOURNAMENT": "Tournament",
+      "USER": "User",
+      "SWIM": "Swim",
+      "SWIM_RESULT": "Swim result",
+      "REPORT": "Report"
     }
   }
 }
