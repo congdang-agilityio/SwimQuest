@@ -83,6 +83,11 @@
       "title": "Organizer links",
       "invite": "Invite link"
     },
+    "export": {
+      "title": "Export",
+      "note": "The file lists teams, members' display names, verified km and points. It holds no emails or GPS data.",
+      "button": "Export"
+    },
     "progress": {
       "title": "Team progress",
       "empty": "No teams yet.",
