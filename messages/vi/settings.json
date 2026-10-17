@@ -143,5 +143,42 @@
       "EXTRA_PACE_NOT_STRICTER": "Tốc độ phải nhanh hơn tốc độ chậm nhất hợp lý của giải, {pace} /100m.",
       "UNKNOWN": "Giá trị này không hợp lệ."
     }
+  },
+  "realisticLimits": {
+    "title": "Giới hạn bơi hợp lý",
+    "intro": "Buổi bơi nằm ngoài các giới hạn này sẽ bị gắn cờ để xem xét. Đã điền sẵn theo giá trị của giải.",
+    "legend": "Giới hạn hợp lý",
+    "fields": {
+      "fastestPace": "Tốc độ nhanh nhất hợp lý (m:ss mỗi 100 m)",
+      "slowestPace": "Tốc độ chậm nhất hợp lý (m:ss mỗi 100 m)",
+      "longestRealisticSwimKm": "Buổi bơi dài nhất hợp lý (km)"
+    },
+    "hints": {
+      "range": "Cho phép: {range}."
+    },
+    "rulesHeading": "Ý nghĩa của các giới hạn",
+    "rules": {
+      "unset": "-",
+      "fastest": "Buổi bơi nhanh hơn {pace} /100m sẽ bị gắn cờ để xem xét.",
+      "slowest": "Buổi bơi chậm hơn {pace} /100m sẽ bị gắn cờ để xem xét.",
+      "longest": "Buổi bơi dài hơn {km} km sẽ bị gắn cờ để xem xét.",
+      "flagged": "Buổi bơi bị gắn cờ không bị từ chối: ban tổ chức xem xét trước khi được tính.",
+      "difference": "Đây không phải luật \"buổi bơi dài nhất được tính\": luật đó giới hạn phần được tính của một buổi bơi, còn buổi bơi dài nhất hợp lý chỉ quyết định buổi nào bị gắn cờ."
+    },
+    "save": "Lưu giới hạn bơi",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu giới hạn bơi.",
+    "locked": "Đã khóa trong mùa giải: không thể thay đổi giới hạn bơi sau khi mùa giải bắt đầu.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa gửi được. Hãy kiểm tra kết nối và thử lại.",
+    "errors": {
+      "PACE_INVALID": "Nhập tốc độ dạng m:ss, ví dụ 1:05.",
+      "DISTANCE_INVALID": "Nhập quãng đường theo km, ví dụ 30 hoặc 7.5.",
+      "LIMIT_OUT_OF_BOUNDS": "Ngoài khoảng cho phép: {range}.",
+      "FASTEST_NOT_FASTER_THAN_SLOWEST": "Tốc độ nhanh nhất phải nhanh hơn tốc độ chậm nhất.",
+      "EXTRA_PACE_NOT_STRICTER": "Tốc độ chậm nhất phải chậm hơn luật tốc độ bổ sung, {extraPace} /100m.",
+      "EXTRA_DISTANCE_NOT_STRICTER": "Buổi bơi dài nhất phải dài hơn luật quãng đường tối thiểu, {minKm} km.",
+      "UNKNOWN": "Giá trị này không hợp lệ."
+    }
   }
 }

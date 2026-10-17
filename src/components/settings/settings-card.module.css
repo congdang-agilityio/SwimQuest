@@ -57,6 +57,13 @@
   padding: 0;
   border: 0;
 }
+/* Label, input, hint and error share rows across the two columns, so inputs line up when labels wrap. */
+.card .group > p:not(.hint) {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  gap: var(--sq-space-1);
+}
 .card .legend {
   grid-column: 1 / -1;
   margin-bottom: var(--sq-space-2);

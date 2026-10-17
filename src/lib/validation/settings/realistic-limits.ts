@@ -11,7 +11,7 @@ export type RealisticLimitsContext = {
 
 const isCount = (v: unknown): v is number => Number.isSafeInteger(v) && (v as number) > 0;
 
-function boundOf(snapshot: unknown, field: SwimLimitField) {
+export function boundOf(snapshot: unknown, field: SwimLimitField) {
   const b = (snapshot as Record<string, { min?: unknown; max?: unknown }> | null)?.[field];
   return b && isCount(b.min) && isCount(b.max) && b.min <= b.max
     ? { min: b.min, max: b.max }

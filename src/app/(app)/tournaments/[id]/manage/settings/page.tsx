@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { DeadlineSettingsForm } from "@/components/settings/deadline-settings-form";
 import { ExtraRulesForm } from "@/components/settings/extra-rules-form";
+import { RealisticLimitsForm } from "@/components/settings/realistic-limits-form";
 import { PointValuesForm } from "@/components/settings/point-values-form";
 import styles from "@/components/settings/settings-card.module.css";
 import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
@@ -10,9 +11,11 @@ import type { PointValues } from "@/components/tournaments/rules/point-rules";
 import type { SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { Card, ScreenHeader } from "@/components/ui";
+import { SWIM_LIMIT_BOUNDS, type SwimLimitField } from "@/lib/swim-limits";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { boundOf } from "@/lib/validation/settings/realistic-limits";
 import { getSettings } from "@/server/tournaments/update-settings";
 
 /** "Rules and settings": organizer only; anyone else gets the not-found page. */
@@ -31,9 +34,22 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
   const extra = settings?.extraRules as
     { minSwimDistanceM: number | null; extraSlowestPaceSecPer100m: number | null } | undefined;
   const points = settings?.points as PointValues | undefined;
+  const limits = settings?.realisticLimits as
+    | {
+        fastestPaceSecPer100m: number;
+        slowestPaceSecPer100m: number;
+        longestRealisticSwimM: number;
+      }
+    | undefined;
   if (!swim || !deadlines) notFound();
   const status = effectiveStatus(tournament, new Date());
   const locked = status !== "DRAFT" && status !== "PUBLISHED";
+  const bounds = Object.fromEntries(
+    (Object.keys(SWIM_LIMIT_BOUNDS) as SwimLimitField[]).map((f) => [
+      f,
+      boundOf(tournament.swimLimitBounds, f),
+    ]),
+  ) as Record<SwimLimitField, { min: number; max: number }>;
   const t = await getTranslations("settings");
   const tCommon = await getTranslations("common");
   return (
@@ -60,6 +76,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
           locked={locked}
         />
       </Card>
+      {limits && (
+        <Card as="section" className={styles.card}>
+          <RealisticLimitsForm
+            tournamentId={tournament.id}
+            values={limits}
+            bounds={bounds}
+            locked={locked}
+          />
+        </Card>
+      )}
       {points && (
         <Card as="section" className={styles.card}>
           <PointValuesForm
