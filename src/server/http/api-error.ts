@@ -41,6 +41,7 @@ export type ApiErrorCode =
   | "ALREADY_DECIDED"
   | "DISPUTE_OPEN"
   | "NOT_DISPUTABLE"
+  | "NOT_REVOKABLE"
   | "QUOTA_REACHED"
   | "QUOTA_NOT_REACHED"
   | "REQUEST_PENDING"
@@ -91,6 +92,7 @@ const messages: Record<ApiErrorCode, string> = {
   ALREADY_DECIDED: "This swim has already been decided.",
   DISPUTE_OPEN: "This swim already has an open dispute.",
   NOT_DISPUTABLE: "Only a rejected, duplicate or rule-missed swim can be disputed.",
+  NOT_REVOKABLE: "Only a verified swim can be revoked.",
   QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
   QUOTA_NOT_REACHED: "You can request more tournaments only after reaching your limit.",
   REQUEST_PENDING: "You already have a pending request.",
