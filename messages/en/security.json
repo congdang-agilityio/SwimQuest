@@ -1,0 +1,29 @@
+{
+  "title": "Security",
+  "login": {
+    "title": "How you sign in",
+    "method": "Email and password"
+  },
+  "change": {
+    "title": "Change password",
+    "current": "Current password",
+    "next": "New password",
+    "confirm": "Repeat the new password",
+    "submit": "Change password",
+    "success": "Your password was changed. Other devices were signed out."
+  },
+  "errors": {
+    "CURRENT_REQUIRED": "Please enter your current password.",
+    "WRONG_PASSWORD": "That is not your current password.",
+    "PASSWORD_REQUIRED": "Please enter a new password.",
+    "PASSWORD_BLANK": "The new password cannot be only spaces.",
+    "PASSWORD_TOO_SHORT": "The new password must have at least 8 characters.",
+    "PASSWORD_TOO_LONG": "The new password is too long (128 characters at most).",
+    "PASSWORD_MISMATCH": "The two new passwords are not the same.",
+    "GENERIC": "Something went wrong. Please try again."
+  },
+  "recovery": {
+    "title": "Forgot your password?",
+    "body": "If you cannot sign in, contact a platform admin. They can help you get back into your account."
+  }
+}

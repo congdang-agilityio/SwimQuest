@@ -1,0 +1,29 @@
+{
+  "title": "Bảo mật",
+  "login": {
+    "title": "Cách bạn đăng nhập",
+    "method": "Email và mật khẩu"
+  },
+  "change": {
+    "title": "Đổi mật khẩu",
+    "current": "Mật khẩu hiện tại",
+    "next": "Mật khẩu mới",
+    "confirm": "Nhập lại mật khẩu mới",
+    "submit": "Đổi mật khẩu",
+    "success": "Đã đổi mật khẩu. Các thiết bị khác đã được đăng xuất."
+  },
+  "errors": {
+    "CURRENT_REQUIRED": "Vui lòng nhập mật khẩu hiện tại.",
+    "WRONG_PASSWORD": "Đây không phải mật khẩu hiện tại của bạn.",
+    "PASSWORD_REQUIRED": "Vui lòng nhập mật khẩu mới.",
+    "PASSWORD_BLANK": "Mật khẩu mới không được chỉ có khoảng trắng.",
+    "PASSWORD_TOO_SHORT": "Mật khẩu mới phải có ít nhất 8 ký tự.",
+    "PASSWORD_TOO_LONG": "Mật khẩu mới quá dài (tối đa 128 ký tự).",
+    "PASSWORD_MISMATCH": "Hai mật khẩu mới chưa giống nhau.",
+    "GENERIC": "Đã xảy ra lỗi. Vui lòng thử lại."
+  },
+  "recovery": {
+    "title": "Quên mật khẩu?",
+    "body": "Nếu không đăng nhập được, hãy liên hệ quản trị viên nền tảng. Họ sẽ giúp bạn vào lại tài khoản."
+  }
+}
