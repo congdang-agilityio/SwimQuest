@@ -2,7 +2,8 @@
   "title": "Admin",
   "sections": {
     "users": "Users",
-    "swimLimits": "Swim limits"
+    "swimLimits": "Swim limits",
+    "reports": "Reports"
   },
   "users": {
     "title": "Users",
@@ -150,6 +151,55 @@
       "NOT_FASTER_THAN_SLOWEST": "The fastest pace must be faster than the slowest pace.",
       "REQUIRED": "Enter a reason.",
       "UNKNOWN": "This value is not valid."
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "back": "Back",
+    "listTitle": "Reports",
+    "filterLabel": "Filter by status",
+    "filter": {
+      "ALL": "All",
+      "OPEN": "Open",
+      "HANDLED": "Handled",
+      "DISMISSED": "Dismissed"
+    },
+    "status": {
+      "OPEN": "Open",
+      "HANDLED": "Handled",
+      "DISMISSED": "Dismissed"
+    },
+    "targetType": {
+      "PLAYER": "Player",
+      "TEAM": "Team",
+      "TOURNAMENT": "Tournament",
+      "SWIM": "Swim"
+    },
+    "targetUnknown": "Item no longer available",
+    "reportedBy": "Reported by",
+    "sentAt": "Sent",
+    "internalNote": "Internal note (admins only)",
+    "close": {
+      "HANDLED": "Mark handled",
+      "DISMISSED": "Dismiss"
+    },
+    "noteLabel": "Internal note",
+    "noteHint": "Required, up to {max} characters. Only admins see it; the reporter does not.",
+    "confirmYes": "Save",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "empty": "No reports here.",
+    "loading": "Loading...",
+    "loadMore": "Show more",
+    "retry": "Try again",
+    "loadError": "Could not load reports. Check your connection and try again.",
+    "errors": {
+      "REASON_REQUIRED": "Enter a note of 1 to 500 characters.",
+      "ALREADY_DECIDED": "This report was already closed. The list was refreshed.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "NOT_FOUND": "This report no longer exists.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "failed": "Could not close the report. Please try again."
     }
   }
 }

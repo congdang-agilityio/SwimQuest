@@ -9,6 +9,7 @@ import { getAdminContact } from "@/server/platform/admin-contact";
 const SECTIONS = [
   { key: "users", href: "/admin/users" },
   { key: "swimLimits", href: "/admin/swim-limits" },
+  { key: "reports", href: "/admin/reports" },
 ] as const;
 
 export default async function AdminPage() {
