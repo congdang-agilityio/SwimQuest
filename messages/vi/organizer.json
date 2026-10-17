@@ -11,5 +11,25 @@
       "ARCHIVED": "Đã lưu trữ"
     },
     "settingsLink": "Luật và cài đặt"
+  },
+  "players": {
+    "title": "Người chơi chưa có đội",
+    "empty": "Mọi người chơi đều đã có đội.",
+    "removed": "Bị loại sau khi bắt đầu",
+    "add": "Thêm vào đội",
+    "addFor": "Thêm {name} vào đội",
+    "team": "Đội",
+    "choose": "Chọn đội",
+    "freePlaces": "{name} (còn {count} chỗ)",
+    "teamFull": "{name} (đã đầy)",
+    "confirm": "Xác nhận",
+    "adding": "Đang thêm...",
+    "cancel": "Hủy",
+    "errors": {
+      "full": "Đội đó đã đầy. Hãy chọn đội khác.",
+      "already": "Người chơi này đã có đội.",
+      "failed": "Không thể thêm người chơi. Hãy thử lại.",
+      "network": "Không có kết nối. Hãy thử lại."
+    }
   }
 }

@@ -26,6 +26,10 @@ vi.mock("@/server/auth/roles", () => ({
 vi.mock("@/server/teams/manage", () => ({
   listTeamsWithCounts: async () => ({ teams: [], capacity: 5 }),
 }));
+vi.mock("@/server/organizer/unassigned-players", () => ({ listUnassignedPlayers: async () => [] }));
+vi.mock("@/components/organizer/unassigned-players", () => ({
+  UnassignedPlayers: () => <div>unassigned</div>,
+}));
 vi.mock("@/components/teams/team-list", () => ({ TeamList: () => <div>teams</div> }));
 vi.mock("@/components/tournaments/invite-link", () => ({
   InviteLink: ({ url }: { url: string }) => <div data-testid="invite">{url}</div>,
