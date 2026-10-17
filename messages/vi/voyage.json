@@ -5,5 +5,21 @@
   "noStart": "Chưa chọn điểm xuất phát",
   "progress": "{reached} / {total} km hành trình · {pct}",
   "ship": "Tàu của {team}",
-  "note": "Bản đồ chỉ mang tính minh họa, không phải hải đồ dẫn đường."
+  "note": "Bản đồ chỉ mang tính minh họa, không phải hải đồ dẫn đường.",
+  "screenTitle": "Hành trình của đội",
+  "mapTitle": "Bản đồ hải trình Route 01",
+  "emblem": "Huy hiệu đội {team}",
+  "teamProgress": "Tiến độ của đội",
+  "routeProgress": "Tiến độ trên lộ trình",
+  "bandStart": "Xuất phát",
+  "bandFinish": "Đích đến",
+  "province": {
+    "non_nuoc": "Đà Nẵng",
+    "son_thuy": "Đà Nẵng",
+    "pham_van_dong": "Đà Nẵng",
+    "man_thai": "Đà Nẵng",
+    "hon_sup": "Đà Nẵng",
+    "cu_lao_cham": "Quảng Nam",
+    "ly_son": "Quảng Ngãi"
+  }
 }

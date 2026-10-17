@@ -1,10 +1,12 @@
 import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
-import { landmarkArt, ROUTE01_ART } from "@/lib/art/route01-art";
+import { ProgressBar } from "@/components/ui";
+import { MAP_ASPECT } from "@/lib/routes/destinations-passed";
 import { formatProgressPct } from "@/lib/scoring/progress";
-import { shipTier } from "@/lib/scoring/ship-tier";
+import { ScrollToShip } from "./scroll-to-ship";
 import { ShipMarker } from "./ship-marker";
+import { VOYAGE_MAP_ART, VOYAGE_SHIP_ART } from "./voyage-art";
 import styles from "./voyage.module.css";
 
 export type RouteMapProps = {
@@ -17,10 +19,25 @@ export type RouteMapProps = {
   ship: { x: number; y: number } | null;
 };
 
-const ASPECT = 1.6; // map box is 16:10; SVG viewBox is 160 x 100
-// Names sit right of their icon (open sea), except near the right edge where they would not fit.
-const NAME_LEFT_FROM_X = 75;
-/** Route map base: background and landmarks from the art registry, names and progress as text. */
+// Names sit right of their pin, as on the mockup map; near the right edge they sit above it.
+const NAME_ABOVE_FROM_X = 85;
+
+/** Share (0..100) of the path length at each path point, for the dots on the route bar. */
+function pathShares(path: { x: number; y: number }[]): number[] {
+  const cumulative = [0];
+  for (let i = 1; i < path.length; i++) {
+    const a = path[i - 1];
+    const b = path[i];
+    cumulative.push(cumulative[i - 1] + Math.hypot((b.x - a.x) * MAP_ASPECT, b.y - a.y));
+  }
+  const total = cumulative[cumulative.length - 1];
+  return cumulative.map((c) => (total === 0 ? 0 : (c / total) * 100));
+}
+
+/**
+ * Route map: the painted Route 01 scene cut from the mockup, numbered pins and name pills at the
+ * anchors (which sit on the painted islands), the team ship, and the progress band under the map.
+ */
 export function RouteMap({
   routeId,
   teamName,
@@ -31,85 +48,124 @@ export function RouteMap({
   ship,
 }: RouteMapProps) {
   const t = useTranslations();
-  const background = ROUTE01_ART.find((a) => a.key === "map");
   const label = t("voyage.progress", {
     reached: progress.routeKmReached,
     total: progress.routeKmTotal,
     pct: formatProgressPct(progress.progressBp),
   });
+  const pct = Math.min(100, Math.max(0, progress.progressBp / 100));
+  const finish = destinations.find((d) => d.isFinish);
   return (
-    <section aria-label={t("voyage.mapLabel")}>
-      <div
-        data-testid="route-map"
-        style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden" }}
-      >
-        <ArtImage
-          art={background}
-          alt=""
-          className={styles.background}
-          fallback={<div style={{ position: "absolute", inset: 0, background: "#bde3f2" }} />}
-        />
-        {path && (
-          <svg
-            data-testid="route-path"
-            viewBox="0 0 160 100"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-          >
-            <polyline
-              points={path.map((p) => `${p.x * ASPECT},${p.y}`).join(" ")}
-              fill="none"
-              stroke="#c2410c"
-              strokeWidth={3}
-              strokeDasharray="6 4"
-              vectorEffect="non-scaling-stroke"
-            />
-          </svg>
-        )}
-        {destinations.map((d) => (
+    <section aria-label={t("voyage.mapLabel")} className={styles.section}>
+      <div className={styles.frame}>
+        {/* On a phone the wide map scrolls sideways instead of shrinking its names. */}
+        <div className={styles.mapScroll} data-map-scroll>
+          {ship && <ScrollToShip />}
           <div
-            key={d.slug}
-            data-testid={`destination-${d.slug}`}
-            className={styles.destination}
-            style={{ left: `${d.x}%`, top: `${d.y}%` }}
+            data-testid="route-map"
+            className={styles.map}
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: "18 / 7",
+              overflow: "hidden",
+            }}
           >
             <ArtImage
-              art={landmarkArt(d.slug)}
+              art={VOYAGE_MAP_ART}
               alt=""
-              className={styles.landmark}
-              fallback={<span aria-hidden="true">●</span>}
+              className={styles.background}
+              fallback={<div className={styles.backgroundFallback} />}
             />
-            <span
-              data-testid="landmark-name"
-              className={d.x >= NAME_LEFT_FROM_X ? styles.nameLeft : styles.nameRight}
-              style={{ fontWeight: start?.slug === d.slug || d.isFinish ? 700 : 400 }}
-            >
-              {t(`routes.${routeId}.${d.slug}`)}
-              {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
-            </span>
+            {path && (
+              <svg
+                data-testid="route-path"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+                className={styles.path}
+              >
+                <polyline
+                  points={path.map((p) => `${p.x},${p.y}`).join(" ")}
+                  fill="none"
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                  strokeDasharray="1 7"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            )}
+            {destinations.map((d, i) => (
+              <div
+                key={d.slug}
+                data-testid={`destination-${d.slug}`}
+                className={styles.destination}
+                data-start={start?.slug === d.slug || undefined}
+                data-finish={d.isFinish || undefined}
+                style={{ left: `${d.x}%`, top: `${d.y}%` }}
+              >
+                {/* The landmark itself is painted on the map art; the pin shows the route order. */}
+                <span aria-hidden="true" className={styles.pin}>
+                  {i + 1}
+                </span>
+                <span className={d.x >= NAME_ABOVE_FROM_X ? styles.nameAbove : styles.nameRight}>
+                  <span data-testid="landmark-name" className={styles.name}>
+                    {t(`routes.${routeId}.${d.slug}`)}
+                    {d.isFinish && <span data-testid="finish-marker"> ({t("voyage.finish")})</span>}
+                  </span>
+                  <span className={styles.province}>({t(`voyage.province.${d.slug}`)})</span>
+                </span>
+              </div>
+            ))}
+            {ship && (
+              <ShipMarker x={ship.x} y={ship.y} alt={t("voyage.ship", { team: teamName })} />
+            )}
           </div>
-        ))}
-        {ship && (
-          <ShipMarker
-            x={ship.x}
-            y={ship.y}
-            tier={shipTier(progress.progressBp)}
-            alt={t("voyage.ship", { team: teamName })}
-          />
+        </div>
+        {ship && path && (
+          <>
+            <div className={styles.bandBar}>
+              <ProgressBar value={pct} label={t("voyage.routeProgress")} tone="gold" />
+              {pathShares(path).map((share, i) => (
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  className={styles.bandDot}
+                  data-passed={share <= pct || undefined}
+                  style={{ left: `${share}%` }}
+                />
+              ))}
+              <span className={styles.bandShip} style={{ left: `${pct}%` }}>
+                <ArtImage
+                  art={VOYAGE_SHIP_ART}
+                  alt=""
+                  fallback={<span aria-hidden="true">⛵</span>}
+                />
+              </span>
+            </div>
+            <strong
+              data-testid="progress-label"
+              // A caption in the band under the map, so it never covers a destination name (#619).
+              className={styles.progressLabel}
+            >
+              {label}
+            </strong>
+            {start && (
+              <span className={styles.bandStart}>
+                {t(`routes.${routeId}.${start.slug}`)} ({t("voyage.bandStart")})
+              </span>
+            )}
+            {finish && (
+              <span className={styles.bandFinish}>
+                <strong>{t(`routes.${routeId}.${finish.slug}`)}</strong>
+                <span>({t("voyage.bandFinish")})</span>
+              </span>
+            )}
+          </>
         )}
       </div>
-      {ship && (
-        <strong
-          data-testid="progress-label"
-          // A caption under the map at every width, so it never covers a destination name.
-          className={styles.progressLabel}
-        >
-          {label}
-        </strong>
-      )}
       {start ? (
-        <p data-testid="start-info">
+        <p data-testid="start-info" className={styles.meta}>
           {t("voyage.start", { name: t(`routes.${routeId}.${start.slug}`) })}
           {start.automaticAtIso && (
             <>
@@ -119,9 +175,13 @@ export function RouteMap({
           )}
         </p>
       ) : (
-        <p data-testid="no-start">{t("voyage.noStart")}</p>
+        <p data-testid="no-start" className={styles.meta}>
+          {t("voyage.noStart")}
+        </p>
       )}
-      <p data-testid="map-note">{t("voyage.note")}</p>
+      <p data-testid="map-note" className={styles.note}>
+        {t("voyage.note")}
+      </p>
     </section>
   );
 }

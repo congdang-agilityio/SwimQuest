@@ -1,3 +1,139 @@
+/* Voyage screen ("Hành trình của đội" phone screen and the "Bản đồ hải trình Route 01" panel).
+   Every colour comes from src/styles/tokens.css. */
+
+/* Dark ocean panel. On a phone it fills the light sheet edge to edge, like the mockup screen. */
+.panel {
+  display: grid;
+  gap: var(--sq-space-3);
+  /* Cover the sheet down to the bottom nav, like the dark phone screen in the mockup. */
+  align-content: start;
+  min-height: calc(100vh - 61px - var(--sq-space-3));
+  margin: calc(-1 * var(--sq-space-4)) calc(-1 * var(--sq-space-4))
+    calc(-1 * (var(--sq-nav-height) + var(--sq-space-8)));
+  padding: var(--sq-space-2) var(--sq-space-3) calc(var(--sq-nav-height) + var(--sq-space-8));
+  border-radius: var(--sq-radius-xl) var(--sq-radius-xl) 0 0;
+  background: var(--sq-gradient-nav);
+  color: var(--sq-text-on-dark);
+}
+
+.screenHeader {
+  margin-bottom: calc(-1 * var(--sq-space-2));
+}
+
+.headRow {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+
+.mapTitle {
+  display: none;
+}
+
+/* Team card: emblem in a gold ring, team name, leaderboard pill, % and bar. */
+.teamCard {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-navy-800);
+  box-shadow: var(--sq-shadow-card);
+}
+
+.teamTop {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+
+.emblemRing {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--sq-gold);
+  border-radius: 50%;
+  background: var(--sq-foam);
+  overflow: hidden;
+}
+
+.emblemRing img,
+.emblemRing svg {
+  width: 40px;
+  height: 40px;
+}
+
+.teamText {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.teamKicker {
+  overflow: hidden;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teamName {
+  overflow: hidden;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teamProgress {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+
+.teamPct {
+  color: var(--sq-ocean);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+}
+
+.section {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+
+/* Map frame: the map box, then the dark progress band under it. */
+.frame {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "map map"
+    "bar bar"
+    "label label"
+    "start finish";
+  column-gap: var(--sq-space-3);
+  overflow: hidden;
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-navy-950);
+  box-shadow: var(--sq-shadow-raised);
+}
+
+.mapScroll {
+  grid-area: map;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* Wide enough on a phone for the names to stay readable; the scroller shows the rest. */
+.map {
+  min-width: 720px;
+  /* Pins and pills scale with the map (cqw), so they stay on the painted ones at every width. */
+  container-type: inline-size;
+}
+
 .background {
   position: absolute;
   inset: 0;
@@ -6,61 +142,245 @@
   object-fit: cover;
 }
 
-/* Zero-size anchor: the icon is centred on the anchor, the name sits beside it, never under it. */
+.backgroundFallback {
+  position: absolute;
+  inset: 0;
+  background: var(--sq-gradient-sea);
+}
+
+.path {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.path polyline {
+  stroke: var(--sq-foam);
+  opacity: 0.85;
+}
+
+/* Zero-size anchor: the numbered pin is centred on the anchor, the name pill sits beside it. */
 .destination {
+  --pin: max(22px, 3.7cqw);
   position: absolute;
   width: 0;
   height: 0;
 }
 
-.landmark {
+.pin {
   position: absolute;
   left: 0;
   top: 0;
-  width: clamp(18px, 6.7vw, 44px);
-  max-width: none;
-  height: auto;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--pin);
+  height: var(--pin);
+  border: 2px solid var(--sq-gold);
+  border-radius: 50%;
+  background: var(--sq-navy-800);
+  color: var(--sq-white);
+  font-size: calc(var(--pin) * 0.5);
+  font-weight: var(--sq-weight-black);
+  line-height: 1;
+  box-shadow: var(--sq-shadow-card);
   transform: translate(-50%, -50%);
 }
 
 .nameRight,
-.nameLeft {
+.nameAbove {
   position: absolute;
   top: 0;
-  transform: translateY(-50%);
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  /* Size and place of the pills painted on the mockup map (162 x 75 at 1348 px wide). */
+  min-width: 12cqw;
+  min-height: 6.8cqw;
+  padding: 0.4cqw 1cqw;
+  border: 1px solid var(--sq-navy-600);
+  border-radius: 1.1cqw;
+  /* Opaque, so it fully covers the pill painted in the map art underneath. */
+  background: var(--sq-navy-800);
+  color: var(--sq-white);
+  font-size: max(10px, 1.45cqw);
+  line-height: 1.25;
   white-space: nowrap;
-  background: #fffd;
-  padding: 0 2px;
-  font-size: 0.6rem;
-  line-height: 1.2;
+  box-shadow: var(--sq-shadow-card);
 }
 
 .nameRight {
-  left: calc(clamp(18px, 6.7vw, 44px) / 2 + 2px);
+  top: -1.4cqw;
+  /* Clear of the pin, over the pill painted beside it. */
+  left: calc(var(--pin) / 2 + 2px);
 }
 
-.nameLeft {
-  right: calc(clamp(18px, 6.7vw, 44px) / 2 + 2px);
+/* Near the right edge (Lý Sơn) the pill sits above the pin, over open sea. */
+.nameAbove {
+  top: auto;
+  right: calc(var(--pin) / -2);
+  bottom: calc(var(--pin) / 2 + 4px);
 }
 
-@media (min-width: 480px) {
-  .nameRight,
-  .nameLeft {
-    font-size: 0.8rem;
-  }
+.name {
+  font-weight: var(--sq-weight-bold);
+}
+
+.province {
+  color: var(--sq-text-on-dark-muted);
+}
+
+.destination[data-start] .nameRight,
+.destination[data-start] .nameAbove,
+.destination[data-finish] .nameRight,
+.destination[data-finish] .nameAbove {
+  border-color: var(--sq-gold);
+}
+
+/* Above the pins and name pills: the team's own ship is the one thing that must stay visible. */
+.shipMarker {
+  z-index: 2;
 }
 
 .ship {
-  /* Same 4:3 footprint as the earlier vector ship, so the marker stays inside the map near its
-     edges; the square ship art is fitted inside it. */
   width: 100%;
-  aspect-ratio: 4 / 3;
   height: auto;
-  object-fit: contain;
+  filter: var(--sq-shadow-drop);
 }
 
-/* The progress label is a caption under the map at every width (#619): no spot on the map is free of
-   destination names at every progress and viewport, so it never sits on the map. */
+/* Progress band: gold route bar with the ship and destination dots, then the captions. */
+.bandBar {
+  position: relative;
+  grid-area: bar;
+  margin: var(--sq-space-4) var(--sq-space-4) 0;
+}
+
+.bandDot {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sq-foam);
+  transform: translate(-50%, -50%);
+}
+
+.bandDot[data-passed] {
+  background: var(--sq-navy-800);
+}
+
+.bandShip {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  transform: translate(-50%, -62%);
+}
+
+.bandShip img {
+  width: 100%;
+  height: auto;
+  filter: var(--sq-shadow-drop);
+}
+
+/* The progress label is the caption in the band under the map at every width (#619): no spot on
+   the map is free of destination names at every progress and viewport, so it never sits on it. */
 .progressLabel {
+  grid-area: label;
   display: block;
+  margin: var(--sq-space-2) var(--sq-space-4) 0;
+  color: var(--sq-white);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+  text-align: center;
+}
+
+.bandStart,
+.bandFinish {
+  margin: var(--sq-space-1) var(--sq-space-4) var(--sq-space-3);
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-xs);
+}
+
+.bandStart {
+  grid-area: start;
+  align-self: end;
+}
+
+.bandFinish {
+  grid-area: finish;
+  display: grid;
+  justify-items: end;
+  text-align: right;
+}
+
+.bandFinish strong {
+  color: var(--sq-gold);
+  font-size: var(--sq-text-sm);
+}
+
+.meta {
+  margin: 0;
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-sm);
+}
+
+.note {
+  margin: 0;
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-xs);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    min-height: 0;
+    margin: 0;
+    padding: var(--sq-space-4);
+    border-radius: var(--sq-radius-xl);
+  }
+
+  .screenHeader {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .headRow {
+    grid-template-columns: 1fr minmax(300px, 380px);
+    align-items: start;
+  }
+
+  .mapTitle {
+    display: block;
+  }
+
+  .mapTitle h2 {
+    border-radius: var(--sq-radius-lg);
+    background: transparent;
+    padding-left: 0;
+  }
+
+  .frame {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "map map map"
+      "bar bar bar"
+      "start label finish";
+  }
+
+  .progressLabel {
+    align-self: center;
+    margin: var(--sq-space-2) 0 var(--sq-space-3);
+    font-size: var(--sq-text-lg);
+    text-align: right;
+  }
+
+  .bandShip {
+    width: 48px;
+  }
 }

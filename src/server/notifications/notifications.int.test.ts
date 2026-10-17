@@ -204,9 +204,9 @@ describe("notifications from domain events", () => {
     it("tells members when a destination was passed, and nothing before that", async () => {
       const ids = await setup("hon_sup");
       const t = { tournamentId: ids.tournamentId, teamId: ids.teamId };
-      await emit({ type: "TEAM_PROGRESS_CHANGED", payload: { ...t, fromBp: 0, toBp: 4000 } });
+      await emit({ type: "TEAM_PROGRESS_CHANGED", payload: { ...t, fromBp: 0, toBp: 3000 } });
       expect(await all()).toHaveLength(0);
-      await emit({ type: "TEAM_PROGRESS_CHANGED", payload: { ...t, fromBp: 4000, toBp: 7000 } });
+      await emit({ type: "TEAM_PROGRESS_CHANGED", payload: { ...t, fromBp: 3000, toBp: 7000 } });
       const rows = await all();
       expect(rows).toHaveLength(2);
       expect(rows[0]).toMatchObject({

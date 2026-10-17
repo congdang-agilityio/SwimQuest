@@ -144,7 +144,7 @@ const intersects = (a: Box, b: Box) =>
   a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
 /**
- * The progress label is a whole, readable caption directly under the map at every width (#619),
+ * The progress label is a whole, readable caption in the band under the map at every width (#619),
  * the ship stays on the map, and the label covers no destination name.
  */
 async function expectLabelReadable(page: Page) {
@@ -157,7 +157,8 @@ async function expectLabelReadable(page: Page) {
   expect(label.y, "caption directly under the map").toBeGreaterThanOrEqual(
     map.y + map.height - 0.5,
   );
-  expect(label.y).toBeLessThanOrEqual(map.y + map.height + 16);
+  // In the band under the map, below the gold route bar (#693).
+  expect(label.y).toBeLessThanOrEqual(map.y + map.height + 64);
   const fits = await labelEl.evaluate((el) => el.scrollWidth <= el.clientWidth);
   expect(fits, "label text not cut off").toBe(true);
   const ship = (await page.getByTestId("ship").boundingBox()) as Box;
@@ -343,7 +344,8 @@ async function expectNamesReadable(page: Page) {
     expect(name.y + name.height, `${slug} bottom`).toBeLessThanOrEqual(map.y + map.height);
     slugs.push(slug);
     names.push(name);
-    const icon = await dest.locator("img").first().boundingBox();
+    // The numbered pin (the landmark itself is painted on the map art, #693).
+    const icon = await dest.locator('span[aria-hidden="true"]').first().boundingBox();
     if (icon) icons.push(icon);
   }
   for (let i = 0; i < names.length; i++) {

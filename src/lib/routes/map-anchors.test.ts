@@ -20,17 +20,16 @@ describe("route01 map anchors", () => {
     }
   });
 
-  it("puts Ly Son offshore to the south-east of every other destination", () => {
+  it("puts Ly Son offshore, east of every other destination (mockup map, #693)", () => {
     const ly = anchors.anchors.ly_son;
     for (const [slug, p] of Object.entries<{ x: number; y: number }>(anchors.anchors)) {
       if (slug === "ly_son") continue;
       expect(ly.x).toBeGreaterThan(p.x);
-      expect(ly.y).toBeGreaterThan(p.y);
     }
   });
 
   it("documents the aspect ratio", () => {
-    expect(anchors.aspectRatio).toBe("16:10");
+    expect(anchors.aspectRatio).toBe("18:7");
   });
 
   it("ships a small map without text", () => {

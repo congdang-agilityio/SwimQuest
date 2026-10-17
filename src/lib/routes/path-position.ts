@@ -2,7 +2,7 @@ export type MapPoint = { x: number; y: number };
 
 /**
  * Point at `fraction` (0..1, clamped) of the path's length. Points are percent of the map box;
- * `aspect` (width / height, 1.6 for the 16:10 map) makes lengths true on screen, not in percent.
+ * `aspect` (width / height, 18/7 for the Route 01 map) makes lengths true on screen, not in percent.
  */
 export function pointAlongPath(path: readonly MapPoint[], fraction: number, aspect = 1): MapPoint {
   if (path.length === 0) throw new RangeError("path needs at least one point");

@@ -100,7 +100,7 @@ describe("getVoyage", () => {
       }),
     );
     const pts = v!.path!;
-    const aspect = 1.6;
+    const aspect = 18 / 7;
     const seg = pts.slice(1).map((p, i) => Math.hypot((p.x - pts[i].x) * aspect, p.y - pts[i].y));
     const total = seg.reduce((a, b) => a + b, 0);
     let rem = 0.68 * total;
