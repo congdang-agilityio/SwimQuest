@@ -10,10 +10,18 @@ type Props = {
   hasInvite: boolean;
   /** Details can still be edited (not archived). */
   canEdit?: boolean;
+  /** The viewer is the organizer, who alone sets up the Zalo group (S-85). */
+  zalo?: boolean;
 };
 
-/** Organizer links of the console (S-65 AC 5): review queue, settings, invite link, helpers. */
-export function ConsoleLinks({ tournamentId, published, hasInvite, canEdit = false }: Props) {
+/** Organizer links of the console (S-65 AC 5): review queue, settings, invite link, Zalo group, helpers. */
+export function ConsoleLinks({
+  tournamentId,
+  published,
+  hasInvite,
+  canEdit = false,
+  zalo = false,
+}: Props) {
   const t = useTranslations("organizer");
   const base = `/tournaments/${tournamentId}/manage`;
   return (
@@ -41,6 +49,11 @@ export function ConsoleLinks({ tournamentId, published, hasInvite, canEdit = fal
         <ButtonLink href={`${base}/metrics`} variant="secondary" block>
           {t("console.links.metrics")}
         </ButtonLink>
+        {zalo && (
+          <ButtonLink href={`${base}/zalo`} variant="secondary" block>
+            {t("manage.zaloLink")}
+          </ButtonLink>
+        )}
         {published && (
           <ButtonLink href={`${base}/helpers`} variant="secondary" block>
             {t("manage.helpersLink")}

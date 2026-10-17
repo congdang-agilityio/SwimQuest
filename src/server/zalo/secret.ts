@@ -34,6 +34,16 @@ function secretKey(): Buffer {
   return key;
 }
 
+/** Whether `ZALO_KEY_SECRET` is usable, so the settings page can say "not set up" up front. */
+export function isZaloConfigured(): boolean {
+  try {
+    secretKey();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Encrypts a bot key with AES-256-GCM; returns base64 of `iv | tag | ciphertext`. */
 export function encryptSecret(plain: string): string {
   const key = secretKey();

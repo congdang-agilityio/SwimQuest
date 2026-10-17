@@ -15,7 +15,7 @@ import { SwimSettingsForm } from "@/components/settings/swim-settings-form";
 import type { PointValues } from "@/components/tournaments/rules/point-rules";
 import type { SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
-import { Card, ScreenHeader } from "@/components/ui";
+import { ButtonLink, Card, ScreenHeader } from "@/components/ui";
 import { SWIM_LIMIT_BOUNDS, type SwimLimitField } from "@/lib/swim-limits";
 import { effectiveStatus } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
@@ -61,6 +61,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
   ) as Record<SwimLimitField, { min: number; max: number }>;
   const t = await getTranslations("settings");
   const tCommon = await getTranslations("common");
+  const tZalo = await getTranslations("zalo");
   return (
     <main className={styles.screen}>
       <div className={styles.headerBand}>
@@ -123,6 +124,15 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
           <OptionalFieldsForm tournamentId={tournament.id} values={optional} />
         </Card>
       )}
+      <Card as="section" id="zalo" aria-labelledby="zalo-settings-title" className={styles.card}>
+        <h2 id="zalo-settings-title" className={styles.heading}>
+          {tZalo("title")}
+        </h2>
+        <p className={styles.intro}>{tZalo("intro")}</p>
+        <ButtonLink href={`/tournaments/${tournament.id}/manage/zalo`} variant="secondary" block>
+          {tZalo("open")}
+        </ButtonLink>
+      </Card>
     </main>
   );
 }

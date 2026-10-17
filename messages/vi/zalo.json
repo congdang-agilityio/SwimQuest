@@ -1,0 +1,65 @@
+{
+  "open": "Thiết lập nhóm Zalo",
+  "title": "Nhóm Zalo",
+  "intro": "Kết nối bot Zalo của bạn để nhóm Zalo của giải tự động nhận thông báo. Bot chỉ đăng tin, không trả lời.",
+  "closed": "Giải đấu đã kết thúc nên không thể thay đổi cài đặt Zalo nữa.",
+  "notConfigured": {
+    "title": "Chưa bật đăng tin Zalo",
+    "body": "Máy chủ chưa sẵn sàng lưu khóa bot Zalo nên hiện chưa thể lưu khóa. Hãy nhờ quản trị viên nền tảng bật đăng tin Zalo rồi quay lại đây."
+  },
+  "status": {
+    "title": "Kết nối",
+    "none": "Chưa có bot Zalo. Làm theo các bước bên dưới để kết nối.",
+    "keyHint": "Khóa kết thúc bằng {hint}",
+    "keySaved": "Đã lưu khóa",
+    "waitingChip": "Đang chờ",
+    "connectedChip": "Đã kết nối",
+    "waiting": "Đang chờ nhắc tên bot trong nhóm",
+    "connected": "Đã kết nối với nhóm",
+    "connectedSince": "Đã kết nối với nhóm từ {date}",
+    "webhookProblem": "Zalo chưa nhận đường dẫn tới ứng dụng nên tin nhắc tên bot có thể chưa đến được. Hãy lưu lại khóa để thử lại."
+  },
+  "steps": {
+    "title": "Các bước thiết lập",
+    "create": {
+      "title": "Tạo bot Zalo",
+      "body": "Trong Zalo Bot Creator, tạo một bot cho nhóm của bạn và sao chép khóa của bot."
+    },
+    "paste": {
+      "title": "Dán khóa vào đây",
+      "body": "Dán khóa bên dưới rồi lưu. Ứng dụng kiểm tra khóa với Zalo và lưu ở dạng mã hóa."
+    },
+    "add": {
+      "title": "Thêm bot vào nhóm",
+      "body": "Trong nhóm Zalo, thêm bot làm thành viên."
+    },
+    "mention": {
+      "title": "Nhắc tên bot trong nhóm",
+      "body": "Gửi một tin nhắn có nhắc tên bot (@tên bot). Nhóm sẽ được liên kết và bot đăng lời giới thiệu giải."
+    }
+  },
+  "key": {
+    "title": "Khóa bot",
+    "replaceTitle": "Đổi khóa bot",
+    "label": "Khóa bot Zalo",
+    "hint": "Sau khi lưu, khóa không bao giờ hiện lại; chỉ hiện 4 ký tự cuối.",
+    "save": "Lưu khóa",
+    "saving": "Đang kiểm tra với Zalo…",
+    "saved": "Đã lưu khóa."
+  },
+  "remove": {
+    "title": "Gỡ khỏi giải đấu này",
+    "confirm": "Gỡ bot khỏi giải đấu này? Bot sẽ ngừng đăng tin của giải này. Các giải khác đang dùng bot không bị ảnh hưởng.",
+    "yes": "Gỡ",
+    "removing": "Đang gỡ…",
+    "cancel": "Hủy"
+  },
+  "errors": {
+    "notConfigured": "Máy chủ chưa bật đăng tin Zalo. Hãy nhờ quản trị viên nền tảng.",
+    "rejected": "Zalo không chấp nhận khóa này. Hãy kiểm tra và thử lại.",
+    "unreachable": "Không kết nối được với Zalo. Hãy thử lại sau.",
+    "closed": "Giải đấu đã kết thúc nên không thể thay đổi cài đặt Zalo nữa.",
+    "failed": "Không thực hiện được. Hãy thử lại.",
+    "network": "Không có kết nối. Hãy kiểm tra mạng và thử lại."
+  }
+}
