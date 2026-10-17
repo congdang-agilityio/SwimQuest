@@ -2,19 +2,23 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { StartCorrectionDialog } from "@/components/admin/start-correction-dialog";
 import { OrganizerStartPanel } from "@/components/starts/organizer-start-panel";
 import { RosterList } from "@/components/teams/roster-list";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute, startDestinations } from "@/lib/routes";
 import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
-import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { ForbiddenError, NotFoundError, requireOrganizerOrAdmin } from "@/server/auth/roles";
 import { db } from "@/server/db";
 import { getTeamRoster } from "@/server/teams/roster";
 
 export const dynamic = "force-dynamic";
 
-/** Organizer team page: roster, captain mark and Make captain. Anyone else gets not-found. */
+/**
+ * Organizer team page: roster, captain mark and Make captain. Platform admins may open it too and,
+ * after the start lock, get the exceptional start correction (S-72). Anyone else gets not-found.
+ */
 export default async function OrganizerTeamPage({
   params,
 }: {
@@ -23,7 +27,7 @@ export default async function OrganizerTeamPage({
   const { id, teamId } = await params;
   const path = (await headers()).get(NEXT_PATH_HEADER) ?? "/tournaments";
   const user = await requireUser(path);
-  await requireOrganizer(user.id, id).catch((err: unknown) => {
+  await requireOrganizerOrAdmin(user, id).catch((err: unknown) => {
     if (err instanceof ForbiddenError || err instanceof NotFoundError) notFound();
     throw err;
   });
@@ -60,6 +64,10 @@ export default async function OrganizerTeamPage({
     },
   });
   const t = await getTranslations("captain");
+  const starts = route
+    ? startDestinations(route).map((d) => ({ slug: d.slug, nameKey: d.nameKey }))
+    : [];
+  const locked = isStartLocked(team.tournament, new Date());
   return (
     <main>
       <p>
@@ -69,12 +77,19 @@ export default async function OrganizerTeamPage({
       {route && (
         <OrganizerStartPanel
           teamId={team.id}
-          starts={startDestinations(route).map((d) => ({ slug: d.slug, nameKey: d.nameKey }))}
+          starts={starts}
           currentSlug={team.startDestination}
           setBy={team.startSetBy}
           setAtIso={team.startSetAt?.toISOString() ?? null}
           lockAtIso={startLockAt(team.tournament).toISOString()}
-          locked={isStartLocked(team.tournament, new Date())}
+          locked={locked}
+        />
+      )}
+      {route && user.isPlatformAdmin && locked && team.tournament.status !== "ARCHIVED" && (
+        <StartCorrectionDialog
+          teamId={team.id}
+          starts={starts}
+          currentSlug={team.startDestination}
         />
       )}
       <RosterList

@@ -227,5 +227,31 @@
       "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
       "failed": "Không lưu được quyết định. Hãy thử lại."
     }
+  },
+  "startCorrection": {
+    "title": "Điều chỉnh ngoại lệ",
+    "help": "Điểm xuất phát đã khóa. Là quản trị viên nền tảng, bạn vẫn có thể đổi nó như một điều chỉnh ngoại lệ; thay đổi được ghi lại cùng lý do của bạn.",
+    "open": "Điều chỉnh điểm xuất phát",
+    "startLabel": "Điểm xuất phát mới",
+    "reason": "Lý do",
+    "reasonHint": "Được ghi vào nhật ký kiểm tra cùng điểm xuất phát cũ và mới. Tối đa 300 ký tự.",
+    "reasonRequired": "Hãy nhập lý do điều chỉnh.",
+    "continue": "Tiếp tục",
+    "cancel": "Hủy",
+    "back": "Quay lại",
+    "confirmTitle": "Xác nhận điều chỉnh",
+    "confirmBody": "Đổi điểm xuất phát của đội từ {from} sang {to}? Thay đổi được ghi lại cùng lý do của bạn.",
+    "confirmYes": "Đồng ý, đổi",
+    "saving": "Đang lưu...",
+    "done": "Đã đổi điểm xuất phát sang {name}. Thay đổi đã được ghi lại.",
+    "errors": {
+      "sameStart": "Đây đã là điểm xuất phát của đội. Hãy chọn điểm khác.",
+      "START_NOT_LOCKED": "Điểm xuất phát chưa khóa. Hãy đổi bằng phần chọn điểm xuất phát của ban tổ chức.",
+      "ARCHIVED": "Giải đấu đã lưu trữ và không thể thay đổi nữa.",
+      "INVALID_START": "Điểm này không thuộc lộ trình. Hãy chọn điểm khác.",
+      "forbidden": "Chỉ quản trị viên nền tảng mới có thể điều chỉnh.",
+      "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
+      "failed": "Không thể đổi điểm xuất phát. Vui lòng thử lại."
+    }
   }
 }
