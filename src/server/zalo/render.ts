@@ -1,4 +1,5 @@
 import type { Prisma, ZaloMessageKind } from "@prisma/client";
+import { renderIntro } from "./messages/intro";
 
 /** The stored payload of a queued message (`payload.parts` for merged messages). */
 export type ZaloStoredPayload = Record<string, Prisma.JsonValue>;
@@ -10,7 +11,9 @@ export type ZaloStoredPayload = Record<string, Prisma.JsonValue>;
 export type ZaloRenderer = (payload: ZaloStoredPayload) => Promise<string | null>;
 
 /** One renderer per message kind; each message task registers its own. */
-const RENDERERS: Partial<Record<ZaloMessageKind, ZaloRenderer>> = {};
+const RENDERERS: Partial<Record<ZaloMessageKind, ZaloRenderer>> = {
+  INTRO: renderIntro,
+};
 
 /** Whether this kind can be sent yet; messages of other kinds wait in the queue. */
 export function hasRenderer(kind: ZaloMessageKind): boolean {

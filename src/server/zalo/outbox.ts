@@ -69,6 +69,32 @@ export async function enqueueZalo(tx: Tx, input: EnqueueZaloInput): Promise<bool
   return queued;
 }
 
+/**
+ * Queues the tournament introduction (S-85 AC 4) for its bot's linked group, once per
+ * tournament and group (`dedupeKey intro:<tournamentId>:<chatId>`, so a tournament moved to a
+ * bot with another group introduces itself there too), and sets `introPostedAt`. Does nothing
+ * while the bot has no group. The introduction always goes out (no switch).
+ */
+export async function enqueueIntro(tx: Tx, tournamentId: string): Promise<boolean> {
+  const settings = await tx.tournamentZalo.findUnique({
+    where: { tournamentId },
+    select: { zaloBot: { select: { chatId: true } } },
+  });
+  const chatId = settings?.zaloBot.chatId;
+  if (!chatId) return false;
+  const queued = await enqueueZalo(tx, {
+    tournamentId,
+    kind: "INTRO",
+    payload: {},
+    dedupeKey: `intro:${tournamentId}:${chatId}`,
+  });
+  await tx.tournamentZalo.updateMany({
+    where: { tournamentId, introPostedAt: null },
+    data: { introPostedAt: new Date() },
+  });
+  return queued;
+}
+
 interface GroupTarget {
   zaloBotId: string;
   chatId: string;
