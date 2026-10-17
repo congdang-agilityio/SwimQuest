@@ -166,6 +166,12 @@
   overflow-wrap: anywhere;
   text-decoration: none;
 }
+.nameLine {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
 .name:hover {
   text-decoration: underline;
 }

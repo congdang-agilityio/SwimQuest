@@ -32,5 +32,6 @@
     "starfishHint": "Mỗi lần thưởng bơi dài",
     "coinHint": "1 xu cho mỗi km",
     "collectOnly": "Chỉ để sưu tầm, không thể tiêu hay đổi."
-  }
+  },
+  "energyOrb": "Hệ số tuần đang bật"
 }

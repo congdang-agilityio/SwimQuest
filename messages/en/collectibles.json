@@ -32,5 +32,6 @@
     "starfishHint": "Each long-swim bonus",
     "coinHint": "1 coin per km",
     "collectOnly": "For collecting only; they can't be spent or traded."
-  }
+  },
+  "energyOrb": "Weekly multiplier active"
 }
