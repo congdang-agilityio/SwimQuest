@@ -6,7 +6,8 @@
     "reports": "Reports",
     "tournamentRequests": "Tournament requests",
     "audit": "Audit log",
-    "assets": "Asset gallery"
+    "assets": "Asset gallery",
+    "metrics": "Metrics"
   },
   "users": {
     "title": "Users",
@@ -376,6 +377,44 @@
       "map": "Route map elements",
       "effects": "Effects",
       "decor": "Decoration"
+    }
+  },
+  "metrics": {
+    "title": "Metrics",
+    "back": "Back",
+    "range": {
+      "title": "Date range",
+      "from": "From date",
+      "to": "To date",
+      "apply": "Show range",
+      "reset": "Last 30 days"
+    },
+    "funnel": {
+      "title": "Funnel",
+      "steps": {
+        "signedUp": "Signed up",
+        "joined": "Joined a tournament",
+        "firstSwim": "First verified swim",
+        "finished": "Member of a finished team"
+      },
+      "users": "{count, plural, one {# user} other {# users}}",
+      "conversion": "{pct}% of the previous step",
+      "note": "Distinct users per step in the chosen range. Counts only, no names."
+    },
+    "events": {
+      "title": "Events in the range",
+      "empty": "No events were recorded in this range."
+    },
+    "health": {
+      "title": "Health signals",
+      "kinds": {
+        "API_FAILURE": "API failures",
+        "ASSET_FAILURE": "Asset loading failures"
+      },
+      "last7": "Last 7 days: {count}",
+      "last30": "Last 30 days: {count}",
+      "topPaths": "Most frequent paths (30 days)",
+      "none": "No failures recorded."
     }
   }
 }

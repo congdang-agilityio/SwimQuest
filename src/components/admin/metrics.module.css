@@ -1,0 +1,105 @@
+/* Admin Metrics: navy section bands over light cards, like the other admin pages. */
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.band {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  background: var(--sq-navy-800);
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-md);
+}
+.steps,
+.rows {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: var(--sq-space-4);
+  list-style: none;
+}
+.step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sq-space-1) var(--sq-space-3);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  color: var(--sq-text);
+}
+.stepName {
+  font-weight: var(--sq-weight-semibold);
+}
+.stepValue {
+  text-align: right;
+}
+.stepRate {
+  grid-column: 1 / -1;
+  min-height: 1em;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.bar {
+  grid-column: 1 / -1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-100);
+}
+.barFill {
+  display: block;
+  height: 100%;
+  background: var(--sq-navy-800);
+}
+.rowItem {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+.path {
+  overflow-wrap: anywhere;
+}
+.note {
+  margin: 0;
+  padding: 0 var(--sq-space-4) var(--sq-space-4);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.healthGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.healthCard {
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  color: var(--sq-text);
+}
+.healthCard h3 {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-3) 0;
+}
+.healthCounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-4);
+  margin: 0;
+  padding: var(--sq-space-2) var(--sq-space-3);
+  font-weight: var(--sq-weight-semibold);
+}
+.healthCard .rows,
+.healthCard .note {
+  padding-right: var(--sq-space-3);
+  padding-left: var(--sq-space-3);
+}
+.healthCard .note {
+  padding-bottom: var(--sq-space-2);
+}

@@ -6,7 +6,8 @@
     "reports": "Báo cáo",
     "tournamentRequests": "Yêu cầu thêm giải đấu",
     "audit": "Nhật ký kiểm toán",
-    "assets": "Thư viện hình ảnh"
+    "assets": "Thư viện hình ảnh",
+    "metrics": "Số liệu"
   },
   "users": {
     "title": "Người dùng",
@@ -376,6 +377,44 @@
       "map": "Thành phần bản đồ hải trình",
       "effects": "Hiệu ứng",
       "decor": "Trang trí"
+    }
+  },
+  "metrics": {
+    "title": "Số liệu",
+    "back": "Quay lại",
+    "range": {
+      "title": "Khoảng ngày",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "apply": "Xem khoảng này",
+      "reset": "30 ngày gần nhất"
+    },
+    "funnel": {
+      "title": "Phễu người chơi",
+      "steps": {
+        "signedUp": "Đã đăng ký",
+        "joined": "Đã tham gia giải đấu",
+        "firstSwim": "Buổi bơi đầu tiên được xác minh",
+        "finished": "Thành viên của đội đã về đích"
+      },
+      "users": "{count} người dùng",
+      "conversion": "{pct}% so với bước trước",
+      "note": "Số người dùng khác nhau ở mỗi bước trong khoảng đã chọn. Chỉ có số liệu, không có tên."
+    },
+    "events": {
+      "title": "Sự kiện trong khoảng",
+      "empty": "Chưa ghi nhận sự kiện nào trong khoảng này."
+    },
+    "health": {
+      "title": "Tín hiệu sức khỏe",
+      "kinds": {
+        "API_FAILURE": "Lỗi API",
+        "ASSET_FAILURE": "Lỗi tải tài nguyên"
+      },
+      "last7": "7 ngày qua: {count}",
+      "last30": "30 ngày qua: {count}",
+      "topPaths": "Đường dẫn gặp lỗi nhiều nhất (30 ngày)",
+      "none": "Chưa ghi nhận lỗi nào."
     }
   }
 }
