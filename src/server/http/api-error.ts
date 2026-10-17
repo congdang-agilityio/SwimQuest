@@ -34,6 +34,7 @@ export type ApiErrorCode =
   | "LAST_ADMIN"
   | "REASON_REQUIRED"
   | "ALREADY_DECIDED"
+  | "QUOTA_REACHED"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
@@ -70,6 +71,7 @@ const messages: Record<ApiErrorCode, string> = {
   LAST_ADMIN: "The last platform admin role cannot be removed.",
   REASON_REQUIRED: "Give a short reason (at most 300 characters) to reject this swim.",
   ALREADY_DECIDED: "This swim has already been decided.",
+  QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
 };

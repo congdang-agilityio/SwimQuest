@@ -3,6 +3,7 @@ import { requireApiUser } from "@/server/auth/current-user";
 import { apiError } from "@/server/http/api-error";
 import { isSameOrigin, readJson } from "@/server/http/request";
 import { createDraft } from "@/server/tournaments/create";
+import { QuotaError } from "@/server/tournaments/quota";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,13 @@ export async function POST(request: Request) {
   const json = await readJson(request);
   if (!json.ok) return apiError(400, "INVALID_BODY");
 
-  const result = await createDraft(auth.user.id, json.body);
+  let result;
+  try {
+    result = await createDraft(auth.user.id, json.body);
+  } catch (error) {
+    if (error instanceof QuotaError) return apiError(409, "QUOTA_REACHED");
+    throw error;
+  }
   if (!result.ok) return apiError(400, "VALIDATION_FAILED", result.errors);
   return NextResponse.json(
     { id: result.id },
