@@ -5,16 +5,19 @@ import { FinishLostNotice } from "@/components/finish/finish-lost-notice";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { ButtonLink, ProgressBar, ScreenHeader, SectionHeader } from "@/components/ui";
+import { TierUpgrade } from "@/components/voyage/tier-upgrade";
 import { RouteMap } from "@/components/voyage/route-map";
 import styles from "@/components/voyage/voyage.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { formatProgressPct } from "@/lib/scoring/progress";
+import { shipTier } from "@/lib/scoring/ship-tier";
 import { requireUser } from "@/server/auth/current-user";
 import { TournamentSwitcher } from "@/components/nav/tournament-switcher";
 import {
   getTournamentSwitcher,
   SELECTED_TOURNAMENT_COOKIE,
 } from "@/server/home/selected-tournament";
+import { hasSeen } from "@/server/moments/seen";
 import { getVoyage } from "@/server/voyage/get-voyage";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +40,10 @@ export default async function VoyagePage() {
     );
   }
   const pct = voyage.progress.progressBp / 100;
+  // First open after the team reached a new ship tier (never tier 1): play the upgrade once.
+  const tier = shipTier(voyage.progress.progressBp);
+  const tierKey = `tier:${voyage.team.id}:${tier}`;
+  const playUpgrade = tier > 1 && !(await hasSeen(user.id, tierKey));
   return (
     <main className={styles.panel}>
       {switcher && <TournamentSwitcher {...switcher} placement="page" />}
@@ -82,6 +89,14 @@ export default async function VoyagePage() {
         <FinishLostNotice userId={user.id} />
         <TeamFinish userId={user.id} />
       </div>
+      {playUpgrade && (
+        <TierUpgrade
+          momentKey={tierKey}
+          tier={tier}
+          shipAlt={tv("ship", { team: voyage.team.name })}
+          caption={tv("tierUp", { tier })}
+        />
+      )}
       <RouteMap
         routeId={voyage.tournament.routeId}
         teamName={voyage.team.name}
