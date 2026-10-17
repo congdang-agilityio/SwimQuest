@@ -1,0 +1,28 @@
+{
+  "title": "Bơi an toàn",
+  "intro": "SwimQuest chỉ là một trò chơi. An toàn của bạn luôn đặt lên trước.",
+  "heroAlt": "Những người bơi lúc bình minh bên bờ biển yên ả",
+  "tips": {
+    "night": {
+      "title": "Không bơi ban đêm",
+      "body": "Chỉ bơi ban ngày, khi người khác có thể nhìn thấy bạn và bạn nhìn rõ mặt nước."
+    },
+    "alone": {
+      "title": "Không bơi một mình ở vùng nước hở",
+      "body": "Hãy bơi cùng bạn bơi hoặc nơi có cứu hộ trông coi, và báo cho ai đó biết bạn ở đâu."
+    },
+    "limits": {
+      "title": "Bơi trong khả năng của bạn",
+      "body": "Dừng lại nghỉ khi mệt hoặc lạnh. Không quãng đường nào đáng để đánh đổi sự an toàn."
+    },
+    "map": {
+      "title": "Bản đồ chỉ là hình minh họa",
+      "body": "Bản đồ hành trình là tranh trong trò chơi, không phải tuyến đường thật. Đừng dùng nó để định hướng dưới nước."
+    }
+  },
+  "reminder": {
+    "text": "Bơi ban ngày, không bơi một mình ở vùng nước hở và trong khả năng của bạn.",
+    "link": "Đọc lời khuyên an toàn"
+  },
+  "back": "Quay lại"
+}

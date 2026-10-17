@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { ScreenHeader } from "@/components/ui";
+import { SafetyReminder } from "@/components/safety/safety-reminder";
 import { UploadForm } from "@/components/swims/upload-form";
 import styles from "@/components/swims/swims.module.css";
 
@@ -11,6 +12,7 @@ export default async function ConnectPage() {
       <div className={styles.headerBand}>
         <ScreenHeader title={t("title")} backHref="/team" backLabel={tCommon("back")} />
       </div>
+      <SafetyReminder />
       <UploadForm />
     </main>
   );
