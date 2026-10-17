@@ -1,5 +1,6 @@
 "use client";
 
+import { SafeImg } from "@/components/art/safe-img";
 import { useEffect, useState } from "react";
 import { ArtImage } from "@/components/art/art-image";
 import { Sparkle } from "@/components/effects/sparkle";
@@ -17,10 +18,12 @@ type Props = {
 
 function Effect({ name, className }: { name: string; className: string }) {
   return (
-    <picture>
-      <source type="image/webp" srcSet={`/art/mockup/effects/${name}.webp`} />
-      <img src={`/art/mockup/effects/${name}.png`} alt="" className={className} />
-    </picture>
+    <SafeImg
+      src={`/art/mockup/effects/${name}.png`}
+      webp={`/art/mockup/effects/${name}.webp`}
+      alt=""
+      className={className}
+    />
   );
 }
 

@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import type { ChipTone } from "@/components/ui";
@@ -21,8 +22,7 @@ export function SwimHero({ distance, duration }: { distance: string; duration: s
           <dd className={styles.heroDuration}>{duration}</dd>
         </div>
       </dl>
-      {/* eslint-disable-next-line @next/next/no-img-element -- small static decoration */}
-      <img className={styles.wave} src={WAVE_BAND} alt="" width={244} height={70} />
+      <SafeImg className={styles.wave} src={WAVE_BAND} alt="" width={244} height={70} />
     </div>
   );
 }

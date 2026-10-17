@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import { mockupArt } from "@/lib/art/mockup-art";
 import { shipTier } from "@/lib/scoring/ship-tier";
 
@@ -18,8 +19,7 @@ export function TierShip({ progressBp, alt, size = 40, small = false, className 
   const art = mockupArt(`ships/ship-tier-${tier}${small ? "-small" : ""}`);
   if (!art) return null;
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- small static art cut from the mockup
-    <img
+    <SafeImg
       src={art.webp}
       alt={alt(tier)}
       width={size}

@@ -1,3 +1,4 @@
+import { SafeImg } from "@/components/art/safe-img";
 import type { ReactNode } from "react";
 import { Card } from "@/components/ui";
 import { mockupArt } from "@/lib/art/mockup-art";
@@ -26,10 +27,7 @@ export function StateCard({
   const src = mockupArt(art)?.webp;
   return (
     <Card as="section" className={styles.card} role={role} aria-labelledby={titleId}>
-      {src && (
-        // eslint-disable-next-line @next/next/no-img-element -- static art, no optimisation needed
-        <img src={src} alt="" className={styles.art} />
-      )}
+      {src && <SafeImg src={src} alt="" className={styles.art} />}
       <h2 id={titleId} className={styles.title}>
         {title}
       </h2>
