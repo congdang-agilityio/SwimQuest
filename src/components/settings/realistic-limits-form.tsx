@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import styles from "./settings-card.module.css";
 import { RealisticLimitsRules } from "@/components/tournaments/rules/realistic-limits-rules";
 import { Button, Field } from "@/components/ui";
+import { formatKm, normalizeDecimal } from "@/lib/decimal-km";
 import { clientFetch } from "@/lib/http/client-fetch";
 import { formatPace, parsePace } from "@/lib/validation/settings/extra-rules";
 
@@ -24,7 +25,7 @@ const KNOWN = new Set<string>(INPUTS);
 
 /** Km as typed (at most 2 decimals) to whole metres, or null. */
 function parseKm(text: string) {
-  const s = text.trim();
+  const s = String(normalizeDecimal(text.trim()));
   return /^\d+(\.\d{1,2})?$/.test(s) && Number(s) > 0 ? Math.round(Number(s) * 1000) : null;
 }
 
@@ -42,10 +43,11 @@ export function RealisticLimitsForm({
   locked: boolean;
 }) {
   const t = useTranslations("settings.realisticLimits");
+  const locale = useLocale();
   const [text, setText] = useState<Record<Input, string>>({
     fastestPace: formatPace(values.fastestPaceSecPer100m),
     slowestPace: formatPace(values.slowestPaceSecPer100m),
-    longestRealisticSwimKm: String(values.longestRealisticSwimM / 1000),
+    longestRealisticSwimKm: formatKm(values.longestRealisticSwimM, locale),
   });
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
@@ -62,7 +64,7 @@ export function RealisticLimitsForm({
   const range = {
     fastestPace: `${formatPace(bounds.fastestPaceSecPer100m.min)}-${formatPace(bounds.fastestPaceSecPer100m.max)}`,
     slowestPace: `${formatPace(bounds.slowestPaceSecPer100m.min)}-${formatPace(bounds.slowestPaceSecPer100m.max)}`,
-    longestRealisticSwimKm: `${bounds.longestRealisticSwimM.min / 1000}-${bounds.longestRealisticSwimM.max / 1000}`,
+    longestRealisticSwimKm: `${formatKm(bounds.longestRealisticSwimM.min, locale)}-${formatKm(bounds.longestRealisticSwimM.max, locale)}`,
   };
   // The rules text follows what is typed; a value that is not valid yet shows as a dash.
   const live = {

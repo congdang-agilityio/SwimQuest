@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { kmText, type SwimRulesValues } from "@/components/tournaments/rules/swim-rules";
 import { clientFetch } from "@/lib/http/client-fetch";
 
@@ -23,6 +23,7 @@ export function SwimSettingsForm({
   locked: boolean;
 }) {
   const t = useTranslations("settings.swim");
+  const locale = useLocale();
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -121,9 +122,14 @@ export function SwimSettingsForm({
         "longestSwimCountedKm",
         t("longestSwimCounted"),
         t("longestSwimCountedHelp"),
-        kmText(values.longestSwimCountedM),
+        kmText(values.longestSwimCountedM, locale),
       )}
-      {field("dailyLimitKm", t("dailyLimit"), t("dailyLimitHelp"), kmText(values.dailyLimitM))}
+      {field(
+        "dailyLimitKm",
+        t("dailyLimit"),
+        t("dailyLimitHelp"),
+        kmText(values.dailyLimitM, locale),
+      )}
       <p>
         <label>
           {t("swimType")}

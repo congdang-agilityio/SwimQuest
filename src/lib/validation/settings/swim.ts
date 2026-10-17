@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { normalizeDecimal } from "@/lib/decimal-km";
 
 /** Upper bound that keeps metres far inside a 32-bit integer. */
 export const MAX_SETTING_KM = 10_000;
 
 /** Kilometres as typed (string) or a number: > 0, at most 2 decimals; returns whole metres. */
 const km = z.unknown().transform((value, ctx) => {
-  const raw = typeof value === "string" ? value.trim() : value;
+  const raw = normalizeDecimal(typeof value === "string" ? value.trim() : value);
   const n = typeof raw === "string" && /^[+-]?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
   let error: string | null = null;
   if (raw === undefined || raw === null || raw === "") error = "DISTANCE_REQUIRED";

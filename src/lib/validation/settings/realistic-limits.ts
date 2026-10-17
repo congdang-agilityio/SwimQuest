@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeDecimal } from "@/lib/decimal-km";
 import { SWIM_LIMIT_BOUNDS, type SwimLimitField } from "@/lib/swim-limits";
 import { formatPace, parsePace } from "./extra-rules";
 
@@ -20,7 +21,8 @@ export function boundOf(snapshot: unknown, field: SwimLimitField) {
 
 /** Km as typed or a number, > 0 with at most 2 decimals, to whole metres; null if malformed. */
 function parseKm(value: unknown): number | null {
-  const raw = typeof value === "string" && /^\d+(\.\d{1,2})?$/.test(value.trim()) ? +value : value;
+  const typed = normalizeDecimal(value);
+  const raw = typeof typed === "string" && /^\d+(\.\d{1,2})?$/.test(typed.trim()) ? +typed : typed;
   if (typeof raw !== "number" || !(raw > 0) || !Number.isFinite(raw)) return null;
   return Math.abs(raw * 100 - Math.round(raw * 100)) > 1e-6 ? null : Math.round(raw * 1000);
 }
