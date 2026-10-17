@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Avatar, Button, Field, SelectField, TextareaField } from "@/components/ui";
 import { DEFAULT_AVATAR_KEYS } from "@/lib/default-avatars";
@@ -40,6 +40,19 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [offline, setOffline] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setOffline(!navigator.onLine);
+    sync();
+    window.addEventListener("offline", sync);
+    window.addEventListener("online", sync);
+    return () => {
+      window.removeEventListener("offline", sync);
+      window.removeEventListener("online", sync);
+    };
+  }, []);
   const [uploading, setUploading] = useState<Kind | null>(null);
 
   const dirty =
@@ -88,12 +101,21 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
     setUploading(null);
   }
 
-  async function onSubmit(event: FormEvent) {
+  function onSubmit(event: FormEvent) {
     event.preventDefault();
+    return save();
+  }
+
+  /** Sends the values as they stand now; a failed save leaves every field as typed, so Retry resends them. */
+  async function save() {
     setErrors({});
     const goalDistanceM = goalDistance.trim() === "" ? null : parseGoalDistance(goalDistance);
     if (goalDistance.trim() !== "" && goalDistanceM === null) {
       setErrors({ goalDistanceM: "GOAL_DISTANCE_INVALID" });
+      return;
+    }
+    if (!navigator.onLine) {
+      setErrors({ form: "OFFLINE" });
       return;
     }
     setBusy(true);
@@ -120,9 +142,14 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
         return;
       }
       const fields = json?.error?.fields as Record<string, string> | undefined;
-      setErrors(fields && Object.keys(fields).length ? fields : { form: "GENERIC" });
+      setStatus(res.status);
+      setErrors(
+        fields && Object.keys(fields).length
+          ? fields
+          : { form: res.status >= 500 ? "SERVER" : "GENERIC" },
+      );
     } catch {
-      setErrors({ form: "GENERIC" });
+      setErrors({ form: navigator.onLine ? "GENERIC" : "OFFLINE" });
     }
     setBusy(false);
   }
@@ -308,10 +335,20 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
         )}
       </fieldset>
 
-      {errors.form && (
-        <p role="alert" className={styles.error}>
-          {message(errors.form)}
+      {offline && !errors.form && (
+        <p role="status" className={styles.notice}>
+          {t("offlineNotice")}
         </p>
+      )}
+      {errors.form && (
+        <div role="alert" className={styles.formError}>
+          <p className={styles.error}>
+            {errors.form === "SERVER" ? tr("SERVER", { status }) : message(errors.form)}
+          </p>
+          <Button variant="secondary" size="sm" onClick={save} disabled={busy}>
+            {t("retry")}
+          </Button>
+        </div>
       )}
       <div className={styles.actions}>
         <Button type="submit" disabled={busy || uploading !== null}>
@@ -339,4 +376,6 @@ const KNOWN_ERRORS: ReadonlySet<string> = new Set([
   "UNKNOWN_FIELD",
   "IMAGE_TOO_LARGE",
   "IMAGE_TYPE_NOT_ALLOWED",
+  "OFFLINE",
+  "SERVER",
 ]);

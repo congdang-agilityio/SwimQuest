@@ -1,11 +1,11 @@
 {
   "view": {
     "edit": "Sửa hồ sơ",
-    "noBio": "Chưa có giới thiệu.",
+    "noBio": "Chưa có giới thiệu. Chạm Sửa hồ sơ để thêm.",
     "coverAlt": "Ảnh bìa",
     "avatarAlt": "Ảnh đại diện",
     "goalsTitle": "Mục tiêu (chưa xác minh)",
-    "goalsEmpty": "Chưa đặt mục tiêu.",
+    "goalsEmpty": "Chưa đặt mục tiêu. Chạm Sửa hồ sơ để thêm mục tiêu.",
     "goalDistance": "Quãng đường mục tiêu: {km} km",
     "goalDistanceM": "Quãng đường mục tiêu: {m} m"
   },
@@ -40,7 +40,9 @@
     "goalDistanceHint": "Không bắt buộc. Nhập kèm đơn vị, ví dụ 800 m hoặc 2,5 km.",
     "goalDistancePlaceholder": "2,5 km",
     "disciplines": "Bộ môn",
-    "disciplinesHint": "Chọn những bộ môn bạn thích."
+    "disciplinesHint": "Chọn những bộ môn bạn thích.",
+    "offlineNotice": "Bạn đang ngoại tuyến; thay đổi vẫn được giữ. Hãy lưu khi có mạng lại.",
+    "retry": "Thử lại"
   },
   "defaults": {
     "dolphin": "Cá heo",
@@ -65,7 +67,9 @@
     "GENERIC": "Không lưu được hồ sơ. Hãy thử lại.",
     "GOALS_TOO_LONG": "Mục tiêu tối đa {max} ký tự.",
     "GOAL_DISTANCE_INVALID": "Nhập quãng đường như 800 m hoặc 2,5 km (tối đa 1.000 km).",
-    "DISCIPLINE_UNKNOWN": "Hãy chọn bộ môn trong danh sách."
+    "DISCIPLINE_UNKNOWN": "Hãy chọn bộ môn trong danh sách.",
+    "OFFLINE": "Bạn đang ngoại tuyến; thay đổi vẫn được giữ. Hãy thử lại khi có mạng.",
+    "SERVER": "Máy chủ gặp sự cố (lỗi {status}). Thay đổi của bạn vẫn được giữ; hãy thử lại để gửi lại."
   },
   "disciplines": {
     "POOL": "Hồ bơi",
