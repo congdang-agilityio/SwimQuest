@@ -4,11 +4,24 @@ import { isRegionCode } from "@/lib/regions";
 
 export const DISPLAY_NAME_MAX = 40;
 export const BIO_MAX = 300;
+export const GOALS_MAX = 500;
+export const GOAL_DISTANCE_MAX_M = 1_000_000;
+export const DISCIPLINES = [
+  "POOL",
+  "OPEN_WATER",
+  "FREESTYLE",
+  "BREASTSTROKE",
+  "BACKSTROKE",
+  "BUTTERFLY",
+] as const;
 
 export type ProfileErrorCode =
   | "DISPLAY_NAME_REQUIRED"
   | "DISPLAY_NAME_TOO_LONG"
   | "BIO_TOO_LONG"
+  | "GOALS_TOO_LONG"
+  | "GOAL_DISTANCE_INVALID"
+  | "DISCIPLINE_UNKNOWN"
   | "REGION_UNKNOWN"
   | "AVATAR_UNKNOWN"
   | "IMAGE_INVALID"
@@ -37,6 +50,24 @@ export const profileUpdateSchema = z.strictObject(
       .trim()
       .max(BIO_MAX, code("BIO_TOO_LONG"))
       .nullable()
+      .optional(),
+    goalsText: z
+      .string(code("GOALS_TOO_LONG"))
+      .trim()
+      .max(GOALS_MAX, code("GOALS_TOO_LONG"))
+      .transform((v) => v || null)
+      .nullable()
+      .optional(),
+    goalDistanceM: z
+      .number(code("GOAL_DISTANCE_INVALID"))
+      .int(code("GOAL_DISTANCE_INVALID"))
+      .min(1, code("GOAL_DISTANCE_INVALID"))
+      .max(GOAL_DISTANCE_MAX_M, code("GOAL_DISTANCE_INVALID"))
+      .nullable()
+      .optional(),
+    disciplines: z
+      .array(z.enum(DISCIPLINES, code("DISCIPLINE_UNKNOWN")), code("DISCIPLINE_UNKNOWN"))
+      .transform((list) => [...new Set(list)])
       .optional(),
     regionCode: z
       .string(code("REGION_UNKNOWN"))
