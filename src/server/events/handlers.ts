@@ -1,4 +1,5 @@
 import { teamBadgeHandlers } from "../badges/team-badges";
+import { funnelHandlers } from "../funnel/handlers";
 import { notificationHandlers } from "../notifications/handlers";
 import type { db } from "../db";
 import type { DomainEventMap, DomainEventType } from "./types";
@@ -55,3 +56,14 @@ export function registerTeamBadgeHandlers(): void {
   }
 }
 registerTeamBadgeHandlers();
+
+/** Product funnel events (S-81): domain events mapped to SRC-10 funnel names. */
+export function registerFunnelHandlers(): void {
+  for (const [type, fn] of Object.entries(funnelHandlers)) {
+    registry.set(type as DomainEventType, [
+      ...(registry.get(type as DomainEventType) ?? []),
+      fn as EventHandler<never>,
+    ]);
+  }
+}
+registerFunnelHandlers();

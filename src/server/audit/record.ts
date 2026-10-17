@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { recordFunnelEvent, type FunnelClient, type FunnelEventName } from "../funnel/record";
 
 /** Audited action names. Add new privileged actions here; never use free-form strings. */
 export const AUDIT_ACTIONS = {
@@ -37,6 +38,19 @@ export const AUDIT_ACTIONS = {
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
 
+/** Audited actions that are also funnel events (S-81 AC 5): score changes and admin overrides. */
+const FUNNEL_FOR_ACTION: Partial<Record<AuditAction, FunnelEventName>> = {
+  SWIM_REVIEWED: "score_recalculated",
+  SWIM_REVOKED: "score_recalculated",
+  DISPUTE_DECIDED: "score_recalculated",
+  PLAYER_MOVED: "score_recalculated",
+  START_CORRECTED_BY_ADMIN: "admin_override",
+  TEAM_START_SET_BY_ORGANIZER: "admin_override",
+  ACCOUNT_SUSPENDED: "admin_override",
+  ACCOUNT_REACTIVATED: "admin_override",
+  PASSWORD_RESET_BY_ADMIN: "admin_override",
+};
+
 export type AuditActor = { type: "USER"; userId: string } | { type: "SYSTEM" };
 
 export type AuditInput = {
@@ -52,7 +66,7 @@ export type AuditInput = {
 };
 
 /** Any client that can write audit events, typically the `tx` of `db.$transaction`. */
-export type AuditClient = {
+export type AuditClient = FunnelClient & {
   auditEvent: {
     create(args: { data: Prisma.AuditEventUncheckedCreateInput }): PromiseLike<unknown>;
   };
@@ -60,7 +74,8 @@ export type AuditClient = {
 
 /**
  * Writes one audit event with the given client, so it commits or rolls back together with
- * the audited change. `createdAt` is set by the database.
+ * the audited change. `createdAt` is set by the database. Score changes and admin overrides
+ * also record their funnel event with the same client.
  */
 export async function recordAudit(tx: AuditClient, input: AuditInput): Promise<void> {
   const { actor, ...event } = input;
@@ -71,4 +86,14 @@ export async function recordAudit(tx: AuditClient, input: AuditInput): Promise<v
       actorUserId: actor.type === "USER" ? actor.userId : null,
     },
   });
+  const funnel = FUNNEL_FOR_ACTION[input.action];
+  if (funnel) {
+    // Same client, so the funnel row commits or rolls back with the audited change.
+    await recordFunnelEvent(tx, funnel, {
+      userId: actor.type === "USER" ? actor.userId : null,
+      tournamentId: input.tournamentId ?? null,
+      refId: input.entityId,
+      props: { action: input.action },
+    });
+  }
 }
