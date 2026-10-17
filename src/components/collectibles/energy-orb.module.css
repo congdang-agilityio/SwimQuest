@@ -1,0 +1,42 @@
+/* The energy orb (G3 effects/glow): a soft gold glow that pulses; still with reduced motion. */
+.orb {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--orb-size, 28px);
+  height: var(--orb-size, 28px);
+  flex: none;
+  pointer-events: none;
+}
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--sq-gold) 0%, transparent 72%);
+  opacity: 0.9;
+}
+.art {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: contain;
+  animation: pulse 1.8s ease-in-out infinite alternate;
+}
+@keyframes pulse {
+  from {
+    transform: scale(0.88);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .art {
+    animation: none;
+  }
+}

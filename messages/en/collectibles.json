@@ -1,0 +1,42 @@
+{
+  "team": {
+    "title": "Team collectibles",
+    "fragmentsTitle": "Map fragments",
+    "fragment": "Fragment {percent}%",
+    "fragmentAlt": "Map fragment {percent}%",
+    "fragmentMissing": "Map fragment {percent}%: not reached yet",
+    "rewardsTitle": "Map and treasure chests",
+    "voyageMap": "Route 01 map",
+    "voyageMapAlt": "Route 01 voyage map",
+    "voyageMapComplete": "Completed",
+    "voyageMapProgress": "{count}/4 fragments",
+    "chest": {
+      "HALFWAY": "Halfway chest",
+      "LY_SON": "Lý Sơn chest"
+    },
+    "chestAt": {
+      "HALFWAY": "50%",
+      "LY_SON": "Lý Sơn"
+    },
+    "chestMissing": "{chest}: not reached yet",
+    "chestNew": "Just opened!",
+    "collectOnly": "Collectibles are for collecting only: they add no points, don't change the voyage, and can't be spent or traded."
+  },
+  "mine": {
+    "title": "My collectibles",
+    "pearl": "Pearls",
+    "starfish": "Starfish",
+    "coin": "Coins",
+    "count": "{label}: {count}",
+    "pearlHint": "A week with 3+ swim days",
+    "starfishHint": "Each long-swim bonus",
+    "coinHint": "1 coin per km",
+    "collectOnly": "For collecting only; they can't be spent or traded."
+  },
+  "energyOrb": "Weekly multiplier active",
+  "profile": {
+    "title": "Collectibles",
+    "team": "Team {team}",
+    "collectOnly": "Collectibles are for collecting only and follow the team's current progress: if progress drops, that milestone's items go too."
+  }
+}
