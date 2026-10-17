@@ -1,5 +1,11 @@
 import type { Prisma, ZaloMessageKind } from "@prisma/client";
 import { renderIntro } from "./messages/intro";
+import {
+  renderNewTeam,
+  renderPlayerJoined,
+  renderPlayerMoved,
+  renderSeasonStart,
+} from "./messages/team";
 
 /** The stored payload of a queued message (`payload.parts` for merged messages). */
 export type ZaloStoredPayload = Record<string, Prisma.JsonValue>;
@@ -13,6 +19,10 @@ export type ZaloRenderer = (payload: ZaloStoredPayload) => Promise<string | null
 /** One renderer per message kind; each message task registers its own. */
 const RENDERERS: Partial<Record<ZaloMessageKind, ZaloRenderer>> = {
   INTRO: renderIntro,
+  NEW_TEAM: renderNewTeam,
+  PLAYER_JOINED: renderPlayerJoined,
+  PLAYER_MOVED: renderPlayerMoved,
+  SEASON_START: renderSeasonStart,
 };
 
 /** Whether this kind can be sent yet; messages of other kinds wait in the queue. */
