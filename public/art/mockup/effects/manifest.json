@@ -1,0 +1,171 @@
+[
+  {
+    "key": "splash-small",
+    "file": "/art/mockup/effects/splash-small.png",
+    "webp": "/art/mockup/effects/splash-small.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [509, 1571, 151, 61],
+    "alt": {
+      "vi": "Bọt nhỏ",
+      "en": "Small splash"
+    }
+  },
+  {
+    "key": "splash-small-2",
+    "file": "/art/mockup/effects/splash-small-2.png",
+    "webp": "/art/mockup/effects/splash-small-2.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [677, 1551, 186, 84],
+    "alt": {
+      "vi": "Bọt nhỏ 2",
+      "en": "Small splash 2"
+    }
+  },
+  {
+    "key": "splash-medium",
+    "file": "/art/mockup/effects/splash-medium.png",
+    "webp": "/art/mockup/effects/splash-medium.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [872, 1524, 238, 111],
+    "alt": {
+      "vi": "Bọt vừa",
+      "en": "Medium splash"
+    }
+  },
+  {
+    "key": "wave",
+    "file": "/art/mockup/effects/wave.png",
+    "webp": "/art/mockup/effects/wave.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1140, 1514, 233, 133],
+    "alt": {
+      "vi": "Sóng",
+      "en": "Wave"
+    }
+  },
+  {
+    "key": "wave-curl",
+    "file": "/art/mockup/effects/wave-curl.png",
+    "webp": "/art/mockup/effects/wave-curl.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2360, 999, 203, 161],
+    "alt": {
+      "vi": "Sóng cuộn",
+      "en": "Curling wave"
+    }
+  },
+  {
+    "key": "bubble",
+    "file": "/art/mockup/effects/bubble.png",
+    "webp": "/art/mockup/effects/bubble.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1389, 1514, 128, 123],
+    "alt": {
+      "vi": "Bong bóng",
+      "en": "Bubbles"
+    }
+  },
+  {
+    "key": "glow",
+    "file": "/art/mockup/effects/glow.png",
+    "webp": "/art/mockup/effects/glow.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1747, 1536, 85, 81],
+    "alt": {
+      "vi": "Ánh sáng",
+      "en": "Glow"
+    }
+  },
+  {
+    "key": "splash-burst",
+    "file": "/art/mockup/effects/splash-burst.png",
+    "webp": "/art/mockup/effects/splash-burst.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1551, 1519, 134, 125],
+    "alt": {
+      "vi": "Tia nước",
+      "en": "Water burst"
+    }
+  },
+  {
+    "key": "splash-ring",
+    "file": "/art/mockup/effects/splash-ring.png",
+    "webp": "/art/mockup/effects/splash-ring.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1846, 1518, 122, 112],
+    "alt": {
+      "vi": "Vòng tia nước",
+      "en": "Water ring"
+    }
+  },
+  {
+    "key": "wave-trail",
+    "file": "/art/mockup/effects/wave-trail.png",
+    "webp": "/art/mockup/effects/wave-trail.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [839, 880, 261, 79],
+    "alt": {
+      "vi": "Vệt sóng",
+      "en": "Wave trail"
+    }
+  },
+  {
+    "key": "water-spark",
+    "file": "/art/mockup/effects/water-spark.png",
+    "webp": "/art/mockup/effects/water-spark.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1114, 762, 103, 140],
+    "alt": {
+      "vi": "Tia sóng",
+      "en": "Water spark"
+    }
+  },
+  {
+    "key": "foam-burst",
+    "file": "/art/mockup/effects/foam-burst.png",
+    "webp": "/art/mockup/effects/foam-burst.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1226, 738, 109, 165],
+    "alt": {
+      "vi": "Bọt nước",
+      "en": "Foam burst"
+    }
+  },
+  {
+    "key": "completion-burst",
+    "file": "/art/mockup/effects/completion-burst.png",
+    "webp": "/art/mockup/effects/completion-burst.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1344, 748, 117, 159],
+    "alt": {
+      "vi": "Hiệu ứng hoàn thành",
+      "en": "Completion burst"
+    }
+  }
+]
