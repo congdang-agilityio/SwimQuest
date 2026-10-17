@@ -15,17 +15,19 @@ import { requireUser } from "@/server/auth/current-user";
 import { db } from "@/server/db";
 import { listUserBadges } from "@/server/badges/list";
 import { getMyProfile } from "@/server/profile/my-profile";
+import { getLevels } from "@/server/xp/level";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./profile.module.css";
 
 export default async function ProfilePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/profile");
-  const [t, tc, stats, profile, badges] = await Promise.all([
+  const [t, tc, stats, profile, badges, levels] = await Promise.all([
     getTranslations("nav"),
     getTranslations("common"),
     getPlayerStats(user.id),
     getMyProfile(user.id),
     listUserBadges(user.id),
+    getLevels([user.id]),
   ]);
   // The account vanished after the session check: sign in again. Never notFound() here, because
   // loading.tsx streams a 200 first and a 404 could no longer be sent.
@@ -41,7 +43,10 @@ export default async function ProfilePage() {
         <ScreenHeader title={t("profile.title")} />
       </div>
 
-      <ProfileSection profile={profile} />
+      <ProfileSection
+        profile={profile}
+        level={levels.get(user.id) ?? { xp: 0, level: 1, xpToNext: 25 }}
+      />
 
       <StatsSection stats={stats} teamNames={teamNames} />
 

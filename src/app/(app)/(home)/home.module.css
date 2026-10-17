@@ -31,7 +31,14 @@
   gap: var(--sq-space-3);
   min-width: 0;
 }
+.who {
+  display: grid;
+  justify-items: start;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
 .name {
+  max-width: 100%;
   overflow: hidden;
   font-size: var(--sq-text-lg);
   font-weight: var(--sq-weight-bold);
