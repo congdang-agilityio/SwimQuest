@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Button, ButtonLink, Card } from "@/components/ui";
+import { StateCard } from "@/components/states/state-card";
+import { Button, ButtonLink } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
 import * as f from "@/lib/format/swim";
 import { utcToVnParts } from "@/lib/time/vn";
@@ -39,12 +40,11 @@ export function SwimList({ initialItems, initialCursor }: Props) {
 
   if (items.length === 0) {
     return (
-      <Card as="section" className={styles.empty}>
-        <h2>{t("empty")}</h2>
-        <ButtonLink href="/connect" variant="primary">
+      <StateCard art="items/goggles" titleId="swims-empty" title={t("empty")} body={t("emptyBody")}>
+        <ButtonLink href="/connect" variant="primary" block>
           {t("add")}
         </ButtonLink>
-      </Card>
+      </StateCard>
     );
   }
   return (
