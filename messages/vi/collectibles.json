@@ -1,0 +1,25 @@
+{
+  "team": {
+    "title": "Bộ sưu tập đội",
+    "fragmentsTitle": "Mảnh bản đồ",
+    "fragment": "Mảnh {percent}%",
+    "fragmentAlt": "Mảnh bản đồ {percent}%",
+    "fragmentMissing": "Mảnh bản đồ {percent}%: chưa đạt",
+    "rewardsTitle": "Bản đồ và rương báu",
+    "voyageMap": "Bản đồ Route 01",
+    "voyageMapAlt": "Bản đồ hải trình Route 01",
+    "voyageMapComplete": "Hoàn thành",
+    "voyageMapProgress": "{count}/4 mảnh",
+    "chest": {
+      "HALFWAY": "Rương 50%",
+      "LY_SON": "Rương Lý Sơn"
+    },
+    "chestAt": {
+      "HALFWAY": "50%",
+      "LY_SON": "Lý Sơn"
+    },
+    "chestMissing": "{chest}: chưa đạt",
+    "chestNew": "Mới mở!",
+    "collectOnly": "Vật phẩm chỉ để sưu tầm: không cộng điểm, không ảnh hưởng hải trình, không thể tiêu hay trao đổi."
+  }
+}
