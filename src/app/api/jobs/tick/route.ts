@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { apiError } from "@/server/http/api-error";
 import {
   runDueSeasonEnds,
+  runDueSeasonStarts,
   runDueStartAssignments,
   runDueWeekSettlements,
   runDueXpWeekSettlements,
@@ -30,12 +31,13 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!given || !sameSecret(given, secret)) return apiError(401, "UNAUTHENTICATED");
 
   const startAssignments = await runDueStartAssignments(new Date());
+  const seasonStarts = await runDueSeasonStarts(new Date());
   const weekSettlements = await runDueWeekSettlements(new Date());
   const seasonEnds = await runDueSeasonEnds(new Date());
   const xpWeekSettlements = await runDueXpWeekSettlements(new Date());
   const pushes = await runPendingPushes();
   return NextResponse.json(
-    { startAssignments, weekSettlements, seasonEnds, xpWeekSettlements, pushes },
+    { startAssignments, seasonStarts, weekSettlements, seasonEnds, xpWeekSettlements, pushes },
     { headers: { "cache-control": "no-store" } },
   );
 }
