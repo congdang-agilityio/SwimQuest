@@ -1,4 +1,5 @@
-import { mockupArt } from "@/lib/art/mockup-art";
+import { ArtImage } from "@/components/art/art-image";
+import { mockupArt, toArtAsset } from "@/lib/art/mockup-art";
 import styles from "./swimmer-sprite.module.css";
 
 type Props = {
@@ -15,8 +16,7 @@ export function SwimmerSprite({ pose = "poses/freestyle-01" }: Props) {
   if (!art) return null;
   return (
     <span className={styles.swimmer} data-testid="swimmer" aria-hidden="true">
-      {/* eslint-disable-next-line @next/next/no-img-element -- small static art from the registry */}
-      <img src={art.webp} alt="" width={art.width} height={art.height} className={styles.image} />
+      <ArtImage art={toArtAsset(art)} alt="" className={styles.image} fallback={null} />
     </span>
   );
 }

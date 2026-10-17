@@ -11,7 +11,8 @@ import { NavIcon } from "./nav-icon";
 import { TournamentSwitcher } from "./tournament-switcher";
 import type { TournamentSwitcherData } from "@/server/home/selected-tournament";
 import { isActive, navItems } from "./nav-items";
-import { mockupArt } from "@/lib/art/mockup-art";
+import { ArtImage } from "@/components/art/art-image";
+import { mockupArt, toArtAsset } from "@/lib/art/mockup-art";
 import styles from "./app-nav.module.css";
 
 /**
@@ -19,7 +20,8 @@ import styles from "./app-nav.module.css";
  * (bottom bar below 768 px, left rail from 768 px). The current tab has aria-current.
  */
 /** The SwimQuest wave mark (G1, asset sheet B); the brand name beside it is live text. */
-const LOGO = mockupArt("brand/logo-mark");
+const LOGO_ART = mockupArt("brand/logo-mark");
+const LOGO = LOGO_ART && toArtAsset(LOGO_ART);
 
 type Props = {
   displayName: string;
@@ -40,10 +42,7 @@ export function AppNav({ displayName, avatarSrc, isPlatformAdmin, switcher, bell
     <>
       <div className={styles.topBar}>
         <span className={styles.brand}>
-          {LOGO && (
-            // eslint-disable-next-line @next/next/no-img-element -- small static brand art
-            <img src={LOGO.webp} alt="" width={32} height={32} className={styles.logo} />
-          )}
+          <ArtImage art={LOGO} alt="" className={styles.logo} fallback={null} />
           {tc("appName")}
         </span>
         <div className={styles.actions}>

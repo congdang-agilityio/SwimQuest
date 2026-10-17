@@ -1,4 +1,5 @@
-import { mockupArt } from "@/lib/art/mockup-art";
+import { ArtImage } from "@/components/art/art-image";
+import { mockupArt, toArtAsset } from "@/lib/art/mockup-art";
 import styles from "./map-decor.module.css";
 
 /*
@@ -23,19 +24,15 @@ export function MapDecor() {
         const art = mockupArt(key);
         if (!art) return null;
         return (
-          // eslint-disable-next-line @next/next/no-img-element -- small static art from the registry
-          <img
+          <span
             key={key}
-            src={art.webp}
-            alt=""
-            width={art.width}
-            height={art.height}
-            loading="lazy"
-            decoding="async"
             className={styles.item}
             data-flip={flip || undefined}
             style={{ left: `${x}%`, top: `${y}%`, width: `${w}%` }}
-          />
+          >
+            {/* A missing image renders nothing: decoration has no fallback. */}
+            <ArtImage art={toArtAsset(art)} alt="" className={styles.image} fallback={null} />
+          </span>
         );
       })}
     </div>
