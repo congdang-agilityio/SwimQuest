@@ -2,11 +2,12 @@ import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { ProgressBar } from "@/components/ui";
+import { landmarkArt } from "@/lib/art/route01-art";
 import { MAP_ASPECT } from "@/lib/routes/destinations-passed";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import { ScrollToShip } from "./scroll-to-ship";
 import { ShipMarker } from "./ship-marker";
-import { VOYAGE_MAP_ART, VOYAGE_SHIP_ART } from "./voyage-art";
+import { compassArt, VOYAGE_MAP_ART, VOYAGE_SHIP_ART } from "./voyage-art";
 import styles from "./voyage.module.css";
 
 export type RouteMapProps = {
@@ -77,6 +78,7 @@ export function RouteMap({
               className={styles.background}
               fallback={<div className={styles.backgroundFallback} />}
             />
+            <ArtImage art={compassArt()} alt="" className={styles.compass} fallback={null} />
             {path && (
               <svg
                 data-testid="route-path"
@@ -104,7 +106,13 @@ export function RouteMap({
                 data-finish={d.isFinish || undefined}
                 style={{ left: `${d.x}%`, top: `${d.y}%` }}
               >
-                {/* The landmark itself is painted on the map art; the pin shows the route order. */}
+                {/* Landmark island (G1 art) under the numbered pin, which shows the route order. */}
+                <ArtImage
+                  art={landmarkArt(d.slug)}
+                  alt=""
+                  className={styles.landmark}
+                  fallback={null}
+                />
                 <span aria-hidden="true" className={styles.pin}>
                   {i + 1}
                 </span>

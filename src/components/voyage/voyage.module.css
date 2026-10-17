@@ -148,6 +148,14 @@
   background: var(--sq-gradient-sea);
 }
 
+.compass {
+  position: absolute;
+  left: 1%;
+  top: 2.5%;
+  width: 10%;
+  height: auto;
+}
+
 .path {
   position: absolute;
   inset: 0;
@@ -158,6 +166,19 @@
 .path polyline {
   stroke: var(--sq-foam);
   opacity: 0.85;
+}
+
+/* Landmark island (G1, 4:3) centred a little below the pin, like the islands under the
+   mockup's pins. */
+.landmark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9cqw;
+  max-width: none;
+  height: auto;
+  transform: translate(-50%, -38%);
+  filter: var(--sq-shadow-drop);
 }
 
 /* Zero-size anchor: the numbered pin is centred on the anchor, the name pill sits beside it. */

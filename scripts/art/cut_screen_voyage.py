@@ -7,8 +7,9 @@ Writes public/art/mockup/screen-voyage/:
 - map-route01.webp: the Route 01 map scene of the "BẢN ĐỒ HẢI TRÌNH ROUTE 01" panel, 2x LANCZOS,
   18:7 (1348 x 524). The painted pins and name pills stay: the app draws its own pins and pills on
   top at the same anchors (public/art/route01/map-anchors.json). Painted UI with no app
-  counterpart is removed: the team card corner, the duplicate "3 Bãi Sơn Thủy" pill and the
-  painted ship (the app draws the team's ship).
+  counterpart is removed: the team card corner, the duplicate "3 Bãi Sơn Thủy" pill, the
+  painted compass (the page draws map/compass-rose) and the painted ship (the app draws the
+  team's ship).
 - ship-map.png: the painted ship from the same map, sea keyed out.
 Swap both for the shared group assets (map: G3, ships: G2) once they are on main.
 """
@@ -43,10 +44,12 @@ def cut_map(im: Image.Image) -> Image.Image:
     mask.paste(255, (40, 0, card.size[0], 40))
     scene.paste(card, (880, -16), mask)
 
-    # Duplicate "3" pill: inpainted from its surroundings.
+    # Duplicate "3" pill and the painted compass (with its N/E/S/W letters; the page draws the
+    # G3 compass-rose instead): inpainted from their surroundings.
     a = cv2.cvtColor(np.array(scene), cv2.COLOR_RGB2BGR)
     hole = np.zeros(a.shape[:2], np.uint8)
     cv2.rectangle(hole, (312, 132), (500, 218), 255, -1)
+    cv2.rectangle(hole, (14, 14), (152, 150), 255, -1)
     a = cv2.inpaint(a, hole, 15, cv2.INPAINT_NS)
     scene = Image.fromarray(cv2.cvtColor(a, cv2.COLOR_BGR2RGB))
 
