@@ -52,7 +52,12 @@ export async function resolveSession(token: string, now: Date = new Date()) {
   if (typeof token !== "string" || !TOKEN_PATTERN.test(token)) return null;
   const session = await db.session.findUnique({
     where: { tokenHash: hashToken(token) },
-    select: { id: true, userId: true, expiresAt: true, user: { select: publicUserSelect } },
+    select: {
+      id: true,
+      userId: true,
+      expiresAt: true,
+      user: { select: { ...publicUserSelect, mustChangePassword: true } },
+    },
   });
   if (!session || session.expiresAt <= now) return null;
   if (session.user.status === "SUSPENDED") return { suspended: true as const };

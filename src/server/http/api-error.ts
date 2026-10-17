@@ -8,6 +8,7 @@ export type ApiErrorCode =
   | "FORBIDDEN_ORIGIN"
   | "INVALID_CREDENTIALS"
   | "ACCOUNT_SUSPENDED"
+  | "PASSWORD_CHANGE_REQUIRED"
   | "UNAUTHENTICATED"
   | "FORBIDDEN"
   | "NOT_FOUND"
@@ -67,6 +68,7 @@ const messages: Record<ApiErrorCode, string> = {
   FORBIDDEN_ORIGIN: "Cross-site requests are not allowed.",
   INVALID_CREDENTIALS: "The email or password is incorrect.",
   ACCOUNT_SUSPENDED: "This account is suspended. Contact the platform admin to restore it.",
+  PASSWORD_CHANGE_REQUIRED: "Choose a new password before you continue.",
   UNAUTHENTICATED: "Please log in to continue.",
   FORBIDDEN: "You do not have permission to do this.",
   NOT_FOUND: "The requested item was not found.",
