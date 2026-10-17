@@ -33,5 +33,10 @@
     "coinHint": "1 coin per km",
     "collectOnly": "For collecting only; they can't be spent or traded."
   },
-  "energyOrb": "Weekly multiplier active"
+  "energyOrb": "Weekly multiplier active",
+  "profile": {
+    "title": "Collectibles",
+    "team": "Team {team}",
+    "collectOnly": "Collectibles are for collecting only and follow the team's current progress: if progress drops, that milestone's items go too."
+  }
 }
