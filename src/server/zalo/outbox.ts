@@ -15,8 +15,14 @@ export interface EnqueueZaloInput {
   /**
    * Messages with the same key merge into one post while it is still pending: the payload is
    * appended to `payload.parts`. Ignored when `dedupeKey` is set (a deduped message never merges).
+   * A function gets the group's chat id, for keys per chat (`swim:<swimId>:<chatId>`).
    */
-  groupKey?: string;
+  groupKey?: string | ((chatId: string) => string);
+  /**
+   * A counted swim result (#460): queued at most once ever. Skipped when a `ZaloSwimPost`
+   * already exists for it; otherwise one is inserted (insert-or-ignore) with the message id.
+   */
+  swimResultId?: string;
   /** Queues the message at most once ever (insert-or-ignore). */
   dedupeKey?: string;
 }
@@ -29,15 +35,22 @@ export interface EnqueueZaloInput {
  * Returns whether a message was queued or merged.
  */
 export async function enqueueZalo(tx: Tx, input: EnqueueZaloInput): Promise<boolean> {
-  const { tournamentId, kind, payload, groupKey, dedupeKey } = input;
+  const { tournamentId, kind, payload, dedupeKey, swimResultId } = input;
   const settings = await tx.tournamentZalo.findUnique({
     where: { tournamentId },
     select: { zaloBot: { select: { id: true, chatId: true } } },
   });
   const bot = settings?.zaloBot;
   if (!bot?.chatId) return false;
+  const groupKey =
+    typeof input.groupKey === "function" ? input.groupKey(bot.chatId) : input.groupKey;
+  if (swimResultId) {
+    const posted = await tx.zaloSwimPost.findUnique({ where: { swimResultId }, select: {} });
+    if (posted) return false;
+  }
 
   let queued: boolean;
+  let messageId: string | null = null;
   if (dedupeKey) {
     const res = await tx.zaloMessage.createMany({
       data: [
@@ -53,17 +66,25 @@ export async function enqueueZalo(tx: Tx, input: EnqueueZaloInput): Promise<bool
     });
     queued = res.count > 0;
   } else if (groupKey) {
-    await appendPart(
+    messageId = await appendPart(
       tx,
       { zaloBotId: bot.id, chatId: bot.chatId, kind, groupKey, tournamentId },
       payload,
     );
     queued = true;
   } else {
-    await tx.zaloMessage.create({
+    const created = await tx.zaloMessage.create({
       data: { zaloBotId: bot.id, chatId: bot.chatId, kind, payload: { ...payload, tournamentId } },
+      select: { id: true },
     });
+    messageId = created.id;
     queued = true;
+  }
+  if (swimResultId && messageId) {
+    await tx.zaloSwimPost.createMany({
+      data: [{ swimResultId, zaloMessageId: messageId }],
+      skipDuplicates: true,
+    });
   }
   if (queued) scheduleDelivery();
   return queued;
@@ -103,8 +124,11 @@ interface GroupTarget {
   tournamentId: string;
 }
 
-/** Appends to the pending post with this group key (row locked), or starts a new one. */
-async function appendPart(tx: Tx, target: GroupTarget, part: ZaloPayload): Promise<void> {
+/**
+ * Appends to the pending post with this group key (row locked), or starts a new one. Returns
+ * the message id.
+ */
+async function appendPart(tx: Tx, target: GroupTarget, part: ZaloPayload): Promise<string> {
   const [open] = await tx.$queryRaw<{ id: string; payload: Prisma.JsonValue }[]>`
     SELECT id, payload FROM "ZaloMessage"
     WHERE "groupKey" = ${target.groupKey} AND "zaloBotId" = ${target.zaloBotId}
@@ -119,9 +143,9 @@ async function appendPart(tx: Tx, target: GroupTarget, part: ZaloPayload): Promi
       where: { id: open.id },
       data: { payload: { ...(current as object), parts: [...parts, part] } },
     });
-    return;
+    return open.id;
   }
-  await tx.zaloMessage.create({
+  const created = await tx.zaloMessage.create({
     data: {
       zaloBotId: target.zaloBotId,
       chatId: target.chatId,
@@ -129,7 +153,9 @@ async function appendPart(tx: Tx, target: GroupTarget, part: ZaloPayload): Promi
       groupKey: target.groupKey,
       payload: { tournamentId: target.tournamentId, parts: [part] },
     },
+    select: { id: true },
   });
+  return created.id;
 }
 
 /**
