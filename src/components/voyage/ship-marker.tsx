@@ -12,14 +12,15 @@ type Props = {
 };
 
 // Ship box width as a share of the map width.
-const BOX_PCT = 12;
+const BOX_PCT = 11;
 
-/** The team's ship on the map, drawn for its current tier. The progress label is rendered by RouteMap. */
+/** The team's ship on the map drawn for its current tier (G2 art). The progress label is rendered by RouteMap. */
 export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
   return (
     <div
       data-testid="ship"
       data-tier={tier}
+      className={styles.shipMarker}
       style={{
         position: "absolute",
         left: `${x}%`,

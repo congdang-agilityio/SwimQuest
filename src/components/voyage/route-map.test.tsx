@@ -65,7 +65,8 @@ describe("RouteMap", () => {
     const label = screen.getByTestId("progress-label");
     expect(screen.getByTestId("ship").contains(label)).toBe(false);
     expect(screen.getByTestId("route-map").contains(label)).toBe(false);
-    expect(label.parentElement).toBe(screen.getByTestId("route-map").parentElement);
+    // In the band of the same frame as the map (the map sits in a sideways scroller on phones).
+    expect(label.parentElement!.contains(screen.getByTestId("route-map"))).toBe(true);
   });
 
   it("places all seven destinations at their anchors", () => {
@@ -84,9 +85,9 @@ describe("RouteMap", () => {
     expect(screen.getAllByTestId("finish-marker")).toHaveLength(1);
   });
 
-  it("renders a 16:10 box", () => {
+  it("renders an 18:7 box, the aspect of the map art", () => {
     setup({});
-    expect(screen.getByTestId("route-map").style.aspectRatio).toBe("16 / 10");
+    expect(screen.getByTestId("route-map").style.aspectRatio).toBe("18 / 7");
   });
 
   it("uses the current language", () => {

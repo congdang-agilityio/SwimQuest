@@ -1,15 +1,36 @@
 {
-  "aspectRatio": "16:10",
-  "width": 1600,
-  "height": 1000,
+  "aspectRatio": "18:7",
+  "width": 1348,
+  "height": 524,
   "unit": "percent of map width (x) and height (y)",
   "anchors": {
-    "non_nuoc": { "x": 33, "y": 8 },
-    "son_thuy": { "x": 36, "y": 24 },
-    "pham_van_dong": { "x": 36, "y": 40 },
-    "man_thai": { "x": 33, "y": 54 },
-    "hon_sup": { "x": 30, "y": 68 },
-    "cu_lao_cham": { "x": 62, "y": 64 },
-    "ly_son": { "x": 80, "y": 79 }
+    "non_nuoc": {
+      "x": 10.9,
+      "y": 85.5
+    },
+    "son_thuy": {
+      "x": 16.8,
+      "y": 48.1
+    },
+    "pham_van_dong": {
+      "x": 38,
+      "y": 14.9
+    },
+    "man_thai": {
+      "x": 59.1,
+      "y": 20.6
+    },
+    "hon_sup": {
+      "x": 74.2,
+      "y": 38.2
+    },
+    "cu_lao_cham": {
+      "x": 53.6,
+      "y": 54.2
+    },
+    "ly_son": {
+      "x": 92.2,
+      "y": 40.5
+    }
   }
 }

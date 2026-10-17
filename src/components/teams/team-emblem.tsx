@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { emblemPath, isEmblemKey } from "@/lib/emblems";
 
 type TeamEmblemProps = {
@@ -12,6 +12,10 @@ type TeamEmblemProps = {
 
 export function TeamEmblem({ emblemKey, size, alt }: TeamEmblemProps) {
   const [failed, setFailed] = useState(false);
+  // A server-rendered <img> can fail before React attaches onError (same as ArtImage).
+  const checkLoaded = useCallback((img: HTMLImageElement | null) => {
+    if (img && img.complete && img.naturalWidth === 0) setFailed(true);
+  }, []);
 
   if (!isEmblemKey(emblemKey) || failed) {
     return (
@@ -32,6 +36,7 @@ export function TeamEmblem({ emblemKey, size, alt }: TeamEmblemProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element -- tiny static SVG, no optimisation needed
     <img
+      ref={checkLoaded}
       src={emblemPath(emblemKey)}
       alt={alt}
       width={size}

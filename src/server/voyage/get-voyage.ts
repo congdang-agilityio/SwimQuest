@@ -2,14 +2,13 @@ import { getCurrentMembership } from "@/server/home/my-tournaments";
 import { getTeamPoints } from "@/server/scoring/team-points";
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { getRoute } from "@/lib/routes";
+import { MAP_ASPECT } from "@/lib/routes/destinations-passed";
 import { pointAlongPath, type MapPoint } from "@/lib/routes/path-position";
 import route01Anchors from "../../../public/art/route01/map-anchors.json";
 
 const anchorsByRoute: Record<string, { anchors: Record<string, MapPoint> }> = {
   route01: route01Anchors,
 };
-/** Map aspect ratio (16:10): anchors are percent of the map box, so x counts 1.6x for lengths. */
-const MAP_ASPECT = 16 / 10;
 
 export type Voyage = {
   tournament: { id: string; name: string; routeId: string };

@@ -5,5 +5,21 @@
   "noStart": "Start not chosen yet",
   "progress": "{reached} / {total} route km · {pct}",
   "ship": "{team}'s ship",
-  "note": "This map is illustrative and is not a navigation chart."
+  "note": "This map is illustrative and is not a navigation chart.",
+  "screenTitle": "Team voyage",
+  "mapTitle": "Route 01 voyage map",
+  "emblem": "{team} team emblem",
+  "teamProgress": "Team progress",
+  "routeProgress": "Route progress",
+  "bandStart": "Start",
+  "bandFinish": "Finish",
+  "province": {
+    "non_nuoc": "Da Nang",
+    "son_thuy": "Da Nang",
+    "pham_van_dong": "Da Nang",
+    "man_thai": "Da Nang",
+    "hon_sup": "Da Nang",
+    "cu_lao_cham": "Quang Nam",
+    "ly_son": "Quang Ngai"
+  }
 }
