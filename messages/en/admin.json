@@ -73,6 +73,43 @@
         "network": "Could not reach the server. Check your connection and try again.",
         "failed": "Could not change the account status. Please try again."
       }
+    },
+    "password": {
+      "title": "Password",
+      "help": "If the player forgot their password, set a temporary one and pass it to them outside the app. First make sure the person asking really owns this account.",
+      "reset": "Reset password",
+      "confirm": "Reset the password of {name}? They are logged out everywhere and must choose a new password the next time they log in.",
+      "confirmYes": "Yes, reset",
+      "cancel": "Cancel",
+      "saving": "Resetting...",
+      "shownTitle": "Temporary password",
+      "shownIntro": "Temporary password for {name}:",
+      "shownWarning": "This is shown only once. Pass it to the player in person or by phone, never in a public place. It disappears when you close this.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the password and copy it by hand.",
+      "close": "Close",
+      "errors": {
+        "FORBIDDEN": "You do not have permission to do this.",
+        "NOT_FOUND": "This user no longer exists.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "failed": "Could not reset the password. Please try again."
+      }
+    }
+  },
+  "contact": {
+    "title": "Admin contact",
+    "help": "Players who forgot their password see this on the Forgot password page. Say how to reach you, for example a phone number or a Zalo name.",
+    "label": "How to contact the platform admin",
+    "hint": "Plain text, up to {max} characters. Leave empty to show a general message.",
+    "save": "Save contact",
+    "saving": "Saving...",
+    "done": "The contact was saved.",
+    "errors": {
+      "INVALID_ADMIN_CONTACT": "Use plain text of up to 200 characters.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "failed": "Could not save the contact. Please try again."
     }
   },
   "swimLimits": {

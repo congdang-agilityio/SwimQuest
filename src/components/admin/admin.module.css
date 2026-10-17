@@ -140,3 +140,27 @@
 .actions > * {
   width: 100%;
 }
+.secret {
+  display: block;
+  padding: var(--sq-space-3);
+  border: 1px dashed var(--sq-navy-800);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-foam);
+  color: var(--sq-navy-800);
+  font-family: var(--sq-font-mono);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  letter-spacing: 0.08em;
+  text-align: center;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.warning {
+  margin: 0;
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-gold-wash);
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
