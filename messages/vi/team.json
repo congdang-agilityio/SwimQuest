@@ -21,5 +21,32 @@
     "playerMoved": "Một thành viên đã rời đội, nên quãng đường của đội thấp hơn vạch đích.",
     "close": "Đóng"
   },
-  "shipTier": "Tàu cấp {tier}"
+  "shipTier": "Tàu cấp {tier}",
+  "leaveSwitch": {
+    "title": "Thao tác với đội",
+    "switch": "Đổi đội",
+    "leave": "Rời đội",
+    "cancel": "Hủy",
+    "afterStart": "Mùa giải đã bắt đầu. Chỉ ban tổ chức mới có thể chuyển người chơi giữa các đội.",
+    "leaveTitle": "Rời {team}?",
+    "leaveBody": "Bạn sẽ rời đội và có thể chọn đội khác bằng liên kết mời.",
+    "captainWarning": "Bạn là đội trưởng. Đội sẽ không có đội trưởng cho đến khi ban tổ chức chỉ định người mới.",
+    "confirmLeave": "Đồng ý, rời đội",
+    "pickTitle": "Chọn đội muốn chuyển sang",
+    "noOtherTeams": "Không có đội nào khác để chuyển sang.",
+    "full": "Đã đầy",
+    "fullDisabled": "Đã đầy, không thể chọn",
+    "placesLeft": "{count, plural, other {Còn # chỗ}}",
+    "choose": "Chuyển sang {name}",
+    "switchTitle": "Chuyển sang {team}?",
+    "switchBody": "Bạn sẽ rời đội hiện tại và tham gia đội này.",
+    "confirmSwitch": "Đồng ý, đổi đội",
+    "error": {
+      "seasonStarted": "Mùa giải đã bắt đầu. Chỉ ban tổ chức mới có thể chuyển người chơi.",
+      "teamFull": "Đội đó vừa đầy. Vui lòng chọn đội khác.",
+      "alreadyMember": "Bạn đã ở trong một đội. Vui lòng tải lại trang.",
+      "notMember": "Bạn không còn là thành viên của đội này.",
+      "failed": "Có lỗi xảy ra. Vui lòng thử lại."
+    }
+  }
 }

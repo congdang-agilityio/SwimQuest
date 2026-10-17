@@ -9,13 +9,15 @@ import styles from "@/components/teams/my-team.module.css";
 import { ButtonLink } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
-import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
+import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { getMyPoints } from "@/server/scoring/my-points";
+import { listTeamsWithCounts } from "@/server/teams/manage";
 import { getMyTeamView } from "@/server/teams/my-team-view";
 import { TeamHeader } from "@/components/teams/team-header";
+import { LeaveSwitchActions } from "@/components/teams/leave-switch-actions";
 import { TeamRoster } from "@/components/teams/team-roster";
 
 export default async function TeamPage() {
@@ -29,6 +31,19 @@ export default async function TeamPage() {
   }
   const view = membership ? await getMyTeamView(user.id) : null;
   const myPoints = membership ? await getMyPoints(user.id, membership.tournament.id) : null;
+  const status = membership ? effectiveStatus(membership.tournament, new Date()) : null;
+  const beforeStart = status === "DRAFT" || status === "PUBLISHED";
+  const otherTeams =
+    membership && beforeStart
+      ? (await listTeamsWithCounts(membership.tournament.id)).teams
+          .filter((x) => x.id !== membership.team.id)
+          .map((x) => ({
+            id: x.id,
+            name: x.name,
+            emblemKey: x.emblemKey,
+            freePlaces: Math.max(0, x.memberLimit - x.memberCount),
+          }))
+      : [];
   const startSlug = membership?.team.startDestination ?? null;
   return (
     <main>
@@ -51,6 +66,13 @@ export default async function TeamPage() {
                   {tTeam("addSwim")}
                 </ButtonLink>
               </div>
+              <LeaveSwitchActions
+                teamId={membership.team.id}
+                teamName={view.team.name}
+                isCaptain={membership.team.captainUserId === user.id}
+                beforeStart={beforeStart}
+                otherTeams={otherTeams}
+              />
             </>
           ) : (
             <div className={styles.empty}>
