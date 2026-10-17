@@ -1,6 +1,7 @@
 import { ArtImage } from "@/components/art/art-image";
 import { shipArt } from "@/lib/art/route01-art";
 import type { ShipTier } from "@/lib/scoring/ship-tier";
+import { SwimmerSprite } from "./swimmer-sprite";
 import styles from "./voyage.module.css";
 
 type Props = {
@@ -14,7 +15,10 @@ type Props = {
 // Ship box width as a share of the map width.
 const BOX_PCT = 11;
 
-/** The team's ship on the map drawn for its current tier (G2 art). The progress label is rendered by RouteMap. */
+/**
+ * The team's ship on the map drawn for its current tier (G2 art), with a swimmer gliding beside
+ * it. The progress label is rendered by RouteMap.
+ */
 export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
   return (
     <div
@@ -32,6 +36,7 @@ export function ShipMarker({ x, y, alt, tier = 1 }: Props) {
         width: `${BOX_PCT}%`,
       }}
     >
+      <SwimmerSprite />
       <ArtImage
         art={shipArt(tier)}
         alt={alt}

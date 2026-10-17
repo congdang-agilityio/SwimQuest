@@ -12,7 +12,14 @@ const PUBLIC_PATHS = [
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
 /** Folders whose contents (not the folder itself) are public: auth API, build output, `public/`. */
 const PUBLIC_DIRS = ["/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
-const PUBLIC_FILES = new Set(["/manifest.webmanifest", "/favicon.ico", "/robots.txt", "/sw.js"]);
+const PUBLIC_FILES = new Set([
+  "/manifest.webmanifest",
+  "/favicon.ico",
+  "/icon.png",
+  "/apple-icon.png",
+  "/robots.txt",
+  "/sw.js",
+]);
 
 /** Visitors who open the main address (Home, `/` without a query) without a valid session see this page (S-70). */
 export const WELCOME_PATH = "/welcome";

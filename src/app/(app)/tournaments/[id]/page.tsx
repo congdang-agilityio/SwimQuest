@@ -45,6 +45,7 @@ export default async function TournamentDetailsPage({
         <Card as="article" aria-labelledby="details-name" className={styles.card}>
           <DetailsHeader
             name={details.name}
+            bannerImageId={details.bannerImageId}
             description={details.description}
             organizerName={details.organizer.displayName}
             status={details.status}

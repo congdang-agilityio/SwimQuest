@@ -3,8 +3,8 @@ import { EMBLEM_KEYS, emblemPath, isEmblemKey } from "./emblems";
 
 describe("emblems", () => {
   it("lists six unique keys", () => {
-    expect(EMBLEM_KEYS).toHaveLength(6);
-    expect(new Set(EMBLEM_KEYS).size).toBe(6);
+    expect(EMBLEM_KEYS).toHaveLength(8);
+    expect(new Set(EMBLEM_KEYS).size).toBe(8);
   });
 
   it("accepts every known key", () => {

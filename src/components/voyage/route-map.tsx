@@ -6,6 +6,7 @@ import { landmarkArt, shipArt } from "@/lib/art/route01-art";
 import { MAP_ASPECT } from "@/lib/routes/destinations-passed";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import { shipTier } from "@/lib/scoring/ship-tier";
+import { MapDecor } from "./map-decor";
 import { ScrollToShip } from "./scroll-to-ship";
 import { ShipMarker } from "./ship-marker";
 import { compassArt, VOYAGE_MAP_ART } from "./voyage-art";
@@ -81,6 +82,8 @@ export function RouteMap({
               fallback={<div className={styles.backgroundFallback} />}
             />
             <ArtImage art={compassArt()} alt="" className={styles.compass} fallback={null} />
+            {/* Marine life and decoration (G3), under the route, the pins and the ship. */}
+            <MapDecor />
             {path && (
               <svg
                 data-testid="route-path"

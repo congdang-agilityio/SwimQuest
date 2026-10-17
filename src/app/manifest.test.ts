@@ -13,7 +13,11 @@ describe("web app manifest", () => {
     expect(m.background_color).toBe("#F4FBFF");
   });
   it("lists the 192 and 512 icons", () => {
-    expect(m.icons?.map((i) => i.sizes)).toEqual(["192x192", "512x512"]);
-    expect(m.icons?.map((i) => i.src)).toEqual(["/icons/icon-192.png", "/icons/icon-512.png"]);
+    expect(m.icons?.map((i) => i.sizes)).toEqual(["192x192", "512x512", "512x512"]);
+    expect(m.icons?.map((i) => i.src)).toEqual([
+      "/icons/icon-192.png",
+      "/icons/icon-512.png",
+      "/icons/maskable-512.png",
+    ]);
   });
 });

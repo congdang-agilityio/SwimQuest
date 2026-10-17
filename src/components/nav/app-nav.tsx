@@ -11,12 +11,16 @@ import { NavIcon } from "./nav-icon";
 import { TournamentSwitcher } from "./tournament-switcher";
 import type { TournamentSwitcherData } from "@/server/home/selected-tournament";
 import { isActive, navItems } from "./nav-items";
+import { mockupArt } from "@/lib/art/mockup-art";
 import styles from "./app-nav.module.css";
 
 /**
  * App shell chrome: a top bar with the brand and the account menu, and the main navigation
  * (bottom bar below 768 px, left rail from 768 px). The current tab has aria-current.
  */
+/** The SwimQuest wave mark (G1, asset sheet B); the brand name beside it is live text. */
+const LOGO = mockupArt("brand/logo-mark");
+
 type Props = {
   displayName: string;
   /** The player's uploaded or default-key picture; initials show when there is none. */
@@ -35,7 +39,13 @@ export function AppNav({ displayName, avatarSrc, isPlatformAdmin, switcher, bell
   return (
     <>
       <div className={styles.topBar}>
-        <span className={styles.brand}>{tc("appName")}</span>
+        <span className={styles.brand}>
+          {LOGO && (
+            // eslint-disable-next-line @next/next/no-img-element -- small static brand art
+            <img src={LOGO.webp} alt="" width={32} height={32} className={styles.logo} />
+          )}
+          {tc("appName")}
+        </span>
         <div className={styles.actions}>
           {bell}
           <details className={styles.account}>

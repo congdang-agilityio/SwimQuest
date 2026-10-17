@@ -28,7 +28,9 @@
     "wave": "Wave",
     "anchor": "Anchor",
     "shell": "Shell",
-    "star": "Star"
+    "star": "Star",
+    "lighthouse": "Lighthouse",
+    "fish": "Clownfish"
   },
   "errors": {
     "NAME_REQUIRED": "Enter a team name.",

@@ -4,7 +4,6 @@ import { NavIcon } from "@/components/nav/nav-icon";
 import { ButtonLink, Chip, ProgressBar } from "@/components/ui";
 import { ReportButton } from "@/components/reports/report-button";
 import { TierShip } from "@/components/ship/tier-ship";
-import { MOCKUP_TEAM_EMBLEM } from "@/lib/art/mockup-avatars";
 import type { MyTeamView } from "@/server/teams/my-team-view";
 import styles from "./my-team.module.css";
 import { FinishedLabel } from "./finished-label";
@@ -44,12 +43,7 @@ export function TeamHeader({
     <header className={styles.hero}>
       <div className={styles.identity}>
         <span className={styles.emblem}>
-          {team.emblemKey === "wave" ? (
-            // eslint-disable-next-line @next/next/no-img-element -- small static art cut from the mockup
-            <img src={MOCKUP_TEAM_EMBLEM} alt="" width={88} height={88} />
-          ) : (
-            <TeamEmblem emblemKey={team.emblemKey} size={88} alt="" />
-          )}
+          <TeamEmblem emblemKey={team.emblemKey} size={88} alt="" />
         </span>
         <div>
           <h2 className={styles.teamName}>{team.name}</h2>
