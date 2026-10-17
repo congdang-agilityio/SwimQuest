@@ -57,6 +57,7 @@ describe("current user", () => {
         id: user.id,
         displayName: "Current",
         isPlatformAdmin: false,
+        mustChangePassword: false,
       });
     });
 

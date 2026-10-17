@@ -25,5 +25,11 @@
   "recovery": {
     "title": "Quên mật khẩu?",
     "body": "Nếu không đăng nhập được, hãy liên hệ quản trị viên nền tảng. Họ sẽ giúp bạn vào lại tài khoản."
+  },
+  "forced": {
+    "title": "Chọn mật khẩu mới",
+    "intro": "Chào {name}, quản trị viên đã đặt lại mật khẩu của bạn. Nhập mật khẩu tạm bạn nhận được vào ô mật khẩu hiện tại, rồi chọn mật khẩu mới. Sau đó bạn dùng ứng dụng bình thường.",
+    "logoutLabel": "Đăng xuất",
+    "logoutHint": "Chưa muốn đổi lúc này? Bạn có thể đăng xuất và quay lại sau. Lần tới bạn vẫn sẽ được yêu cầu đổi."
   }
 }

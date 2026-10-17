@@ -57,6 +57,7 @@ describe("sessions", () => {
       displayName: "Session",
       status: "ACTIVE",
       isPlatformAdmin: false,
+      mustChangePassword: false,
     });
     expect(found?.session.userId).toBe(user.id);
     expect(JSON.stringify(found)).not.toContain("passwordHash");

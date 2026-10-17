@@ -25,5 +25,11 @@
   "recovery": {
     "title": "Forgot your password?",
     "body": "If you cannot sign in, contact a platform admin. They can help you get back into your account."
+  },
+  "forced": {
+    "title": "Choose a new password",
+    "intro": "Hi {name}, an admin reset your password. Enter the temporary password you were given as the current password, then choose a new one. You can use the app again right after.",
+    "logoutLabel": "Log out",
+    "logoutHint": "Not now? You can log out and come back later. You will be asked again next time."
   }
 }
