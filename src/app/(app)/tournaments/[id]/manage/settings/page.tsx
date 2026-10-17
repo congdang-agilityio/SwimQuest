@@ -4,6 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { DeadlineSettingsForm } from "@/components/settings/deadline-settings-form";
 import { ExtraRulesForm } from "@/components/settings/extra-rules-form";
 import { RealisticLimitsForm } from "@/components/settings/realistic-limits-form";
+import {
+  OptionalFieldsForm,
+  type OptionalValues,
+} from "@/components/settings/optional-fields-form";
 import { PointValuesForm } from "@/components/settings/point-values-form";
 import styles from "@/components/settings/settings-card.module.css";
 import { VisibilityField } from "@/components/settings/visibility-field";
@@ -45,6 +49,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
         longestRealisticSwimM: number;
       }
     | undefined;
+  const optional = settings?.optional as OptionalValues | undefined;
   if (!swim || !deadlines) notFound();
   const status = effectiveStatus(tournament, new Date());
   const locked = status !== "DRAFT" && status !== "PUBLISHED";
@@ -111,6 +116,11 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
             slowestPaceSecPer100m={tournament.slowestPaceSecPer100m}
             locked={locked}
           />
+        </Card>
+      )}
+      {optional && (
+        <Card as="section" id="optional" className={styles.card}>
+          <OptionalFieldsForm tournamentId={tournament.id} values={optional} />
         </Card>
       )}
     </main>

@@ -201,5 +201,48 @@
     "saved": "Đã lưu.",
     "failed": "Không thể lưu. Vui lòng thử lại.",
     "networkError": "Lỗi kết nối. Vui lòng thử lại."
+  },
+  "optional": {
+    "title": "Thông tin tùy chọn",
+    "intro": "Mọi mục ở đây đều không bắt buộc và vẫn sửa được sau khi công bố giải.",
+    "imagesLegend": "Hình ảnh",
+    "linksLegend": "Liên kết và liên hệ",
+    "textLegend": "Ghi chú và thể lệ",
+    "fields": {
+      "banner": "Ảnh bìa (không bắt buộc)",
+      "logo": "Logo (không bắt buộc)",
+      "rulesUrl": "Liên kết thể lệ (không bắt buộc)",
+      "contactChannel": "Kênh liên hệ (không bắt buộc)",
+      "eligibilityNotes": "Ghi chú điều kiện tham gia (không bắt buộc)",
+      "rulesText": "Thể lệ bằng văn bản (không bắt buộc)"
+    },
+    "hints": {
+      "banner": "PNG, JPEG hoặc WebP, tối đa 2 MB. Nếu không có, người chơi thấy ảnh bìa mặc định.",
+      "logo": "PNG, JPEG hoặc WebP, tối đa 2 MB.",
+      "rulesUrl": "Địa chỉ web bắt đầu bằng http:// hoặc https://.",
+      "contactChannel": "Cách người chơi liên hệ bạn, ví dụ email hoặc liên kết nhóm. Tối đa 200 ký tự.",
+      "eligibilityNotes": "Ai được tham gia, ví dụ độ tuổi. Ứng dụng không kiểm tra mục này. Tối đa 1.000 ký tự.",
+      "rulesText": "Thể lệ của bạn dạng văn bản thuần. Tối đa 5.000 ký tự."
+    },
+    "upload": "Tải lên",
+    "replace": "Đổi ảnh",
+    "remove": "Bỏ ảnh",
+    "uploading": "Đang tải lên…",
+    "save": "Lưu thông tin tùy chọn",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu thông tin tùy chọn.",
+    "failed": "Không lưu được. Vui lòng thử lại sau.",
+    "networkError": "Yêu cầu chưa được gửi đi. Kiểm tra kết nối rồi thử lại.",
+    "errors": {
+      "INVALID_URL": "Nhập địa chỉ web đầy đủ bắt đầu bằng http:// hoặc https://.",
+      "ELIGIBILITY_NOTES_TOO_LONG": "Ghi chú điều kiện tối đa 1.000 ký tự.",
+      "CONTACT_CHANNEL_TOO_LONG": "Kênh liên hệ tối đa 200 ký tự.",
+      "RULES_TEXT_TOO_LONG": "Thể lệ bằng văn bản tối đa 5.000 ký tự.",
+      "IMAGE_INVALID": "Không dùng được ảnh này nữa. Hãy tải lên lại.",
+      "IMAGE_TOO_LARGE": "Ảnh lớn hơn 2 MB.",
+      "IMAGE_TYPE_NOT_ALLOWED": "Dùng ảnh PNG, JPEG hoặc WebP.",
+      "UPLOAD_FAILED": "Không tải ảnh lên được. Hãy thử lại.",
+      "UNKNOWN": "Giá trị này không hợp lệ."
+    }
   }
 }
