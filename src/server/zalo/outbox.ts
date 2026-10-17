@@ -45,7 +45,10 @@ export async function enqueueZalo(tx: Tx, input: EnqueueZaloInput): Promise<bool
   const groupKey =
     typeof input.groupKey === "function" ? input.groupKey(bot.chatId) : input.groupKey;
   if (swimResultId) {
-    const posted = await tx.zaloSwimPost.findUnique({ where: { swimResultId }, select: {} });
+    const posted = await tx.zaloSwimPost.findUnique({
+      where: { swimResultId },
+      select: { swimResultId: true },
+    });
     if (posted) return false;
   }
 
