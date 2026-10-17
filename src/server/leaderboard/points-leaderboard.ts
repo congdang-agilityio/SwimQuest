@@ -19,12 +19,12 @@ export type KmLeaderboardRow = {
   isMyTeam: boolean;
 };
 
-type Base = { teamId: string; name: string; emblemKey: string; isMyTeam: boolean };
+export type Base = { teamId: string; name: string; emblemKey: string; isMyTeam: boolean };
 
 const cmp = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 /** Loads the teams and enforces the access rule: active members and the organizer only. */
-async function teamsFor(viewerId: string, tournamentId: string): Promise<Base[]> {
+export async function teamsFor(viewerId: string, tournamentId: string): Promise<Base[]> {
   if (
     typeof viewerId !== "string" ||
     !viewerId ||
@@ -57,7 +57,7 @@ async function teamsFor(viewerId: string, tournamentId: string): Promise<Base[]>
   }));
 }
 
-const byValueThenName =
+export const byValueThenName =
   <T extends Base>(value: (r: T) => number) =>
   (a: T, b: T) =>
     value(b) - value(a) || cmp(a.name, b.name) || cmp(a.teamId, b.teamId);
