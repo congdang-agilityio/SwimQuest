@@ -5,7 +5,8 @@
     "swimLimits": "Giới hạn bơi",
     "reports": "Báo cáo",
     "tournamentRequests": "Yêu cầu thêm giải đấu",
-    "audit": "Nhật ký kiểm toán"
+    "audit": "Nhật ký kiểm toán",
+    "assets": "Thư viện hình ảnh"
   },
   "users": {
     "title": "Người dùng",
@@ -323,6 +324,43 @@
       "SWIM": "Lượt bơi",
       "SWIM_RESULT": "Kết quả bơi",
       "REPORT": "Báo cáo"
+    }
+  },
+  "assets": {
+    "title": "Thư viện hình ảnh",
+    "back": "Quay lại",
+    "empty": "Chưa có hình nào trong thư viện.",
+    "summary": "{total} hình, {missing} thiếu file.",
+    "filter": "Lọc theo nhóm",
+    "all": "Tất cả",
+    "light": "Nền sáng",
+    "dark": "Nền tối",
+    "present": "Có file",
+    "missing": "Thiếu",
+    "path": "Đường dẫn",
+    "size": "Kích thước",
+    "source": "Nguồn",
+    "usage": "Dùng cho",
+    "sources": {
+      "sheet-a": "Bảng asset A",
+      "sheet-b": "Bảng asset B",
+      "sheet-a-large": "Bảng asset A (bản lớn)",
+      "sheet-b-large": "Bảng asset B (bản lớn)"
+    },
+    "groups": {
+      "brand": "Logo và biểu tượng ứng dụng",
+      "scenes": "Nền và cảnh minh họa",
+      "landmarks": "Đảo địa danh Route 01",
+      "characters": "Nhân vật",
+      "poses": "Dáng bơi",
+      "ships": "Thuyền của đội",
+      "badges": "Huy hiệu",
+      "medals": "Huy chương và cúp xếp hạng",
+      "marine": "Sinh vật biển",
+      "items": "Vật phẩm và tăng lực",
+      "map": "Thành phần bản đồ hải trình",
+      "effects": "Hiệu ứng",
+      "decor": "Trang trí"
     }
   }
 }

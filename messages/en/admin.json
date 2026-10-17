@@ -5,7 +5,8 @@
     "swimLimits": "Swim limits",
     "reports": "Reports",
     "tournamentRequests": "Tournament requests",
-    "audit": "Audit log"
+    "audit": "Audit log",
+    "assets": "Asset gallery"
   },
   "users": {
     "title": "Users",
@@ -323,6 +324,43 @@
       "SWIM": "Swim",
       "SWIM_RESULT": "Swim result",
       "REPORT": "Report"
+    }
+  },
+  "assets": {
+    "title": "Asset gallery",
+    "back": "Back",
+    "empty": "There are no assets in the library yet.",
+    "summary": "{total} assets, {missing} with a missing file.",
+    "filter": "Filter by group",
+    "all": "All",
+    "light": "Light background",
+    "dark": "Dark background",
+    "present": "Present",
+    "missing": "Missing",
+    "path": "Path",
+    "size": "Size",
+    "source": "Source",
+    "usage": "Used for",
+    "sources": {
+      "sheet-a": "Asset sheet A",
+      "sheet-b": "Asset sheet B",
+      "sheet-a-large": "Asset sheet A (large)",
+      "sheet-b-large": "Asset sheet B (large)"
+    },
+    "groups": {
+      "brand": "Logo and app icon",
+      "scenes": "Backgrounds and scenes",
+      "landmarks": "Route 01 landmark islands",
+      "characters": "Characters",
+      "poses": "Swimmer poses",
+      "ships": "Team ships",
+      "badges": "Badges",
+      "medals": "Ranking medals and trophies",
+      "marine": "Sea creatures",
+      "items": "Items and power-ups",
+      "map": "Route map elements",
+      "effects": "Effects",
+      "decor": "Decoration"
     }
   }
 }
