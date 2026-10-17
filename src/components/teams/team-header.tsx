@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { NavIcon } from "@/components/nav/nav-icon";
 import { ButtonLink, Chip, ProgressBar } from "@/components/ui";
+import { ReportButton } from "@/components/reports/report-button";
 import { TierShip } from "@/components/ship/tier-ship";
 import { MOCKUP_TEAM_EMBLEM } from "@/lib/art/mockup-avatars";
 import type { MyTeamView } from "@/server/teams/my-team-view";
@@ -19,6 +20,8 @@ type Props = {
   finishedAt?: Date | null;
   /** Set for the captain only: the "Edit team" link. */
   editHref?: string;
+  /** Team id: shows the "Report" button. */
+  reportTeamId?: string;
   /** Optional extra content, rendered after the progress. */
   children?: ReactNode;
 };
@@ -32,6 +35,7 @@ export function TeamHeader({
   memberCount,
   finishedAt,
   editHref,
+  reportTeamId,
   children,
 }: Props) {
   const t = useTranslations("team");
@@ -95,6 +99,7 @@ export function TeamHeader({
           {t("edit.link")}
         </ButtonLink>
       )}
+      {reportTeamId && <ReportButton targetType="TEAM" targetId={reportTeamId} />}
       {children}
     </header>
   );

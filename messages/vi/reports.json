@@ -1,0 +1,21 @@
+{
+  "button": "Báo cáo",
+  "title": "Báo cáo vấn đề",
+  "intro": "Hãy cho chúng tôi biết có vấn đề gì. Chỉ quản trị viên nền tảng đọc báo cáo của bạn, và người bị báo cáo không bao giờ biết ai đã gửi.",
+  "label": "Vấn đề là gì?",
+  "counter": "{count} / {max} ký tự (tối thiểu {min})",
+  "send": "Gửi báo cáo",
+  "sending": "Đang gửi...",
+  "cancel": "Hủy",
+  "close": "Đóng",
+  "doneTitle": "Đã gửi báo cáo",
+  "done": "Cảm ơn bạn. Chỉ quản trị viên nền tảng xem được báo cáo của bạn.",
+  "errors": {
+    "tooShort": "Hãy viết ít nhất {min} ký tự.",
+    "tooLong": "Tối đa {max} ký tự.",
+    "rateLimited": "Hôm nay bạn đã gửi quá nhiều báo cáo. Hãy thử lại vào ngày mai.",
+    "notFound": "Nội dung này không còn để báo cáo được nữa.",
+    "failed": "Không gửi được báo cáo. Vui lòng thử lại.",
+    "network": "Không có kết nối. Kiểm tra mạng và thử lại."
+  }
+}

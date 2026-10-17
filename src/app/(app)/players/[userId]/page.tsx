@@ -19,5 +19,7 @@ export default async function PlayerProfilePage({
   const asOutsider = viewer.id === userId && preview === "1";
   const profile = await getPublicProfile(viewer.id, userId, { asOutsider });
   if (!profile) notFound();
-  return <PublicProfileView profile={profile} preview={asOutsider} />;
+  return (
+    <PublicProfileView profile={profile} preview={asOutsider} canReport={viewer.id !== userId} />
+  );
 }

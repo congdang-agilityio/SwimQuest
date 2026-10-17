@@ -1,5 +1,6 @@
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Avatar, Card, Chip, SectionHeader } from "@/components/ui";
+import { ReportButton } from "@/components/reports/report-button";
 import { badgeArt } from "@/lib/art/badge-art";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
 import { regionName } from "@/lib/regions";
@@ -13,9 +14,12 @@ import styles from "./public-profile-view.module.css";
 export function PublicProfileView({
   profile,
   preview = false,
+  canReport = false,
 }: {
   profile: PublicProfile;
   preview?: boolean;
+  /** Another player's profile: offer "Report". */
+  canReport?: boolean;
 }) {
   const t = useTranslations("players");
   const format = useFormatter();
@@ -43,6 +47,8 @@ export function PublicProfileView({
         <span className={styles.name}>{name}</span>
         {region && <span className={styles.region}>{t("region", { name: region })}</span>}
       </Card>
+
+      {canReport && <ReportButton targetType="PLAYER" targetId={profile.id} />}
 
       {profile.bio && (
         <Card as="section" className={styles.block} aria-labelledby="pp-bio">

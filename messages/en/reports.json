@@ -1,0 +1,21 @@
+{
+  "button": "Report",
+  "title": "Report a problem",
+  "intro": "Tell us what is wrong. Only platform admins read your report, and the person you report never sees who sent it.",
+  "label": "What is wrong?",
+  "counter": "{count} / {max} characters (at least {min})",
+  "send": "Send report",
+  "sending": "Sending...",
+  "cancel": "Cancel",
+  "close": "Close",
+  "doneTitle": "Report sent",
+  "done": "Thank you. Only platform admins will see your report.",
+  "errors": {
+    "tooShort": "Write at least {min} characters.",
+    "tooLong": "Keep it to {max} characters or fewer.",
+    "rateLimited": "You have sent too many reports today. Please try again tomorrow.",
+    "notFound": "This can no longer be reported.",
+    "failed": "Could not send the report. Please try again.",
+    "network": "No connection. Check your network and try again."
+  }
+}
