@@ -10,6 +10,8 @@ export type MyTournament = {
   seasonStartAt: Date;
   seasonEndAt: Date;
   isOrganizer: boolean;
+  /** An active review helper of this tournament (S-45): may open its review queue. */
+  isReviewHelper: boolean;
   team: { id: string; name: string; emblemKey: string } | null;
   /** Team progress in basis points; null when there is no team or its start is not chosen yet. */
   progressBp: number | null;
@@ -20,13 +22,18 @@ export type MyTournament = {
  * A draft is private to its organizer. Progress is the player's team progress (null without a team or a chosen start).
  */
 export async function listMyTournaments(userId: string, now: Date): Promise<MyTournament[]> {
-  const [memberships, organized] = await Promise.all([
+  const [memberships, organized, helperRows] = await Promise.all([
     db.teamMember.findMany({
       where: { userId, status: "ACTIVE" },
       include: { team: true, tournament: true },
     }),
     db.tournament.findMany({ where: { organizerId: userId } }),
+    db.reviewHelper.findMany({
+      where: { userId, removedAt: null },
+      select: { tournamentId: true },
+    }),
   ]);
+  const helperOf = new Set(helperRows.map((h) => h.tournamentId));
 
   const rows = new Map<
     string,
@@ -78,6 +85,8 @@ export async function listMyTournaments(userId: string, now: Date): Promise<MyTo
         seasonStartAt: t.seasonStartAt,
         seasonEndAt: t.seasonEndAt,
         isOrganizer: t.organizerId === userId,
+        // Same rule as the queue page: an active helper who still plays in the tournament.
+        isReviewHelper: helperOf.has(t.id) && team !== null,
         team,
         progressBp,
       };

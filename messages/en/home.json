@@ -14,6 +14,8 @@
     "progress": "Progress: {pct}",
     "progressNotStarted": "Start not chosen yet",
     "addSwim": "Add swim",
+    "reviewQueue": "Review queue",
+    "reviewQueueFor": "Review queue of {name}",
     "status": {
       "DRAFT": "Draft",
       "PUBLISHED": "Open for joining",
