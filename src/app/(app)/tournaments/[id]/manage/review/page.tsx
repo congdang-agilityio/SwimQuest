@@ -41,7 +41,10 @@ export default async function ReviewQueuePage({ params }: { params: Promise<{ id
       <div className={manage.headerBand}>
         <ScreenHeader
           title={t("title")}
-          backHref={`/tournaments/${tournament.id}/manage`}
+          // A helper is not the organizer: the organizer page is not theirs, so they go back Home.
+          backHref={
+            tournament.organizerId === user.id ? `/tournaments/${tournament.id}/manage` : "/"
+          }
           backLabel={tCommon("back")}
         />
       </div>

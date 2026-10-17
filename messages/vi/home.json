@@ -14,6 +14,8 @@
     "progress": "Tiến độ: {pct}",
     "progressNotStarted": "Chưa chọn điểm xuất phát",
     "addSwim": "Thêm buổi bơi",
+    "reviewQueue": "Hàng chờ duyệt",
+    "reviewQueueFor": "Hàng chờ duyệt của {name}",
     "status": {
       "DRAFT": "Bản nháp",
       "PUBLISHED": "Đang mở đăng ký",

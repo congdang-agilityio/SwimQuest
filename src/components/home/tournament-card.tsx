@@ -77,6 +77,17 @@ export function TournamentCard({ tournament: x }: { tournament: MyTournament }) 
         <ButtonLink href="/connect" variant="secondary" size="sm" block>
           {t("addSwim")}
         </ButtonLink>
+        {x.effectiveStatus !== "DRAFT" && (x.isOrganizer || x.isReviewHelper) && (
+          <ButtonLink
+            href={`/tournaments/${x.id}/manage/review`}
+            variant="secondary"
+            size="sm"
+            block
+            aria-label={t("reviewQueueFor", { name: x.name })}
+          >
+            {t("reviewQueue")}
+          </ButtonLink>
+        )}
       </article>
     </li>
   );

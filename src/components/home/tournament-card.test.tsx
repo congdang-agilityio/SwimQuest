@@ -16,6 +16,7 @@ const base: MyTournament = {
   seasonStartAt: new Date("2026-10-31T17:00:00Z"),
   seasonEndAt: new Date("2027-01-31T16:59:59Z"),
   isOrganizer: false,
+  isReviewHelper: false,
   team: { id: "k1", name: "Cá Heo", emblemKey: "dolphin" },
   progressBp: 6849,
 };
