@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState, type ReactNode } from "react";
+import { reportTelemetry } from "@/lib/telemetry/report";
 import type { ArtAsset } from "@/lib/art/route01-art";
 
 type ArtImageProps = {
@@ -15,10 +16,10 @@ type ArtImageProps = {
 export function ArtImage({ art, alt, fallback, className }: ArtImageProps) {
   // 0: art.path, 1: art.fallbackPath (the earlier vector art), 2: the caller's fallback.
   const [stage, setStage] = useState(0);
-  const fail = useCallback(
-    () => setStage((s) => (s === 0 && art?.fallbackPath ? 1 : 2)),
-    [art?.fallbackPath],
-  );
+  const fail = useCallback(() => {
+    if (art) reportTelemetry(`asset:${art.path}`, { kind: "ASSET_FAILURE", path: art.path });
+    setStage((s) => (s === 0 && art?.fallbackPath ? 1 : 2));
+  }, [art]);
 
   // The browser can fire `error` before React attaches onError (server-rendered <img>),
   // so a completed image with no pixels is treated as failed once it mounts.
