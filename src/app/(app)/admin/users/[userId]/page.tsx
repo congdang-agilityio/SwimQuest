@@ -5,21 +5,24 @@ import { AccountStatusActions } from "@/components/admin/account-status-actions"
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import styles from "@/components/admin/admin.module.css";
 import { statusTone } from "@/components/admin/status-tone";
+import { UserResults } from "@/components/admin/user-results";
 import { Avatar, Chip, ScreenHeader, SectionHeader } from "@/components/ui";
-import { getUserForAdmin } from "@/server/admin/users";
+import { getUserForAdmin, listUserResultsForAdmin } from "@/server/admin/users";
 import { getCurrentUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
 
-/** Admin user page: account facts, status, password reset and the admin role switch. */
+/**
+ * Admin user page: account facts, status, password reset, the admin role switch and the user's
+ * swim results with the exceptional admin revoke (S-72).
+ */
 export default async function AdminUserPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
-  const actor = await getCurrentUser();
-  const user = await getUserForAdmin(actor ?? { id: "", isPlatformAdmin: false }, userId).catch(
-    (err: unknown) => {
-      if (err instanceof NotFoundError || err instanceof ForbiddenError) notFound();
-      throw err;
-    },
-  );
+  const actor = (await getCurrentUser()) ?? { id: "", isPlatformAdmin: false };
+  const user = await getUserForAdmin(actor, userId).catch((err: unknown) => {
+    if (err instanceof NotFoundError || err instanceof ForbiddenError) notFound();
+    throw err;
+  });
+  const results = await listUserResultsForAdmin(actor, user.id);
   const t = await getTranslations("admin");
   const format = await getFormatter();
   return (
@@ -78,6 +81,7 @@ export default async function AdminUserPage({ params }: { params: Promise<{ user
         displayName={user.displayName}
         isPlatformAdmin={user.isPlatformAdmin}
       />
+      <UserResults results={results} displayName={user.displayName} />
     </main>
   );
 }

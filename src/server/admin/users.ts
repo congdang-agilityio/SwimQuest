@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Prisma, UserStatus } from "@prisma/client";
+import type { Prisma, SwimResultStatus, UserStatus } from "@prisma/client";
 import { db } from "@/server/db";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { ForbiddenError, NotFoundError, requirePlatformAdmin } from "@/server/auth/roles";
@@ -144,4 +144,50 @@ export async function setPlatformAdmin(
     });
     return toDto(updated);
   });
+}
+
+const RESULTS_LIMIT = 50;
+
+/** One of a user's swim results as platform admins see it on the user page (S-72 AC 4). */
+export type AdminUserResultDto = {
+  id: string;
+  status: SwimResultStatus;
+  tournament: { id: string; name: string; archived: boolean };
+  teamName: string;
+  startedAt: string;
+  distanceM: number;
+};
+
+/** The user's latest swim results in every tournament, newest swim first (at most 50). */
+export async function listUserResultsForAdmin(
+  actor: AdminActor,
+  targetId: string,
+): Promise<AdminUserResultDto[]> {
+  await requireAdmin(actor);
+  const id = userId.safeParse(targetId);
+  if (!id.success) throw new NotFoundError();
+  const rows = await db.swimResult.findMany({
+    where: { userId: id.data },
+    orderBy: [{ swim: { startedAt: "desc" } }, { id: "desc" }],
+    take: RESULTS_LIMIT,
+    select: {
+      id: true,
+      status: true,
+      tournament: { select: { id: true, name: true, status: true } },
+      team: { select: { name: true } },
+      swim: { select: { startedAt: true, distanceM: true } },
+    },
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    status: r.status,
+    tournament: {
+      id: r.tournament.id,
+      name: r.tournament.name,
+      archived: r.tournament.status === "ARCHIVED",
+    },
+    teamName: r.team.name,
+    startedAt: r.swim.startedAt.toISOString(),
+    distanceM: r.swim.distanceM,
+  }));
 }

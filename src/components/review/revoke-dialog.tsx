@@ -9,8 +9,19 @@ import styles from "./review.module.css";
 
 type Failure = "failed" | "network" | "forbidden" | "notRevokable" | "reasonRequired";
 
-/** Revoke a verified result with a reason, after an in-page confirm; then the page refreshes. */
-export function RevokeDialog({ resultId, playerName }: { resultId: string; playerName: string }) {
+/**
+ * Revoke a verified result with a reason, after an in-page confirm; then the page refreshes.
+ * `endpoint` defaults to the reviewer route; the admin user page passes the admin route (S-72).
+ */
+export function RevokeDialog({
+  resultId,
+  playerName,
+  endpoint = `/api/review/results/${resultId}/revoke`,
+}: {
+  resultId: string;
+  playerName: string;
+  endpoint?: string;
+}) {
   const t = useTranslations("review.revoke");
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -29,7 +40,7 @@ export function RevokeDialog({ resultId, playerName }: { resultId: string; playe
     setBusy(true);
     setError(null);
     try {
-      const res = await clientFetch(`/api/review/results/${resultId}/revoke`, {
+      const res = await clientFetch(endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ reason: trimmed }),
