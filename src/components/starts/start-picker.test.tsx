@@ -45,12 +45,10 @@ const radio = (slug: keyof typeof NAMES) =>
   screen.getByRole("radio", { name: new RegExp(NAMES[slug]) }) as HTMLInputElement;
 
 describe("StartPicker", () => {
-  it("lists six selectable starts with the same distance and Ly Son as a disabled finish", () => {
+  it("lists six selectable starts and Ly Son as a disabled finish with the route distance", () => {
     setup();
-    for (const slug of SLUGS) {
-      expect(radio(slug).disabled).toBe(false);
-      expect(radio(slug).closest("label")!.textContent).toContain("80,5 km");
-    }
+    for (const slug of SLUGS) expect(radio(slug).disabled).toBe(false);
+    expect(radio("ly_son").closest("label")!.textContent).toContain("80,5 km");
     expect(screen.getAllByRole("radio")).toHaveLength(7);
     expect(radio("ly_son").disabled).toBe(true);
     expect(radio("ly_son").closest("label")!.textContent).toContain(vi_.picker.finish);
@@ -79,11 +77,9 @@ describe("StartPicker", () => {
     for (const slug of SLUGS) expect(radio(slug).disabled).toBe(true);
   });
 
-  it("keeps rows and the back link at least 44px high", () => {
+  it("keeps the back link to My Team", () => {
     setup();
-    for (const l of document.querySelectorAll("label"))
-      expect(parseInt((l as HTMLElement).style.minHeight)).toBeGreaterThanOrEqual(44);
-    expect(parseInt(screen.getByRole("link", { name: vi_.picker.back }).style.minHeight)).toBe(44);
+    expect(screen.getByRole("link", { name: vi_.picker.back }).getAttribute("href")).toBe("/team");
   });
 
   describe("confirming", () => {

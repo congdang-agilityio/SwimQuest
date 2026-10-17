@@ -1,0 +1,187 @@
+/*
+ * Start selection ("Chọn điểm xuất phát" phone screen of the mockup).
+ * Every value comes from src/styles/tokens.css.
+ */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+/* The light sheet has no dark band, so the phone header gets its own navy strip. */
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+/* The light sheet tints every link blue; the back chevron sits on navy. */
+.screen .headerBand a {
+  color: var(--sq-text-on-dark);
+}
+
+.form {
+  display: grid;
+  gap: var(--sq-space-4);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* One white sheet holding the rows (beats the global fieldset frame). */
+.form .list {
+  display: grid;
+  gap: var(--sq-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: var(--sq-space-3);
+  border: 0;
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
+
+/* One landmark row: thumbnail, name, optional pill on the right. */
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-3) var(--sq-space-2) var(--sq-space-2);
+  border: 2px solid transparent;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+  box-shadow: var(--sq-shadow-card);
+  cursor: pointer;
+}
+.row:has(:checked) {
+  border-color: var(--sq-blue-500);
+  background: var(--sq-sky-50);
+}
+.row:has(:focus-visible) {
+  box-shadow: var(--sq-focus-ring);
+}
+.row:has(:disabled) {
+  cursor: default;
+}
+
+/* The native radio stays in the tab order and the accessibility tree, but is not drawn. */
+.radio {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.thumb {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 60px;
+  height: 52px;
+  overflow: hidden;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-gradient-sky);
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.25);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+
+.pill {
+  flex: none;
+  padding: var(--sq-space-1) var(--sq-space-3);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-sky-50);
+  border: 1px solid var(--sq-sky-100);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+  white-space: nowrap;
+}
+
+/* The finish (Lý Sơn): shown, never selectable. */
+.finishRow {
+  margin-top: var(--sq-space-1);
+  border: 2px dashed var(--sq-sky-100);
+  background: var(--sq-white);
+  box-shadow: none;
+}
+.finishText {
+  display: grid;
+  flex: 1;
+  gap: var(--sq-space-1);
+  justify-items: start;
+  min-width: 0;
+}
+
+.finishNote {
+  margin: 0;
+  text-align: center;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.finishNote span {
+  display: block;
+  font-weight: var(--sq-weight-regular);
+  color: var(--sq-text-muted);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  background: var(--sq-sky-50);
+  box-shadow: none;
+}
+
+.saved {
+  margin: 0;
+  border-left: 4px solid var(--sq-success);
+  font-size: var(--sq-text-sm);
+}
+
+.error {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  color: var(--sq-blue-600);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}

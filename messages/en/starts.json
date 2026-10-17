@@ -13,6 +13,8 @@
     "legend": "Your team's start",
     "distance": "{km, number} km",
     "finish": "Finish",
+    "sameFinish": "Every team finishes at {finish}",
+    "sameFinishNote": "(the finish does not change)",
     "readOnly": "Only the captain can choose the start.",
     "lockedSince": "The start is locked since {lockedAt} (Vietnam time). It can no longer be changed.",
     "back": "Back to My Team",

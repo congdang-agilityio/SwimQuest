@@ -2,13 +2,21 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { ArtImage } from "@/components/art/art-image";
+import { Button, Card, Chip } from "@/components/ui";
+import { landmarkArt } from "@/lib/art/route01-art";
 import { clientFetch } from "@/lib/http/client-fetch";
 import { formatVnDateTime } from "@/lib/time/vn";
+import styles from "./start-picker.module.css";
 
-const control = { minHeight: 44, minWidth: 44, boxSizing: "border-box", padding: 8 } as const;
-const row = { display: "flex", alignItems: "center", gap: 8, minHeight: 44 } as const;
-
-const errorColor = { color: "#b91c1c" };
+/** Landmark thumbnail; decorative, so the radio's name stays the place name. */
+function Thumb({ slug }: { slug: string }) {
+  return (
+    <span className={styles.thumb} aria-hidden="true">
+      <ArtImage art={landmarkArt(slug)} alt="" fallback={null} />
+    </span>
+  );
+}
 
 type StartOption = { slug: string; nameKey: string };
 
@@ -84,21 +92,29 @@ export function StartPicker({
     setBusy(false);
   }
 
+  const finishName = finish ? t(finish.nameKey) : null;
   return (
-    <form onSubmit={onSubmit} noValidate aria-labelledby="start-picker-title">
-      <h1 id="start-picker-title">{t("starts.picker.title")}</h1>
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      aria-labelledby="start-picker-title"
+      className={styles.form}
+    >
       {locked ? (
-        <p>{t("starts.picker.lockedSince", { lockedAt: formatVnDateTime(new Date(lockAtIso)) })}</p>
+        <Card className={styles.note}>
+          {t("starts.picker.lockedSince", { lockedAt: formatVnDateTime(new Date(lockAtIso)) })}
+        </Card>
       ) : (
-        readOnly && <p>{t("starts.picker.readOnly")}</p>
+        readOnly && <Card className={styles.note}>{t("starts.picker.readOnly")}</Card>
       )}
       <fieldset
+        className={styles.list}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? "start-error" : undefined}
       >
-        <legend>{t("starts.picker.legend")}</legend>
+        <legend className={styles.srOnly}>{t("starts.picker.legend")}</legend>
         {starts.map(({ slug, nameKey }) => (
-          <label key={slug} style={row}>
+          <label key={slug} className={styles.row}>
             <input
               type="radio"
               name="destination"
@@ -106,41 +122,56 @@ export function StartPicker({
               checked={selected === slug}
               disabled={readOnly}
               onChange={() => setSelected(slug)}
-              style={control}
+              className={styles.radio}
             />
-            <span>
-              {t(nameKey)} ({t("starts.picker.distance", { km: routeDistanceKm })})
-            </span>
+            <Thumb slug={slug} />
+            <span className={styles.name}>{t(nameKey)}</span>
           </label>
         ))}
         {finish && (
-          <label style={row}>
-            <input type="radio" name="destination" value={finish.slug} disabled style={control} />
-            <span>
-              {t(finish.nameKey)} ({t("starts.picker.finish")})
+          <label className={`${styles.row} ${styles.finishRow}`}>
+            <input
+              type="radio"
+              name="destination"
+              value={finish.slug}
+              disabled
+              className={styles.radio}
+            />
+            <Thumb slug={finish.slug} />
+            <span className={styles.finishText}>
+              <span className={styles.name}>{finishName}</span>
+              <Chip tone="info">{t("starts.picker.finish")}</Chip>
+            </span>
+            <span className={styles.pill}>
+              {t("starts.picker.distance", { km: routeDistanceKm })}
             </span>
           </label>
         )}
       </fieldset>
+      {finishName && (
+        <p className={styles.finishNote}>
+          {t("starts.picker.sameFinish", { finish: finishName })}
+          <span>{t("starts.picker.sameFinishNote")}</span>
+        </p>
+      )}
       {error && (
-        <p id="start-error" role="alert" style={errorColor}>
+        <p id="start-error" role="alert" className={styles.error}>
           {error}
         </p>
       )}
-      {saved && <p role="status">{saved}</p>}
-      {!readOnly && !locked && (
-        <button type="submit" disabled={busy} style={control}>
-          {t("starts.picker.confirm")}
-        </button>
+      {saved && (
+        <Card role="status" className={styles.saved}>
+          {saved}
+        </Card>
       )}
-      <p>
-        <a
-          href="/team"
-          style={{ display: "inline-flex", alignItems: "center", minHeight: 44, minWidth: 44 }}
-        >
-          {t("starts.picker.back")}
-        </a>
-      </p>
+      {!readOnly && !locked && (
+        <Button type="submit" variant="primary" block disabled={busy}>
+          {t("starts.picker.confirm")}
+        </Button>
+      )}
+      <a href="/team" className={styles.back}>
+        {t("starts.picker.back")}
+      </a>
     </form>
   );
 }
