@@ -48,6 +48,35 @@
       "past": "Đã qua",
       "future": "Sắp tới",
       "pending": "Chưa đến"
+    },
+    "teams": {
+      "title": "Đội và người chơi",
+      "empty": "Chưa có đội nào.",
+      "members": "{count} / {limit} thành viên",
+      "free": "{count, plural, =0 {Đã đủ} other {Còn # chỗ}}",
+      "captain": "Đội trưởng: {name}",
+      "noCaptain": "Chưa có đội trưởng",
+      "captainTag": "Đội trưởng",
+      "membersOf": "Thành viên của {name}",
+      "unassigned": "{count} người chơi chưa có đội",
+      "allAssigned": "Mọi người chơi đều đã có đội."
+    },
+    "starts": {
+      "title": "Điểm xuất phát các đội",
+      "empty": "Chưa có đội nào.",
+      "locked": "Đã khóa chọn",
+      "open": "Đang mở chọn",
+      "lockedAt": "lúc {at} (giờ Việt Nam)",
+      "openUntil": "đến {at} (giờ Việt Nam)",
+      "none": "Chưa có điểm xuất phát",
+      "autoAt": "Sẽ được gán tự động lúc {at} (giờ Việt Nam)",
+      "due": "Đang gán tự động",
+      "draftHint": "Đội trưởng chọn sau khi công bố",
+      "setBy": {
+        "CAPTAIN": "Đội trưởng chọn",
+        "ORGANIZER": "Ban tổ chức chọn",
+        "AUTOMATIC": "Gán tự động"
+      }
     }
   }
 }

@@ -3,17 +3,11 @@
 import { useTranslations } from "next-intl";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { Chip, Field, SelectField } from "@/components/ui";
-import { mockupGroup } from "@/lib/art/mockup-art";
+import { landmarkKey } from "@/lib/art/mockup-art";
 import { getRoute, listRoutes } from "@/lib/routes";
 import styles from "./create-tournament.module.css";
 
 const routes = listRoutes();
-
-/** Registry key of a destination's landmark art (`landmarks/landmark-07-ly-son` for `ly_son`). */
-function landmarkKey(slug: string): string | undefined {
-  const suffix = `-${slug.replace(/_/g, "-")}`;
-  return mockupGroup("landmarks").find((a) => a.key.endsWith(suffix))?.key;
-}
 
 type Props = {
   value: string;

@@ -70,6 +70,12 @@ export function mockupGroup(group: string): MockupAsset[] {
   return MOCKUP_ART.filter((a) => a.key.startsWith(`${group}/`));
 }
 
+/** Registry key of a destination's landmark art (`landmarks/landmark-07-ly-son` for `ly_son`). */
+export function landmarkKey(slug: string): string | undefined {
+  const suffix = `-${slug.replace(/_/g, "-")}`;
+  return mockupGroup("landmarks").find((a) => a.key.endsWith(suffix))?.key;
+}
+
 /** Alt text in the UI locale (vi is the default language). */
 export function mockupAlt(asset: MockupAsset, locale: string): string {
   return locale.startsWith("en") ? asset.alt.en : asset.alt.vi;

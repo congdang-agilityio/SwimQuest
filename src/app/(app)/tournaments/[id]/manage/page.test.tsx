@@ -17,8 +17,16 @@ vi.mock("next-intl/server", () => ({
     key.split(".").reduce<unknown>((node, part) => (node as Record<string, unknown>)[part], en),
 }));
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) =>
-    key.split(".").reduce<unknown>((node, part) => (node as Record<string, unknown>)[part], en),
+  useTranslations: (ns?: string) => (key: string) => {
+    const path = [ns, key]
+      .filter(Boolean)
+      .join(".")
+      .replace(/^organizer\./, "");
+    const value = path
+      .split(".")
+      .reduce<unknown>((node, part) => (node as Record<string, unknown> | undefined)?.[part], en);
+    return typeof value === "string" ? value : path;
+  },
 }));
 vi.mock("@/server/auth/current-user", () => ({
   requireUser: async () => ({ id: "u1", displayName: "U", isPlatformAdmin: false }),
@@ -52,7 +60,9 @@ vi.mock("@/server/organizer/console", async () => {
 vi.mock("@/server/teams/manage", () => ({
   listTeamsWithCounts: async () => ({ teams: [], capacity: 5 }),
 }));
-vi.mock("@/server/organizer/unassigned-players", () => ({ listUnassignedPlayers: async () => [] }));
+vi.mock("@/server/organizer/participation", () => ({
+  getConsoleTeams: async () => ({ tournamentId: "t1", teams: [], unassignedPlayers: [] }),
+}));
 vi.mock("@/components/organizer/unassigned-players", () => ({
   UnassignedPlayers: () => <div>unassigned</div>,
 }));
