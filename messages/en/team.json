@@ -21,5 +21,32 @@
     "playerMoved": "A member left the team, so its distance fell below the finish.",
     "close": "Close"
   },
-  "shipTier": "Tier {tier} ship"
+  "shipTier": "Tier {tier} ship",
+  "leaveSwitch": {
+    "title": "Team actions",
+    "switch": "Switch team",
+    "leave": "Leave team",
+    "cancel": "Cancel",
+    "afterStart": "The season has started. Only the organizer can move players between teams now.",
+    "leaveTitle": "Leave {team}?",
+    "leaveBody": "You will leave the team and can choose another one with the invite link.",
+    "captainWarning": "You are the captain. The team will have no captain until the organizer appoints one.",
+    "confirmLeave": "Yes, leave team",
+    "pickTitle": "Choose a team to switch to",
+    "noOtherTeams": "There is no other team to switch to.",
+    "full": "Full",
+    "fullDisabled": "Full, cannot be chosen",
+    "placesLeft": "{count, plural, one {# place left} other {# places left}}",
+    "choose": "Switch to {name}",
+    "switchTitle": "Switch to {team}?",
+    "switchBody": "You will leave your current team and join this one.",
+    "confirmSwitch": "Yes, switch team",
+    "error": {
+      "seasonStarted": "The season has started. Only the organizer can move players now.",
+      "teamFull": "That team just filled up. Please choose another team.",
+      "alreadyMember": "You are already in a team. Please reload the page.",
+      "notMember": "You are not a member of this team any more.",
+      "failed": "Something went wrong. Please try again."
+    }
+  }
 }

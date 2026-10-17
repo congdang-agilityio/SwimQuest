@@ -263,3 +263,34 @@
 .finishedRow {
   margin-top: var(--sq-space-2);
 }
+
+/* Leave / switch team actions (below the footer action, same white panel) */
+.moveActions {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: 0 var(--sq-space-4) var(--sq-space-5);
+  background: var(--sq-white);
+}
+.moveButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.moveButtons > * {
+  flex: 1 1 8rem;
+}
+.confirm {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.confirm p {
+  margin: 0;
+}
+.afterStart {
+  padding: 0 var(--sq-space-4) var(--sq-space-5);
+  background: var(--sq-white);
+}
