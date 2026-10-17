@@ -13,6 +13,9 @@ export type ApiErrorCode =
   | "NOT_FOUND"
   | "ROUTE_LOCKED"
   | "SEASON_LOCKED"
+  | "SEASON_ENDED"
+  | "ARCHIVED"
+  | "CONFLICT"
   | "START_LOCKED"
   | "LIMIT_BELOW_MEMBERS"
   | "TEAM_NOT_DELETABLE"
@@ -56,6 +59,9 @@ const messages: Record<ApiErrorCode, string> = {
   NOT_FOUND: "The requested item was not found.",
   ROUTE_LOCKED: "The route cannot be changed after the season has started.",
   SEASON_LOCKED: "These settings cannot be changed after the season has started.",
+  SEASON_ENDED: "The season has ended, so its end date can no longer be changed.",
+  ARCHIVED: "An archived tournament cannot be edited.",
+  CONFLICT: "The tournament changed in the meantime. Reload and try again.",
   START_LOCKED: "The team's start is locked and can no longer be changed.",
   LIMIT_BELOW_MEMBERS: "The member limit cannot be lower than the current members.",
   TEAM_NOT_DELETABLE: "Only an empty team of a draft tournament can be deleted.",
