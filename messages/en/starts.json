@@ -31,5 +31,31 @@
   },
   "origin": {
     "automaticAt": "Assigned automatically at {setAt} (Vietnam time)"
+  },
+  "organizer": {
+    "title": "Starting point",
+    "notChosen": "Not chosen: a start will be assigned automatically at {deadline} (Vietnam time).",
+    "choose": "Choose start",
+    "change": "Change start",
+    "cancel": "Cancel",
+    "save": "Save start",
+    "legend": "Start for this team",
+    "lockedSince": "The start is locked since {lockedAt} (Vietnam time). It can no longer be changed here.",
+    "deadline": "Can be set until {deadline} (Vietnam time).",
+    "overrideTitle": "Replace the captain's choice?",
+    "overrideBody": "The captain chose {name}. Setting {newName} replaces it.",
+    "overrideYes": "Replace",
+    "saved": "Start set: {name}.",
+    "unchanged": "{name} is already this team's start.",
+    "errors": {
+      "NO_SELECTION": "Pick a start.",
+      "INVALID_START": "This start cannot be chosen.",
+      "START_LOCKED": "The start choice is locked (since {lockedAt}).",
+      "GENERIC": "Could not save. Please try again."
+    }
+  },
+  "originBy": {
+    "organizer": "Set by the organizer",
+    "captain": "Chosen by the captain"
   }
 }

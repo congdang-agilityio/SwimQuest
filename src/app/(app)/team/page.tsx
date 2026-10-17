@@ -72,6 +72,7 @@ export default async function TeamPage() {
             isCaptain={membership.team.captainUserId === user.id}
             lockAtIso={startLockAt(membership.tournament).toISOString()}
             locked={isStartLocked(membership.tournament, new Date())}
+            startSetBy={membership.team.startSetBy}
             autoAssignedAtIso={
               membership.team.startSetBy === "AUTOMATIC"
                 ? (membership.team.startSetAt?.toISOString() ?? null)

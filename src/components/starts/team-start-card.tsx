@@ -24,6 +24,8 @@ type Props = {
   locked: boolean;
   /** ISO instant the start was assigned automatically; null/omitted when a person chose it. */
   autoAssignedAtIso?: string | null;
+  /** Who set the start, so members see "set by the organizer" or "chosen by the captain". */
+  startSetBy?: "CAPTAIN" | "ORGANIZER" | "AUTOMATIC" | null;
 };
 
 /** The team's start on My Team; the captain gets a way in until the lock (FR-38). */
@@ -34,6 +36,7 @@ export function TeamStartCard({
   lockAtIso,
   locked,
   autoAssignedAtIso,
+  startSetBy,
 }: Props) {
   const t = useTranslations();
   const canChoose = isCaptain && !locked;
@@ -59,6 +62,11 @@ export function TeamStartCard({
       {startNameKey && autoAssignedAtIso && (
         <p className={styles.note}>
           <StartOriginLabel setAtIso={autoAssignedAtIso} />
+        </p>
+      )}
+      {startNameKey && (startSetBy === "ORGANIZER" || startSetBy === "CAPTAIN") && (
+        <p className={styles.note}>
+          {t(`starts.originBy.${startSetBy === "ORGANIZER" ? "organizer" : "captain"}`)}
         </p>
       )}
       {locked && (
