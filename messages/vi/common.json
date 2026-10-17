@@ -1,5 +1,9 @@
 {
   "appName": "SwimQuest",
   "tagline": "Hành trình bơi lội của cả đội",
-  "back": "Quay lại"
+  "back": "Quay lại",
+  "language": {
+    "label": "Ngôn ngữ",
+    "failed": "Không đổi được ngôn ngữ. Hãy thử lại."
+  }
 }
