@@ -42,6 +42,9 @@ export type ApiErrorCode =
   | "DISPUTE_OPEN"
   | "NOT_DISPUTABLE"
   | "NOT_REVOKABLE"
+  | "NOT_A_PLAYER"
+  | "ALREADY_HELPER"
+  | "NOT_A_HELPER"
   | "QUOTA_REACHED"
   | "QUOTA_NOT_REACHED"
   | "REQUEST_PENDING"
@@ -93,6 +96,9 @@ const messages: Record<ApiErrorCode, string> = {
   DISPUTE_OPEN: "This swim already has an open dispute.",
   NOT_DISPUTABLE: "Only a rejected, duplicate or rule-missed swim can be disputed.",
   NOT_REVOKABLE: "Only a verified swim can be revoked.",
+  NOT_A_PLAYER: "Choose a player who is in a team of this tournament.",
+  ALREADY_HELPER: "This player is already a review helper.",
+  NOT_A_HELPER: "This player is not a review helper of this tournament.",
   QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
   QUOTA_NOT_REACHED: "You can request more tournaments only after reaching your limit.",
   REQUEST_PENDING: "You already have a pending request.",

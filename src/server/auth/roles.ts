@@ -36,7 +36,8 @@ export async function requireOrganizerOrAdmin(
 
 /**
  * Who may review a tournament's flagged swims and disputes (S-43, S-45, FR-71): its organizer
- * or an active review helper of that tournament only. Read from the database on every call, so
+ * or an active review helper of that tournament who also still has an ACTIVE team membership in
+ * it (a helper who left or was removed loses access). Read from the database on every call, so
  * a removed helper is refused on the next request. Helpers get no other organizer power (team
  * and tournament edits use `requireOrganizer`). Throws NotFoundError for an unknown
  * tournament, else ForbiddenError.
@@ -46,7 +47,15 @@ export async function requireReviewer(userId: string, tournamentId: string) {
   if (!t) throw new NotFoundError();
   if (!isId(userId)) throw new ForbiddenError();
   if (t.organizerId === userId) return t;
-  const helper = await db.reviewHelper.count({ where: { tournamentId, userId, removedAt: null } });
+  // One query: the active helper row, joined to an ACTIVE membership in the same tournament.
+  const helper = await db.reviewHelper.count({
+    where: {
+      tournamentId,
+      userId,
+      removedAt: null,
+      user: { memberships: { some: { tournamentId, status: "ACTIVE" } } },
+    },
+  });
   if (helper === 0) throw new ForbiddenError();
   return t;
 }
