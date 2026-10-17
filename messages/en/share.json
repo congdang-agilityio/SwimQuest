@@ -1,0 +1,31 @@
+{
+  "title": "Landed at {place}",
+  "metaTitle": "{team} landed at {place} · SwimQuest",
+  "metaDescription": "Team {team} finished the voyage to {place} in {tournament} on SwimQuest.",
+  "lostMetaTitle": "{team} · SwimQuest",
+  "congrats": "Congratulations!",
+  "done": "{team} has finished",
+  "voyage": "The voyage to {place}",
+  "badgeAlt": "Finish badge: {place}",
+  "emblemAlt": "Team {team} emblem",
+  "tournament": "{tournament}",
+  "route": "Route",
+  "routeLeg": "{start} → {finish}",
+  "date": "Landed on",
+  "total": "Team total",
+  "km": "{km} km",
+  "points": "{points} points",
+  "members": "Crew",
+  "anonymous": "A swimmer",
+  "lostTitle": "This team is no longer at {place}",
+  "lostBody": "Team {team} reached {place}, but a later correction took the team back below the finish.",
+  "lostDate": "Since {date}",
+  "invite": "Swim with your team and cross the sea to Lý Sơn together.",
+  "cta": "Discover SwimQuest",
+  "share": {
+    "button": "Share achievement",
+    "text": "Team {team} landed at {place} on SwimQuest!",
+    "copied": "Link copied",
+    "failed": "Could not share. Please try again."
+  }
+}

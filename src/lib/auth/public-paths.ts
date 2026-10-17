@@ -10,8 +10,11 @@ const PUBLIC_PATHS = [
 ];
 /** Exact paths without a session; the tick job checks its own `CRON_SECRET`. */
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);
-/** Folders whose contents (not the folder itself) are public: auth API, build output, `public/`. */
-const PUBLIC_DIRS = ["/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
+/**
+ * Folders whose contents (not the folder itself) are public: auth API, build output, `public/`,
+ * and the shared team finish pages `/finish/<token>` (S-82).
+ */
+const PUBLIC_DIRS = ["/finish/", "/api/auth/", "/api/images/", "/_next/", "/icons/", "/art/"];
 const PUBLIC_FILES = new Set([
   "/manifest.webmanifest",
   "/favicon.ico",

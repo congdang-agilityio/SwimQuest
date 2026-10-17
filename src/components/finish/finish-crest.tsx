@@ -9,8 +9,8 @@ import styles from "./finish.module.css";
 const EMBLEM = "/art/mockup/screen-finish/finish-emblem";
 
 type Props = {
-  /** SeenMoment key of this finish; marked seen after the sparkle has played. */
-  momentKey: string;
+  /** SeenMoment key of this finish; marked seen after the sparkle has played. None on the public page. */
+  momentKey?: string;
   /** Play the sparkle (the player has not seen this finish yet). */
   play: boolean;
   alt: string;
@@ -25,6 +25,7 @@ export function FinishCrest({ momentKey, play, alt }: Props) {
   }, [play]);
 
   function onDone() {
+    if (!momentKey) return;
     void clientFetch("/api/me/moments", {
       method: "POST",
       headers: { "content-type": "application/json" },
