@@ -1,0 +1,188 @@
+/*
+ * Organizer console (S-65) in the mockup's language: navy header strip, light cards with navy
+ * section bands, chips, the route's sea scene. Every value comes from src/styles/tokens.css.
+ */
+
+/* Header card: sea scene with the status chip, then the timeline; controls below. */
+.header {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+}
+.hero {
+  position: relative;
+  height: 168px;
+  overflow: hidden;
+}
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sceneFallback {
+  height: 100%;
+  background: var(--sq-gradient-sea);
+}
+.statusRow {
+  position: absolute;
+  left: var(--sq-space-3);
+  bottom: var(--sq-space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: var(--sq-space-1) var(--sq-space-1) var(--sq-space-1) var(--sq-space-3);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-navy-900);
+  box-shadow: var(--sq-shadow-card);
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+.statusRow > :last-child {
+  border-radius: var(--sq-radius-pill);
+  padding-inline: var(--sq-space-3);
+}
+.headerBody {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  align-content: start;
+}
+.headerTitle {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.meta {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.metaLabel {
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+
+/* Timeline: a vertical rail of dots; past steps are filled, the next one is gold. */
+.timeline {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "dot label state"
+    "dot when state";
+  column-gap: var(--sq-space-3);
+  padding: var(--sq-space-2) 0;
+}
+.step + .step {
+  border-top: 1px solid var(--sq-sky-100);
+}
+/* Rail between dots. */
+.step::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sq-sky-100);
+}
+.step:first-child::before {
+  top: 50%;
+}
+.step:last-child::before {
+  bottom: 50%;
+}
+.dot {
+  grid-area: dot;
+  position: relative;
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--sq-sky-100);
+  border-radius: 50%;
+  background: var(--sq-white);
+}
+.step[data-state="past"] .dot {
+  border-color: var(--sq-blue-500);
+  background: var(--sq-blue-500);
+}
+.step[data-next="true"] .dot {
+  border-color: var(--sq-gold-strong);
+  background: var(--sq-gold);
+  box-shadow: 0 0 0 4px var(--sq-gold-wash);
+}
+.stepLabel {
+  grid-area: label;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+}
+.stepWhen {
+  grid-area: when;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.stepState {
+  grid-area: state;
+  align-self: center;
+  padding: 2px var(--sq-space-2);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-sky-50);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-semibold);
+}
+.step[data-state="past"] .stepState {
+  background: var(--sq-blue-wash);
+  color: var(--sq-blue-600);
+}
+.step[data-next="true"] .stepState {
+  background: var(--sq-gold-wash);
+  color: var(--sq-navy-800);
+}
+.step[data-state="past"] .stepLabel {
+  color: var(--sq-text-muted);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sq-space-3);
+}
+.actions > * {
+  width: 100%;
+}
+
+/* Publish or archive control, under the scene and timeline. */
+.controls {
+  padding: 0 var(--sq-space-4) var(--sq-space-4);
+}
+
+@media (min-width: 1024px) {
+  /* Desktop: scene and status on the left, timeline on the right; controls span both. */
+  .header {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+  .hero {
+    height: auto;
+    min-height: 280px;
+  }
+  .controls {
+    grid-column: 1 / -1;
+    padding-top: var(--sq-space-4);
+  }
+}

@@ -33,5 +33,21 @@
       "failed": "Could not add the player. Try again.",
       "network": "No connection. Try again."
     }
+  },
+  "console": {
+    "timelineTitle": "Status and timeline",
+    "timeline": {
+      "publishedAt": "Published",
+      "seasonStartAt": "Season start",
+      "startChoiceLocksAt": "Start choice locks",
+      "seasonEndAt": "Season end",
+      "uploadWindowEndsAt": "Upload window ends"
+    },
+    "notYet": "Not published yet",
+    "state": {
+      "past": "Done",
+      "future": "Upcoming",
+      "pending": "Pending"
+    }
   }
 }

@@ -33,5 +33,21 @@
       "failed": "Không thể thêm người chơi. Hãy thử lại.",
       "network": "Không có kết nối. Hãy thử lại."
     }
+  },
+  "console": {
+    "timelineTitle": "Trạng thái và mốc thời gian",
+    "timeline": {
+      "publishedAt": "Ngày công bố",
+      "seasonStartAt": "Bắt đầu mùa giải",
+      "startChoiceLocksAt": "Khóa chọn điểm xuất phát",
+      "seasonEndAt": "Kết thúc mùa giải",
+      "uploadWindowEndsAt": "Hết hạn tải hoạt động"
+    },
+    "notYet": "Chưa công bố",
+    "state": {
+      "past": "Đã qua",
+      "future": "Sắp tới",
+      "pending": "Chưa đến"
+    }
   }
 }
