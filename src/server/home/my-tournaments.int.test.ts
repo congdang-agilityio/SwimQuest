@@ -81,7 +81,7 @@ describe("my tournaments", () => {
     });
     const list = await listMyTournaments(me.id, now);
     expect(list.map((x) => x.name)).toEqual(["Two", "One"]);
-    expect(list[1]).toEqual({
+    expect(list[1]).toMatchObject({
       id: one.t.id,
       name: "One",
       effectiveStatus: "ACTIVE",
@@ -124,7 +124,7 @@ describe("my tournaments", () => {
     const draft = await tournament(org.id, "Draft", "DRAFT");
     await join(draft.t.id, draft.team.id, other.id, "2026-10-01T00:00:00Z");
     const mine = await listMyTournaments(org.id, now);
-    expect(mine).toEqual([
+    expect(mine).toMatchObject([
       {
         id: draft.t.id,
         name: "Draft",

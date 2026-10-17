@@ -33,23 +33,23 @@
   filter: none;
   transform: none;
 }
-.primary {
+.button.primary {
   color: var(--sq-white);
   background: var(--sq-gradient-primary);
   box-shadow: var(--sq-shadow-button);
 }
-.secondary {
+.button.secondary {
   color: var(--sq-blue-600);
   background: var(--sq-white);
   border-color: var(--sq-sky-100);
   box-shadow: var(--sq-shadow-card);
 }
-.ghost {
+.button.ghost {
   color: inherit;
   background: transparent;
   border-color: currentColor;
 }
-.dark {
+.button.dark {
   color: var(--sq-white);
   background: #000;
 }
