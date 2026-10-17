@@ -57,6 +57,16 @@ export async function updateSettings(
   if (!parsed.success)
     return { ok: false, reason: "INVALID", errors: errorsOf(parsed.error.issues) };
 
+  for (const [column, kind] of Object.entries(settings.imageKinds ?? {})) {
+    const id = parsed.data[column];
+    if (typeof id !== "string") continue;
+    const image = await db.imageAsset.findFirst({
+      where: { id, kind, ownerId: userId },
+      select: { id: true },
+    });
+    if (!image) return { ok: false, reason: "INVALID", errors: { [column]: "IMAGE_INVALID" } };
+  }
+
   const where = settings.seasonLocked ? OPEN_FOR_SEASON_SETTINGS(now) : {};
   const guard = settings.writeGuard?.(parsed.data) ?? {};
   const { count } = await db.tournament.updateMany({
