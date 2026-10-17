@@ -1,0 +1,142 @@
+/*
+ * Admin users list and user page, in the mockup's language (navy header strip, light cards,
+ * navy section bands, pill buttons). Every value comes from src/styles/tokens.css.
+ */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+.headerBand a[href] {
+  color: var(--sq-text-on-dark);
+}
+.headerBand h1 {
+  overflow-wrap: anywhere;
+}
+.panel {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.panelBody {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.searchRow {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.list {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+  text-decoration: none;
+}
+.rowText {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+.name {
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+  overflow-wrap: anywhere;
+}
+.email {
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+  overflow-wrap: anywhere;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.muted {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.error {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}
+.ok {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-success);
+}
+.identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.facts {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+}
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+}
+.fact dt {
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-navy-800);
+}
+.fact dd {
+  margin: 0;
+  color: var(--sq-text-muted);
+  overflow-wrap: anywhere;
+}
+.confirm {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-blue-wash);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+}
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sq-space-3);
+}
+.actions > * {
+  width: 100%;
+}
