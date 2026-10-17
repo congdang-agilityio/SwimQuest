@@ -18,10 +18,6 @@
   background: var(--sq-gradient-nav);
   box-shadow: var(--sq-shadow-card);
 }
-/* The back chevron stays white on the navy strip (beats the light-sheet link colour). */
-.headerBand a[href] {
-  color: var(--sq-text-on-dark);
-}
 
 .form {
   display: grid;

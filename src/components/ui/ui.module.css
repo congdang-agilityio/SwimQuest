@@ -196,12 +196,16 @@ a.dark {
   font-weight: var(--sq-weight-bold);
   text-align: center;
 }
-.back {
+/* `a.back` inside the header outranks the light-surface link colour (`[data-surface="light"] a`). */
+.screenHeader .back {
   display: inline-grid;
   place-items: center;
   width: var(--sq-tap);
   height: var(--sq-tap);
   border-radius: var(--sq-radius-pill);
+  color: var(--sq-text-on-dark);
+}
+.screenHeader a.back {
   color: var(--sq-text-on-dark);
 }
 .headerAction {
