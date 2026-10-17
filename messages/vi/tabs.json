@@ -15,7 +15,20 @@
       "ACTIVE": "Đang diễn ra",
       "COMPLETED": "Đã kết thúc",
       "ARCHIVED": "Đã lưu trữ"
-    }
+    },
+    "listTitle": "Danh sách giải đấu",
+    "filterLabel": "Lọc giải đấu theo trạng thái",
+    "filter": {
+      "all": "Tất cả",
+      "active": "Đang diễn ra",
+      "upcoming": "Sắp diễn ra",
+      "ended": "Đã kết thúc"
+    },
+    "filterEmpty": "Không có giải đấu nào trong mục này.",
+    "dates": "{start} – {end}",
+    "team": "Đội: {name}",
+    "manage": "Quản lý",
+    "details": "Xem chi tiết"
   },
   "team": {
     "title": "Đội của tôi"
