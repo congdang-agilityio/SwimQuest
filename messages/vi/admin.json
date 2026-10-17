@@ -73,6 +73,43 @@
         "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
         "failed": "Không đổi được trạng thái tài khoản. Vui lòng thử lại."
       }
+    },
+    "password": {
+      "title": "Mật khẩu",
+      "help": "Nếu người chơi quên mật khẩu, hãy đặt một mật khẩu tạm và gửi cho họ ngoài ứng dụng. Trước tiên hãy chắc chắn người hỏi đúng là chủ tài khoản này.",
+      "reset": "Đặt lại mật khẩu",
+      "confirm": "Đặt lại mật khẩu của {name}? Họ sẽ bị đăng xuất khỏi mọi thiết bị và phải chọn mật khẩu mới ở lần đăng nhập tới.",
+      "confirmYes": "Đồng ý đặt lại",
+      "cancel": "Hủy",
+      "saving": "Đang đặt lại...",
+      "shownTitle": "Mật khẩu tạm",
+      "shownIntro": "Mật khẩu tạm cho {name}:",
+      "shownWarning": "Mật khẩu chỉ hiện một lần. Hãy đưa trực tiếp hoặc qua điện thoại cho người chơi, đừng gửi ở nơi công khai. Mật khẩu sẽ biến mất khi bạn đóng mục này.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không sao chép được. Hãy chọn mật khẩu và sao chép thủ công.",
+      "close": "Đóng",
+      "errors": {
+        "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+        "NOT_FOUND": "Người dùng này không còn tồn tại.",
+        "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
+        "failed": "Không đặt lại được mật khẩu. Vui lòng thử lại."
+      }
+    }
+  },
+  "contact": {
+    "title": "Liên hệ quản trị",
+    "help": "Người chơi quên mật khẩu sẽ thấy nội dung này ở trang Quên mật khẩu. Hãy ghi cách liên hệ với bạn, ví dụ số điện thoại hoặc tên Zalo.",
+    "label": "Cách liên hệ quản trị viên nền tảng",
+    "hint": "Văn bản thường, tối đa {max} ký tự. Để trống để hiện lời nhắn chung.",
+    "save": "Lưu liên hệ",
+    "saving": "Đang lưu...",
+    "done": "Đã lưu liên hệ.",
+    "errors": {
+      "INVALID_ADMIN_CONTACT": "Hãy dùng văn bản thường, tối đa 200 ký tự.",
+      "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+      "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
+      "failed": "Không lưu được liên hệ. Vui lòng thử lại."
     }
   },
   "swimLimits": {

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AdminRoleToggle } from "@/components/admin/admin-role-toggle";
 import { AccountStatusActions } from "@/components/admin/account-status-actions";
+import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import styles from "@/components/admin/admin.module.css";
 import { statusTone } from "@/components/admin/status-tone";
 import { Avatar, Chip, ScreenHeader, SectionHeader } from "@/components/ui";
@@ -9,7 +10,7 @@ import { getUserForAdmin } from "@/server/admin/users";
 import { getCurrentUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
 
-/** Admin user page: account facts and the admin role switch. */
+/** Admin user page: account facts, status, password reset and the admin role switch. */
 export default async function AdminUserPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
   const actor = await getCurrentUser();
@@ -68,6 +69,9 @@ export default async function AdminUserPage({ params }: { params: Promise<{ user
         displayName={user.displayName}
         status={user.status}
       />
+      {user.status !== "DELETED" && (
+        <ResetPasswordButton userId={user.id} displayName={user.displayName} />
+      )}
       <AdminRoleToggle
         key={String(user.isPlatformAdmin)}
         userId={user.id}

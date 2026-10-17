@@ -76,6 +76,7 @@
   --sq-font-sans:
     var(--sq-font-family, "Be Vietnam Pro"), system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
+  --sq-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; /* one-time codes */
   --sq-text-xs: 0.75rem; /* 12 */
   --sq-text-sm: 0.875rem; /* 14 */
   --sq-text-md: 1rem; /* 16 */
