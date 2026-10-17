@@ -13,8 +13,8 @@ describe("TeamRoster", () => {
       <NextIntlClientProvider locale="vi" messages={{ team }}>
         <TeamRoster
           members={[
-            { id: "a", displayName: "Lan", verifiedKm: 1.5, points: 15, isCaptain: true },
-            { id: "b", displayName: "Minh", verifiedKm: 0, points: 0, isCaptain: false },
+            { id: "a", displayName: "Lan", verifiedKm: 1.5, points: 15, isCaptain: true, level: 2 },
+            { id: "b", displayName: "Minh", verifiedKm: 0, points: 0, isCaptain: false, level: 1 },
           ]}
         />
       </NextIntlClientProvider>,
