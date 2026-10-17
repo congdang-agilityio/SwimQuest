@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { ArchiveButton } from "@/components/organizer/archive-button";
 import { ConsoleHeader } from "@/components/organizer/console-header";
 import { ConsoleLinks } from "@/components/organizer/console-links";
 import { ProgressSection } from "@/components/organizer/progress-section";
@@ -68,7 +69,11 @@ export default async function ManageTournamentPage({
         now={now}
         backLabel={tCommon("back")}
         controls={
-          overview.actions.canPublish ? <PublishPanel tournamentId={tournament.id} /> : undefined
+          overview.actions.canPublish ? (
+            <PublishPanel tournamentId={tournament.id} />
+          ) : overview.actions.canArchive ? (
+            <ArchiveButton tournamentId={tournament.id} />
+          ) : undefined
         }
       />
       <ConsoleLinks
