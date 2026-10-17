@@ -1,9 +1,11 @@
 import type { NotificationCategory, Prisma } from "@prisma/client";
+import { after } from "next/server";
 import { destinationsPassed } from "@/lib/routes/destinations-passed";
 import type { MapPoint } from "@/lib/routes/path-position";
 import route01Anchors from "../../../public/art/route01/map-anchors.json";
 import type { EventHandler, EventTx } from "../events/handlers";
 import type { DomainEventType } from "../events/types";
+import { sendPendingPushes } from "../push/send";
 
 const anchorsByRoute: Record<string, Record<string, MapPoint>> = {
   route01: route01Anchors.anchors,
@@ -39,6 +41,20 @@ async function notify(tx: EventTx, d: Draft): Promise<void> {
       link,
     })),
   });
+  schedulePush();
+}
+
+/**
+ * Pushes the new notifications once the response is sent (after the transaction committed).
+ * Outside a request (scripts, tests) there is nothing to schedule: the next tick sends them.
+ * A delivery failure never fails the request that created the notification.
+ */
+function schedulePush(): void {
+  try {
+    after(() => sendPendingPushes().then(() => undefined));
+  } catch {
+    // Not in a request scope.
+  }
 }
 
 async function activeMembers(tx: EventTx, teamId: string): Promise<string[]> {

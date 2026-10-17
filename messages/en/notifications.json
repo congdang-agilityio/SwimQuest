@@ -60,5 +60,8 @@
       "failed": "Could not change push on this device. Try again.",
       "loadFailed": "Could not check push on this device. Reload the page to try again."
     }
+  },
+  "push": {
+    "title": "SwimQuest"
   }
 }

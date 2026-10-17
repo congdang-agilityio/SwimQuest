@@ -60,5 +60,8 @@
       "failed": "Không đổi được thông báo đẩy trên thiết bị này. Hãy thử lại.",
       "loadFailed": "Không kiểm tra được thông báo đẩy trên thiết bị này. Hãy tải lại trang."
     }
+  },
+  "push": {
+    "title": "SwimQuest"
   }
 }

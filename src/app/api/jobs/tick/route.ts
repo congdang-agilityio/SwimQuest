@@ -5,6 +5,7 @@ import {
   runDueStartAssignments,
   runDueWeekSettlements,
   runDueXpWeekSettlements,
+  runPendingPushes,
 } from "@/server/jobs/tick";
 
 export const dynamic = "force-dynamic";
@@ -30,8 +31,9 @@ export async function POST(request: Request): Promise<NextResponse> {
   const startAssignments = await runDueStartAssignments(new Date());
   const weekSettlements = await runDueWeekSettlements(new Date());
   const xpWeekSettlements = await runDueXpWeekSettlements(new Date());
+  const pushes = await runPendingPushes();
   return NextResponse.json(
-    { startAssignments, weekSettlements, xpWeekSettlements },
+    { startAssignments, weekSettlements, xpWeekSettlements, pushes },
     { headers: { "cache-control": "no-store" } },
   );
 }
