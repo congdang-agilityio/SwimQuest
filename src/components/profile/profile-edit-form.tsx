@@ -10,6 +10,8 @@ import { REGIONS } from "@/lib/regions";
 import { goalDistanceText, parseGoalDistance } from "@/lib/goal-distance";
 import { BIO_MAX, DISCIPLINES, DISPLAY_NAME_MAX, GOALS_MAX } from "@/lib/validation/profile";
 import type { MyProfile } from "@/server/profile/my-profile";
+import { useUnsavedChanges } from "@/lib/hooks/use-unsaved-changes";
+import { LeaveConfirm } from "./leave-confirm";
 import styles from "./profile-edit-form.module.css";
 
 type Props = {
@@ -37,7 +39,21 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
   const [coverImageId, setCoverImageId] = useState(profile.coverImageId);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState<Kind | null>(null);
+
+  const dirty =
+    displayName !== profile.displayName ||
+    bio !== (profile.bio ?? "") ||
+    regionCode !== (profile.regionCode ?? "") ||
+    goalsText !== (profile.goalsText ?? "") ||
+    goalDistance !== goalDistanceText(profile.goalDistanceM, locale) ||
+    disciplines.length !== profile.disciplines.length ||
+    disciplines.some((d) => !profile.disciplines.includes(d)) ||
+    avatarImageId !== profile.avatarImageId ||
+    avatarDefaultKey !== profile.avatarDefaultKey ||
+    coverImageId !== profile.coverImageId;
+  const guard = useUnsavedChanges(dirty && !saved);
 
   const message = (code?: string, max?: number) =>
     code ? tr(KNOWN_ERRORS.has(code) ? code : "GENERIC", { max: max ?? 0 }) : undefined;
@@ -99,6 +115,7 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
       });
       const json = await res.json().catch(() => null);
       if (res.ok && json?.profile) {
+        setSaved(true);
         onSaved(json.profile as MyProfile);
         return;
       }
@@ -300,10 +317,11 @@ export function ProfileEditForm({ profile, onSaved, onCancel }: Props) {
         <Button type="submit" disabled={busy || uploading !== null}>
           {busy ? t("saving") : t("save")}
         </Button>
-        <Button variant="ghost" onClick={onCancel} disabled={busy}>
+        <Button variant="ghost" onClick={() => guard.requestLeave(onCancel)} disabled={busy}>
           {t("cancel")}
         </Button>
       </div>
+      {guard.pending && <LeaveConfirm onKeep={guard.keepEditing} onDiscard={guard.discard} />}
     </form>
   );
 }

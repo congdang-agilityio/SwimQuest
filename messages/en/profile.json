@@ -92,5 +92,11 @@
     "title": "Badges",
     "empty": "No badges yet. Join a tournament to earn your first one.",
     "reason": "Reason: {reason}"
+  },
+  "leave": {
+    "title": "Discard your changes?",
+    "body": "You have unsaved changes to your profile. If you leave now they will be lost.",
+    "keep": "Keep editing",
+    "discard": "Discard"
   }
 }
