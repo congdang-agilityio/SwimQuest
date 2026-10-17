@@ -21,8 +21,12 @@ describe("public player projection (database)", () => {
 
     const rows = await db.user.findMany({ select: PUBLIC_PLAYER_SELECT });
 
-    expect(rows).toEqual([{ id: created.id, displayName: "Lan" }]);
+    expect(rows).toEqual([
+      { id: created.id, displayName: "Lan", avatarImageId: null, avatarDefaultKey: null },
+    ]);
     expect(JSON.stringify(rows)).not.toContain("lan@example.com");
-    expect(rows.map(toPublicPlayer)).toEqual([{ id: created.id, displayName: "Lan" }]);
+    expect(rows.map(toPublicPlayer)).toEqual([
+      { id: created.id, displayName: "Lan", avatarImageId: null, avatarDefaultKey: null },
+    ]);
   });
 });

@@ -95,9 +95,36 @@ describe("my team view", () => {
     expect(view!.start).toBeNull();
     expect(view!.memberCount).toBe(3);
     expect(view!.roster).toEqual([
-      { id: cap.id, displayName: "cap", verifiedKm: 5, points: 50, isCaptain: true, level: 1 },
-      { id: b.id, displayName: "bee", verifiedKm: 1.5, points: 15, isCaptain: false, level: 1 },
-      { id: c.id, displayName: "cee", verifiedKm: 0, points: 0, isCaptain: false, level: 1 },
+      {
+        id: cap.id,
+        displayName: "cap",
+        avatarImageId: null,
+        avatarDefaultKey: null,
+        verifiedKm: 5,
+        points: 50,
+        isCaptain: true,
+        level: 1,
+      },
+      {
+        id: b.id,
+        displayName: "bee",
+        avatarImageId: null,
+        avatarDefaultKey: null,
+        verifiedKm: 1.5,
+        points: 15,
+        isCaptain: false,
+        level: 1,
+      },
+      {
+        id: c.id,
+        displayName: "cee",
+        avatarImageId: null,
+        avatarDefaultKey: null,
+        verifiedKm: 0,
+        points: 0,
+        isCaptain: false,
+        level: 1,
+      },
     ]);
     expect(view!.teamPoints).toBe(65);
     expect(view!.teamPoints).toBe(view!.roster.reduce((s, m) => s + m.points, 0));

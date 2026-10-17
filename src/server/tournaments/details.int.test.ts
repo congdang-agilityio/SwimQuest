@@ -62,7 +62,12 @@ describe("getTournamentDetails", () => {
       id: tournament.id,
       name: "Cup",
       description: "Swim around the bay",
-      organizer: { id: organizer.id, displayName: organizer.displayName },
+      organizer: {
+        id: organizer.id,
+        displayName: organizer.displayName,
+        avatarImageId: null,
+        avatarDefaultKey: null,
+      },
       status: "PUBLISHED",
       seasonStartAt: SEASON_START,
       seasonEndAt: SEASON_END,
@@ -107,7 +112,12 @@ describe("getTournamentDetails", () => {
     const json = JSON.stringify(details);
     expect(json).not.toContain("@example.com");
     expect(json).not.toContain("token-PUBLISHED");
-    expect(Object.keys(details!.organizer).sort()).toEqual(["displayName", "id"]);
+    expect(Object.keys(details!.organizer).sort()).toEqual([
+      "avatarDefaultKey",
+      "avatarImageId",
+      "displayName",
+      "id",
+    ]);
   });
 
   it("shows a public tournament while active and completed, but not once archived", async () => {
