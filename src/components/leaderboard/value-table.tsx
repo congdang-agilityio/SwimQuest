@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { FinishedLabel } from "@/components/teams/finished-label";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { Chip } from "@/components/ui";
 import { mockupArt } from "@/lib/art/mockup-art";
@@ -37,7 +38,11 @@ export function RankCell({ rank }: { rank: number }) {
   );
 }
 
-export function TeamCell({ row }: { row: Pick<ValueTableRow, "name" | "emblemKey" | "isMyTeam"> }) {
+export function TeamCell({
+  row,
+}: {
+  row: Pick<ValueTableRow, "name" | "emblemKey" | "isMyTeam"> & { finishedAt?: Date | null };
+}) {
   const t = useTranslations("leaderboard");
   return (
     <th scope="row" className={styles.team}>
@@ -52,6 +57,7 @@ export function TeamCell({ row }: { row: Pick<ValueTableRow, "name" | "emblemKey
               {t("yourTeam")}
             </Chip>
           )}
+          {row.finishedAt && <FinishedLabel finishedAt={row.finishedAt} />}
         </span>
       </span>
     </th>

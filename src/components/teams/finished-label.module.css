@@ -1,0 +1,23 @@
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-1) var(--sq-space-2);
+}
+.chip {
+  gap: var(--sq-space-1);
+  white-space: nowrap;
+}
+.chip img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+.when {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-regular);
+}
+.onDark {
+  color: var(--sq-text-on-dark-muted);
+}
