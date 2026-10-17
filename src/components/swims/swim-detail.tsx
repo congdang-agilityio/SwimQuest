@@ -1,7 +1,9 @@
 import { useLocale, useTranslations } from "next-intl";
 import * as f from "@/lib/format/swim";
 import { Card, Chip } from "@/components/ui";
-import { DecisionNote } from "./decision-note";
+import { DecisionNote, showsDecisionNote } from "./decision-note";
+import { DisputeForm } from "./dispute-form";
+import { DisputeStatus } from "./dispute-status";
 import { CheckReasons } from "./check-reasons";
 import { PointsBreakdown } from "./points-breakdown";
 import { SwimFactRows, SwimHero, resultTone } from "./swim-facts";
@@ -42,7 +44,15 @@ export function SwimDetail({ swim }: { swim: MySwimDto }) {
                   <Chip tone={resultTone(r.status)}>{tc(`status.${r.status}`)}</Chip>
                 </div>
                 <PointsBreakdown points={r.points} />
-                <DecisionNote status={r.status} note={r.decisionNote} decidedAt={r.decidedAt} />
+                <DecisionNote status={r.status} note={r.decisionNote} decidedAt={r.decidedAt}>
+                  {r.canDispute ? <DisputeForm resultId={r.resultId} /> : null}
+                </DecisionNote>
+                {r.canDispute && !showsDecisionNote(r.status, r.decisionNote) ? (
+                  <div className={styles.decisionActions}>
+                    <DisputeForm resultId={r.resultId} />
+                  </div>
+                ) : null}
+                <DisputeStatus open={r.openDispute} last={r.lastDispute} />
                 <CheckReasons reasons={r.reasons} rules={r.rules} />
               </li>
             ))}

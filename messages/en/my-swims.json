@@ -15,6 +15,27 @@
     "decision": {
       "title": "Reviewer's reason",
       "decidedAt": "Decided {date}"
+    },
+    "dispute": {
+      "open": "Dispute",
+      "reasonLabel": "Why do you dispute this?",
+      "count": "{count}/{max} characters",
+      "send": "Send dispute",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "errors": {
+        "network": "Could not send. Check your connection and try again.",
+        "failed": "Could not send the dispute. Please try again.",
+        "DISPUTE_OPEN": "This result already has a dispute waiting for review.",
+        "NOT_DISPUTABLE": "This result cannot be disputed right now."
+      },
+      "openTitle": "Dispute waiting for review",
+      "openText": "The result does not count until the reviewer decides.",
+      "yourReason": "Your reason: {reason}",
+      "sentAt": "Sent {date}",
+      "acceptedTitle": "Dispute accepted",
+      "keptTitle": "Dispute rejected",
+      "decidedAt": "Decided {date}"
     }
   }
 }

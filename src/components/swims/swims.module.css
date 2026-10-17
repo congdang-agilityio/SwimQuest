@@ -239,6 +239,27 @@
   font-size: var(--sq-text-xs);
   color: var(--sq-text-muted);
 }
+.decisionInfo {
+  border-color: var(--sq-sky-100);
+  background: var(--sq-sky-50);
+}
+.decisionGood {
+  border-color: var(--sq-success);
+  background: var(--sq-sky-50);
+}
+.decisionActions {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin-top: var(--sq-space-2);
+}
+.disputeForm {
+  display: grid;
+  gap: var(--sq-space-2);
+}
+.disputeActions {
+  display: flex;
+  gap: var(--sq-space-2);
+}
 .muted {
   margin: 0;
   font-size: var(--sq-text-sm);
