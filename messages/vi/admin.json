@@ -1,4 +1,47 @@
 {
   "title": "Quản trị",
-  "sections": { "users": "Người dùng" }
+  "sections": { "users": "Người dùng" },
+  "users": {
+    "title": "Người dùng",
+    "back": "Quay lại",
+    "searchLabel": "Tìm theo tên hoặc email",
+    "searchButton": "Tìm",
+    "resultsTitle": "Người dùng",
+    "empty": "Không có người dùng nào khớp.",
+    "loadMore": "Xem thêm",
+    "loading": "Đang tải...",
+    "error": "Không tải được danh sách. Kiểm tra kết nối rồi thử lại.",
+    "retry": "Thử lại",
+    "open": "Mở {name}",
+    "status": {
+      "ACTIVE": "Đang hoạt động",
+      "SUSPENDED": "Bị khóa",
+      "DELETION_PENDING": "Chờ xóa",
+      "DELETED": "Đã xóa"
+    },
+    "role": { "admin": "Quản trị viên", "player": "Người chơi" }
+  },
+  "user": {
+    "detailsTitle": "Tài khoản",
+    "email": "Email",
+    "status": "Trạng thái",
+    "role": "Vai trò",
+    "joined": "Tham gia",
+    "roleTitle": "Quyền quản trị",
+    "roleHelpOn": "Người này có thể quản lý nền tảng.",
+    "roleHelpOff": "Người này là người chơi thông thường.",
+    "grant": "Cấp quyền quản trị",
+    "remove": "Gỡ quyền quản trị",
+    "confirmGrant": "Cấp quyền quản trị nền tảng cho {name}? Họ sẽ thấy khu Quản trị ngay.",
+    "confirmRemove": "Gỡ quyền quản trị của {name}? Họ sẽ mất quyền vào khu Quản trị ngay.",
+    "confirmYes": "Đồng ý",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "done": "Đã cập nhật vai trò.",
+    "errors": {
+      "LAST_ADMIN": "Đây là quản trị viên hoạt động cuối cùng. Hãy cấp quyền cho người khác trước.",
+      "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
+      "failed": "Không đổi được vai trò. Vui lòng thử lại."
+    }
+  }
 }

@@ -1,4 +1,47 @@
 {
   "title": "Admin",
-  "sections": { "users": "Users" }
+  "sections": { "users": "Users" },
+  "users": {
+    "title": "Users",
+    "back": "Back",
+    "searchLabel": "Search by name or email",
+    "searchButton": "Search",
+    "resultsTitle": "Users",
+    "empty": "No users match your search.",
+    "loadMore": "Show more",
+    "loading": "Loading...",
+    "error": "Could not load users. Check your connection and try again.",
+    "retry": "Try again",
+    "open": "Open {name}",
+    "status": {
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspended",
+      "DELETION_PENDING": "Deletion pending",
+      "DELETED": "Deleted"
+    },
+    "role": { "admin": "Admin", "player": "Player" }
+  },
+  "user": {
+    "detailsTitle": "Account",
+    "email": "Email",
+    "status": "Status",
+    "role": "Role",
+    "joined": "Joined",
+    "roleTitle": "Admin role",
+    "roleHelpOn": "This user can manage the platform.",
+    "roleHelpOff": "This user is a regular player.",
+    "grant": "Make admin",
+    "remove": "Remove admin role",
+    "confirmGrant": "Make {name} a platform admin? They will see the Admin area right away.",
+    "confirmRemove": "Remove the admin role from {name}? They lose access to the Admin area right away.",
+    "confirmYes": "Yes, confirm",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "done": "The role was updated.",
+    "errors": {
+      "LAST_ADMIN": "This is the last active admin. Make someone else an admin first.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "failed": "Could not change the role. Please try again."
+    }
+  }
 }
