@@ -46,10 +46,23 @@ function loadManifests(): MockupAsset[] {
 
 export const MOCKUP_ART: readonly MockupAsset[] = loadManifests();
 
-const BY_KEY = new Map(MOCKUP_ART.map((a) => [a.key, a]));
+const BY_KEY = new Map<string, MockupAsset>();
+for (const a of MOCKUP_ART) {
+  if (process.env.NODE_ENV !== "production") {
+    if (BY_KEY.has(a.key)) console.warn(`[mockup-art] duplicate key "${a.key}" (${a.file})`);
+    if (!/^[^/]+\/[^/]+$/.test(a.key)) {
+      console.warn(`[mockup-art] key "${a.key}" is not <group>/<name>`);
+    }
+  }
+  if (!BY_KEY.has(a.key)) BY_KEY.set(a.key, a);
+}
 
 export function mockupArt(key: string): MockupAsset | undefined {
-  return BY_KEY.get(key);
+  const art = BY_KEY.get(key);
+  if (!art && process.env.NODE_ENV !== "production" && MOCKUP_ART.length > 0) {
+    console.warn(`[mockup-art] unknown key "${key}"`);
+  }
+  return art;
 }
 
 /** Every asset of one group folder, e.g. `mockupGroup("landmarks")`. */

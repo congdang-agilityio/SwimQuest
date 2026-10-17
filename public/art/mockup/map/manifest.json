@@ -1,6 +1,6 @@
 [
   {
-    "key": "location-pin",
+    "key": "map/location-pin",
     "file": "/art/mockup/map/location-pin.png",
     "webp": "/art/mockup/map/location-pin.webp",
     "width": 256,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "key": "route-pin-1",
+    "key": "map/route-pin-1",
     "file": "/art/mockup/map/route-pin-1.png",
     "webp": "/art/mockup/map/route-pin-1.webp",
     "width": 256,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "key": "route-pin-2",
+    "key": "map/route-pin-2",
     "file": "/art/mockup/map/route-pin-2.png",
     "webp": "/art/mockup/map/route-pin-2.webp",
     "width": 256,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "key": "route-pin-3",
+    "key": "map/route-pin-3",
     "file": "/art/mockup/map/route-pin-3.png",
     "webp": "/art/mockup/map/route-pin-3.webp",
     "width": 256,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "key": "route-pin-4",
+    "key": "map/route-pin-4",
     "file": "/art/mockup/map/route-pin-4.png",
     "webp": "/art/mockup/map/route-pin-4.webp",
     "width": 256,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "key": "route-dot",
+    "key": "map/route-dot",
     "file": "/art/mockup/map/route-dot.png",
     "webp": "/art/mockup/map/route-dot.webp",
     "width": 256,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "key": "route-dash",
+    "key": "map/route-dash",
     "file": "/art/mockup/map/route-dash.png",
     "webp": "/art/mockup/map/route-dash.webp",
     "width": 256,
@@ -91,7 +91,7 @@
     }
   },
   {
-    "key": "flag",
+    "key": "map/flag",
     "file": "/art/mockup/map/flag.png",
     "webp": "/art/mockup/map/flag.webp",
     "width": 256,
@@ -104,7 +104,7 @@
     }
   },
   {
-    "key": "checkered-flag",
+    "key": "map/checkered-flag",
     "file": "/art/mockup/map/checkered-flag.png",
     "webp": "/art/mockup/map/checkered-flag.webp",
     "width": 256,
@@ -117,7 +117,7 @@
     }
   },
   {
-    "key": "compass-rose",
+    "key": "map/compass-rose",
     "file": "/art/mockup/map/compass-rose.png",
     "webp": "/art/mockup/map/compass-rose.webp",
     "width": 256,
@@ -130,7 +130,7 @@
     }
   },
   {
-    "key": "compass-gold",
+    "key": "map/compass-gold",
     "file": "/art/mockup/map/compass-gold.png",
     "webp": "/art/mockup/map/compass-gold.webp",
     "width": 256,
@@ -143,7 +143,7 @@
     }
   },
   {
-    "key": "buoy",
+    "key": "map/buoy",
     "file": "/art/mockup/map/buoy.png",
     "webp": "/art/mockup/map/buoy.webp",
     "width": 256,
@@ -156,7 +156,7 @@
     }
   },
   {
-    "key": "ship-helm",
+    "key": "map/ship-helm",
     "file": "/art/mockup/map/ship-helm.png",
     "webp": "/art/mockup/map/ship-helm.webp",
     "width": 256,
@@ -169,7 +169,7 @@
     }
   },
   {
-    "key": "treasure-chest",
+    "key": "map/treasure-chest",
     "file": "/art/mockup/map/treasure-chest.png",
     "webp": "/art/mockup/map/treasure-chest.webp",
     "width": 256,
@@ -182,7 +182,7 @@
     }
   },
   {
-    "key": "cloud",
+    "key": "map/cloud",
     "file": "/art/mockup/map/cloud.png",
     "webp": "/art/mockup/map/cloud.webp",
     "width": 256,
@@ -195,7 +195,7 @@
     }
   },
   {
-    "key": "arrow",
+    "key": "map/arrow",
     "file": "/art/mockup/map/arrow.png",
     "webp": "/art/mockup/map/arrow.webp",
     "width": 256,

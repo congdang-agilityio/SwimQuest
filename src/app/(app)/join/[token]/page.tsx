@@ -36,7 +36,7 @@ export default async function JoinPage({
           <ScreenHeader title={t("invalidTitle")} backHref="/" backLabel={tCommon("back")} />
         </div>
         <Card className={styles.notice}>
-          <MockupPicture artKey="message-bottle" alt="" className={styles.noticeArt} />
+          <MockupPicture artKey="items/message-bottle" alt="" className={styles.noticeArt} />
           <p>{t("invalidBody")}</p>
         </Card>
       </main>
@@ -70,7 +70,7 @@ export default async function JoinPage({
       />
       {closed ? (
         <Card role="status" className={styles.notice}>
-          <MockupPicture artKey="buoy" alt="" className={styles.noticeArt} />
+          <MockupPicture artKey="map/buoy" alt="" className={styles.noticeArt} />
           <p>
             <strong>{t("closedTitle")}.</strong> {t("closedBody")}
           </p>
