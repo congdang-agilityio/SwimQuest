@@ -5,6 +5,7 @@ const state = vi.hoisted(() => ({ headers: new Headers(), requireUser: vi.fn() }
 vi.mock("next/headers", () => ({ headers: async () => state.headers }));
 vi.mock("@/server/auth/current-user", () => ({ requireUser: state.requireUser }));
 vi.mock("@/components/nav/app-nav", () => ({ AppNav: () => null }));
+vi.mock("@/server/home/selected-tournament", () => ({ getTournamentSwitcher: async () => null }));
 
 const layout = await import("./layout");
 
@@ -40,7 +41,11 @@ describe("(app) layout", () => {
     });
     const tree = await layout.default({ children: null });
     const nav = tree.props.children[0];
-    expect(nav.props).toEqual({ displayName: "Admin An", isPlatformAdmin: true });
+    expect(nav.props).toEqual({
+      displayName: "Admin An",
+      isPlatformAdmin: true,
+      switcher: null,
+    });
   });
 
   it("does not render children when the session is invalid", async () => {
