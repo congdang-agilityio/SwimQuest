@@ -15,7 +15,15 @@
     "type": "Swim type",
     "failed": "Failed checks",
     "shape": "Shape of the swim",
-    "noShape": "No track recorded"
+    "noShape": "No track recorded",
+    "disputed": "Disputed",
+    "disputeReason": "Player's reason for the dispute",
+    "earlier": "Earlier status: {status}",
+    "status": {
+      "REJECTED": "Rejected",
+      "DUPLICATE": "Duplicate",
+      "RULE_MISSED": "Rule missed"
+    }
   },
   "reasons": {
     "PACE_TOO_FAST": "Fastest pace {limit} per 100 m, this swim {value}",
@@ -43,6 +51,12 @@
       "already": "This swim was already decided. Updating the queue...",
       "failed": "Could not save the decision. Try again.",
       "network": "No connection. Try again."
-    }
+    },
+    "accept": "Accept dispute",
+    "acceptFor": "Accept the dispute by {name}",
+    "confirmAccept": "Accept dispute"
+  },
+  "disputes": {
+    "title": "{count, plural, one {# dispute} other {# disputes}} to decide"
   }
 }

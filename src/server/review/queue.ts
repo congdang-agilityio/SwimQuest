@@ -34,7 +34,11 @@ export type ReviewItem = ReviewQueueItem & {
   status: string;
   /** Simplified track, at most MAX_TRACK_POINTS points; reviewers of the tournament only. */
   track: { lat: number; lon: number }[];
+  /** Set for an open dispute: the player's reason and the status the result had before. */
+  dispute?: ReviewDispute;
 };
+
+export type ReviewDispute = { id: string; reason: string; previousStatus: string };
 
 const include = {
   swim: true,
@@ -120,4 +124,20 @@ export async function getReviewItem(viewerId: string, resultId: string): Promise
   await requireReviewer(viewerId, row.tournamentId);
   const track = simplifyTrack(row.swim.track);
   return { ...toItem(row), tournamentId: row.tournamentId, status: row.status, track };
+}
+
+/** The tournament's OPEN disputes, oldest first, each with the player's reason. Reviewers only. */
+export async function getDisputeQueue(
+  viewerId: string,
+  tournamentId: string,
+): Promise<{ resultId: string; dispute: ReviewDispute }[]> {
+  await requireReviewer(viewerId, tournamentId);
+  const rows = await db.dispute.findMany({
+    where: { status: "OPEN", swimResult: { tournamentId, status: "DISPUTED" } },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+  });
+  return rows.map((d) => ({
+    resultId: d.swimResultId,
+    dispute: { id: d.id, reason: d.reason, previousStatus: d.previousStatus },
+  }));
 }

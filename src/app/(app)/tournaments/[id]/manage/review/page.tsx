@@ -10,7 +10,7 @@ import { Card, Chip, ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { ForbiddenError, NotFoundError, requireReviewer } from "@/server/auth/roles";
-import { getReviewItem, getReviewQueue } from "@/server/review/queue";
+import { getDisputeQueue, getReviewItem, getReviewQueue } from "@/server/review/queue";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,13 @@ export default async function ReviewQueuePage({ params }: { params: Promise<{ id
   const queue = await getReviewQueue(user.id, tournament.id);
   // Each item with its simplified track: the shape is for this tournament's reviewers only.
   const items = await Promise.all(queue.map((q) => getReviewItem(user.id, q.resultId)));
+  const disputeQueue = await getDisputeQueue(user.id, tournament.id);
+  const disputes = await Promise.all(
+    disputeQueue.map(async (q) => ({
+      ...(await getReviewItem(user.id, q.resultId)),
+      dispute: q.dispute,
+    })),
+  );
   const t = await getTranslations("review");
   const tCommon = await getTranslations("common");
   return (
@@ -43,18 +50,21 @@ export default async function ReviewQueuePage({ params }: { params: Promise<{ id
           <strong>{tournament.name}</strong>
         </p>
         <p>{t("intro")}</p>
-        <Chip tone={items.length ? "warning" : "success"} className={styles.count}>
-          {t("count", { count: items.length })}
+        <Chip
+          tone={items.length + disputes.length ? "warning" : "success"}
+          className={styles.count}
+        >
+          {t("count", { count: items.length + disputes.length })}
         </Chip>
       </Card>
-      {items.length === 0 ? (
+      {items.length + disputes.length === 0 ? (
         <StateCard
           art="effects/wave"
           titleId="review-empty"
           title={t("empty.title")}
           body={t("empty.body")}
         />
-      ) : (
+      ) : items.length > 0 ? (
         <ul className={styles.list}>
           {items.map((item) => (
             <li key={item.resultId}>
@@ -62,6 +72,20 @@ export default async function ReviewQueuePage({ params }: { params: Promise<{ id
             </li>
           ))}
         </ul>
+      ) : null}
+      {disputes.length > 0 && (
+        <section aria-labelledby="review-disputes" className={styles.disputes}>
+          <h2 id="review-disputes" className={styles.sectionTitle}>
+            {t("disputes.title", { count: disputes.length })}
+          </h2>
+          <ul className={styles.list}>
+            {disputes.map((item) => (
+              <li key={item.dispute.id}>
+                <ReviewItem item={item} />
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </main>
   );
