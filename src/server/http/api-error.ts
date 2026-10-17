@@ -31,6 +31,7 @@ export type ApiErrorCode =
   | "IMAGE_TOO_LARGE"
   | "JOIN_CLOSED"
   | "LINK_OFF"
+  | "NO_INVITE_LINK"
   | "TEAM_FULL"
   | "ALREADY_MEMBER"
   | "REMOVED_FROM_TOURNAMENT"
@@ -77,6 +78,7 @@ const messages: Record<ApiErrorCode, string> = {
   IMAGE_TOO_LARGE: "The image is larger than 2 MB.",
   JOIN_CLOSED: "Joining this tournament is closed.",
   LINK_OFF: "This invite link has been switched off.",
+  NO_INVITE_LINK: "This tournament has no invite link yet. Publish it first.",
   TEAM_FULL: "This team is full. Choose another team.",
   ALREADY_MEMBER: "You are already in a team of this tournament.",
   REMOVED_FROM_TOURNAMENT: "You were removed from this tournament and cannot join it again.",
