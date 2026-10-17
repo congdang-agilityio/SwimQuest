@@ -1,0 +1,193 @@
+/* Tournaments ("DANH SÁCH GIẢI ĐẤU" panel). Every value comes from src/styles/tokens.css. */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+}
+.title {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-black);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* The navy band only shows on desktop, where the screen reads as a dashboard panel. */
+.panelHeader {
+  display: none;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-2);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-3);
+}
+
+/* Four small pills fit one phone row, as in the mockup. */
+.filters ul {
+  gap: var(--sq-space-1);
+}
+.filters li > * {
+  padding-inline: var(--sq-space-2);
+  font-size: var(--sq-text-xs);
+}
+/* The pill row scrolls if it must, which would clip the selected pill's glow into a box. */
+.filters li > [aria-pressed="true"] {
+  box-shadow: none;
+}
+
+.empty {
+  margin: 0;
+  padding: var(--sq-space-4) 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+  text-align: center;
+}
+
+.rows {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: var(--sq-space-3);
+  align-items: start;
+  padding: var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
+
+.thumb {
+  display: block;
+  width: 76px;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-gradient-sea);
+}
+
+.body {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+  padding-top: var(--sq-space-1);
+}
+
+.name {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  line-height: 1.25;
+}
+
+.dates {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-medium);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-2);
+  margin-top: var(--sq-space-1);
+}
+
+.team {
+  margin: 0;
+  overflow: hidden;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+
+.action {
+  margin-left: auto;
+  padding-inline: var(--sq-space-5);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .screen {
+    max-width: 640px;
+  }
+  .panelHeader {
+    display: block;
+  }
+  .card {
+    padding: var(--sq-space-4);
+    border-radius: 0 0 var(--sq-radius-lg) var(--sq-radius-lg);
+  }
+  .filters ul {
+    gap: var(--sq-space-2);
+  }
+  .filters li > * {
+    padding-inline: var(--sq-space-4);
+    font-size: var(--sq-text-sm);
+  }
+  .row {
+    grid-template-columns: 96px 1fr;
+    gap: var(--sq-space-4);
+    padding: var(--sq-space-3);
+  }
+  .thumb {
+    width: 96px;
+  }
+  .name {
+    font-size: var(--sq-text-lg);
+  }
+  .dates,
+  .team {
+    font-size: var(--sq-text-sm);
+  }
+}

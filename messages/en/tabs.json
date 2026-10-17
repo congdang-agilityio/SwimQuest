@@ -15,7 +15,20 @@
       "ACTIVE": "In progress",
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
-    }
+    },
+    "listTitle": "Tournament list",
+    "filterLabel": "Filter tournaments by status",
+    "filter": {
+      "all": "All",
+      "active": "In progress",
+      "upcoming": "Upcoming",
+      "ended": "Ended"
+    },
+    "filterEmpty": "No tournaments in this group.",
+    "dates": "{start} – {end}",
+    "team": "Team: {name}",
+    "manage": "Manage",
+    "details": "View details"
   },
   "team": {
     "title": "My Team"
