@@ -22,11 +22,7 @@ const MAX_QUERY_LENGTH = 100;
 
 /** Case- and accent-insensitive form: "Lý Sơn" -> "ly son" (đ folds to d). */
 export function foldName(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[đĐ]/g, "d")
-    .toLowerCase();
+  return value.normalize("NFD").replace(/\p{M}/gu, "").replace(/[đĐ]/g, "d").toLowerCase();
 }
 
 /** translate() maps for Postgres: every Vietnamese accented letter (both cases) to its base. */
@@ -36,7 +32,10 @@ const [FOLD_FROM, FOLD_TO] = (() => {
   const to: string[] = ["d", "D"];
   for (const base of "aăâeêioôơuưy") {
     for (const tone of ["", ...COMBINING.slice(0, 5)]) {
-      for (const ch of [(base + tone).normalize("NFC"), (base + tone).normalize("NFC").toUpperCase()]) {
+      for (const ch of [
+        (base + tone).normalize("NFC"),
+        (base + tone).normalize("NFC").toUpperCase(),
+      ]) {
         const plain = ch.normalize("NFD").replace(/\p{M}/gu, "");
         if (ch.length === 1 && plain !== ch && !from.includes(ch)) {
           from.push(ch);
@@ -51,11 +50,15 @@ const [FOLD_FROM, FOLD_TO] = (() => {
 
 function parseStatus(status: unknown): PublicListStatus[] {
   const value = typeof status === "string" ? status.toUpperCase() : "";
-  return LISTABLE.includes(value as PublicListStatus) ? [value as PublicListStatus] : DEFAULT_STATUSES;
+  return LISTABLE.includes(value as PublicListStatus)
+    ? [value as PublicListStatus]
+    : DEFAULT_STATUSES;
 }
 
 function encodeCursor(item: PublicTournamentItem): string {
-  return Buffer.from(JSON.stringify([item.seasonStartAt.toISOString(), item.id])).toString("base64url");
+  return Buffer.from(JSON.stringify([item.seasonStartAt.toISOString(), item.id])).toString(
+    "base64url",
+  );
 }
 
 /** An invalid cursor is ignored (first page), never an error. */
@@ -94,7 +97,14 @@ export async function searchPublicTournaments(
 
   // The CASE mirrors effectiveStatus() in src/lib/tournaments/lifecycle.ts.
   const rows = await db.$queryRaw<
-    { id: string; name: string; seasonStartAt: Date; seasonEndAt: Date; stored: string; freePlaces: number }[]
+    {
+      id: string;
+      name: string;
+      seasonStartAt: Date;
+      seasonEndAt: Date;
+      stored: string;
+      freePlaces: number;
+    }[]
   >`
     WITH page AS (
       SELECT * FROM (
