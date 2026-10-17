@@ -20,6 +20,15 @@
   margin-bottom: calc(-1 * var(--sq-space-2));
 }
 
+/* Wraps TeamFinish so its own "order: -1" (first on My Team) does not lift it above the header. */
+.finishSlot {
+  display: grid;
+}
+
+.finishSlot:empty {
+  display: none;
+}
+
 .headRow {
   display: grid;
   gap: var(--sq-space-3);
@@ -300,7 +309,7 @@
   top: 50%;
   display: grid;
   place-items: center;
-  width: 36px;
+  width: 44px;
   transform: translate(-50%, -62%);
 }
 
@@ -406,6 +415,6 @@
   }
 
   .bandShip {
-    width: 48px;
+    width: 60px;
   }
 }

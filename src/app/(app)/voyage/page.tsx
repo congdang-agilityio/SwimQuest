@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { ButtonLink, ProgressBar, ScreenHeader, SectionHeader } from "@/components/ui";
 import { RouteMap } from "@/components/voyage/route-map";
@@ -67,6 +68,10 @@ export default async function VoyagePage() {
             <ProgressBar value={pct} label={tv("teamProgress")} />
           </div>
         </div>
+      </div>
+      {/* "Cập bến Lý Sơn" celebration, only once the team has finished: above the map. */}
+      <div className={styles.finishSlot}>
+        <TeamFinish userId={user.id} />
       </div>
       <RouteMap
         routeId={voyage.tournament.routeId}
