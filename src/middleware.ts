@@ -1,5 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isPublicPath, NEXT_PATH_HEADER, safeNextPath } from "./lib/auth/public-paths";
+import {
+  isPublicPath,
+  NEXT_PATH_HEADER,
+  safeNextPath,
+  WELCOME_PATH,
+} from "./lib/auth/public-paths";
 import { apiError } from "./server/http/api-error";
 
 /**
@@ -33,8 +38,10 @@ function sessionTag(token: string): string {
 
 /**
  * Only checks that a session cookie is present; `requireUser()` in the `(app)` layout validates
- * it against the database. Protected responses are never cached, so the back button after
- * logout does not show protected content.
+ * it against the database. A visitor without one at the bare main address (`/`) goes to the
+ * welcome page; other protected pages, and `/?…` deep links, go to login with `next`.
+ * Protected responses are never cached, so the back button after logout does not show
+ * protected content.
  */
 export function middleware(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl;
@@ -51,6 +58,8 @@ export function middleware(request: NextRequest): NextResponse {
     if (!isApi) response.headers.set(OWNER_HEADER, sessionTag(session));
   } else if (isApi) {
     return apiError(401, "UNAUTHENTICATED");
+  } else if (pathname === "/" && !search) {
+    response = NextResponse.redirect(new URL(WELCOME_PATH, request.url));
   } else {
     const login = new URL("/login", request.url);
     login.searchParams.set("next", nextPath);
