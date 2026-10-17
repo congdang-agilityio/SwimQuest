@@ -73,7 +73,7 @@ export default async function ManageTournamentPage({
     return `${time} ${date}`;
   };
   return (
-    <main className={styles.screen}>
+    <main className={styles.screen} data-wide-grid>
       <div className={styles.headerBand}>
         <ScreenHeader title={tournament.name} backHref="/tournaments" backLabel={tCommon("back")} />
       </div>
