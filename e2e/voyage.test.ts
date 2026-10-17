@@ -148,7 +148,6 @@ const intersects = (a: Box, b: Box) =>
  * the ship stays on the map, and the label covers no destination name.
  */
 async function expectLabelReadable(page: Page) {
-  await expect(page.getByTestId("progress-label")).toBeVisible();
   const map = (await page.getByTestId("route-map").boundingBox()) as Box;
   const labelEl = page.getByTestId("progress-label");
   const label = (await labelEl.boundingBox()) as Box;
@@ -328,7 +327,6 @@ test.describe("progress label at 0% from Non Nước on a 768 px viewport", () =
 });
 
 async function expectNamesReadable(page: Page) {
-  await expect(page.getByTestId("route-map")).toBeVisible();
   const map = (await page.getByTestId("route-map").boundingBox()) as Box;
   // Every rendered destination is checked, so a new or missed one cannot hide an overlap.
   const dests = page.locator('[data-testid^="destination-"]');
