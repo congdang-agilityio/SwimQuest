@@ -1,0 +1,206 @@
+/* Collectibles cards, after the mockup's "VẬT PHẨM & HIỆU ỨNG" panel: a navy tab label on a foam
+   card, then item art over a short bold label. Layout only; every value is a design token. */
+
+.card {
+  display: grid;
+  gap: var(--sq-space-4);
+  padding: 0 0 var(--sq-space-4);
+  overflow: hidden;
+}
+.tab {
+  justify-self: start;
+  margin: 0;
+  padding: var(--sq-space-2) var(--sq-space-5) var(--sq-space-2) var(--sq-space-4);
+  border-radius: 0 0 var(--sq-radius-lg) 0;
+  background: var(--sq-navy-800);
+  color: var(--sq-white);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.group {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: 0 var(--sq-space-4);
+}
+.groupTitle {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sq-space-3) var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tile {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--sq-space-1);
+  min-width: 0;
+  text-align: center;
+}
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+}
+.art {
+  position: relative;
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: var(--sq-shadow-drop);
+}
+.label {
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-bold);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.sub {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  line-height: 1.25;
+}
+.done {
+  color: var(--sq-success);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-bold);
+}
+
+/* A milestone not reached yet: an empty dashed slot with the milestone in it. */
+.slot {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 4px;
+  border: 2px dashed var(--sq-sky-100);
+  border-radius: 50%;
+  background: var(--sq-sky-50);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-bold);
+}
+.dim {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+/* Soft glow behind a completed map or an opened chest (G3 effects/glow). */
+.glow {
+  position: absolute;
+  inset: -30%;
+  width: 160%;
+  max-width: none;
+  height: 160%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.burst {
+  position: absolute;
+  inset: -45%;
+  width: 190%;
+  max-width: none;
+  height: 190%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0;
+}
+.stage[data-state="opening"] .burst {
+  animation: burst 1.2s ease-out forwards;
+}
+.stage[data-state="opening"] .art {
+  animation: open 1.2s ease-out;
+}
+.stage[data-state="closed"] .glow,
+.stage[data-state="opening"] .glow {
+  opacity: 0;
+}
+.stage[data-state="opening"] .glow {
+  animation: glowIn 1.2s ease-out forwards;
+}
+.newChip {
+  justify-self: center;
+}
+@media (min-width: 480px) {
+  .label {
+    font-size: var(--sq-text-sm);
+  }
+}
+
+@keyframes open {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+  15% {
+    transform: scale(1.05) rotate(-6deg);
+  }
+  30% {
+    transform: scale(1.05) rotate(6deg);
+  }
+  45% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+  70% {
+    transform: scale(1.18) rotate(0);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes burst {
+  0%,
+  35% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+@keyframes glowIn {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage[data-state] .art,
+  .stage[data-state] .burst,
+  .stage[data-state] .glow {
+    animation: none;
+  }
+  .stage[data-state="opening"] .glow {
+    opacity: 1;
+  }
+}
+
+.note {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4) 0;
+  border-top: 1px solid var(--sq-sky-100);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+}
