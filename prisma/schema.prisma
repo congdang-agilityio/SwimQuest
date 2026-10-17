@@ -22,55 +22,55 @@ enum ActorType {
 }
 
 model User {
-  id               String         @id @default(cuid())
+  id                String                 @id @default(cuid())
   /// Always stored lower-cased (normalized by the client in src/server/db.ts).
-  email            String         @unique
-  passwordHash     String
-  displayName      String
-  status           UserStatus     @default(ACTIVE)
-  isPlatformAdmin  Boolean        @default(false)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  sessions         Session[]
-  auditEvents      AuditEvent[]
-  organized        Tournament[]   @relation("OrganizedTournaments")
-  captainOf        Team[]         @relation("CaptainedTeams")
-  memberships      TeamMember[]
-  swims            Swim[]
-  swimResults      SwimResult[]
-  pointsEntries    PointsEntry[]
-  seenMoments      SeenMoment[]
-  weeklyResults    WeeklyResult[]
-  decidedResults   SwimResult[]   @relation("SwimResultDecisions")
-  disputes         Dispute[]      @relation("DisputeOwner")
-  decidedDisputes  Dispute[]      @relation("DisputeDecisions")
-  helperOf         ReviewHelper[] @relation("ReviewHelperUser")
-  appointedHelpers ReviewHelper[] @relation("ReviewHelperAppointer")
-  badges           Badge[]        @relation("BadgeOwner")
-  givenBadges      Badge[]        @relation("BadgeGiver")
-  xpEntries        XpEntry[]
-  xpWeeks          XpWeek[]
+  email             String                 @unique
+  passwordHash      String
+  displayName       String
+  status            UserStatus             @default(ACTIVE)
+  isPlatformAdmin   Boolean                @default(false)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  sessions          Session[]
+  auditEvents       AuditEvent[]
+  organized         Tournament[]           @relation("OrganizedTournaments")
+  captainOf         Team[]                 @relation("CaptainedTeams")
+  memberships       TeamMember[]
+  swims             Swim[]
+  swimResults       SwimResult[]
+  pointsEntries     PointsEntry[]
+  seenMoments       SeenMoment[]
+  weeklyResults     WeeklyResult[]
+  decidedResults    SwimResult[]           @relation("SwimResultDecisions")
+  disputes          Dispute[]              @relation("DisputeOwner")
+  decidedDisputes   Dispute[]              @relation("DisputeDecisions")
+  helperOf          ReviewHelper[]         @relation("ReviewHelperUser")
+  appointedHelpers  ReviewHelper[]         @relation("ReviewHelperAppointer")
+  badges            Badge[]                @relation("BadgeOwner")
+  givenBadges       Badge[]                @relation("BadgeGiver")
+  xpEntries         XpEntry[]
+  xpWeeks           XpWeek[]
   /// Uploaded avatar; null shows avatarDefaultKey (or the app default).
-  avatarImageId    String?        @unique
-  avatarImage      ImageAsset?    @relation("UserAvatar", fields: [avatarImageId], references: [id], onDelete: SetNull)
+  avatarImageId     String?                @unique
+  avatarImage       ImageAsset?            @relation("UserAvatar", fields: [avatarImageId], references: [id], onDelete: SetNull)
   /// Key of a built-in default avatar.
-  avatarDefaultKey String?
-  coverImageId     String?        @unique
-  coverImage       ImageAsset?    @relation("UserCover", fields: [coverImageId], references: [id], onDelete: SetNull)
-  bio              String?
+  avatarDefaultKey  String?
+  coverImageId      String?                @unique
+  coverImage        ImageAsset?            @relation("UserCover", fields: [coverImageId], references: [id], onDelete: SetNull)
+  bio               String?
   /// Province or city code, never an address (check constraint "User_regionCode_check").
-  regionCode       String?
-  goalsText        String?
-  goalDistanceM    Int?
-  disciplines      String[]       @default([])
+  regionCode        String?
+  goalsText         String?
+  goalDistanceM     Int?
+  disciplines       String[]               @default([])
   /// Per-field visibility levels; {} means every field is at its default level.
-  privacy          Json           @default("{}")
+  privacy           Json                   @default("{}")
   /// Preferred UI language; null follows the browser.
-  locale           String?
+  locale            String?
   /// Categories the player switched push off for (account-wide); empty = every category on.
   /// The in-app list still records them (S-68).
   pushOffCategories NotificationCategory[] @default([])
-  images           ImageAsset[]   @relation("ImageOwner")
+  images            ImageAsset[]           @relation("ImageOwner")
 
   /// Tournaments allowed on top of the platform quota (granted by approved quota requests).
   extraTournamentQuota Int                      @default(0)
@@ -86,6 +86,7 @@ model User {
   notifications        Notification[]
   pushSubscriptions    PushSubscription[]
   zaloBots             ZaloBot[]
+  funnelEvents         FunnelEvent[]
 }
 
 model Session {
@@ -821,4 +822,40 @@ model ZaloSwimPost {
   createdAt     DateTime    @default(now()) @db.Timestamptz(3)
 
   @@index([zaloMessageId])
+}
+
+/// Product funnel event (SRC-10). Ids, short labels and counts only:
+/// never emails, GPS coordinates or track data.
+model FunnelEvent {
+  id           String   @id @default(cuid())
+  /// Event name from the closed SRC-10 list, e.g. "tournament_joined".
+  name         String
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// No foreign key: events outlive the tournaments they mention.
+  tournamentId String?
+  /// Id of the row the event is about (team, swim, result...).
+  refId        String?
+  props        Json?
+  /// Set for "once" events; null means no dedupe.
+  dedupeKey    String?  @unique
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([name, createdAt])
+}
+
+enum HealthSignalKind {
+  API_FAILURE
+  ASSET_FAILURE
+}
+
+/// A client health signal: a failed API call or asset load. No user or personal data.
+model HealthSignal {
+  id        String           @id @default(cuid())
+  kind      HealthSignalKind
+  path      String           @db.VarChar(200)
+  status    Int?
+  createdAt DateTime         @default(now()) @db.Timestamptz(3)
+
+  @@index([kind, createdAt])
 }
