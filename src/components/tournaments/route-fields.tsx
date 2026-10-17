@@ -1,11 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { MockupPicture } from "@/components/art/mockup-picture";
+import { Chip, Field, SelectField } from "@/components/ui";
+import { mockupGroup } from "@/lib/art/mockup-art";
 import { getRoute, listRoutes } from "@/lib/routes";
+import styles from "./create-tournament.module.css";
 
-const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
-const errorStyle = { color: "#b91c1c" } as const;
 const routes = listRoutes();
+
+/** Registry key of a destination's landmark art (`landmarks/landmark-07-ly-son` for `ly_son`). */
+function landmarkKey(slug: string): string | undefined {
+  const suffix = `-${slug.replace(/_/g, "-")}`;
+  return mockupGroup("landmarks").find((a) => a.key.endsWith(suffix))?.key;
+}
 
 type Props = {
   value: string;
@@ -19,60 +27,56 @@ export function RouteFields({ value, onChange, errors = {} }: Props) {
   const route = getRoute(value) ?? routes[0];
   // nameKey is `routes.<id>.<slug>`; this component's namespace is already `routes`.
   const name = (key: string) => t(key.replace(/^routes\./, ""));
-
-  const a11y = (field: "routeId" | "routeDistanceKm", extra = "") => {
-    const described = [extra, errors[field] && `${field}-error`].filter(Boolean).join(" ");
-    return {
-      "aria-invalid": errors[field] ? true : undefined,
-      "aria-describedby": described || undefined,
-      style: control,
-    };
-  };
-  const message = (field: "routeId" | "routeDistanceKm") =>
-    errors[field] && (
-      <span id={`${field}-error`} role="alert" style={errorStyle}>
-        {errors[field]}
-      </span>
-    );
+  const thumb = <span className={styles.thumb} aria-hidden="true" />;
 
   return (
     <>
-      <p>
-        <label htmlFor="routeId">{t("fields.route")}</label>
-        <select
-          id="routeId"
-          name="routeId"
-          value={route.id}
-          onChange={(e) => onChange(e.target.value)}
-          {...a11y("routeId")}
-        >
-          {routes.map((r) => (
-            <option key={r.id} value={r.id}>
-              {t(`${r.id}.name`)}
-            </option>
-          ))}
-        </select>
-        {message("routeId")}
-      </p>
-      <ol aria-label={t("destinations")}>
-        {route.destinations.map((d) => (
-          <li key={d.slug}>{name(d.nameKey) + (d.isFinish ? ` (${t("finish")})` : "")}</li>
+      <SelectField
+        id="routeId"
+        name="routeId"
+        label={t("fields.route")}
+        value={route.id}
+        onChange={(e) => onChange(e.target.value)}
+        error={errors.routeId}
+      >
+        {routes.map((r) => (
+          <option key={r.id} value={r.id}>
+            {t(`${r.id}.name`)}
+          </option>
         ))}
+      </SelectField>
+      <ol aria-label={t("destinations")} className={styles.stops}>
+        {route.destinations.map((d) => {
+          const key = landmarkKey(d.slug);
+          return (
+            <li key={d.slug} className={styles.stop}>
+              {key ? (
+                <MockupPicture artKey={key} alt="" className={styles.thumb} fallback={thumb} />
+              ) : (
+                thumb
+              )}
+              <span className={styles.stopName}>{name(d.nameKey)}</span>
+              {d.isFinish && (
+                <>
+                  <span className={styles.srOnly}> (</span>
+                  <Chip tone="gold">{t("finish")}</Chip>
+                  <span className={styles.srOnly}>)</span>
+                </>
+              )}
+            </li>
+          );
+        })}
       </ol>
-      <p>
-        <label htmlFor="routeDistanceKm">{t("fields.routeDistanceKm")}</label>
-        <input
-          id="routeDistanceKm"
-          name="routeDistanceKm"
-          type="text"
-          inputMode="decimal"
-          defaultValue=""
-          {...a11y("routeDistanceKm", "routeDistanceKm-hint")}
-        />
-        <small id="routeDistanceKm-hint">{t("distanceHint")}</small>
-        <br />
-        {message("routeDistanceKm")}
-      </p>
+      <Field
+        id="routeDistanceKm"
+        name="routeDistanceKm"
+        type="text"
+        inputMode="decimal"
+        defaultValue=""
+        label={t("fields.routeDistanceKm")}
+        hint={t("distanceHint")}
+        error={errors.routeDistanceKm}
+      />
     </>
   );
 }

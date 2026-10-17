@@ -2,6 +2,8 @@
   "create": {
     "title": "Tạo giải đấu",
     "submit": "Tạo bản nháp",
+    "infoHeading": "Thông tin giải đấu",
+    "routeHeading": "Lộ trình thi đấu",
     "fields": {
       "name": "Tên giải đấu",
       "description": "Mô tả",

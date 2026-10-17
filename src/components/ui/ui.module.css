@@ -129,6 +129,13 @@ a.dark {
 .control[aria-invalid="true"] {
   border-color: var(--sq-danger);
 }
+.hint {
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.onDark .hint {
+  color: var(--sq-text-on-dark-muted);
+}
 .error {
   font-size: var(--sq-text-sm);
   font-weight: var(--sq-weight-medium);

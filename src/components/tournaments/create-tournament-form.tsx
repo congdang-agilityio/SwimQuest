@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { RouteFields } from "./route-fields";
+import styles from "./create-tournament.module.css";
+import { Button, Card, Field, TextareaField, controlClass } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
 import { listRoutes } from "@/lib/routes";
 import { defaultSeasonTimes } from "@/lib/time/vn";
 import { parseTournamentDraft, type TournamentDraftErrors } from "@/lib/validation/tournament";
 
-const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
 const routes = listRoutes();
 type Season = { date: string; time: string };
 const empty: Season = { date: "", time: "" };
@@ -67,73 +68,82 @@ export function CreateTournamentForm() {
     setBusy(false);
   }
 
-  /** Props tying an input to its error message (aria-invalid / aria-describedby) and the message. */
-  const a11y = (field: keyof TournamentDraftErrors, extra = "") => {
-    const code = errors[field];
-    const described = [extra, code && `${field}-error`].filter(Boolean).join(" ");
-    return {
-      "aria-invalid": code ? true : undefined,
-      "aria-describedby": described || undefined,
-      style: control,
-    };
-  };
-  const message = (field: keyof TournamentDraftErrors): ReactNode =>
-    errors[field] && (
-      <span id={`${field}-error`} role="alert" style={{ color: "#b91c1c" }}>
-        {t(`errors.${errors[field]}`)}
-      </span>
-    );
+  /** Props tying a season input to the group's error message (aria-invalid / aria-describedby). */
+  const a11y = (field: "seasonStart" | "seasonEnd") => ({
+    "aria-invalid": errors[field] ? true : undefined,
+    "aria-describedby": errors[field] ? `${field}-error` : undefined,
+    className: controlClass,
+  });
+  const text = (field: keyof TournamentDraftErrors) =>
+    errors[field] ? t(`errors.${errors[field]}`) : undefined;
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-label={t("create.title")}>
-      <p>
-        <label htmlFor="name">{t("create.fields.name")}</label>
-        <input id="name" name="name" type="text" {...a11y("name")} />
-        {message("name")}
-      </p>
-      <p>
-        <label htmlFor="description">{t("create.fields.description")}</label>
-        <textarea id="description" name="description" rows={4} {...a11y("description")} />
-        {message("description")}
-      </p>
-      {(["seasonStart", "seasonEnd"] as const).map((key) => (
-        <fieldset key={key}>
-          <legend>{t(`create.fields.${key}`)}</legend>
-          <label htmlFor={`${key}Date`}>{t("create.fields.date")}</label>
-          <input
-            id={`${key}Date`}
-            type="date"
-            value={season[key].date}
-            onChange={(e) => setPart(key, { date: e.target.value })}
-            {...a11y(key)}
-          />
-          <label htmlFor={`${key}Time`}>{t("create.fields.timeVn")}</label>
-          <input
-            id={`${key}Time`}
-            type="time"
-            value={season[key].time}
-            onChange={(e) => setPart(key, { time: e.target.value })}
-            {...a11y(key)}
-          />
-          {message(key)}
-        </fieldset>
-      ))}
-      <RouteFields
-        value={routeId}
-        onChange={setRouteId}
-        errors={{
-          routeId: errors.routeId && t(`errors.${errors.routeId}`),
-          routeDistanceKm: errors.routeDistanceKm && t(`errors.${errors.routeDistanceKm}`),
-        }}
-      />
+    <form onSubmit={onSubmit} noValidate aria-label={t("create.title")} className={styles.form}>
+      <Card className={styles.card}>
+        <h2 className={styles.heading}>{t("create.infoHeading")}</h2>
+        <Field
+          id="name"
+          name="name"
+          type="text"
+          label={t("create.fields.name")}
+          error={text("name")}
+        />
+        {(["seasonStart", "seasonEnd"] as const).map((key) => (
+          <fieldset key={key} className={styles.group}>
+            <legend className={styles.legend}>{t(`create.fields.${key}`)}</legend>
+            <span className={styles.part}>
+              <label htmlFor={`${key}Date`} className={styles.label}>
+                {t("create.fields.date")}
+              </label>
+              <input
+                id={`${key}Date`}
+                type="date"
+                value={season[key].date}
+                onChange={(e) => setPart(key, { date: e.target.value })}
+                {...a11y(key)}
+              />
+            </span>
+            <span className={styles.part}>
+              <label htmlFor={`${key}Time`} className={styles.label}>
+                {t("create.fields.timeVn")}
+              </label>
+              <input
+                id={`${key}Time`}
+                type="time"
+                value={season[key].time}
+                onChange={(e) => setPart(key, { time: e.target.value })}
+                {...a11y(key)}
+              />
+            </span>
+            {errors[key] && (
+              <span id={`${key}-error`} role="alert" className={styles.error}>
+                {text(key)}
+              </span>
+            )}
+          </fieldset>
+        ))}
+        <TextareaField
+          id="description"
+          name="description"
+          rows={3}
+          label={t("create.fields.description")}
+          error={text("description")}
+        />
+        <h2 className={styles.heading}>{t("create.routeHeading")}</h2>
+        <RouteFields
+          value={routeId}
+          onChange={setRouteId}
+          errors={{ routeId: text("routeId"), routeDistanceKm: text("routeDistanceKm") }}
+        />
+      </Card>
       {failed && (
-        <p role="alert" style={{ color: "#b91c1c" }}>
+        <p role="alert" className={styles.formError}>
           {t("errors.GENERIC")}
         </p>
       )}
-      <button type="submit" disabled={busy} style={control}>
+      <Button type="submit" variant="primary" block disabled={busy}>
         {t("create.submit")}
-      </button>
+      </Button>
     </form>
   );
 }

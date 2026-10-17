@@ -2,6 +2,8 @@
   "create": {
     "title": "Create tournament",
     "submit": "Create draft",
+    "infoHeading": "Tournament details",
+    "routeHeading": "Race route",
     "fields": {
       "name": "Tournament name",
       "description": "Description",
