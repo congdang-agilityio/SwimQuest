@@ -38,6 +38,9 @@ export function ConsoleLinks({ tournamentId, published, hasInvite, canEdit = fal
             {t("console.links.invite")}
           </ButtonLink>
         )}
+        <ButtonLink href={`${base}/metrics`} variant="secondary" block>
+          {t("console.links.metrics")}
+        </ButtonLink>
         {published && (
           <ButtonLink href={`${base}/helpers`} variant="secondary" block>
             {t("manage.helpersLink")}

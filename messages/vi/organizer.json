@@ -81,7 +81,8 @@
     },
     "links": {
       "title": "Lối tắt ban tổ chức",
-      "invite": "Liên kết mời"
+      "invite": "Liên kết mời",
+      "metrics": "Số liệu"
     },
     "export": {
       "title": "Xuất dữ liệu",

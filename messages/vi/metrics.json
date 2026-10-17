@@ -1,0 +1,51 @@
+{
+  "title": "Số liệu",
+  "back": "Quay lại",
+  "intro": "Số liệu tổng hợp của giải. Chỉ có số lượng và tên đội: không có tên người chơi, email hay dữ liệu GPS.",
+  "tabsLabel": "Các mục số liệu",
+  "tabs": { "overview": "Tổng quan", "fairness": "Công bằng" },
+  "empty": {
+    "title": "Chưa có buổi bơi nào",
+    "body": "Số liệu sẽ xuất hiện khi người chơi tải lên những buổi bơi đầu tiên."
+  },
+  "participation": {
+    "title": "Mức tham gia",
+    "membersJoined": "Thành viên đã tham gia",
+    "weekly": {
+      "title": "Người bơi hoạt động theo tuần",
+      "hint": "Người chơi có buổi bơi đã xác minh từ 500 m trở lên, theo tuần (thứ Hai đến Chủ nhật, giờ Việt Nam).",
+      "week": "Tuần từ {date}",
+      "weekHeader": "Tuần",
+      "swimmers": "Người bơi",
+      "empty": "Mùa giải chưa bắt đầu."
+    },
+    "teams": {
+      "title": "Thành viên hoạt động của từng đội tuần này",
+      "team": "Đội",
+      "active": "Thành viên hoạt động",
+      "empty": "Chưa có đội nào."
+    }
+  },
+  "verification": {
+    "title": "Xác minh",
+    "hint": "Tỷ lệ kết quả bơi theo trạng thái.",
+    "status": "Trạng thái",
+    "count": "Kết quả",
+    "share": "Tỷ lệ",
+    "statuses": {
+      "VERIFIED": "Đã xác minh",
+      "FLAGGED": "Bị gắn cờ",
+      "REJECTED": "Bị từ chối",
+      "DUPLICATE": "Trùng lặp",
+      "DISPUTED": "Đang khiếu nại",
+      "OTHER": "Khác"
+    },
+    "shareValue": "{pct}%",
+    "median": {
+      "title": "Thời gian xử lý trung vị",
+      "minutes": "Một nửa số buổi bơi được quyết định trong vòng {minutes} phút sau khi tải lên.",
+      "hours": "Một nửa số buổi bơi được quyết định trong vòng {hours} giờ {minutes} phút sau khi tải lên.",
+      "none": "Chưa có buổi bơi nào được quyết định."
+    }
+  }
+}

@@ -1,0 +1,69 @@
+/* Organizer Metrics (S-80): figures as tables with numbers, bars are decoration only. */
+.stats {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+}
+.stat {
+  display: grid;
+  gap: var(--sq-space-1);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-white);
+}
+.statValue {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-2xl);
+  font-weight: var(--sq-weight-black);
+}
+.statLabel {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.hint {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.tableWrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
+}
+.table th,
+.table td {
+  padding: var(--sq-space-2);
+  border-bottom: 1px solid var(--sq-sky-100);
+  text-align: left;
+  vertical-align: middle;
+}
+.table th {
+  color: var(--sq-navy-800);
+  font-weight: var(--sq-weight-bold);
+}
+.table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.barCell {
+  min-width: 96px;
+  width: 40%;
+}
+.median {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-weight: var(--sq-weight-semibold);
+}
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
