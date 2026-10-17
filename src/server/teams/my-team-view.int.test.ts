@@ -105,6 +105,7 @@ describe("my team view", () => {
         isCaptain: true,
         level: 1,
         badges: [],
+        energyOrb: false,
       },
       {
         id: b.id,
@@ -116,6 +117,7 @@ describe("my team view", () => {
         isCaptain: false,
         level: 1,
         badges: [],
+        energyOrb: false,
       },
       {
         id: c.id,
@@ -127,6 +129,7 @@ describe("my team view", () => {
         isCaptain: false,
         level: 1,
         badges: [],
+        energyOrb: false,
       },
     ]);
     expect(view!.teamPoints).toBe(65);
