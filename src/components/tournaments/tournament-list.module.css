@@ -10,18 +10,27 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--sq-space-3);
 }
+/* Phones: the buttons take their own row so the title stays on one line. */
 .actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-basis: 100%;
   gap: var(--sq-space-2);
+}
+@media (min-width: 600px) {
+  .actions {
+    flex-basis: auto;
+    justify-content: flex-end;
+  }
 }
 .title {
   margin: 0;
+  white-space: nowrap;
   color: var(--sq-navy-800);
   font-size: var(--sq-text-xl);
   font-weight: var(--sq-weight-black);

@@ -39,5 +39,16 @@
       "notSwim": "Not a swim"
     },
     "open": "Open swim"
+  },
+  "sources": {
+    "title": "Activity sources",
+    "comingSoon": "Coming soon",
+    "note": "{source} is coming soon. For now, upload a GPX or FIT file above.",
+    "names": {
+      "strava": "Strava",
+      "garmin": "Garmin",
+      "coros": "Coros",
+      "suunto": "Suunto"
+    }
   }
 }
