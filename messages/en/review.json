@@ -63,5 +63,35 @@
     "title": "Results in this tournament",
     "empty": "This member has no results in this tournament yet.",
     "points": "{points} pts"
+  },
+  "status": {
+    "VERIFIED": "Verified",
+    "FLAGGED": "Flagged",
+    "REJECTED": "Rejected",
+    "DUPLICATE": "Duplicate",
+    "DISPUTED": "Disputed",
+    "REVOKED": "Revoked",
+    "RULE_MISSED": "Rule missed"
+  },
+  "resultTitle": "Swim result",
+  "notRevokable": "Only a verified result can be revoked. This one is: {status}.",
+  "revoke": {
+    "open": "Revoke",
+    "openFor": "Revoke the swim by {name}",
+    "confirmFor": "Revoke the swim by {name}",
+    "warning": "Revoking reverses the points and bonuses this swim earned in this tournament and recalculates the team's progress. It does not affect other tournaments. The player sees the reason.",
+    "reason": "Reason for the player",
+    "reasonHint": "Up to 300 characters.",
+    "reasonRequired": "Enter a reason to revoke this swim.",
+    "confirm": "Revoke swim",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "done": "Revoked. Points reversed and progress recalculated.",
+    "errors": {
+      "notRevokable": "This swim can no longer be revoked. Updating...",
+      "forbidden": "You cannot revoke swims of this tournament.",
+      "failed": "Could not revoke the swim. Try again.",
+      "network": "No connection. Try again."
+    }
   }
 }

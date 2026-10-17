@@ -63,5 +63,35 @@
     "title": "Kết quả trong giải đấu này",
     "empty": "Thành viên này chưa có kết quả nào trong giải đấu.",
     "points": "{points} điểm"
+  },
+  "status": {
+    "VERIFIED": "Đã xác minh",
+    "FLAGGED": "Bị gắn cờ",
+    "REJECTED": "Đã từ chối",
+    "DUPLICATE": "Trùng lặp",
+    "DISPUTED": "Đang khiếu nại",
+    "REVOKED": "Đã thu hồi",
+    "RULE_MISSED": "Không đạt luật"
+  },
+  "resultTitle": "Kết quả lượt bơi",
+  "notRevokable": "Chỉ thu hồi được kết quả đã xác minh. Kết quả này: {status}.",
+  "revoke": {
+    "open": "Thu hồi",
+    "openFor": "Thu hồi lượt bơi của {name}",
+    "confirmFor": "Thu hồi lượt bơi của {name}",
+    "warning": "Thu hồi sẽ hoàn lại điểm và thưởng lượt bơi này đã nhận trong giải này và tính lại tiến độ của đội. Các giải khác không bị ảnh hưởng. Người chơi sẽ thấy lý do.",
+    "reason": "Lý do gửi người chơi",
+    "reasonHint": "Tối đa 300 ký tự.",
+    "reasonRequired": "Nhập lý do để thu hồi lượt bơi này.",
+    "confirm": "Thu hồi lượt bơi",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "done": "Đã thu hồi. Điểm đã được hoàn lại và tiến độ được tính lại.",
+    "errors": {
+      "notRevokable": "Lượt bơi này không còn thu hồi được. Đang cập nhật...",
+      "forbidden": "Bạn không thể thu hồi lượt bơi của giải này.",
+      "failed": "Không thu hồi được lượt bơi. Hãy thử lại.",
+      "network": "Mất kết nối. Hãy thử lại."
+    }
   }
 }
