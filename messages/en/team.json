@@ -1,6 +1,7 @@
 {
   "captain": "Captain",
   "progress": "Progress: {percent}%",
+  "badgesSummary": "Badges ({count})",
   "points": "{points} points",
   "members": "Members: {count} / {limit}",
   "addSwim": "Add swim",

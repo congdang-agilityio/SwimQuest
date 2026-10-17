@@ -1,4 +1,7 @@
+import type { BadgeKind } from "@prisma/client";
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
+import { canSeeField, resolvePrivacy, type Relation } from "@/lib/privacy";
+import { listMembersBadges } from "@/server/badges/list";
 import { db } from "@/server/db";
 import { getSelectedMembership } from "@/server/home/selected-tournament";
 import { getPlayerTotals, getTeamPoints } from "@/server/scoring/team-points";
@@ -14,6 +17,8 @@ export type MyTeamMember = PublicPlayer & {
   points: number;
   isCaptain: boolean;
   level: number;
+  /** This tournament's active badges; empty when none or when the member keeps them private. */
+  badges: { id: string; kind: BadgeKind }[];
 };
 
 export type MyTeamView = {
@@ -49,21 +54,31 @@ export async function getMyTeamView(
   const members = await db.teamMember.findMany({
     where: { teamId: team.id, tournamentId: tournament.id, status: "ACTIVE" },
     orderBy: [{ joinedAt: "asc" }, { id: "asc" }],
-    select: { user: { select: PUBLIC_PLAYER_SELECT } },
+    select: { user: { select: { ...PUBLIC_PLAYER_SELECT, privacy: true } } },
   });
   const totals = await getPlayerTotals(
     tournament.id,
     members.map((m) => m.user.id),
   );
   const levels = await getLevels(members.map((m) => m.user.id));
+  const badgeMap = await listMembersBadges(
+    tournament.id,
+    members.map((m) => m.user.id),
+  );
   const roster = members.map(({ user }): MyTeamMember => {
     const t = totals.get(user.id) ?? { points: 0, countedM: 0 };
+    // The viewer is on this team, so every other member is a teammate (privacy: badges).
+    const relation: Relation = user.id === userId ? "SELF" : "TEAMMATE";
+    const showBadges = canSeeField(resolvePrivacy(user.privacy), "badges", relation);
     return {
       ...toPublicPlayer(user),
       verifiedKm: t.countedM / 1000,
       points: t.points,
       isCaptain: user.id === team.captainUserId,
       level: levels.get(user.id)?.level ?? 1,
+      badges: showBadges
+        ? (badgeMap.get(user.id) ?? []).map((b) => ({ id: b.id, kind: b.kind }))
+        : [],
     };
   });
   // By PointsEntry.teamId (#206): a removed member's swims stay with the team.
