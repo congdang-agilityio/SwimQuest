@@ -1,0 +1,15 @@
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-1);
+}
+.badge img {
+  object-fit: contain;
+}
+.name {
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+  text-align: center;
+}

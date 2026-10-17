@@ -74,5 +74,23 @@
     "BREASTSTROKE": "Breaststroke",
     "BACKSTROKE": "Backstroke",
     "BUTTERFLY": "Butterfly"
+  },
+  "stats": {
+    "title": "Verified stats",
+    "swims": "Swims",
+    "distance": "Distance",
+    "km": "km",
+    "activeDays": "Active days",
+    "tournaments": "Tournaments",
+    "teams": "Teams",
+    "badges": "Badges",
+    "progressTitle": "Route 01 progress",
+    "progressLabel": "Route 01 progress of {team}",
+    "progressCaption": "{team}: {reached} / {total} km"
+  },
+  "badges": {
+    "title": "Badges",
+    "empty": "No badges yet. Join a tournament to earn your first one.",
+    "reason": "Reason: {reason}"
   }
 }

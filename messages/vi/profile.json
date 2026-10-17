@@ -74,5 +74,23 @@
     "BREASTSTROKE": "Bơi ếch",
     "BACKSTROKE": "Bơi ngửa",
     "BUTTERFLY": "Bơi bướm"
+  },
+  "stats": {
+    "title": "Thành tích đã xác minh",
+    "swims": "Lần bơi",
+    "distance": "Quãng đường",
+    "km": "km",
+    "activeDays": "Ngày hoạt động",
+    "tournaments": "Giải đấu",
+    "teams": "Đội",
+    "badges": "Huy hiệu",
+    "progressTitle": "Tiến độ Route 01",
+    "progressLabel": "Tiến độ Route 01 của {team}",
+    "progressCaption": "{team}: {reached} / {total} km"
+  },
+  "badges": {
+    "title": "Huy hiệu",
+    "empty": "Chưa có huy hiệu. Hãy tham gia giải đấu để nhận huy hiệu đầu tiên.",
+    "reason": "Lý do: {reason}"
   }
 }
