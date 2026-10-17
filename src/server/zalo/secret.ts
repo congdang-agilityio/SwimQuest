@@ -1,10 +1,10 @@
-import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
+import { createCipheriv, createDecipheriv, hkdfSync, randomBytes } from "node:crypto";
 
 export type ZaloSecretErrorCode = "ZALO_NOT_CONFIGURED" | "ZALO_KEY_UNREADABLE";
 
 const MESSAGES: Record<ZaloSecretErrorCode, string> = {
   ZALO_NOT_CONFIGURED:
-    "ZALO_KEY_SECRET is missing or malformed (expected base64 of 32 bytes, e.g. openssl rand -base64 32)",
+    "Neither ZALO_KEY_SECRET (base64 of 32 bytes) nor CRON_SECRET is usable as the bot-key secret",
   ZALO_KEY_UNREADABLE: "A stored Zalo bot key could not be decrypted",
 };
 
@@ -25,16 +25,28 @@ const TAG_BYTES = 16;
 /** 32 bytes in standard base64 is exactly 43 characters plus one "=". */
 const SECRET_SHAPE = /^[A-Za-z0-9+/]{43}=$/;
 
-/** Reads `ZALO_KEY_SECRET` (base64, 32 bytes) at call time; fails closed when it is not usable. */
+/** HKDF info label for the key derived from `CRON_SECRET`; changing it orphans stored keys. */
+const HKDF_INFO = "swimquest:zalo-bot-key:v1";
+
+/**
+ * The 32-byte encryption key, read at call time and failing closed. `ZALO_KEY_SECRET` (base64,
+ * 32 bytes) wins when set, so keys sealed with it keep working. Otherwise the key is derived
+ * with HKDF-SHA256 from `CRON_SECRET`. Only when neither is usable is Zalo "not configured".
+ */
 function secretKey(): Buffer {
   const raw = process.env.ZALO_KEY_SECRET?.trim() ?? "";
-  if (!SECRET_SHAPE.test(raw)) throw new ZaloSecretError("ZALO_NOT_CONFIGURED");
-  const key = Buffer.from(raw, "base64");
-  if (key.length !== 32) throw new ZaloSecretError("ZALO_NOT_CONFIGURED");
-  return key;
+  if (raw) {
+    if (!SECRET_SHAPE.test(raw)) throw new ZaloSecretError("ZALO_NOT_CONFIGURED");
+    const key = Buffer.from(raw, "base64");
+    if (key.length !== 32) throw new ZaloSecretError("ZALO_NOT_CONFIGURED");
+    return key;
+  }
+  const cron = process.env.CRON_SECRET?.trim() ?? "";
+  if (!cron) throw new ZaloSecretError("ZALO_NOT_CONFIGURED");
+  return Buffer.from(hkdfSync("sha256", cron, Buffer.alloc(0), HKDF_INFO, 32));
 }
 
-/** Whether `ZALO_KEY_SECRET` is usable, so the settings page can say "not set up" up front. */
+/** Whether an encryption key is available, so the settings page can say "not set up" up front. */
 export function isZaloConfigured(): boolean {
   try {
     secretKey();
