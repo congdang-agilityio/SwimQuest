@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { LifecycleTournament } from "@/lib/tournaments/lifecycle";
 import en from "../../../../../../messages/en/organizer.json";
 
 const state = vi.hoisted(() => ({ headers: new Headers(), tournament: {} as object }));
@@ -15,6 +16,10 @@ vi.mock("next-intl/server", () => ({
   getTranslations: async () => (key: string) =>
     key.split(".").reduce<unknown>((node, part) => (node as Record<string, unknown>)[part], en),
 }));
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) =>
+    key.split(".").reduce<unknown>((node, part) => (node as Record<string, unknown>)[part], en),
+}));
 vi.mock("@/server/auth/current-user", () => ({
   requireUser: async () => ({ id: "u1", displayName: "U", isPlatformAdmin: false }),
 }));
@@ -23,6 +28,27 @@ vi.mock("@/server/auth/roles", () => ({
   NotFoundError: class extends Error {},
   requireOrganizer: async () => state.tournament,
 }));
+vi.mock("@/server/organizer/console", async () => {
+  const { effectiveStatus } = await import("@/lib/tournaments/lifecycle");
+  return {
+    getConsoleOverview: async (_u: string, _t: string, now: Date) => {
+      const t = state.tournament as LifecycleTournament;
+      return {
+        status: effectiveStatus({ ...t, startChoiceDeadlineAt: null }, now),
+        timeline: {
+          publishedAt: null,
+          seasonStartAt: t.seasonStartAt,
+          startChoiceLocksAt: t.seasonStartAt,
+          seasonEndAt: t.seasonEndAt,
+          uploadWindowEndsAt: t.seasonEndAt,
+        },
+        actions: { canPublish: t.status === "DRAFT", canArchive: false },
+        startsLocked: false,
+        starts: [],
+      };
+    },
+  };
+});
 vi.mock("@/server/teams/manage", () => ({
   listTeamsWithCounts: async () => ({ teams: [], capacity: 5 }),
 }));
