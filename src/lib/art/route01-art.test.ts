@@ -13,6 +13,9 @@ describe("ROUTE01_ART", () => {
   it("points every entry at a file that exists under public/", () => {
     for (const art of ROUTE01_ART) {
       expect(existsSync(path.join(process.cwd(), "public", art.path)), art.path).toBe(true);
+      if (art.fallbackPath) {
+        expect(existsSync(path.join(process.cwd(), "public", art.fallbackPath))).toBe(true);
+      }
     }
   });
 
@@ -25,7 +28,8 @@ describe("ROUTE01_ART", () => {
   });
 
   it("looks up landmarks by slug and ships by tier", () => {
-    expect(landmarkArt("ly_son")?.path).toBe("/art/route01/landmarks/ly_son.svg");
+    expect(landmarkArt("ly_son")?.path).toBe("/art/mockup/landmarks/landmark-07-ly-son.png");
+    expect(landmarkArt("ly_son")?.fallbackPath).toBe("/art/route01/landmarks/ly_son.svg");
     expect(shipArt(2)?.path).toBe("/art/ships/ship-tier-2.svg");
     expect(landmarkArt("nowhere")).toBeUndefined();
     expect(shipArt(9)).toBeUndefined();

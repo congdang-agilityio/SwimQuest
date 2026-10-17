@@ -1,0 +1,128 @@
+[
+  {
+    "key": "landmarks/landmark-01-non-nuoc",
+    "file": "/art/mockup/landmarks/landmark-01-non-nuoc.png",
+    "webp": "/art/mockup/landmarks/landmark-01-non-nuoc.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      1925,
+      68,
+      157,
+      146
+    ],
+    "alt": {
+      "vi": "Bãi Non Nước",
+      "en": "Non Nuoc Beach"
+    }
+  },
+  {
+    "key": "landmarks/landmark-02-son-thuy",
+    "file": "/art/mockup/landmarks/landmark-02-son-thuy.png",
+    "webp": "/art/mockup/landmarks/landmark-02-son-thuy.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      2077,
+      57,
+      159,
+      150
+    ],
+    "alt": {
+      "vi": "Bãi Sơn Thủy",
+      "en": "Son Thuy Beach"
+    }
+  },
+  {
+    "key": "landmarks/landmark-03-pham-van-dong",
+    "file": "/art/mockup/landmarks/landmark-03-pham-van-dong.png",
+    "webp": "/art/mockup/landmarks/landmark-03-pham-van-dong.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      2240,
+      68,
+      159,
+      135
+    ],
+    "alt": {
+      "vi": "Bãi Phạm Văn Đồng",
+      "en": "Pham Van Dong Beach"
+    }
+  },
+  {
+    "key": "landmarks/landmark-04-man-thai",
+    "file": "/art/mockup/landmarks/landmark-04-man-thai.png",
+    "webp": "/art/mockup/landmarks/landmark-04-man-thai.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      2401,
+      47,
+      164,
+      159
+    ],
+    "alt": {
+      "vi": "Bãi Mân Thái",
+      "en": "Man Thai Beach"
+    }
+  },
+  {
+    "key": "landmarks/landmark-05-hon-sup",
+    "file": "/art/mockup/landmarks/landmark-05-hon-sup.png",
+    "webp": "/art/mockup/landmarks/landmark-05-hon-sup.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      1928,
+      263,
+      212,
+      184
+    ],
+    "alt": {
+      "vi": "Hòn Sụp",
+      "en": "Hon Sup"
+    }
+  },
+  {
+    "key": "landmarks/landmark-06-cu-lao-cham",
+    "file": "/art/mockup/landmarks/landmark-06-cu-lao-cham.png",
+    "webp": "/art/mockup/landmarks/landmark-06-cu-lao-cham.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      2143,
+      278,
+      216,
+      177
+    ],
+    "alt": {
+      "vi": "Cù Lao Chàm",
+      "en": "Cu Lao Cham"
+    }
+  },
+  {
+    "key": "landmarks/landmark-07-ly-son",
+    "file": "/art/mockup/landmarks/landmark-07-ly-son.png",
+    "webp": "/art/mockup/landmarks/landmark-07-ly-son.webp",
+    "width": 384,
+    "height": 288,
+    "source": "sheet-b-large",
+    "box": [
+      2356,
+      262,
+      216,
+      194
+    ],
+    "alt": {
+      "vi": "Lý Sơn",
+      "en": "Ly Son"
+    }
+  }
+]

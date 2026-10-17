@@ -1,0 +1,56 @@
+[
+  {
+    "key": "brand/logo",
+    "file": "/art/mockup/brand/logo.png",
+    "webp": "/art/mockup/brand/logo.webp",
+    "width": 1024,
+    "height": 707,
+    "source": "sheet-a-large",
+    "box": [
+      31,
+      8,
+      543,
+      365
+    ],
+    "alt": {
+      "vi": "SwimQuest – Hải trình mùa đông",
+      "en": "SwimQuest – Winter Voyage"
+    }
+  },
+  {
+    "key": "brand/logo-mark",
+    "file": "/art/mockup/brand/logo-mark.png",
+    "webp": "/art/mockup/brand/logo-mark.webp",
+    "width": 512,
+    "height": 512,
+    "source": "sheet-b-large",
+    "box": [
+      2092,
+      1383,
+      217,
+      162
+    ],
+    "alt": {
+      "vi": "Biểu tượng sóng SwimQuest",
+      "en": "SwimQuest wave mark"
+    }
+  },
+  {
+    "key": "brand/app-icon",
+    "file": "/art/mockup/brand/app-icon.png",
+    "webp": "/art/mockup/brand/app-icon.webp",
+    "width": 512,
+    "height": 512,
+    "source": "sheet-a-large",
+    "box": [
+      178,
+      363,
+      255,
+      254
+    ],
+    "alt": {
+      "vi": "Biểu tượng ứng dụng SwimQuest",
+      "en": "SwimQuest app icon"
+    }
+  }
+]

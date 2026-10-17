@@ -1,10 +1,24 @@
 .hero {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 400 / 260;
+  aspect-ratio: 16 / 9;
   border-radius: var(--sq-radius-xl);
   background: var(--sq-gradient-sky);
   box-shadow: var(--sq-shadow-raised);
+}
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The vector fallback fills the hero box instead of drawing a second card. */
+.fill {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  border-radius: 0;
+  box-shadow: none;
 }
 .scene {
   display: block;
