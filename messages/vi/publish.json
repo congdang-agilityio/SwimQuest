@@ -41,6 +41,15 @@
     "copied": "Đã sao chép",
     "copyFailed": "Không sao chép được. Hãy chọn liên kết và sao chép thủ công.",
     "share": "Chia sẻ",
-    "shareText": "Tham gia giải SwimQuest của tôi: {name}"
+    "shareText": "Tham gia giải SwimQuest của tôi: {name}",
+    "offHint": "Liên kết đang tắt. Không ai tham gia được bằng liên kết này cho đến khi bạn bật lại.",
+    "switchOff": "Tắt liên kết",
+    "switchOn": "Bật liên kết",
+    "replace": "Đổi liên kết",
+    "replaceConfirm": "Đổi liên kết? Liên kết cũ và các liên kết đội trưởng sẽ không dùng được nữa. Người chơi đã vào đội vẫn giữ nguyên.",
+    "replaceYes": "Đổi ngay",
+    "replacing": "Đang đổi...",
+    "cancel": "Hủy",
+    "changeFailed": "Không thực hiện được thay đổi. Vui lòng thử lại."
   }
 }

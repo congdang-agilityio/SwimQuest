@@ -108,6 +108,8 @@ export default async function ManageTournamentPage({
       {tournament.status === "DRAFT" && <PublishPanel tournamentId={tournament.id} />}
       {showInvite && origin && (
         <InviteLink
+          tournamentId={tournament.id}
+          enabled={tournament.inviteEnabled}
           url={`${origin}/join/${tournament.inviteToken}`}
           tournamentName={tournament.name}
         />

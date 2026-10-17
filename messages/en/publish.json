@@ -41,6 +41,15 @@
     "copied": "Copied",
     "copyFailed": "Could not copy. Select the link and copy it by hand.",
     "share": "Share",
-    "shareText": "Join my SwimQuest tournament: {name}"
+    "shareText": "Join my SwimQuest tournament: {name}",
+    "offHint": "The link is switched off. Nobody can join with it until you switch it back on.",
+    "switchOff": "Switch off",
+    "switchOn": "Switch on",
+    "replace": "Replace link",
+    "replaceConfirm": "Replace the link? The old link and any captain team links will stop working. Players already in a team stay.",
+    "replaceYes": "Replace",
+    "replacing": "Replacing...",
+    "cancel": "Cancel",
+    "changeFailed": "The change did not go through. Please try again."
   }
 }

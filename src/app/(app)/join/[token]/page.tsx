@@ -43,6 +43,19 @@ export default async function JoinPage({
     );
   }
   const { tournament, myTeam, joiningOpen } = view;
+  if (view.linkState === "OFF" && !myTeam) {
+    return (
+      <main className={styles.screen}>
+        <div className={styles.headerBand}>
+          <ScreenHeader title={t("offTitle")} backHref="/" backLabel={tCommon("back")} />
+        </div>
+        <Card role="status" className={styles.notice}>
+          <MockupPicture artKey="items/message-bottle" alt="" className={styles.noticeArt} />
+          <p>{t("offBody")}</p>
+        </Card>
+      </main>
+    );
+  }
   const freeTeams = view.teams.map((x) => ({
     id: x.id,
     name: x.name,

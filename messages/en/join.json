@@ -16,5 +16,7 @@
   "goToTeam": "Go to My Team",
   "failed": "Could not join. Please try again.",
   "eligibility": "Who can join",
-  "details": "Details and rules"
+  "details": "Details and rules",
+  "offTitle": "This link no longer works",
+  "offBody": "The organizer switched this invite link off. Ask them for a new one."
 }
