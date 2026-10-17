@@ -42,9 +42,10 @@ async function changeStatus(
   change: Change,
 ): Promise<AccountStatusResult> {
   return db.$transaction(async (tx) => {
-    // Lock every admin row in id order first (as setPlatformAdmin does), then check the caller
-    // against that locked set: admin-state changes serialize on the same rows, so two admins
-    // suspending each other at once cannot leave the platform without an active admin.
+    // Lock every admin row in id order first (setPlatformAdmin uses the same order, so they
+    // cannot deadlock), then check the caller against that
+    // locked set: admin-state changes serialize on the same rows, so two admins suspending each
+    // other at once cannot leave the platform without an active admin.
     const admins = await tx.$queryRaw<{ id: string; status: UserStatus }[]>`
       SELECT "id", "status" FROM "User" WHERE "isPlatformAdmin" = true ORDER BY "id" FOR UPDATE`;
     const actorId = typeof actor?.id === "string" ? actor.id : "";
