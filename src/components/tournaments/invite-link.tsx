@@ -7,7 +7,7 @@ import { clientFetch } from "@/lib/http/client-fetch";
 import styles from "./manage.module.css";
 
 /** Copies text with the Clipboard API, falling back to a hidden textarea and `execCommand`. */
-async function copyText(text: string): Promise<boolean> {
+export async function copyText(text: string): Promise<boolean> {
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);

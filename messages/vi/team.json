@@ -66,5 +66,16 @@
     "title": "Bạn đã bị gỡ khỏi {team}",
     "beforeStart": "Ban tổ chức đã gỡ bạn khỏi {team} trong {tournament}. Bạn có thể chọn đội khác còn chỗ.",
     "afterStart": "Ban tổ chức đã gỡ bạn khỏi {team} trong {tournament}. Bạn đã rời giải đấu và không thể tham gia lại bằng liên kết."
+  },
+  "invite": {
+    "open": "Mời thành viên",
+    "title": "Mời vào đội",
+    "hint": "Gửi liên kết này. Liên kết mở giải đấu và chọn sẵn đội của bạn.",
+    "label": "Liên kết mời vào đội",
+    "copy": "Sao chép liên kết",
+    "copied": "Đã sao chép liên kết",
+    "copyFailed": "Không sao chép được. Hãy chọn liên kết và sao chép thủ công.",
+    "share": "Chia sẻ",
+    "shareText": "Tham gia đội {team} của mình trên SwimQuest"
   }
 }

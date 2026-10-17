@@ -66,5 +66,16 @@
     "title": "You were removed from {team}",
     "beforeStart": "The organizer removed you from {team} in {tournament}. You can choose another team with room.",
     "afterStart": "The organizer removed you from {team} in {tournament}. You have left the tournament and cannot join it again through a link."
+  },
+  "invite": {
+    "open": "Invite members",
+    "title": "Invite to team",
+    "hint": "Send this link. It opens the tournament with your team already chosen.",
+    "label": "Team invite link",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "copyFailed": "Could not copy. Select the link and copy it by hand.",
+    "share": "Share",
+    "shareText": "Join my team {team} on SwimQuest"
   }
 }

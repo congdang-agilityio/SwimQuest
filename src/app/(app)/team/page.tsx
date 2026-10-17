@@ -18,6 +18,7 @@ import { getMyPoints } from "@/server/scoring/my-points";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 import { getLastRemoval, getMyTeamView } from "@/server/teams/my-team-view";
 import { TeamHeader } from "@/components/teams/team-header";
+import { CaptainInvite } from "@/components/teams/captain-invite";
 import { LeaveSwitchActions } from "@/components/teams/leave-switch-actions";
 import { TeamRoster } from "@/components/teams/team-roster";
 
@@ -74,6 +75,7 @@ export default async function TeamPage() {
                   {tTeam("addSwim")}
                 </ButtonLink>
               </div>
+              <CaptainInvite userId={user.id} />
               <LeaveSwitchActions
                 teamId={membership.team.id}
                 teamName={view.team.name}
