@@ -30,7 +30,8 @@ describe("ROUTE01_ART", () => {
   it("looks up landmarks by slug and ships by tier", () => {
     expect(landmarkArt("ly_son")?.path).toBe("/art/mockup/landmarks/landmark-07-ly-son.png");
     expect(landmarkArt("ly_son")?.fallbackPath).toBe("/art/route01/landmarks/ly_son.svg");
-    expect(shipArt(2)?.path).toBe("/art/ships/ship-tier-2.svg");
+    expect(shipArt(2)?.path).toBe("/art/mockup/ships/ship-tier-2.png");
+    expect(shipArt(2)?.fallbackPath).toBe("/art/ships/ship-tier-2.svg");
     expect(landmarkArt("nowhere")).toBeUndefined();
     expect(shipArt(9)).toBeUndefined();
   });

@@ -1,0 +1,218 @@
+[
+  {
+    "key": "ships/ship-tier-1",
+    "file": "/art/mockup/ships/ship-tier-1.png",
+    "webp": "/art/mockup/ships/ship-tier-1.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1341,
+      71,
+      152,
+      276
+    ],
+    "alt": {
+      "vi": "Tàu cấp 1",
+      "en": "Ship tier 1"
+    }
+  },
+  {
+    "key": "ships/ship-tier-2",
+    "file": "/art/mockup/ships/ship-tier-2.png",
+    "webp": "/art/mockup/ships/ship-tier-2.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1498,
+      71,
+      126,
+      273
+    ],
+    "alt": {
+      "vi": "Tàu cấp 2",
+      "en": "Ship tier 2"
+    }
+  },
+  {
+    "key": "ships/ship-tier-3",
+    "file": "/art/mockup/ships/ship-tier-3.png",
+    "webp": "/art/mockup/ships/ship-tier-3.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1623,
+      72,
+      138,
+      273
+    ],
+    "alt": {
+      "vi": "Tàu cấp 3",
+      "en": "Ship tier 3"
+    }
+  },
+  {
+    "key": "ships/ship-tier-4",
+    "file": "/art/mockup/ships/ship-tier-4.png",
+    "webp": "/art/mockup/ships/ship-tier-4.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1766,
+      71,
+      130,
+      275
+    ],
+    "alt": {
+      "vi": "Tàu cấp 4",
+      "en": "Ship tier 4"
+    }
+  },
+  {
+    "key": "ships/ship-tier-1-small",
+    "file": "/art/mockup/ships/ship-tier-1-small.png",
+    "webp": "/art/mockup/ships/ship-tier-1-small.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1351,
+      397,
+      59,
+      117
+    ],
+    "alt": {
+      "vi": "Tàu cấp 1 thu nhỏ",
+      "en": "Small ship, tier 1"
+    }
+  },
+  {
+    "key": "ships/ship-tier-1-small-alt",
+    "file": "/art/mockup/ships/ship-tier-1-small-alt.png",
+    "webp": "/art/mockup/ships/ship-tier-1-small-alt.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1420,
+      397,
+      58,
+      114
+    ],
+    "alt": {
+      "vi": "Tàu cấp 1 thu nhỏ (biến thể)",
+      "en": "Small ship, tier 1 (variant)"
+    }
+  },
+  {
+    "key": "ships/ship-tier-2-small",
+    "file": "/art/mockup/ships/ship-tier-2-small.png",
+    "webp": "/art/mockup/ships/ship-tier-2-small.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1528,
+      395,
+      63,
+      119
+    ],
+    "alt": {
+      "vi": "Tàu cấp 2 thu nhỏ",
+      "en": "Small ship, tier 2"
+    }
+  },
+  {
+    "key": "ships/ship-tier-3-small",
+    "file": "/art/mockup/ships/ship-tier-3-small.png",
+    "webp": "/art/mockup/ships/ship-tier-3-small.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1660,
+      397,
+      67,
+      117
+    ],
+    "alt": {
+      "vi": "Tàu cấp 3 thu nhỏ",
+      "en": "Small ship, tier 3"
+    }
+  },
+  {
+    "key": "ships/ship-tier-4-small",
+    "file": "/art/mockup/ships/ship-tier-4-small.png",
+    "webp": "/art/mockup/ships/ship-tier-4-small.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1799,
+      405,
+      67,
+      110
+    ],
+    "alt": {
+      "vi": "Tàu cấp 4 thu nhỏ",
+      "en": "Small ship, tier 4"
+    }
+  },
+  {
+    "key": "ships/boat-team-blue",
+    "file": "/art/mockup/ships/boat-team-blue.png",
+    "webp": "/art/mockup/ships/boat-team-blue.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1487,
+      97,
+      228,
+      377
+    ],
+    "alt": {
+      "vi": "Thuyền đội xanh dương",
+      "en": "Blue team boat"
+    }
+  },
+  {
+    "key": "ships/boat-team-red",
+    "file": "/art/mockup/ships/boat-team-red.png",
+    "webp": "/art/mockup/ships/boat-team-red.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1673,
+      88,
+      239,
+      418
+    ],
+    "alt": {
+      "vi": "Thuyền đội đỏ",
+      "en": "Red team boat"
+    }
+  },
+  {
+    "key": "ships/boat-team-purple",
+    "file": "/art/mockup/ships/boat-team-purple.png",
+    "webp": "/art/mockup/ships/boat-team-purple.webp",
+    "width": 384,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1893,
+      102,
+      201,
+      369
+    ],
+    "alt": {
+      "vi": "Thuyền đội tím",
+      "en": "Purple team boat"
+    }
+  }
+]

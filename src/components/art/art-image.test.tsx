@@ -9,7 +9,8 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const art = shipArt(1)!;
+// An asset without a vector fallback, so a load error goes straight to the caller's fallback.
+const art = { ...shipArt(1)!, fallbackPath: undefined };
 
 describe("ArtImage", () => {
   it("renders the image with the given alt", () => {

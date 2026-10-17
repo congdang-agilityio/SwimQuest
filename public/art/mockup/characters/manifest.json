@@ -1,0 +1,218 @@
+[
+  {
+    "key": "characters/portrait-blue-cap",
+    "file": "/art/mockup/characters/portrait-blue-cap.png",
+    "webp": "/art/mockup/characters/portrait-blue-cap.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      574,
+      68,
+      199,
+      219
+    ],
+    "alt": {
+      "vi": "Chân dung vận động viên nam đội mũ bơi xanh dương",
+      "en": "Portrait of a male swimmer in a blue cap"
+    }
+  },
+  {
+    "key": "characters/portrait-pink-cap",
+    "file": "/art/mockup/characters/portrait-pink-cap.png",
+    "webp": "/art/mockup/characters/portrait-pink-cap.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      759,
+      97,
+      174,
+      190
+    ],
+    "alt": {
+      "vi": "Chân dung vận động viên nữ đội mũ bơi hồng",
+      "en": "Portrait of a female swimmer in a pink cap"
+    }
+  },
+  {
+    "key": "characters/portrait-green-cap",
+    "file": "/art/mockup/characters/portrait-green-cap.png",
+    "webp": "/art/mockup/characters/portrait-green-cap.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      917,
+      83,
+      179,
+      204
+    ],
+    "alt": {
+      "vi": "Chân dung vận động viên đội mũ bơi xanh lá",
+      "en": "Portrait of a swimmer in a green cap"
+    }
+  },
+  {
+    "key": "characters/portrait-yellow-cap",
+    "file": "/art/mockup/characters/portrait-yellow-cap.png",
+    "webp": "/art/mockup/characters/portrait-yellow-cap.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      1084,
+      96,
+      242,
+      191
+    ],
+    "alt": {
+      "vi": "Chân dung vận động viên nữ đội mũ bơi vàng",
+      "en": "Portrait of a female swimmer in a yellow cap"
+    }
+  },
+  {
+    "key": "characters/portrait-senior",
+    "file": "/art/mockup/characters/portrait-senior.png",
+    "webp": "/art/mockup/characters/portrait-senior.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      1292,
+      100,
+      201,
+      187
+    ],
+    "alt": {
+      "vi": "Chân dung vận động viên lớn tuổi",
+      "en": "Portrait of a senior swimmer"
+    }
+  },
+  {
+    "key": "characters/swimmer-male-basic",
+    "file": "/art/mockup/characters/swimmer-male-basic.png",
+    "webp": "/art/mockup/characters/swimmer-male-basic.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      573,
+      59,
+      77,
+      225
+    ],
+    "alt": {
+      "vi": "Vận động viên nam - cơ bản",
+      "en": "Male swimmer, basic suit"
+    }
+  },
+  {
+    "key": "characters/swimmer-male-basic-alt",
+    "file": "/art/mockup/characters/swimmer-male-basic-alt.png",
+    "webp": "/art/mockup/characters/swimmer-male-basic-alt.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      680,
+      59,
+      71,
+      225
+    ],
+    "alt": {
+      "vi": "Vận động viên nam - cơ bản (biến thể)",
+      "en": "Male swimmer, basic suit (variant)"
+    }
+  },
+  {
+    "key": "characters/swimmer-female-basic",
+    "file": "/art/mockup/characters/swimmer-female-basic.png",
+    "webp": "/art/mockup/characters/swimmer-female-basic.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      805,
+      62,
+      79,
+      221
+    ],
+    "alt": {
+      "vi": "Vận động viên nữ - cơ bản",
+      "en": "Female swimmer, basic suit"
+    }
+  },
+  {
+    "key": "characters/swimmer-wetsuit",
+    "file": "/art/mockup/characters/swimmer-wetsuit.png",
+    "webp": "/art/mockup/characters/swimmer-wetsuit.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      924,
+      60,
+      76,
+      224
+    ],
+    "alt": {
+      "vi": "Vận động viên mặc wetsuit",
+      "en": "Swimmer in a wetsuit"
+    }
+  },
+  {
+    "key": "characters/swimmer-outfit-red",
+    "file": "/art/mockup/characters/swimmer-outfit-red.png",
+    "webp": "/art/mockup/characters/swimmer-outfit-red.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1034,
+      61,
+      80,
+      223
+    ],
+    "alt": {
+      "vi": "Vận động viên đồ bơi đỏ",
+      "en": "Swimmer in a red swimsuit"
+    }
+  },
+  {
+    "key": "characters/swimmer-outfit-green",
+    "file": "/art/mockup/characters/swimmer-outfit-green.png",
+    "webp": "/art/mockup/characters/swimmer-outfit-green.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1152,
+      63,
+      65,
+      219
+    ],
+    "alt": {
+      "vi": "Vận động viên đồ bơi hai mảnh",
+      "en": "Swimmer in a two-piece swimsuit"
+    }
+  },
+  {
+    "key": "characters/swimmer-outfit-black",
+    "file": "/art/mockup/characters/swimmer-outfit-black.png",
+    "webp": "/art/mockup/characters/swimmer-outfit-black.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-b-large",
+    "box": [
+      1236,
+      63,
+      70,
+      219
+    ],
+    "alt": {
+      "vi": "Vận động viên đồ bơi đen",
+      "en": "Swimmer in a black swimsuit"
+    }
+  }
+]

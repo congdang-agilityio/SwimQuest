@@ -1,0 +1,344 @@
+[
+  {
+    "key": "poses/swim-front-01",
+    "file": "/art/mockup/poses/swim-front-01.png",
+    "webp": "/art/mockup/poses/swim-front-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      495,
+      435,
+      95,
+      77
+    ],
+    "alt": {
+      "vi": "Khung bơi trực diện 1",
+      "en": "Swimming frame, front view 1"
+    }
+  },
+  {
+    "key": "poses/swim-front-02",
+    "file": "/art/mockup/poses/swim-front-02.png",
+    "webp": "/art/mockup/poses/swim-front-02.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      608,
+      435,
+      78,
+      79
+    ],
+    "alt": {
+      "vi": "Khung bơi trực diện 2",
+      "en": "Swimming frame, front view 2"
+    }
+  },
+  {
+    "key": "poses/swim-front-03",
+    "file": "/art/mockup/poses/swim-front-03.png",
+    "webp": "/art/mockup/poses/swim-front-03.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      692,
+      435,
+      90,
+      77
+    ],
+    "alt": {
+      "vi": "Khung bơi trực diện 3",
+      "en": "Swimming frame, front view 3"
+    }
+  },
+  {
+    "key": "poses/swim-side-01",
+    "file": "/art/mockup/poses/swim-side-01.png",
+    "webp": "/art/mockup/poses/swim-side-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      815,
+      432,
+      79,
+      84
+    ],
+    "alt": {
+      "vi": "Khung bơi nhìn ngang 1",
+      "en": "Swimming frame, side view 1"
+    }
+  },
+  {
+    "key": "poses/swim-side-02",
+    "file": "/art/mockup/poses/swim-side-02.png",
+    "webp": "/art/mockup/poses/swim-side-02.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      900,
+      436,
+      100,
+      75
+    ],
+    "alt": {
+      "vi": "Khung bơi nhìn ngang 2",
+      "en": "Swimming frame, side view 2"
+    }
+  },
+  {
+    "key": "poses/swim-side-03",
+    "file": "/art/mockup/poses/swim-side-03.png",
+    "webp": "/art/mockup/poses/swim-side-03.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [
+      1005,
+      438,
+      85,
+      72
+    ],
+    "alt": {
+      "vi": "Khung bơi nhìn ngang 3",
+      "en": "Swimming frame, side view 3"
+    }
+  },
+  {
+    "key": "poses/idle-01",
+    "file": "/art/mockup/poses/idle-01.png",
+    "webp": "/art/mockup/poses/idle-01.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1115,
+      412,
+      58,
+      143
+    ],
+    "alt": {
+      "vi": "Tư thế đứng chờ 1",
+      "en": "Idle pose 1"
+    }
+  },
+  {
+    "key": "poses/idle-02",
+    "file": "/art/mockup/poses/idle-02.png",
+    "webp": "/art/mockup/poses/idle-02.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1192,
+      412,
+      56,
+      145
+    ],
+    "alt": {
+      "vi": "Tư thế đứng chờ 2",
+      "en": "Idle pose 2"
+    }
+  },
+  {
+    "key": "poses/cheer-01",
+    "file": "/art/mockup/poses/cheer-01.png",
+    "webp": "/art/mockup/poses/cheer-01.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1269,
+      413,
+      111,
+      145
+    ],
+    "alt": {
+      "vi": "Tư thế cổ vũ 1",
+      "en": "Cheer pose 1"
+    }
+  },
+  {
+    "key": "poses/cheer-02",
+    "file": "/art/mockup/poses/cheer-02.png",
+    "webp": "/art/mockup/poses/cheer-02.webp",
+    "width": 256,
+    "height": 384,
+    "source": "sheet-a-large",
+    "box": [
+      1397,
+      418,
+      75,
+      140
+    ],
+    "alt": {
+      "vi": "Tư thế cổ vũ 2",
+      "en": "Cheer pose 2"
+    }
+  },
+  {
+    "key": "poses/freestyle-01",
+    "file": "/art/mockup/poses/freestyle-01.png",
+    "webp": "/art/mockup/poses/freestyle-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      568,
+      421,
+      158,
+      62
+    ],
+    "alt": {
+      "vi": "Bơi sải",
+      "en": "Freestyle"
+    }
+  },
+  {
+    "key": "poses/breaststroke-01",
+    "file": "/art/mockup/poses/breaststroke-01.png",
+    "webp": "/art/mockup/poses/breaststroke-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      752,
+      421,
+      171,
+      62
+    ],
+    "alt": {
+      "vi": "Bơi ếch",
+      "en": "Breaststroke"
+    }
+  },
+  {
+    "key": "poses/backstroke-01",
+    "file": "/art/mockup/poses/backstroke-01.png",
+    "webp": "/art/mockup/poses/backstroke-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      974,
+      423,
+      143,
+      56
+    ],
+    "alt": {
+      "vi": "Bơi ngửa",
+      "en": "Backstroke"
+    }
+  },
+  {
+    "key": "poses/butterfly-01",
+    "file": "/art/mockup/poses/butterfly-01.png",
+    "webp": "/art/mockup/poses/butterfly-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1151,
+      422,
+      157,
+      60
+    ],
+    "alt": {
+      "vi": "Bơi bướm",
+      "en": "Butterfly"
+    }
+  },
+  {
+    "key": "poses/swim-stroke-01",
+    "file": "/art/mockup/poses/swim-stroke-01.png",
+    "webp": "/art/mockup/poses/swim-stroke-01.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      567,
+      349,
+      126,
+      56
+    ],
+    "alt": {
+      "vi": "Khung bơi 1",
+      "en": "Swim stroke frame 1"
+    }
+  },
+  {
+    "key": "poses/swim-stroke-02",
+    "file": "/art/mockup/poses/swim-stroke-02.png",
+    "webp": "/art/mockup/poses/swim-stroke-02.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      713,
+      337,
+      130,
+      73
+    ],
+    "alt": {
+      "vi": "Khung bơi 2",
+      "en": "Swim stroke frame 2"
+    }
+  },
+  {
+    "key": "poses/swim-stroke-03",
+    "file": "/art/mockup/poses/swim-stroke-03.png",
+    "webp": "/art/mockup/poses/swim-stroke-03.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      880,
+      336,
+      119,
+      63
+    ],
+    "alt": {
+      "vi": "Khung bơi 3",
+      "en": "Swim stroke frame 3"
+    }
+  },
+  {
+    "key": "poses/swim-stroke-04",
+    "file": "/art/mockup/poses/swim-stroke-04.png",
+    "webp": "/art/mockup/poses/swim-stroke-04.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1026,
+      338,
+      101,
+      59
+    ],
+    "alt": {
+      "vi": "Khung bơi 4",
+      "en": "Swim stroke frame 4"
+    }
+  },
+  {
+    "key": "poses/swim-stroke-05",
+    "file": "/art/mockup/poses/swim-stroke-05.png",
+    "webp": "/art/mockup/poses/swim-stroke-05.webp",
+    "width": 384,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [
+      1144,
+      347,
+      154,
+      59
+    ],
+    "alt": {
+      "vi": "Khung bơi 5",
+      "en": "Swim stroke frame 5"
+    }
+  }
+]

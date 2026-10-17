@@ -33,7 +33,7 @@ const LANDMARK_MOCKUP: Record<(typeof LANDMARK_SLUGS)[number], string> = {
 };
 
 const LANDMARK_NEED = "Transparent square cut-out or art, no text";
-const SHIP_NEED = "Transparent 128x96 (4:3) image, bow facing right, readable at 48 px, no text";
+const SHIP_NEED = "Transparent square cut-out, readable at 48 px, no text";
 
 export const ROUTE01_ART: readonly ArtAsset[] = [
   {
@@ -49,10 +49,13 @@ export const ROUTE01_ART: readonly ArtAsset[] = [
     source: "cut-out",
     replacementNeed: LANDMARK_NEED,
   })),
+  // Ship tiers cut from asset sheet B (public/art/mockup/ships, scripts/art/cut_g2.py); the
+  // earlier vector ships stay as the load fallback.
   ...([1, 2, 3] as const).map((tier): ArtAsset => ({
     key: `ship-tier-${tier}`,
-    path: `/art/ships/ship-tier-${tier}.svg`,
-    source: "vector",
+    path: `/art/mockup/ships/ship-tier-${tier}.png`,
+    fallbackPath: `/art/ships/ship-tier-${tier}.svg`,
+    source: "cut-out",
     replacementNeed: SHIP_NEED,
   })),
 ];
