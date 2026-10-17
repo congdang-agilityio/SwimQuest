@@ -7,7 +7,7 @@ import { Avatar, ButtonLink, Card } from "@/components/ui";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
-import { listMyTournaments } from "@/server/home/my-tournaments";
+import { listMyTournaments, splitTournaments } from "@/server/home/my-tournaments";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./home.module.css";
 
@@ -19,7 +19,8 @@ export default async function HomePage() {
     listMyTournaments(user.id, new Date()),
     getPlayerStats(user.id),
   ]);
-  const featured = tournaments.find((x) => x.effectiveStatus === "ACTIVE") ?? tournaments[0];
+  const { active, past } = splitTournaments(tournaments);
+  const featured = active.find((x) => x.effectiveStatus === "ACTIVE") ?? active[0];
   const km = format.number(stats.verifiedDistanceM / 1000, { maximumFractionDigits: 1 });
   return (
     <main className={styles.home}>
@@ -74,21 +75,40 @@ export default async function HomePage() {
         <JoinGuidance />
       ) : (
         <>
-          <Card
-            tone="dark"
-            as="section"
-            className={styles.tournaments}
-            aria-labelledby="home-tournaments"
-          >
-            <h2 id="home-tournaments" className={styles.sectionTitle}>
-              {t("title")}
-            </h2>
-            <ul className={styles.list}>
-              {tournaments.map((x) => (
-                <TournamentCard key={x.id} tournament={x} />
-              ))}
-            </ul>
-          </Card>
+          {active.length > 0 && (
+            <Card
+              tone="dark"
+              as="section"
+              className={styles.tournaments}
+              aria-labelledby="home-tournaments"
+            >
+              <h2 id="home-tournaments" className={styles.sectionTitle}>
+                {t("title")}
+              </h2>
+              <ul className={styles.list}>
+                {active.map((x) => (
+                  <TournamentCard key={x.id} tournament={x} />
+                ))}
+              </ul>
+            </Card>
+          )}
+          {past.length > 0 && (
+            <Card
+              tone="dark"
+              as="section"
+              className={styles.tournaments}
+              aria-labelledby="home-history"
+            >
+              <h2 id="home-history" className={styles.sectionTitle}>
+                {t("history")}
+              </h2>
+              <ul className={styles.list}>
+                {past.map((x) => (
+                  <TournamentCard key={x.id} tournament={x} compact />
+                ))}
+              </ul>
+            </Card>
+          )}
           <ButtonLink href="/voyage" variant="primary" block>
             {t("voyageMap")}
           </ButtonLink>

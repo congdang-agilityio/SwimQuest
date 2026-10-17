@@ -23,7 +23,14 @@ function vnDate(instant: Date): string {
 }
 
 /** One of my tournaments: my team, season, status, progress and the "Add swim" entry. */
-export function TournamentCard({ tournament: x }: { tournament: MyTournament }) {
+export function TournamentCard({
+  tournament: x,
+  compact = false,
+}: {
+  tournament: MyTournament;
+  /** History row: no progress and no actions, just the way in to the results. */
+  compact?: boolean;
+}) {
   const t = useTranslations("home.card");
   return (
     <li>
@@ -64,7 +71,8 @@ export function TournamentCard({ tournament: x }: { tournament: MyTournament }) 
             </p>
           </div>
         </div>
-        {x.team &&
+        {!compact &&
+          x.team &&
           (x.progressBp === null ? (
             <p className={styles.muted}>{t("progressNotStarted")}</p>
           ) : (
@@ -74,10 +82,12 @@ export function TournamentCard({ tournament: x }: { tournament: MyTournament }) 
               caption={t("progress", { pct: formatProgressPct(x.progressBp) })}
             />
           ))}
-        <ButtonLink href="/connect" variant="secondary" size="sm" block>
-          {t("addSwim")}
-        </ButtonLink>
-        {x.effectiveStatus !== "DRAFT" && (x.isOrganizer || x.isReviewHelper) && (
+        {!compact && (
+          <ButtonLink href="/connect" variant="secondary" size="sm" block>
+            {t("addSwim")}
+          </ButtonLink>
+        )}
+        {!compact && x.effectiveStatus !== "DRAFT" && (x.isOrganizer || x.isReviewHelper) && (
           <ButtonLink
             href={`/tournaments/${x.id}/manage/review`}
             variant="secondary"
