@@ -10,18 +10,23 @@ import styles from "@/components/voyage/voyage.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { formatProgressPct } from "@/lib/scoring/progress";
 import { requireUser } from "@/server/auth/current-user";
-import { SELECTED_TOURNAMENT_COOKIE } from "@/server/home/selected-tournament";
+import { TournamentSwitcher } from "@/components/nav/tournament-switcher";
+import {
+  getTournamentSwitcher,
+  SELECTED_TOURNAMENT_COOKIE,
+} from "@/server/home/selected-tournament";
 import { getVoyage } from "@/server/voyage/get-voyage";
 
 export const dynamic = "force-dynamic";
 
 export default async function VoyagePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/voyage");
-  const [t, tv, tl, voyage] = await Promise.all([
+  const [t, tv, tl, voyage, switcher] = await Promise.all([
     getTranslations("tabs.voyage"),
     getTranslations("voyage"),
     getTranslations("leaderboard"),
     getVoyage(user.id, (await cookies()).get(SELECTED_TOURNAMENT_COOKIE)?.value),
+    getTournamentSwitcher(user.id),
   ]);
   if (!voyage) {
     return (
@@ -34,6 +39,7 @@ export default async function VoyagePage() {
   const pct = voyage.progress.progressBp / 100;
   return (
     <main className={styles.panel}>
+      {switcher && <TournamentSwitcher {...switcher} placement="page" />}
       {/* Phone: centred screen title. Desktop: the uppercase map band below carries the title. */}
       <div className={styles.screenHeader}>
         <ScreenHeader title={tv("screenTitle")} />

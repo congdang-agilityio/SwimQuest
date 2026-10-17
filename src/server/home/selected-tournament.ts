@@ -36,3 +36,29 @@ export async function getSelectedMembershipFromCookie(userId: string) {
   const value = (await cookies()).get(SELECTED_TOURNAMENT_COOKIE)?.value;
   return getSelectedMembership(userId, value);
 }
+
+export type TournamentSwitcherData = {
+  selectedId: string;
+  options: { id: string; tournamentName: string; teamName: string }[];
+};
+
+/** Switcher options (my active, non-archived tournaments) and the shown one; null below two. */
+export async function getTournamentSwitcher(
+  userId: string,
+): Promise<TournamentSwitcherData | null> {
+  const rows = await db.teamMember.findMany({
+    where: { userId, status: "ACTIVE", tournament: { status: { not: "ARCHIVED" } } },
+    orderBy: [{ joinedAt: "desc" }, { id: "desc" }],
+    include: { team: true, tournament: true },
+  });
+  if (rows.length < 2) return null;
+  const selected = await getSelectedMembershipFromCookie(userId);
+  return {
+    selectedId: selected?.tournament.id ?? rows[0].tournamentId,
+    options: rows.map((m) => ({
+      id: m.tournamentId,
+      tournamentName: m.tournament.name,
+      teamName: m.team.name,
+    })),
+  };
+}

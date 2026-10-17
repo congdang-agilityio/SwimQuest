@@ -12,11 +12,15 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { effectiveStatus, isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
-import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
+import {
+  getSelectedMembershipFromCookie,
+  getTournamentSwitcher,
+} from "@/server/home/selected-tournament";
 import { ensureStartsAssigned } from "@/server/jobs/tick";
 import { getMyPoints } from "@/server/scoring/my-points";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 import { getLastRemoval, getMyTeamView } from "@/server/teams/my-team-view";
+import { TournamentSwitcher } from "@/components/nav/tournament-switcher";
 import { TeamHeader } from "@/components/teams/team-header";
 import { CaptainInvite } from "@/components/teams/captain-invite";
 import { LeaveSwitchActions } from "@/components/teams/leave-switch-actions";
@@ -47,9 +51,11 @@ export default async function TeamPage() {
             freePlaces: Math.max(0, x.memberLimit - x.memberCount),
           }))
       : [];
+  const switcher = await getTournamentSwitcher(user.id);
   const startSlug = membership?.team.startDestination ?? null;
   return (
     <main>
+      {switcher && <TournamentSwitcher {...switcher} placement="page" />}
       <div className={styles.layout}>
         <div className={styles.panel}>
           <h1 className={styles.title}>{t("title")}</h1>

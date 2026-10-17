@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Avatar } from "@/components/ui";
 import { NavIcon } from "./nav-icon";
+import { TournamentSwitcher } from "./tournament-switcher";
+import type { TournamentSwitcherData } from "@/server/home/selected-tournament";
 import { isActive, navItems } from "./nav-items";
 import styles from "./app-nav.module.css";
 
@@ -13,9 +15,14 @@ import styles from "./app-nav.module.css";
  * App shell chrome: a top bar with the brand and the account menu, and the main navigation
  * (bottom bar below 768 px, left rail from 768 px). The current tab has aria-current.
  */
-type Props = { displayName: string; isPlatformAdmin: boolean };
+type Props = {
+  displayName: string;
+  isPlatformAdmin: boolean;
+  /** Two or more active tournaments: the switcher shows in the left rail from 768 px. */
+  switcher?: TournamentSwitcherData | null;
+};
 
-export function AppNav({ displayName, isPlatformAdmin }: Props) {
+export function AppNav({ displayName, isPlatformAdmin, switcher }: Props) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
@@ -34,6 +41,7 @@ export function AppNav({ displayName, isPlatformAdmin }: Props) {
         </details>
       </div>
       <nav className={styles.nav} aria-label={t("label")}>
+        {switcher && <TournamentSwitcher {...switcher} placement="rail" />}
         <ul className={styles.list}>
           {navItems(isPlatformAdmin).map(({ key, href }) => (
             <li key={key}>
