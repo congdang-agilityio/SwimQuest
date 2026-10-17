@@ -109,5 +109,39 @@
       "MAX_BELOW_THREE_DAYS": "The maximum cannot be below the 3+ days multiplier.",
       "UNKNOWN": "This value is not valid."
     }
+  },
+  "extraRules": {
+    "title": "Extra swim rules",
+    "intro": "Optional. Leave both empty for no extra rules.",
+    "legend": "Limits per swim",
+    "fields": {
+      "minSwimDistanceM": "Minimum distance per swim (m)",
+      "extraSlowestPace": "Slowest pace (m:ss per 100 m)"
+    },
+    "hints": {
+      "minSwimDistanceM": "Empty = no minimum.",
+      "extraSlowestPace": "Empty = no limit. Must be faster than {pace} /100m."
+    },
+    "rulesHeading": "What this means",
+    "rules": {
+      "none": "No extra rules: every valid swim counts.",
+      "minDistance": "Each swim must be at least {m, number} m.",
+      "pace": "Each swim must be at least as fast as {pace} /100m.",
+      "consequence": "A swim that misses a rule does not count in this tournament and can only be disputed."
+    },
+    "save": "Save extra rules",
+    "saving": "Saving...",
+    "saved": "Extra rules saved.",
+    "locked": "Locked for the season: the extra rules cannot change once the season has started.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "DISTANCE_INVALID": "Enter a whole number of metres.",
+      "DISTANCE_NOT_POSITIVE": "The distance must be more than 0.",
+      "EXTRA_DISTANCE_TOO_LARGE": "The distance must be below the longest realistic swim.",
+      "PACE_INVALID": "Enter a pace as m:ss, for example 3:00.",
+      "EXTRA_PACE_NOT_STRICTER": "The pace must be faster than the tournament's slowest realistic pace, {pace} /100m.",
+      "UNKNOWN": "This value is not valid."
+    }
   }
 }
