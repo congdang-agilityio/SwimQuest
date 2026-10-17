@@ -1,7 +1,11 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { apiError } from "@/server/http/api-error";
-import { runDueStartAssignments, runDueWeekSettlements } from "@/server/jobs/tick";
+import {
+  runDueStartAssignments,
+  runDueWeekSettlements,
+  runDueXpWeekSettlements,
+} from "@/server/jobs/tick";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +29,9 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const startAssignments = await runDueStartAssignments(new Date());
   const weekSettlements = await runDueWeekSettlements(new Date());
+  const xpWeekSettlements = await runDueXpWeekSettlements(new Date());
   return NextResponse.json(
-    { startAssignments, weekSettlements },
+    { startAssignments, weekSettlements, xpWeekSettlements },
     { headers: { "cache-control": "no-store" } },
   );
 }

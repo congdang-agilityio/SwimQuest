@@ -2,9 +2,10 @@ import type { XpKind } from "@prisma/client";
 import { firstSwimBonus, longSwimBonus, PLATFORM_POINT_VALUES } from "@/lib/scoring/bonuses";
 import { countDistance } from "@/lib/scoring/distance-points";
 import { levelForXp } from "@/lib/scoring/levels";
-import { vnDayKey } from "@/lib/time/vn";
+import { vnDayKey, vnWeekStart } from "@/lib/time/vn";
 import type { Tx } from "@/server/checks/run-checks";
 import { emitEvent } from "@/server/events/emit";
+import { recalculateXpWeek } from "./settle-xp-week";
 
 /** Platform swim limits for XP (S-51): never a tournament's changed settings. */
 export const XP_LONGEST_SWIM_M = 10_000;
@@ -30,8 +31,10 @@ async function totalXp(tx: Tx, userId: string): Promise<number> {
  *   DISTANCE XP), FIRST_SWIM_BONUS once per player ever and LONG_SWIM_BONUS once per Vietnam day;
  * - the swim has no VERIFIED result but live entries: one REVERSAL per live entry. A REVERSAL
  *   keeps `swimId` null (unique (swimId, kind)) and points to the entry it cancels.
- * Emits LEVEL_CHANGED when the player's level changes. Calling it again changes nothing. A
- * swim whose entries were reversed is not awarded again (the unique index keeps its rows).
+ * When the swim's Vietnam week is already settled, its weekly multiplier is recalculated with a
+ * delta entry. Emits LEVEL_CHANGED when the player's level changes. Calling it again changes
+ * nothing. A swim whose entries were reversed is not awarded again (the unique index keeps its
+ * rows). Lock order: the caller's `lockPlayerSwims` first, then this per-player XP lock.
  */
 export async function syncSwimXp(tx: Tx, swimId: string): Promise<void> {
   const swim = await tx.swim.findUniqueOrThrow({
@@ -58,6 +61,7 @@ export async function syncSwimXp(tx: Tx, swimId: string): Promise<void> {
       });
     }
   }
+  await recalculateXpWeek(tx, userId, vnWeekStart(swim.startedAt));
   const [fromLevel, toLevel] = [levelForXp(before), levelForXp(await totalXp(tx, userId))];
   if (fromLevel !== toLevel) {
     await emitEvent(tx, { type: "LEVEL_CHANGED", payload: { userId, fromLevel, toLevel } });
