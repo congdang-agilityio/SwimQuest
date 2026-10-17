@@ -17,19 +17,20 @@ export type PickerTeam = {
 };
 
 type Props = {
-  token: string;
+  /** Endpoint that takes `{teamId}`: /api/join/:token or /api/tournaments/:id/join. */
+  submitUrl: string;
   teams: readonly PickerTeam[];
   myTeam: { id: string; name: string } | null;
   /** Team named by the link (?team=), already checked to belong to this tournament. */
   preselectedId?: string | null;
 };
 
-/** Team choice on the join page: join at once (POST /api/join/:token), or show the current team. */
-export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props) {
+/** Team choice on the join page: join at once (POST to submitUrl), or show the current team. */
+export function TeamPicker({ submitUrl, teams, myTeam, preselectedId = null }: Props) {
   const t = useTranslations("join");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<"justFilled" | "failed" | null>(null);
+  const [message, setMessage] = useState<"justFilled" | "notPublic" | "failed" | null>(null);
 
   const [chosenId, setChosenId] = useState<string | null>(preselectedId);
   const chosen = teams.find((x) => x.id === chosenId) ?? null;
@@ -50,7 +51,7 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
   async function choose(teamId: string) {
     setChosenId(teamId);
     setBusy(true);
-    const res = await clientFetch(`/api/join/${encodeURIComponent(token)}`, {
+    const res = await clientFetch(submitUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ teamId }),
@@ -59,6 +60,7 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
     setBusy(false);
     const body = res ? await res.json().catch(() => null) : null;
     if (res?.status === 409 && body?.error?.code === "TEAM_FULL") setMessage("justFilled");
+    else if (res?.status === 404 && body?.error?.code === "NOT_PUBLIC") setMessage("notPublic");
     else setMessage("failed");
     router.refresh();
   }

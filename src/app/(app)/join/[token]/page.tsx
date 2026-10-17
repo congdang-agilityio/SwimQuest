@@ -113,7 +113,12 @@ export default async function JoinPage({
           </p>
         </Card>
       ) : (
-        <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} preselectedId={preselectedId} />
+        <TeamPicker
+          submitUrl={`/api/join/${encodeURIComponent(token)}`}
+          teams={freeTeams}
+          myTeam={myTeam}
+          preselectedId={preselectedId}
+        />
       )}
       {tournament.eligibilityNotes && (
         <Card as="section" className={styles.eligibility}>

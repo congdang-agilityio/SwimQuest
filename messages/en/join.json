@@ -14,6 +14,7 @@
   "invalidBody": "Check the invite link with your organizer or captain.",
   "alreadyIn": "You are in {team}",
   "goToTeam": "Go to My Team",
+  "notPublic": "This tournament is no longer public. Ask the organizer for an invite link.",
   "failed": "Could not join. Please try again.",
   "eligibility": "Who can join",
   "details": "Details and rules",
