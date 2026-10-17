@@ -1,0 +1,39 @@
+/*
+ * Wide desktop layout for the organizer console and the admin area. Below 1024 px nothing
+ * changes (the phone column of each screen stays). From 1024 px the light content sheet of the
+ * app shell grows and each screen's column fills it; screens that mark their <main> with
+ * data-wide-grid lay their cards out in two columns.
+ */
+
+.wide {
+  display: contents;
+}
+
+@media (min-width: 1024px) {
+  /* The shell sheet that holds this container gets wider (it is capped at 960 px otherwise). */
+  :global([data-surface="light"]):has(> .wide) {
+    max-width: none;
+  }
+
+  .wide > main {
+    max-width: none;
+  }
+
+  .wide > main[data-wide-grid] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  /* Header band, tables and anything marked wide span both columns. */
+  .wide > main[data-wide-grid] > :first-child,
+  .wide > main[data-wide-grid] > [data-wide-span] {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  :global([data-surface="light"]):has(> .wide) {
+    /* Sheet is at most 1280 px wide, centred, and never under the rail. */
+    margin-left: max(calc(var(--sq-rail-width) + var(--sq-space-6)), calc((100% - 1280px) / 2));
+    margin-right: max(var(--sq-space-6), calc((100% - 1280px) / 2));
+  }
+}

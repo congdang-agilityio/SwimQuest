@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { WideContainer } from "@/components/layout/wide-container";
 import { AccessDenied } from "@/components/states/access-denied";
 import { getCurrentUser } from "@/server/auth/current-user";
 import { ForbiddenError, requirePlatformAdmin } from "@/server/auth/roles";
@@ -11,5 +12,5 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     if (err instanceof ForbiddenError) return <AccessDenied />;
     throw err;
   }
-  return <>{children}</>;
+  return <WideContainer>{children}</WideContainer>;
 }
