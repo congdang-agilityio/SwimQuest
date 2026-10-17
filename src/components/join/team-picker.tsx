@@ -38,7 +38,7 @@ export function TeamPicker({ token, teams, myTeam, preselectedId = null }: Props
   if (myTeam) {
     return (
       <Card as="section" className={styles.notice}>
-        <MockupPicture artKey="flag" alt="" className={styles.noticeArt} />
+        <MockupPicture artKey="map/flag" alt="" className={styles.noticeArt} />
         <p>{t("alreadyIn", { team: myTeam.name })}</p>
         <ButtonLink href="/team" block>
           {t("goToTeam")}

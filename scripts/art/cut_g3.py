@@ -400,7 +400,7 @@ def main():
         x0, y0 = (round(v * k) for v in spec["box"][:2])
         box = [x0 + bb[0], y0 + bb[1], bb[2] - bb[0], bb[3] - bb[1]]
         manifests.setdefault(folder, []).append(dict(
-            key=spec["key"], file=f"/art/mockup/{folder}/{spec['key']}.png", webp=f"/art/mockup/{folder}/{spec['key']}.webp",
+            key=f"{folder}/{spec['key']}", file=f"/art/mockup/{folder}/{spec['key']}.png", webp=f"/art/mockup/{folder}/{spec['key']}.webp",
             width=im.width, height=im.height, source=f"sheet-{spec['sheet']}" + ("-large" if large else ""), box=box,
             alt=dict(vi=spec["vi"], en=spec["en"])))
         previews.setdefault(folder, []).append((spec["key"], im))

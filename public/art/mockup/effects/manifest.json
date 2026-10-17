@@ -1,6 +1,6 @@
 [
   {
-    "key": "splash-small",
+    "key": "effects/splash-small",
     "file": "/art/mockup/effects/splash-small.png",
     "webp": "/art/mockup/effects/splash-small.webp",
     "width": 256,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "key": "splash-small-2",
+    "key": "effects/splash-small-2",
     "file": "/art/mockup/effects/splash-small-2.png",
     "webp": "/art/mockup/effects/splash-small-2.webp",
     "width": 256,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "key": "splash-medium",
+    "key": "effects/splash-medium",
     "file": "/art/mockup/effects/splash-medium.png",
     "webp": "/art/mockup/effects/splash-medium.webp",
     "width": 256,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "key": "wave",
+    "key": "effects/wave",
     "file": "/art/mockup/effects/wave.png",
     "webp": "/art/mockup/effects/wave.webp",
     "width": 256,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "key": "wave-curl",
+    "key": "effects/wave-curl",
     "file": "/art/mockup/effects/wave-curl.png",
     "webp": "/art/mockup/effects/wave-curl.webp",
     "width": 256,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "key": "bubble",
+    "key": "effects/bubble",
     "file": "/art/mockup/effects/bubble.png",
     "webp": "/art/mockup/effects/bubble.webp",
     "width": 256,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "key": "glow",
+    "key": "effects/glow",
     "file": "/art/mockup/effects/glow.png",
     "webp": "/art/mockup/effects/glow.webp",
     "width": 256,
@@ -91,7 +91,7 @@
     }
   },
   {
-    "key": "splash-burst",
+    "key": "effects/splash-burst",
     "file": "/art/mockup/effects/splash-burst.png",
     "webp": "/art/mockup/effects/splash-burst.webp",
     "width": 256,
@@ -104,7 +104,7 @@
     }
   },
   {
-    "key": "splash-ring",
+    "key": "effects/splash-ring",
     "file": "/art/mockup/effects/splash-ring.png",
     "webp": "/art/mockup/effects/splash-ring.webp",
     "width": 256,
@@ -117,7 +117,7 @@
     }
   },
   {
-    "key": "wave-trail",
+    "key": "effects/wave-trail",
     "file": "/art/mockup/effects/wave-trail.png",
     "webp": "/art/mockup/effects/wave-trail.webp",
     "width": 256,
@@ -130,7 +130,7 @@
     }
   },
   {
-    "key": "water-spark",
+    "key": "effects/water-spark",
     "file": "/art/mockup/effects/water-spark.png",
     "webp": "/art/mockup/effects/water-spark.webp",
     "width": 256,
@@ -143,7 +143,7 @@
     }
   },
   {
-    "key": "foam-burst",
+    "key": "effects/foam-burst",
     "file": "/art/mockup/effects/foam-burst.png",
     "webp": "/art/mockup/effects/foam-burst.webp",
     "width": 256,
@@ -156,7 +156,7 @@
     }
   },
   {
-    "key": "completion-burst",
+    "key": "effects/completion-burst",
     "file": "/art/mockup/effects/completion-burst.png",
     "webp": "/art/mockup/effects/completion-burst.webp",
     "width": 256,

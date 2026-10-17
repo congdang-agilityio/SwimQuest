@@ -1,6 +1,6 @@
 [
   {
-    "key": "dolphin",
+    "key": "marine/dolphin",
     "file": "/art/mockup/marine/dolphin.png",
     "webp": "/art/mockup/marine/dolphin.webp",
     "width": 256,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "key": "sea-turtle",
+    "key": "marine/sea-turtle",
     "file": "/art/mockup/marine/sea-turtle.png",
     "webp": "/art/mockup/marine/sea-turtle.webp",
     "width": 256,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "key": "ray",
+    "key": "marine/ray",
     "file": "/art/mockup/marine/ray.png",
     "webp": "/art/mockup/marine/ray.webp",
     "width": 256,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "key": "whale-shark",
+    "key": "marine/whale-shark",
     "file": "/art/mockup/marine/whale-shark.png",
     "webp": "/art/mockup/marine/whale-shark.webp",
     "width": 256,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "key": "jellyfish",
+    "key": "marine/jellyfish",
     "file": "/art/mockup/marine/jellyfish.png",
     "webp": "/art/mockup/marine/jellyfish.webp",
     "width": 256,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "key": "fish-school",
+    "key": "marine/fish-school",
     "file": "/art/mockup/marine/fish-school.png",
     "webp": "/art/mockup/marine/fish-school.webp",
     "width": 256,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "key": "clownfish",
+    "key": "marine/clownfish",
     "file": "/art/mockup/marine/clownfish.png",
     "webp": "/art/mockup/marine/clownfish.webp",
     "width": 256,
@@ -91,7 +91,7 @@
     }
   },
   {
-    "key": "tuna",
+    "key": "marine/tuna",
     "file": "/art/mockup/marine/tuna.png",
     "webp": "/art/mockup/marine/tuna.webp",
     "width": 256,

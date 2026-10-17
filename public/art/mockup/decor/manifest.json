@@ -1,6 +1,6 @@
 [
   {
-    "key": "coral",
+    "key": "decor/coral",
     "file": "/art/mockup/decor/coral.png",
     "webp": "/art/mockup/decor/coral.webp",
     "width": 256,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "key": "starfish",
+    "key": "decor/starfish",
     "file": "/art/mockup/decor/starfish.png",
     "webp": "/art/mockup/decor/starfish.webp",
     "width": 256,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "key": "seaweed",
+    "key": "decor/seaweed",
     "file": "/art/mockup/decor/seaweed.png",
     "webp": "/art/mockup/decor/seaweed.webp",
     "width": 256,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "key": "sea-turtle",
+    "key": "decor/sea-turtle",
     "file": "/art/mockup/decor/sea-turtle.png",
     "webp": "/art/mockup/decor/sea-turtle.webp",
     "width": 256,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "key": "scallop-shell",
+    "key": "decor/scallop-shell",
     "file": "/art/mockup/decor/scallop-shell.png",
     "webp": "/art/mockup/decor/scallop-shell.webp",
     "width": 256,
