@@ -1,0 +1,25 @@
+{
+  "title": "Người hỗ trợ duyệt",
+  "note": "Người hỗ trợ duyệt chỉ được quyết định các lượt bơi bị gắn cờ và khiếu nại của giải này, không làm được gì khác. Họ không thể đổi giải, đội hay cài đặt.",
+  "listTitle": "Người hỗ trợ hiện tại",
+  "empty": "Chưa có người hỗ trợ duyệt.",
+  "remove": "Gỡ",
+  "removeFor": "Gỡ {name} khỏi vai trò hỗ trợ duyệt",
+  "removeConfirm": "Gỡ {name} khỏi vai trò hỗ trợ duyệt? Họ sẽ mất quyền vào hàng chờ duyệt ngay.",
+  "removeYes": "Đồng ý, gỡ",
+  "removing": "Đang gỡ...",
+  "cancel": "Hủy",
+  "addTitle": "Chỉ định người hỗ trợ",
+  "noPlayers": "Không còn người chơi nào của giải để chỉ định.",
+  "player": "Người chơi",
+  "choose": "Chọn người chơi",
+  "appoint": "Chỉ định",
+  "appointing": "Đang chỉ định...",
+  "errors": {
+    "notPlayer": "Người này không phải người chơi đang tham gia giải.",
+    "already": "Người chơi này đã là người hỗ trợ duyệt.",
+    "notHelper": "Người chơi này không còn là người hỗ trợ duyệt.",
+    "failed": "Không lưu được thay đổi. Hãy thử lại.",
+    "network": "Mất kết nối. Kiểm tra mạng và thử lại."
+  }
+}

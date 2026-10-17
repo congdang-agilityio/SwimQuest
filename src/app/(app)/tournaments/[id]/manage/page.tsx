@@ -111,6 +111,15 @@ export default async function ManageTournamentPage({
                 {t("manage.reviewLink")}
               </ButtonLink>
             )}
+            {tournament.status !== "DRAFT" && (
+              <ButtonLink
+                href={`/tournaments/${tournament.id}/manage/helpers`}
+                variant="secondary"
+                block
+              >
+                {t("manage.helpersLink")}
+              </ButtonLink>
+            )}
           </div>
         </div>
       </Card>

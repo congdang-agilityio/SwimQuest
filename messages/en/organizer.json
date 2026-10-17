@@ -11,7 +11,8 @@
       "ARCHIVED": "Archived"
     },
     "settingsLink": "Rules and settings",
-    "reviewLink": "Review queue"
+    "reviewLink": "Review queue",
+    "helpersLink": "Review helpers"
   },
   "players": {
     "title": "Players without a team",
