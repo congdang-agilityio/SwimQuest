@@ -6,3 +6,32 @@
   min-width: 44px;
   padding: 0 12px;
 }
+.card {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-3);
+  max-width: 420px;
+  margin: var(--sq-space-6) auto;
+  padding: var(--sq-space-8) var(--sq-space-4);
+  text-align: center;
+}
+.card > a,
+.card > button {
+  width: 100%;
+}
+.art {
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+}
+.title {
+  margin: 0;
+  color: var(--sq-text);
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-black);
+}
+.body {
+  margin: 0 0 var(--sq-space-2);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-md);
+}

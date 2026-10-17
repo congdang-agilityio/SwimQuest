@@ -1,6 +1,10 @@
 {
-  "loading": { "label": "Đang tải" },
-  "empty": { "title": "Chưa có gì ở đây" },
+  "loading": {
+    "label": "Đang tải"
+  },
+  "empty": {
+    "title": "Chưa có gì ở đây"
+  },
   "error": {
     "title": "Đã xảy ra lỗi",
     "body": "Không tải được nội dung này. Vui lòng thử lại.",
@@ -9,6 +13,11 @@
   "accessDenied": {
     "title": "Bạn không có quyền truy cập",
     "body": "Bạn không được phép xem trang này.",
+    "home": "Về Trang chủ"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "body": "Chúng tôi không tìm thấy trang này. Có thể trang đã được chuyển đi.",
     "home": "Về Trang chủ"
   }
 }
