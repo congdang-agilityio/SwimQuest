@@ -76,7 +76,8 @@ test("the organizer appoints, then changes, the captain; others get not-found", 
   }
 
   await page.goto(`/tournaments/${id}/manage`);
-  await page.getByRole("link", { name: "Rùa Biển" }).click();
+  // The console lists the team in several sections; every link opens the team page.
+  await page.getByRole("link", { name: "Rùa Biển" }).first().click();
   await expect(page.getByRole("heading", { name: "Rùa Biển" })).toBeVisible();
   await expect(page.getByRole("button", { name: /làm đội trưởng/ })).toHaveCount(2);
 

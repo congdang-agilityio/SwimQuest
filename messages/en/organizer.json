@@ -52,7 +52,7 @@
     "teams": {
       "title": "Teams and players",
       "empty": "No teams yet.",
-      "members": "{count} / {limit} members",
+      "members": "{count}/{limit} members",
       "free": "{count, plural, =0 {Full} one {# place free} other {# places free}}",
       "captain": "Captain: {name}",
       "noCaptain": "No captain yet",

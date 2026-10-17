@@ -74,6 +74,7 @@ test("draft without teams lists the issue; with a team: preview, publish once, i
 
   await page.goto(manage);
   await page.getByRole("link", { name: "Xem trước" }).click();
+  await page.waitForURL(/\/manage\/preview$/);
   await expect(page.getByText("Đội Rùa")).toBeVisible();
 
   // Publishing needs a visibility choice: follow the issue link and pick it in the browser.

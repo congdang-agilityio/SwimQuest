@@ -52,7 +52,7 @@
     "teams": {
       "title": "Đội và người chơi",
       "empty": "Chưa có đội nào.",
-      "members": "{count} / {limit} thành viên",
+      "members": "{count}/{limit} thành viên",
       "free": "{count, plural, =0 {Đã đủ} other {Còn # chỗ}}",
       "captain": "Đội trưởng: {name}",
       "noCaptain": "Chưa có đội trưởng",
