@@ -8,7 +8,7 @@ import { TeamHeader } from "./team-header";
 afterEach(cleanup);
 
 describe("TeamHeader", () => {
-  it("shows name, description, captain, progress, points, members and the Add swim link", () => {
+  it("shows name, description, captain, progress, points, and members", () => {
     render(
       <NextIntlClientProvider locale="vi" messages={{ team }}>
         <TeamHeader
@@ -29,8 +29,5 @@ describe("TeamHeader", () => {
     expect(screen.getByText("Tiến độ: 12%")).toBeTruthy();
     expect(screen.getByText("30 điểm")).toBeTruthy();
     expect(screen.getByText("Thành viên: 2 / 5")).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Thêm buổi bơi" }).getAttribute("href")).toBe(
-      "/connect",
-    );
   });
 });

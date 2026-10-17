@@ -53,6 +53,11 @@
   color: var(--sq-white);
   background: #000;
 }
+/* Beat the light-surface link colour (`[data-surface="light"] a`) on ButtonLink. */
+a.primary,
+a.dark {
+  color: var(--sq-white);
+}
 .block {
   display: flex;
   width: 100%;

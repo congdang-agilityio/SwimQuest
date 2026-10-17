@@ -5,5 +5,7 @@
   "members": "Thành viên: {count} / {limit}",
   "addSwim": "Thêm buổi bơi",
   "rosterTitle": "Thành viên",
-  "km": "{km} km"
+  "km": "{km} km",
+  "level": "Lv {level}",
+  "progressLabel": "Tiến độ của đội"
 }
