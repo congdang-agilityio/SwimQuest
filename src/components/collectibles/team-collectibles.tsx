@@ -9,32 +9,23 @@ import styles from "./collectibles.module.css";
 
 const CHESTS: readonly TreasureChestKey[] = ["HALFWAY", "LY_SON"];
 
-/**
- * The team's map fragments, Route 01 voyage map and treasure chests (S-85), styled after the
- * mockup's item panel. Milestones not reached yet are empty slots. Collecting only: no actions.
- */
-export function TeamCollectibles({
+/** The team's fragment slots, the Route 01 map and the chests (two item groups of the card). */
+export function TeamCollectiblesGroups({
   collectibles,
-  headingId = "team-collectibles-title",
+  headingLevel = 3,
 }: {
   collectibles: TeamCollectiblesView;
-  headingId?: string;
+  /** Heading level of the two group titles. */
+  headingLevel?: 3 | 4;
 }) {
   const t = useTranslations("collectibles.team");
+  const H = headingLevel === 3 ? "h3" : "h4";
   const owned = new Set(collectibles.mapFragments.map((f) => f.percent));
   const chests = new Map(collectibles.treasureChests.map((c) => [c.chest, c]));
   return (
-    <Card
-      as="section"
-      aria-labelledby={headingId}
-      className={styles.card}
-      data-testid="team-collectibles"
-    >
-      <h2 id={headingId} className={styles.tab}>
-        {t("title")}
-      </h2>
+    <>
       <div className={styles.group}>
-        <h3 className={styles.groupTitle}>{t("fragmentsTitle")}</h3>
+        <H className={styles.groupTitle}>{t("fragmentsTitle")}</H>
         <ul className={styles.grid}>
           {MAP_FRAGMENT_PERCENTS.map((percent) => {
             const earned = owned.has(percent);
@@ -71,7 +62,7 @@ export function TeamCollectibles({
         </ul>
       </div>
       <div className={styles.group}>
-        <h3 className={styles.groupTitle}>{t("rewardsTitle")}</h3>
+        <H className={styles.groupTitle}>{t("rewardsTitle")}</H>
         <ul className={styles.grid}>
           <li
             className={styles.tile}
@@ -132,6 +123,33 @@ export function TeamCollectibles({
           })}
         </ul>
       </div>
+    </>
+  );
+}
+
+/**
+ * The team's map fragments, Route 01 voyage map and treasure chests (S-85), styled after the
+ * mockup's item panel. Milestones not reached yet are empty slots. Collecting only: no actions.
+ */
+export function TeamCollectibles({
+  collectibles,
+  headingId = "team-collectibles-title",
+}: {
+  collectibles: TeamCollectiblesView;
+  headingId?: string;
+}) {
+  const t = useTranslations("collectibles.team");
+  return (
+    <Card
+      as="section"
+      aria-labelledby={headingId}
+      className={styles.card}
+      data-testid="team-collectibles"
+    >
+      <h2 id={headingId} className={styles.tab}>
+        {t("title")}
+      </h2>
+      <TeamCollectiblesGroups collectibles={collectibles} />
       <p className={styles.note}>{t("collectOnly")}</p>
     </Card>
   );

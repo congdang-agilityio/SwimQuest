@@ -33,5 +33,10 @@
     "coinHint": "1 xu cho mỗi km",
     "collectOnly": "Chỉ để sưu tầm, không thể tiêu hay đổi."
   },
-  "energyOrb": "Hệ số tuần đang bật"
+  "energyOrb": "Hệ số tuần đang bật",
+  "profile": {
+    "title": "Bộ sưu tập",
+    "team": "Đội {team}",
+    "collectOnly": "Vật phẩm chỉ để sưu tầm và đi theo tiến độ hiện tại của đội: nếu tiến độ giảm, vật phẩm của mốc đó cũng mất."
+  }
 }
