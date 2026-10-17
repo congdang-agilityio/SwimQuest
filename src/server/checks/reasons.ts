@@ -23,6 +23,10 @@ export const REASON_CODES = [
   "UPLOADED_AFTER_DEADLINE",
   /** Uploaded at or after the season end time plus the tournament's M days (rule check). */
   "UPLOAD_WINDOW_CLOSED",
+  /** Shorter than the tournament's minimum swim distance (extra rule check). */
+  "MIN_DISTANCE_MISSED",
+  /** Slower than the tournament's extra slowest pace per 100 m (extra rule check). */
+  "EXTRA_PACE_MISSED",
 ] as const;
 
 export type ReasonCode = (typeof REASON_CODES)[number];

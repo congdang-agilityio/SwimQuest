@@ -6,7 +6,11 @@ const deadlines = {
   submissionDays: 7,
   lateUploadDays: 3,
   seasonEndAt: new Date("2026-11-30T20:00:00+07:00"),
+  minSwimDistanceM: null,
+  extraSlowestPaceSecPer100m: null,
 };
+/** 1000 m in 20 minutes. */
+const effort = { distanceM: 1000, durationS: 1200 };
 const t = (swimTypeAllowed: "ANY" | "POOL_ONLY" | "OPEN_WATER_ONLY") => ({
   swimTypeAllowed,
   ...deadlines,
@@ -16,6 +20,7 @@ const s = (swimType: "POOL" | "OPEN_WATER" | "UNKNOWN") => ({
   swimType,
   startedAt: new Date("2026-11-01T06:00:00+07:00"),
   createdAt: new Date("2026-11-02T08:00:00+07:00"),
+  ...effort,
 });
 
 describe("evaluateRules: swim type", () => {
@@ -54,6 +59,7 @@ const at = (startedAt: string, createdAt: string) => ({
   swimType: "POOL" as const,
   startedAt: vn(startedAt),
   createdAt: vn(createdAt),
+  ...effort,
 });
 const late = (days: number, swimDate: string) => ({
   code: "UPLOADED_AFTER_DEADLINE",
