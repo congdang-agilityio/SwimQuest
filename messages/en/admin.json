@@ -1,7 +1,8 @@
 {
   "title": "Admin",
   "sections": {
-    "users": "Users"
+    "users": "Users",
+    "swimLimits": "Swim limits"
   },
   "users": {
     "title": "Users",
@@ -72,6 +73,46 @@
         "network": "Could not reach the server. Check your connection and try again.",
         "failed": "Could not change the account status. Please try again."
       }
+    }
+  },
+  "swimLimits": {
+    "title": "Swim limits",
+    "back": "Back",
+    "intro": "Set the default realistic swim limits that new tournaments start with, and the bounds organizers must stay within. Paces are minutes:seconds per 100 m, distance is in km.",
+    "existingNote": "Existing tournaments keep the limits and bounds they were created with. Changes apply to tournaments created afterwards.",
+    "fields": {
+      "fastestPaceSecPer100m": "Fastest realistic pace (per 100 m)",
+      "slowestPaceSecPer100m": "Slowest realistic pace (per 100 m)",
+      "longestRealisticSwimM": "Longest realistic swim (km)"
+    },
+    "parts": {
+      "value": {
+        "pace": "Default (m:ss)",
+        "km": "Default (km)"
+      },
+      "min": {
+        "pace": "Lowest allowed (m:ss)",
+        "km": "Lowest allowed (km)"
+      },
+      "max": {
+        "pace": "Highest allowed (m:ss)",
+        "km": "Highest allowed (km)"
+      }
+    },
+    "reason": "Reason for the change",
+    "reasonHint": "Required. It is recorded in the audit log.",
+    "save": "Save swim limits",
+    "saving": "Saving...",
+    "saved": "The swim limits were saved.",
+    "networkError": "Could not reach the server. Check your connection and try again.",
+    "failed": "Could not save the swim limits. Please try again.",
+    "errors": {
+      "INVALID_NUMBER": "Enter a valid positive value.",
+      "MIN_ABOVE_MAX": "The lowest allowed value must not be above the highest.",
+      "OUT_OF_BOUNDS": "The default must be between the lowest and highest allowed values.",
+      "NOT_FASTER_THAN_SLOWEST": "The fastest pace must be faster than the slowest pace.",
+      "REQUIRED": "Enter a reason.",
+      "UNKNOWN": "This value is not valid."
     }
   }
 }

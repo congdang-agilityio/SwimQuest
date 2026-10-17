@@ -1,7 +1,8 @@
 {
   "title": "Quản trị",
   "sections": {
-    "users": "Người dùng"
+    "users": "Người dùng",
+    "swimLimits": "Giới hạn bơi"
   },
   "users": {
     "title": "Người dùng",
@@ -72,6 +73,46 @@
         "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
         "failed": "Không đổi được trạng thái tài khoản. Vui lòng thử lại."
       }
+    }
+  },
+  "swimLimits": {
+    "title": "Giới hạn bơi",
+    "back": "Quay lại",
+    "intro": "Đặt giới hạn bơi thực tế mặc định cho giải mới và khoảng cho phép mà ban tổ chức phải tuân theo. Tốc độ tính theo phút:giây mỗi 100 m, quãng đường tính theo km.",
+    "existingNote": "Các giải hiện có giữ nguyên giới hạn và khoảng cho phép lúc tạo. Thay đổi chỉ áp dụng cho giải tạo sau đó.",
+    "fields": {
+      "fastestPaceSecPer100m": "Tốc độ nhanh nhất thực tế (mỗi 100 m)",
+      "slowestPaceSecPer100m": "Tốc độ chậm nhất thực tế (mỗi 100 m)",
+      "longestRealisticSwimM": "Quãng bơi dài nhất thực tế (km)"
+    },
+    "parts": {
+      "value": {
+        "pace": "Mặc định (m:ss)",
+        "km": "Mặc định (km)"
+      },
+      "min": {
+        "pace": "Thấp nhất cho phép (m:ss)",
+        "km": "Thấp nhất cho phép (km)"
+      },
+      "max": {
+        "pace": "Cao nhất cho phép (m:ss)",
+        "km": "Cao nhất cho phép (km)"
+      }
+    },
+    "reason": "Lý do thay đổi",
+    "reasonHint": "Bắt buộc. Lý do được ghi vào nhật ký kiểm toán.",
+    "save": "Lưu giới hạn bơi",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu giới hạn bơi.",
+    "networkError": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
+    "failed": "Không lưu được giới hạn bơi. Vui lòng thử lại.",
+    "errors": {
+      "INVALID_NUMBER": "Nhập một giá trị dương hợp lệ.",
+      "MIN_ABOVE_MAX": "Giá trị thấp nhất không được lớn hơn giá trị cao nhất.",
+      "OUT_OF_BOUNDS": "Giá trị mặc định phải nằm giữa giá trị thấp nhất và cao nhất.",
+      "NOT_FASTER_THAN_SLOWEST": "Tốc độ nhanh nhất phải nhanh hơn tốc độ chậm nhất.",
+      "REQUIRED": "Nhập lý do.",
+      "UNKNOWN": "Giá trị này không hợp lệ."
     }
   }
 }

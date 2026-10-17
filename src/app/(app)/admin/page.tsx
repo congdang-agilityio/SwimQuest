@@ -3,7 +3,10 @@ import { getTranslations } from "next-intl/server";
 import styles from "@/components/nav/app-nav.module.css";
 
 /** Admin sections; later admin tasks add their entry here. */
-const SECTIONS = [{ key: "users", href: "/admin/users" }] as const;
+const SECTIONS = [
+  { key: "users", href: "/admin/users" },
+  { key: "swimLimits", href: "/admin/swim-limits" },
+] as const;
 
 export default async function AdminPage() {
   const t = await getTranslations("admin");
