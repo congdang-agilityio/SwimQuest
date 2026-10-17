@@ -18,10 +18,6 @@
   background: var(--sq-gradient-nav);
   box-shadow: var(--sq-shadow-card);
 }
-/* The light sheet tints every link blue; the back chevron sits on navy. */
-.screen .headerBand a {
-  color: var(--sq-text-on-dark);
-}
 
 .form {
   display: grid;

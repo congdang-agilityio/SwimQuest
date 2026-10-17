@@ -14,10 +14,6 @@
   background: var(--sq-gradient-nav);
   box-shadow: var(--sq-shadow-card);
 }
-/* The light sheet turns links blue; the back chevron stays white on the navy band. */
-.headerBand a {
-  color: var(--sq-text-on-dark);
-}
 
 .panel {
   display: grid;
