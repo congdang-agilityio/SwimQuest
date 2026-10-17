@@ -1,7 +1,9 @@
 import type { Prisma } from "@prisma/client";
-import { effectiveStatus } from "@/lib/tournaments/lifecycle";
+import { isSeasonConfigLocked } from "@/lib/tournaments/lifecycle";
 import { isSettingsGroup, SETTINGS_GROUPS, type SettingsGroup } from "@/lib/validation/settings";
 import { requireOrganizer } from "@/server/auth/roles";
+import { changedFields } from "@/server/audit/diff";
+import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { db } from "@/server/db";
 
 type Values = Record<string, unknown>;
@@ -47,9 +49,8 @@ export async function updateSettings(
   if (!isSettingsGroup(group)) return { ok: false, reason: "UNKNOWN_GROUP" };
   const settings: SettingsGroup = SETTINGS_GROUPS[group];
 
-  const status = effectiveStatus(tournament, now);
-  const locked = settings.seasonLocked && status !== "DRAFT" && status !== "PUBLISHED";
-  if (locked) return { ok: false, reason: "SEASON_LOCKED" };
+  if (settings.seasonLocked && isSeasonConfigLocked(tournament, now))
+    return { ok: false, reason: "SEASON_LOCKED" };
 
   if (typeof input !== "object" || input === null || Array.isArray(input))
     return { ok: false, reason: "INVALID", errors: { body: "INVALID_BODY" } };
@@ -69,9 +70,24 @@ export async function updateSettings(
 
   const where = settings.seasonLocked ? OPEN_FOR_SEASON_SETTINGS(now) : {};
   const guard = settings.writeGuard?.(parsed.data) ?? {};
-  const { count } = await db.tournament.updateMany({
-    where: { AND: [{ id: tournament.id }, where, guard] },
-    data: parsed.data,
+  const changes = changedFields(tournament, parsed.data);
+  const audited = tournament.status !== "DRAFT" && Object.keys(changes.after).length > 0;
+  const count = await db.$transaction(async (tx) => {
+    const { count } = await tx.tournament.updateMany({
+      where: { AND: [{ id: tournament.id }, where, guard] },
+      data: parsed.data,
+    });
+    if (count > 0 && audited)
+      await recordAudit(tx, {
+        actor: { type: "USER", userId },
+        action: AUDIT_ACTIONS.TOURNAMENT_UPDATED,
+        entityType: "Tournament",
+        entityId: tournament.id,
+        tournamentId: tournament.id,
+        before: changes.before,
+        after: changes.after,
+      });
+    return count;
   });
   if (count > 0) return { ok: true, group, values: parsed.data };
   if (retry) return updateSettings(userId, tournamentId, group, input, now, false);
