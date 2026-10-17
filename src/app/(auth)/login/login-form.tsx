@@ -15,14 +15,16 @@ const FIELDS: { name: FieldName; type: string; autoComplete: string }[] = [
   { name: "password", type: "password", autoComplete: "current-password" },
 ];
 
-export function LoginForm({ next }: { next?: string }) {
+export function LoginForm({ next, suspended = false }: { next?: string; suspended?: boolean }) {
   const t = useTranslations("auth");
   const [missing, setMissing] = useState<Record<FieldName, boolean>>({
     email: false,
     password: false,
   });
   const [busy, setBusy] = useState(false);
-  const [problem, setProblem] = useState<"invalid" | "failed" | null>(null);
+  const [problem, setProblem] = useState<"invalid" | "failed" | "suspended" | null>(
+    suspended ? "suspended" : null,
+  );
   const safeNext = safeNextPath(next, "");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -43,7 +45,14 @@ export function LoginForm({ next }: { next?: string }) {
         window.location.assign(safeNextPath(next));
         return;
       }
-      setProblem(res.status === 401 || res.status === 400 ? "invalid" : "failed");
+      const code = res.status === 403 ? (await res.json().catch(() => null))?.error?.code : null;
+      setProblem(
+        code === "ACCOUNT_SUSPENDED"
+          ? "suspended"
+          : res.status === 401 || res.status === 400
+            ? "invalid"
+            : "failed",
+      );
     } catch {
       setProblem("failed");
     }
@@ -73,7 +82,11 @@ export function LoginForm({ next }: { next?: string }) {
       ))}
       {problem && (
         <p role="alert" className={styles.problem}>
-          {problem === "invalid" ? t("errors.INVALID_CREDENTIALS") : t("errors.GENERIC")}
+          {problem === "suspended"
+            ? t("errors.ACCOUNT_SUSPENDED")
+            : problem === "invalid"
+              ? t("errors.INVALID_CREDENTIALS")
+              : t("errors.GENERIC")}
         </p>
       )}
       <Button type="submit" disabled={busy} block>

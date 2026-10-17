@@ -8,9 +8,11 @@ export const dynamic = "force-dynamic";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string | string[] }>;
+  searchParams: Promise<{ next?: string | string[]; suspended?: string | string[] }>;
 }) {
   if (await getCurrentUser()) redirect("/");
-  const { next } = await searchParams;
-  return <LoginForm next={typeof next === "string" ? next : undefined} />;
+  const { next, suspended } = await searchParams;
+  return (
+    <LoginForm next={typeof next === "string" ? next : undefined} suspended={suspended === "1"} />
+  );
 }
