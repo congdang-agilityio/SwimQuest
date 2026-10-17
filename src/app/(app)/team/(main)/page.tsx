@@ -25,6 +25,11 @@ import { TeamHeader } from "@/components/teams/team-header";
 import { CaptainInvite } from "@/components/teams/captain-invite";
 import { LeaveSwitchActions } from "@/components/teams/leave-switch-actions";
 import { TeamRoster } from "@/components/teams/team-roster";
+import { TeamCollectibles } from "@/components/collectibles/team-collectibles";
+import { getTeamCollectibles } from "@/server/collectibles/team-collectibles";
+import { MyCollectiblesCard } from "@/components/collectibles/my-collectibles-card";
+import { getPersonalCollectibles } from "@/server/collectibles/personal";
+import { db } from "@/server/db";
 
 export default async function TeamPage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/team");
@@ -38,6 +43,12 @@ export default async function TeamPage() {
   const view = membership ? await getMyTeamView(user.id, membership.tournament.id) : null;
   const removal = membership ? null : await getLastRemoval(user.id);
   const myPoints = membership ? await getMyPoints(user.id, membership.tournament.id) : null;
+  const collectibles = membership ? await getTeamCollectibles(user.id, membership.team.id) : null;
+  const mine = membership
+    ? (await getPersonalCollectibles(db, membership.tournament.id, [user.id], new Date())).get(
+        user.id,
+      )
+    : undefined;
   const status = membership ? effectiveStatus(membership.tournament, new Date()) : null;
   const beforeStart = status === "DRAFT" || status === "PUBLISHED";
   const otherTeams =
@@ -110,28 +121,32 @@ export default async function TeamPage() {
             </div>
           )}
         </div>
-        <FinishLostNotice userId={user.id} />
-        {view?.finishedAt && <TeamFinish userId={user.id} />}
-        {myPoints && <MyPointsCard points={myPoints} />}
-        {membership && view && (
-          <TeamStartCard
-            startSlug={startSlug}
-            startNameKey={
-              getRoute(membership.tournament.routeId)?.destinations.find(
-                (d) => d.slug === startSlug,
-              )?.nameKey ?? null
-            }
-            isCaptain={membership.team.captainUserId === user.id}
-            lockAtIso={startLockAt(membership.tournament).toISOString()}
-            locked={isStartLocked(membership.tournament, new Date())}
-            startSetBy={membership.team.startSetBy}
-            autoAssignedAtIso={
-              membership.team.startSetBy === "AUTOMATIC"
-                ? (membership.team.startSetAt?.toISOString() ?? null)
-                : null
-            }
-          />
-        )}
+        <div className={styles.side}>
+          <FinishLostNotice userId={user.id} />
+          {view?.finishedAt && <TeamFinish userId={user.id} />}
+          {myPoints && <MyPointsCard points={myPoints} />}
+          {mine && <MyCollectiblesCard collectibles={mine} />}
+          {collectibles && <TeamCollectibles collectibles={collectibles} />}
+          {membership && view && (
+            <TeamStartCard
+              startSlug={startSlug}
+              startNameKey={
+                getRoute(membership.tournament.routeId)?.destinations.find(
+                  (d) => d.slug === startSlug,
+                )?.nameKey ?? null
+              }
+              isCaptain={membership.team.captainUserId === user.id}
+              lockAtIso={startLockAt(membership.tournament).toISOString()}
+              locked={isStartLocked(membership.tournament, new Date())}
+              startSetBy={membership.team.startSetBy}
+              autoAssignedAtIso={
+                membership.team.startSetBy === "AUTOMATIC"
+                  ? (membership.team.startSetAt?.toISOString() ?? null)
+                  : null
+              }
+            />
+          )}
+        </div>
       </div>
     </main>
   );
