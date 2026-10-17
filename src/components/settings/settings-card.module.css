@@ -146,3 +146,75 @@
   font-size: var(--sq-text-sm);
   color: var(--sq-text-muted);
 }
+
+/* Optional fields: stacked groups, with an upload row per picture. */
+.card .stack {
+  display: grid;
+  gap: var(--sq-space-3);
+  min-width: 0;
+  margin: 0 0 var(--sq-space-4);
+  padding: 0;
+  border: 0;
+}
+.imageField {
+  display: grid;
+  gap: var(--sq-space-2);
+  min-width: 0;
+}
+.imageLabel {
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-navy-800);
+}
+.banner {
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  border-radius: var(--sq-radius-md);
+  object-fit: cover;
+}
+.logo {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--sq-radius-md);
+  object-fit: cover;
+}
+.imageRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-3);
+}
+.upload {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sq-tap);
+  padding: 0 var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-white);
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  cursor: pointer;
+}
+.upload:focus-within {
+  outline: 2px solid var(--sq-blue-600);
+  outline-offset: 2px;
+}
+.file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.imageHint {
+  margin: 0;
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.fieldError {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-danger);
+}

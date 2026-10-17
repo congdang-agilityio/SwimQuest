@@ -201,5 +201,48 @@
     "saved": "Saved.",
     "failed": "Could not save. Please try again.",
     "networkError": "Connection error. Please try again."
+  },
+  "optional": {
+    "title": "Optional details",
+    "intro": "Everything here is optional and stays editable after you publish.",
+    "imagesLegend": "Pictures",
+    "linksLegend": "Links and contact",
+    "textLegend": "Notes and written rules",
+    "fields": {
+      "banner": "Banner (optional)",
+      "logo": "Logo (optional)",
+      "rulesUrl": "Rules link (optional)",
+      "contactChannel": "Contact channel (optional)",
+      "eligibilityNotes": "Eligibility notes (optional)",
+      "rulesText": "Written rules (optional)"
+    },
+    "hints": {
+      "banner": "PNG, JPEG or WebP, up to 2 MB. Without one, players see the default banner.",
+      "logo": "PNG, JPEG or WebP, up to 2 MB.",
+      "rulesUrl": "A web address starting with http:// or https://.",
+      "contactChannel": "How players can reach you, for example an email or a group link. Up to 200 characters.",
+      "eligibilityNotes": "Who may join, for example an age range. The app does not check this. Up to 1,000 characters.",
+      "rulesText": "Your own rules in plain text. Up to 5,000 characters."
+    },
+    "upload": "Upload",
+    "replace": "Replace",
+    "remove": "Remove",
+    "uploading": "Uploading…",
+    "save": "Save optional details",
+    "saving": "Saving...",
+    "saved": "Optional details saved.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "INVALID_URL": "Enter a full web address starting with http:// or https://.",
+      "ELIGIBILITY_NOTES_TOO_LONG": "Eligibility notes can be up to 1,000 characters.",
+      "CONTACT_CHANNEL_TOO_LONG": "The contact channel can be up to 200 characters.",
+      "RULES_TEXT_TOO_LONG": "The written rules can be up to 5,000 characters.",
+      "IMAGE_INVALID": "That image can no longer be used. Upload it again.",
+      "IMAGE_TOO_LARGE": "The image is larger than 2 MB.",
+      "IMAGE_TYPE_NOT_ALLOWED": "Use a PNG, JPEG or WebP image.",
+      "UPLOAD_FAILED": "Could not upload the image. Try again.",
+      "UNKNOWN": "This value is not valid."
+    }
   }
 }
