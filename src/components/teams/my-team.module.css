@@ -302,3 +302,46 @@
 .handover > p {
   margin: var(--sq-space-2) 0 0;
 }
+
+/* Captain invite card ("Mời thành viên"), in the white panel between the footer and the actions */
+.invite {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: 0 var(--sq-space-4) var(--sq-space-3);
+  background: var(--sq-white);
+}
+.inviteCard {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+}
+.inviteTitle {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+}
+.inviteHint {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.inviteInput {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-white);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+.inviteActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
