@@ -72,3 +72,17 @@
   font-size: var(--sq-text-sm);
   font-weight: var(--sq-weight-semibold);
 }
+.switches {
+  display: grid;
+}
+.switches > * + * {
+  padding-top: var(--sq-space-3);
+  margin-top: var(--sq-space-3);
+  border-top: 1px solid var(--sq-sky-100);
+}
+.saved {
+  margin: 0;
+  color: var(--sq-success);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
