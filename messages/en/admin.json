@@ -3,7 +3,8 @@
   "sections": {
     "users": "Users",
     "swimLimits": "Swim limits",
-    "reports": "Reports"
+    "reports": "Reports",
+    "tournamentRequests": "Tournament requests"
   },
   "users": {
     "title": "Users",
@@ -200,6 +201,31 @@
       "NOT_FOUND": "This report no longer exists.",
       "network": "Could not reach the server. Check your connection and try again.",
       "failed": "Could not close the report. Please try again."
+    }
+  },
+  "tournamentRequests": {
+    "title": "Tournament requests",
+    "back": "Back",
+    "listTitle": "Pending requests",
+    "sentAt": "Sent",
+    "approve": "Approve",
+    "reject": "Reject",
+    "confirmReject": "Reject request",
+    "reasonLabel": "Reason for the player",
+    "reasonHint": "Required, up to {max} characters. The player sees it.",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "empty": "No pending requests.",
+    "loading": "Loading...",
+    "retry": "Try again",
+    "loadError": "Could not load requests. Check your connection and try again.",
+    "errors": {
+      "INVALID_REASON": "Enter a reason of 1 to 500 characters.",
+      "REQUEST_DECIDED": "This request was already decided. The list was refreshed.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "NOT_FOUND": "This request no longer exists.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "failed": "Could not save the decision. Please try again."
     }
   }
 }
