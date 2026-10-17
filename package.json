@@ -10,7 +10,8 @@
     "postinstall": "prisma generate",
     "build": "prisma generate && next build",
     "start": "next start -p ${PORT:-3000}",
-    "lint": "eslint . && prettier --check .",
+    "lint": "eslint . && prettier --check . && npm run check:safety-copy",
+    "check:safety-copy": "node --no-warnings scripts/check-safety-copy.mjs",
     "test": "vitest run",
     "e2e": "playwright test"
   },
