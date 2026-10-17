@@ -47,6 +47,7 @@ describe("(app) layout", () => {
     expect(nav.props).toEqual({
       bell: expect.anything(),
       displayName: "Admin An",
+      avatarSrc: null,
       isPlatformAdmin: true,
       switcher: null,
     });
