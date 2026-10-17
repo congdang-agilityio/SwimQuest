@@ -1,0 +1,28 @@
+{
+  "title": "Tìm giải đấu",
+  "listTitle": "Danh sách giải đấu",
+  "searchLabel": "Tìm giải đấu",
+  "searchPlaceholder": "Tìm giải đấu…",
+  "searchButton": "Tìm",
+  "filterLabel": "Lọc giải đấu theo trạng thái",
+  "filter": {
+    "open": "Đang mở",
+    "PUBLISHED": "Đăng ký",
+    "ACTIVE": "Đang diễn ra",
+    "COMPLETED": "Kết thúc"
+  },
+  "status": {
+    "PUBLISHED": "Đang mở đăng ký",
+    "ACTIVE": "Đang diễn ra",
+    "COMPLETED": "Đã kết thúc"
+  },
+  "dates": "{start} – {end}",
+  "placesLeft": "{count, plural, =0 {Hết chỗ} other {Còn # chỗ}}",
+  "join": "Tham gia",
+  "details": "Xem chi tiết",
+  "empty": "Không tìm thấy giải đấu nào phù hợp.",
+  "emptyHint": "Hãy thử từ khóa khác hoặc xóa bộ lọc.",
+  "clear": "Xóa bộ lọc",
+  "more": "Xem thêm",
+  "back": "Giải đấu của tôi"
+}
