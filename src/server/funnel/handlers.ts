@@ -33,13 +33,16 @@ export const funnelHandlers: { [T in DomainEventType]?: EventHandler<T> } = {
       refId: p.teamId,
       once: p.teamId,
     }),
-  TEAM_START_SET: (tx, p) =>
-    recordFunnelEvent(tx, "route_start_selected", {
-      userId: p.setBy,
+  TEAM_START_SET: (tx, p) => {
+    // The automatic assignment has no user: `setBy` is "AUTOMATIC" there, not a user id.
+    const automatic = p.setBy === "AUTOMATIC";
+    return recordFunnelEvent(tx, "route_start_selected", {
+      userId: automatic ? null : p.setBy,
       tournamentId: p.tournamentId,
       refId: p.teamId,
-      props: { startId: p.startId },
-    }),
+      props: { startId: p.startId, ...(automatic ? { source: "automatic" } : {}) },
+    });
+  },
   TEAM_START_LOCKED: (tx, p) =>
     recordFunnelEvent(tx, "route_start_locked", {
       tournamentId: p.tournamentId,
