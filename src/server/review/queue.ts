@@ -2,7 +2,11 @@ import type { Prisma, Swim, Tournament } from "@prisma/client";
 import { utcToVnParts } from "@/lib/time/vn";
 import { NotFoundError, requireReviewer } from "@/server/auth/roles";
 import { db } from "@/server/db";
-import { PUBLIC_PLAYER_SELECT, type PublicPlayer } from "@/server/users/public-player";
+import {
+  PUBLIC_PLAYER_SELECT,
+  toPublicPlayer,
+  type PublicPlayer,
+} from "@/server/users/public-player";
 
 /** Most points a reviewer gets of a swim's track: enough for its shape, not every fix. */
 export const MAX_TRACK_POINTS = 500;
@@ -82,7 +86,7 @@ function toItem({ id, swim, user, tournament, reasons }: Row): ReviewQueueItem {
   return {
     resultId: id,
     swimId: swim.id,
-    player: { id: user.id, displayName: user.displayName },
+    player: toPublicPlayer(user),
     startedAt: swim.startedAt.toISOString(),
     date: utcToVnParts(swim.startedAt).date,
     distanceM: swim.distanceM,

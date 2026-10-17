@@ -95,12 +95,16 @@ describe("team roster and captain appointment", () => {
         {
           id: anna.id,
           displayName: "anna",
+          avatarImageId: null,
+          avatarDefaultKey: null,
           isCaptain: false,
           joinedAt: new Date("2026-10-01T00:00:00Z"),
         },
         {
           id: binh.id,
           displayName: "binh",
+          avatarImageId: null,
+          avatarDefaultKey: null,
           isCaptain: true,
           joinedAt: new Date("2026-10-02T00:00:00Z"),
         },
@@ -112,7 +116,14 @@ describe("team roster and captain appointment", () => {
       const roster = await getTeamRoster(team.id);
       expect(roster).toHaveLength(2);
       for (const member of roster) {
-        expect(Object.keys(member).sort()).toEqual(["displayName", "id", "isCaptain", "joinedAt"]);
+        expect(Object.keys(member).sort()).toEqual([
+          "avatarDefaultKey",
+          "avatarImageId",
+          "displayName",
+          "id",
+          "isCaptain",
+          "joinedAt",
+        ]);
         expect(JSON.stringify(member)).not.toContain("@example.com");
       }
     });

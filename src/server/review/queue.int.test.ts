@@ -124,7 +124,7 @@ describe("getReviewQueue", () => {
     expect(queue[1]).toEqual({
       resultId: flagged.id,
       swimId: flagged.swimId,
-      player: { id: player.id, displayName: "player" },
+      player: { id: player.id, displayName: "player", avatarImageId: null, avatarDefaultKey: null },
       startedAt: new Date("2026-06-02T06:00:00+07:00").toISOString(),
       date: "2026-06-02",
       distanceM: 1000,
