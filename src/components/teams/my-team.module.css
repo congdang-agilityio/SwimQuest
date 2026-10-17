@@ -249,3 +249,6 @@
   color: var(--sq-text);
   font-size: var(--sq-text-sm);
 }
+.finishedRow {
+  margin-top: var(--sq-space-2);
+}

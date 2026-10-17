@@ -5,6 +5,7 @@ import { Chip, ProgressBar } from "@/components/ui";
 import { MOCKUP_TEAM_EMBLEM } from "@/lib/art/mockup-avatars";
 import type { MyTeamView } from "@/server/teams/my-team-view";
 import styles from "./my-team.module.css";
+import { FinishedLabel } from "./finished-label";
 import { TeamEmblem } from "./team-emblem";
 
 type Props = {
@@ -13,6 +14,8 @@ type Props = {
   progressBp: number;
   teamPoints: number;
   memberCount: number;
+  /** Set once the team has finished the route. */
+  finishedAt?: Date | null;
   /** Optional extra content, rendered after the progress. */
   children?: ReactNode;
 };
@@ -24,6 +27,7 @@ export function TeamHeader({
   progressBp,
   teamPoints,
   memberCount,
+  finishedAt,
   children,
 }: Props) {
   const t = useTranslations("team");
@@ -47,6 +51,11 @@ export function TeamHeader({
               <span>{t("members", { count: memberCount, limit: team.memberLimit })}</span>
             </Chip>
           </p>
+          {finishedAt && (
+            <div className={styles.finishedRow}>
+              <FinishedLabel finishedAt={finishedAt} onDark />
+            </div>
+          )}
         </div>
       </div>
       {captainName && (

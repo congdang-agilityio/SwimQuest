@@ -43,6 +43,7 @@ export default async function TeamPage() {
                 progressBp={view.progress.progressBp}
                 teamPoints={view.teamPoints}
                 memberCount={view.memberCount}
+                finishedAt={view.finishedAt}
               />
               <TeamRoster members={view.roster} />
               <div className={styles.footer}>

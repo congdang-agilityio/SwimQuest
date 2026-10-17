@@ -9,6 +9,8 @@ export type ProgressTableRow = {
   emblemKey: string;
   progressBp: number;
   routeKmReached: number;
+  /** Set once the team has finished the route; shows the finished label. */
+  finishedAt?: Date | null;
   isMyTeam: boolean;
 };
 
