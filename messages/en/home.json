@@ -24,6 +24,8 @@
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
     },
-    "progressLabel": "Team progress"
+    "progressLabel": "Team progress",
+    "manage": "Manage",
+    "manageFor": "Manage {name}"
   }
 }

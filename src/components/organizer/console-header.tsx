@@ -32,8 +32,6 @@ type Props = {
   backLabel: string;
   /** The publish or archive control allowed in this state (rendered by the page). */
   controls?: ReactNode;
-  /** Buttons under the timeline (settings, review). */
-  actions?: ReactNode;
 };
 
 const when = (d: Date) => {
@@ -42,15 +40,7 @@ const when = (d: Date) => {
 };
 
 /** Top of the organizer console (S-65 AC 2): status, Vietnam-time timeline and allowed controls. */
-export function ConsoleHeader({
-  name,
-  status,
-  timeline,
-  now,
-  backLabel,
-  controls,
-  actions,
-}: Props) {
+export function ConsoleHeader({ name, status, timeline, now, backLabel, controls }: Props) {
   const t = useTranslations("organizer");
   const next = TIMELINE.find((key) => {
     const at = timeline[key];
@@ -107,7 +97,6 @@ export function ConsoleHeader({
               );
             })}
           </ol>
-          {actions}
         </div>
         {controls && <div className={styles.controls}>{controls}</div>}
       </Card>

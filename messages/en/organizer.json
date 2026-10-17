@@ -77,6 +77,19 @@
         "ORGANIZER": "By the organizer",
         "AUTOMATIC": "Assigned automatically"
       }
+    },
+    "links": {
+      "title": "Organizer links",
+      "invite": "Invite link"
+    },
+    "progress": {
+      "title": "Team progress",
+      "empty": "No teams yet.",
+      "rank": "Rank {rank}",
+      "ship": "Ship level {tier}",
+      "barLabel": "Progress of {name}",
+      "active": "{count}/{total} active this week",
+      "finished": "Finished"
     }
   }
 }

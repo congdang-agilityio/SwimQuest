@@ -2,7 +2,8 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ConsoleHeader } from "@/components/organizer/console-header";
-import consoleStyles from "@/components/organizer/console.module.css";
+import { ConsoleLinks } from "@/components/organizer/console-links";
+import { ProgressSection } from "@/components/organizer/progress-section";
 import { StartsSection } from "@/components/organizer/starts-section";
 import { TeamsSection } from "@/components/organizer/teams-section";
 import { UnassignedPlayers } from "@/components/organizer/unassigned-players";
@@ -10,7 +11,6 @@ import { TeamList } from "@/components/teams/team-list";
 import { InviteLink } from "@/components/tournaments/invite-link";
 import styles from "@/components/tournaments/manage.module.css";
 import { PublishPanel } from "@/components/tournaments/publish-panel";
-import { ButtonLink } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
@@ -56,7 +56,6 @@ export default async function ManageTournamentPage({
           locked: isStartLocked(tournament, now),
           lockAtIso: startLockAt(tournament).toISOString(),
         };
-  const t = await getTranslations("organizer");
   const tCommon = await getTranslations("common");
   const showInvite = tournament.status !== "DRAFT" && Boolean(tournament.inviteToken);
   const origin = showInvite ? pageOrigin(await headers()) : null;
@@ -71,32 +70,15 @@ export default async function ManageTournamentPage({
         controls={
           overview.actions.canPublish ? <PublishPanel tournamentId={tournament.id} /> : undefined
         }
-        actions={
-          <div className={consoleStyles.actions}>
-            <ButtonLink
-              href={`/tournaments/${tournament.id}/manage/settings`}
-              variant="secondary"
-              block
-            >
-              {t("manage.settingsLink")}
-            </ButtonLink>
-            {tournament.status !== "DRAFT" && (
-              <ButtonLink href={`/tournaments/${tournament.id}/manage/review`} block>
-                {t("manage.reviewLink")}
-              </ButtonLink>
-            )}
-            {tournament.status !== "DRAFT" && (
-              <ButtonLink
-                href={`/tournaments/${tournament.id}/manage/helpers`}
-                variant="secondary"
-                block
-              >
-                {t("manage.helpersLink")}
-              </ButtonLink>
-            )}
-          </div>
-        }
       />
+      <ConsoleLinks
+        tournamentId={tournament.id}
+        published={tournament.status !== "DRAFT"}
+        hasInvite={Boolean(showInvite && origin)}
+      />
+      {(overview.status === "ACTIVE" || overview.status === "COMPLETED") && (
+        <ProgressSection tournamentId={tournament.id} teams={consoleTeams.teams} />
+      )}
       <TeamsSection
         tournamentId={tournament.id}
         teams={consoleTeams.teams}

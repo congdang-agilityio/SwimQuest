@@ -77,6 +77,19 @@
         "ORGANIZER": "Ban tổ chức chọn",
         "AUTOMATIC": "Gán tự động"
       }
+    },
+    "links": {
+      "title": "Lối tắt ban tổ chức",
+      "invite": "Liên kết mời"
+    },
+    "progress": {
+      "title": "Tiến độ các đội",
+      "empty": "Chưa có đội nào.",
+      "rank": "Hạng {rank}",
+      "ship": "Tàu cấp {tier}",
+      "barLabel": "Tiến độ của {name}",
+      "active": "{count}/{total} hoạt động tuần này",
+      "finished": "Đã về đích"
     }
   }
 }
