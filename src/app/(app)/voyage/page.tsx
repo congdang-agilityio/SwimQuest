@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
+import { FinishLostNotice } from "@/components/finish/finish-lost-notice";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { ButtonLink, ProgressBar, ScreenHeader, SectionHeader } from "@/components/ui";
@@ -71,6 +72,7 @@ export default async function VoyagePage() {
       </div>
       {/* "Cập bến Lý Sơn" celebration, only once the team has finished: above the map. */}
       <div className={styles.finishSlot}>
+        <FinishLostNotice userId={user.id} />
         <TeamFinish userId={user.id} />
       </div>
       <RouteMap
