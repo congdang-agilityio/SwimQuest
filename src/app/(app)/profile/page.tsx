@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
@@ -25,7 +25,9 @@ export default async function ProfilePage() {
     getMyProfile(user.id),
     listUserBadges(user.id),
   ]);
-  if (!profile) notFound();
+  // The account vanished after the session check: sign in again. Never notFound() here, because
+  // loading.tsx streams a 200 first and a 404 could no longer be sent.
+  if (!profile) redirect("/login?next=/profile");
   const teams = await db.team.findMany({
     where: { id: { in: stats.currentProgress.map((p) => p.teamId) } },
     select: { id: true, name: true },
