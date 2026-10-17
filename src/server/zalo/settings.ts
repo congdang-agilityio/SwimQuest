@@ -4,9 +4,8 @@ import { db } from "@/server/db";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
 import { requireOrganizer } from "@/server/auth/roles";
 import { getMe, setWebhook, ZaloApiError } from "./client";
+import { enqueueIntro } from "./outbox";
 import { decryptSecret, encryptSecret, keyHint, ZaloSecretError } from "./secret";
-
-type Tx = Parameters<Parameters<typeof db.$transaction>[0]>[0];
 
 export type ZaloSettingsErrorCode =
   "INVALID_KEY" | "INVALID_ORIGIN" | "TOURNAMENT_CLOSED" | "ZALO_KEY_REJECTED" | "ZALO_UNREACHABLE";
@@ -190,7 +189,7 @@ export async function saveZaloBotKey(
       update: sameBot ? {} : { zaloBotId: bot.id, introPostedAt: null },
       create: { tournamentId, zaloBotId: bot.id },
     });
-    if (bot.chatId) await queueIntro(tx, tournamentId, bot.id, bot.chatId);
+    if (bot.chatId) await enqueueIntro(tx, tournamentId);
 
     await recordAudit(tx, {
       actor: { type: "USER", userId },
@@ -246,33 +245,4 @@ function readSecret(sealed: string): string | null {
     if (e instanceof ZaloSecretError && e.code === "ZALO_KEY_UNREADABLE") return null;
     throw e;
   }
-}
-
-/**
- * Queues this tournament's introduction for the bot's linked group (S-85 AC 5), once per
- * tournament and group. Delivery and the Vietnamese text come with the outbox (#433) and the
- * intro message (#445), which may replace this with their `enqueueIntro`.
- */
-async function queueIntro(
-  tx: Tx,
-  tournamentId: string,
-  zaloBotId: string,
-  chatId: string,
-): Promise<void> {
-  await tx.zaloMessage.createMany({
-    data: [
-      {
-        zaloBotId,
-        chatId,
-        kind: "INTRO",
-        payload: { tournamentId },
-        dedupeKey: `intro:${tournamentId}:${chatId}`,
-      },
-    ],
-    skipDuplicates: true,
-  });
-  await tx.tournamentZalo.updateMany({
-    where: { tournamentId, introPostedAt: null },
-    data: { introPostedAt: new Date() },
-  });
 }
