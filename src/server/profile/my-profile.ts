@@ -1,4 +1,5 @@
 import { db } from "@/server/db";
+import { recordFunnelEvent } from "@/server/funnel/record";
 import { parseProfileUpdate, type ProfileErrors } from "@/lib/validation/profile";
 
 const MY_PROFILE_SELECT = {
@@ -62,10 +63,15 @@ export async function updateMyProfile(
   else if (rest.avatarDefaultKey) data.avatarImageId = null;
   const defined = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
   try {
-    const profile = await db.user.update({
-      where: { id: userId },
-      data: defined,
-      select: MY_PROFILE_SELECT,
+    const profile = await db.$transaction(async (tx) => {
+      const saved = await tx.user.update({
+        where: { id: userId },
+        data: defined,
+        select: MY_PROFILE_SELECT,
+      });
+      // Only the first successful save counts as the profile setup.
+      await recordFunnelEvent(tx, "profile_setup_completed", { userId, once: userId });
+      return saved;
     });
     return { ok: true, profile };
   } catch (error) {

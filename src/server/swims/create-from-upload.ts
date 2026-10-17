@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { lockPlayerSwims, runChecks } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
+import { recordFunnelEvent } from "@/server/funnel/record";
 import { detectSwimSource, parseSwimFile } from "./parse";
 import { ParseError } from "./parse/types";
 import { swimDtoInclude, type SwimForDto } from "./swim-dto";
@@ -67,6 +68,12 @@ export async function createSwimFromUpload(
     await lockPlayerSwims(tx, userId);
     // Stamp after the lock: the default (transaction start) may predate a swim we waited for.
     const swim = await tx.swim.create({ data: { ...input.data, createdAt: new Date() } });
+    await recordFunnelEvent(tx, "activity_submitted", {
+      userId,
+      refId: swim.id,
+      props: { source },
+      once: swim.id,
+    });
     await runChecks(tx, swim);
     return tx.swim.findUniqueOrThrow({ where: { id: swim.id }, include: swimDtoInclude });
   });
