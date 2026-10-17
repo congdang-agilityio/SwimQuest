@@ -1,6 +1,7 @@
 import { SafeImg } from "@/components/art/safe-img";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { EnergyOrb } from "@/components/collectibles/energy-orb";
 import { Avatar, Chip } from "@/components/ui";
 import { badgeArt } from "@/lib/art/badge-art";
 import { profileAvatarSrc } from "@/lib/profile-avatar";
@@ -33,9 +34,12 @@ export function TeamRoster({
           <li key={m.id} className={styles.row}>
             <Avatar name={m.displayName} src={profileAvatarSrc(m)} size={44} decorative />
             <span className={styles.who}>
-              <Link href={`/players/${m.id}`} className={styles.name}>
-                {m.displayName}
-              </Link>
+              <span className={styles.nameLine}>
+                <Link href={`/players/${m.id}`} className={styles.name}>
+                  {m.displayName}
+                </Link>
+                {m.energyOrb && <EnergyOrb size={26} />}
+              </span>
               <span className={styles.tags}>
                 {m.isCaptain && (
                   <Chip tone="gold">
