@@ -1,0 +1,103 @@
+/* Base element styles on top of tokens.css. Screen styles belong in components/ui or CSS modules. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--sq-font-sans);
+  font-size: var(--sq-text-md);
+  line-height: var(--sq-leading);
+  color: var(--sq-text-on-dark);
+  background: var(--sq-navy-900) var(--sq-gradient-page) no-repeat;
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-weight: var(--sq-weight-bold);
+}
+
+a {
+  color: var(--sq-ocean);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--sq-focus-ring);
+  border-radius: var(--sq-radius-sm);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+/* Light surfaces (the content sheet, cards) switch text and form controls to the light scheme. */
+[data-surface="light"] {
+  color-scheme: light;
+  color: var(--sq-text);
+}
+
+[data-surface="light"] a {
+  color: var(--sq-blue-600);
+}
+
+[data-surface="light"] input:not([type="checkbox"], [type="radio"], [type="file"], [type="range"]),
+[data-surface="light"] select,
+[data-surface="light"] textarea {
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  color: var(--sq-text);
+}
+
+/* Buttons not yet moved to components/ui get a neutral pill on light surfaces. */
+[data-surface="light"] button:not([class]) {
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-white);
+  color: var(--sq-blue-600);
+  font-weight: var(--sq-weight-semibold);
+  box-shadow: var(--sq-shadow-card);
+  cursor: pointer;
+}
+
+[data-surface="light"] button:not([class]):disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+[data-surface="light"] fieldset {
+  margin: 0 0 var(--sq-space-4);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+}
+
+[data-surface="light"] legend {
+  padding: 0 var(--sq-space-1);
+  font-weight: var(--sq-weight-semibold);
+}

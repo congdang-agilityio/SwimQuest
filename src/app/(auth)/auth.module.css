@@ -1,0 +1,82 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding: var(--sq-space-4);
+}
+.column {
+  width: 100%;
+  max-width: var(--sq-content-max);
+}
+@media (min-width: 768px) {
+  .page {
+    align-content: center;
+    padding: var(--sq-space-8) var(--sq-space-4);
+  }
+  .column {
+    padding: var(--sq-space-4);
+    border: 1px solid var(--sq-navy-600);
+    border-radius: calc(var(--sq-radius-xl) + 8px);
+    background: rgb(1 33 61 / 0.7);
+    box-shadow: var(--sq-shadow-raised), var(--sq-shadow-glow);
+  }
+}
+.brandBlock {
+  position: relative;
+  margin-top: calc(-1 * var(--sq-space-10));
+  text-align: center;
+}
+.welcome,
+.brand,
+.tagline {
+  margin: 0;
+}
+.welcome {
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-semibold);
+}
+.brand {
+  font-size: var(--sq-text-display);
+  font-weight: var(--sq-weight-black);
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 3px 12px rgb(0 174 239 / 0.5);
+}
+.tagline {
+  margin-top: var(--sq-space-1);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-on-dark-muted);
+}
+.form {
+  margin-top: var(--sq-space-6);
+}
+.title {
+  margin: 0 0 var(--sq-space-4);
+  font-size: var(--sq-text-xl);
+  text-align: center;
+}
+.problem {
+  margin: 0 0 var(--sq-space-4);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-md);
+  background: rgb(198 47 58 / 0.18);
+  border: 1px solid rgb(255 180 180 / 0.5);
+  color: #ffd4d4;
+  font-weight: var(--sq-weight-medium);
+}
+.switch {
+  margin: var(--sq-space-4) 0 0;
+  text-align: center;
+  color: var(--sq-text-on-dark-muted);
+}
+/* NFR-10: links are touch targets too, at least 44x44 CSS px. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  color: var(--sq-ocean);
+  font-weight: var(--sq-weight-semibold);
+}

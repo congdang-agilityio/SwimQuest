@@ -1,59 +1,162 @@
-.account {
-  text-align: right;
+/* App shell: deep-blue page, top bar, bottom navigation (mobile) / left rail (desktop). */
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  background: linear-gradient(180deg, rgb(1 33 61 / 0.96), rgb(1 33 61 / 0.82));
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgb(10 77 128 / 0.6);
 }
+.brand {
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-black);
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--sq-white);
+  text-decoration: none;
+  text-shadow: 0 2px 8px rgb(0 174 239 / 0.45);
+}
+.account {
+  position: relative;
+}
+/* Plain 44x44 touch target; other screens import it (NFR-10). */
 .tap {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  min-width: 44px;
-  padding: 0 12px;
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  padding: 0 var(--sq-space-3);
+}
+.accountSummary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-2);
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  padding: 0 var(--sq-space-3) 0 var(--sq-space-1);
+  border: 1px solid var(--sq-navy-600);
+  border-radius: var(--sq-radius-pill);
+  background: rgb(0 59 102 / 0.7);
+  color: var(--sq-white);
+  font-weight: var(--sq-weight-semibold);
+  cursor: pointer;
+  list-style: none;
+}
+.accountSummary::-webkit-details-marker {
+  display: none;
+}
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--sq-space-2));
+  display: grid;
+  gap: var(--sq-space-2);
+  min-width: 180px;
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+  box-shadow: var(--sq-shadow-raised);
 }
 .nav {
   position: fixed;
   inset: auto 0 0 0;
-  background: #fff;
-  box-shadow: 0 0 0 1px #cbd5e1;
+  z-index: 30;
+  padding: var(--sq-space-1) var(--sq-space-2) calc(var(--sq-space-1) + env(safe-area-inset-bottom));
+  background: var(--sq-gradient-nav);
+  border-top: 1px solid var(--sq-navy-600);
+  box-shadow: 0 -6px 20px rgb(1 26 49 / 0.5);
 }
 .list {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
+  gap: var(--sq-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .link {
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
   min-height: 56px;
-  color: inherit;
+  padding: var(--sq-space-1) 2px;
+  border-radius: var(--sq-radius-md);
+  color: var(--sq-text-on-dark-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-medium);
+  text-align: center;
   text-decoration: none;
 }
-.link[aria-current="page"] {
-  font-weight: 700;
-  box-shadow: inset 0 4px currentColor;
+.link:hover {
+  color: var(--sq-white);
 }
+.link[aria-current="page"] {
+  color: var(--sq-white);
+  font-weight: var(--sq-weight-bold);
+  background: linear-gradient(180deg, rgb(0 174 239 / 0.28), rgb(0 59 102 / 0.6));
+  box-shadow: inset 0 0 0 1px rgb(0 174 239 / 0.45);
+}
+.link[aria-current="page"] svg {
+  color: var(--sq-ocean);
+}
+/* The light content sheet every signed-in page sits on. */
 .content {
-  padding-bottom: 72px;
+  min-height: calc(100vh - 61px);
+  max-width: 960px;
+  margin: var(--sq-space-3) auto 0;
+  padding: var(--sq-space-4) var(--sq-space-4) calc(var(--sq-nav-height) + var(--sq-space-8));
+  border-radius: var(--sq-radius-xl) var(--sq-radius-xl) 0 0;
+  background: var(--sq-gradient-sheet);
+  box-shadow: var(--sq-shadow-raised);
 }
 @media (min-width: 768px) {
   .nav {
     inset: 0 auto 0 0;
-    width: 200px;
+    width: var(--sq-rail-width);
+    padding: 72px var(--sq-space-3) var(--sq-space-4);
+    border-top: 0;
+    border-right: 1px solid var(--sq-navy-600);
   }
   .list {
     grid-auto-flow: row;
+    gap: var(--sq-space-2);
   }
   .link {
-    justify-items: start;
-    padding: 0 16px;
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: var(--sq-space-3);
+    min-height: 48px;
+    padding: 0 var(--sq-space-4);
+    font-size: var(--sq-text-md);
+    text-align: left;
   }
-  .link[aria-current="page"] {
-    box-shadow: inset 4px 0 currentColor;
+  .topBar {
+    position: sticky;
+    z-index: 40;
+    margin-left: 0;
   }
-  .account,
   .content {
-    margin-left: 200px;
-    padding-bottom: 0;
+    margin: var(--sq-space-6) var(--sq-space-6) var(--sq-space-6)
+      calc(var(--sq-rail-width) + var(--sq-space-6));
+    padding: var(--sq-space-6);
+    min-height: auto;
+    border-radius: var(--sq-radius-xl);
+  }
+}
+@media (min-width: 1200px) {
+  .content {
+    /* Centre the sheet in the viewport, but never under the rail. */
+    margin-left: max(calc(var(--sq-rail-width) + var(--sq-space-6)), calc((100% - 960px) / 2));
+    margin-right: auto;
+    padding-left: var(--sq-space-8);
+    padding-right: var(--sq-space-8);
   }
 }

@@ -2,7 +2,12 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { Button, Field } from "@/components/ui";
 import { safeNextPath } from "@/lib/auth/public-paths";
+import styles from "../auth.module.css";
+
+/** NFR-10: links are touch targets too, at least 44x44 CSS px. */
+const tap = { display: "inline-flex", alignItems: "center", minHeight: 44, minWidth: 44 } as const;
 import { parseSignUp, type SignUpErrors, type SignUpField } from "@/lib/validation/auth";
 
 const FIELDS: { name: SignUpField; type: string; autoComplete: string }[] = [
@@ -10,10 +15,6 @@ const FIELDS: { name: SignUpField; type: string; autoComplete: string }[] = [
   { name: "password", type: "password", autoComplete: "new-password" },
   { name: "displayName", type: "text", autoComplete: "nickname" },
 ];
-const control = { minHeight: 44, width: "100%", boxSizing: "border-box", padding: 8 } as const;
-const errorColor = { color: "#b91c1c" };
-/** NFR-10: links are touch targets too, at least 44x44 CSS px. */
-const link = { display: "inline-flex", alignItems: "center", minHeight: 44, minWidth: 44 } as const;
 
 export function SignUpForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
@@ -46,46 +47,41 @@ export function SignUpForm({ next }: { next?: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-labelledby="signup-title">
-      <h1 id="signup-title">{t("signup.title")}</h1>
+    <form onSubmit={onSubmit} noValidate aria-labelledby="signup-title" className={styles.form}>
+      <h1 id="signup-title" className={styles.title}>
+        {t("signup.title")}
+      </h1>
       {FIELDS.map(({ name, type, autoComplete }) => {
         const code = errors[name];
         return (
-          <p key={name}>
-            <label htmlFor={name}>{t(`fields.${name}`)}</label>
-            <input
-              id={name}
-              name={name}
-              type={type}
-              autoComplete={autoComplete}
-              aria-invalid={code ? true : undefined}
-              aria-describedby={code ? `${name}-error` : undefined}
-              style={control}
-            />
-            {code && (
-              <span id={`${name}-error`} role="alert" style={errorColor}>
-                {t(`errors.${code}`)}
-              </span>
-            )}
-          </p>
+          <Field
+            key={name}
+            id={name}
+            name={name}
+            type={type}
+            autoComplete={autoComplete}
+            label={t(`fields.${name}`)}
+            error={code ? t(`errors.${code}`) : undefined}
+            onDark
+          />
         );
       })}
       {problem && (
-        <p role="alert" style={errorColor}>
+        <p role="alert" className={styles.problem}>
           {problem === "taken" ? t("errors.EMAIL_TAKEN") : t("errors.GENERIC")}{" "}
           {problem === "taken" && (
-            <a href="/login" style={link}>
+            <a href="/login" className={styles.link} style={tap}>
               {t("signup.loginCta")}
             </a>
           )}
         </p>
       )}
-      <button type="submit" disabled={busy} style={control}>
+      <Button type="submit" disabled={busy} block>
         {t("signup.submit")}
-      </button>
-      <p>
+      </Button>
+      <p className={styles.switch}>
         {t("signup.haveAccount")}{" "}
-        <a href="/login" style={link}>
+        <a href="/login" className={styles.link} style={tap}>
           {t("signup.loginCta")}
         </a>
       </p>
