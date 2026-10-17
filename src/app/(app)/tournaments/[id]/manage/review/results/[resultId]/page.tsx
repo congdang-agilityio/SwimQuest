@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { ReportButton } from "@/components/reports/report-button";
 import { ReviewItem } from "@/components/review/review-item";
 import { RevokeDialog } from "@/components/review/revoke-dialog";
 import styles from "@/components/review/review.module.css";
@@ -52,6 +53,7 @@ export default async function ReviewResultPage({
           )
         }
       />
+      {item.player.id !== user.id && <ReportButton targetType="SWIM" targetId={item.swimId} />}
     </main>
   );
 }
