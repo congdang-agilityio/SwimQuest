@@ -67,6 +67,9 @@ model User {
   privacy          Json           @default("{}")
   /// Preferred UI language; null follows the browser.
   locale           String?
+  /// Categories the player switched push off for (account-wide); empty = every category on.
+  /// The in-app list still records them (S-68).
+  pushOffCategories NotificationCategory[] @default([])
   images           ImageAsset[]   @relation("ImageOwner")
 
   /// Tournaments allowed on top of the platform quota (granted by approved quota requests).
