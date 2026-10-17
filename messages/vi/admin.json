@@ -1,6 +1,8 @@
 {
   "title": "Quản trị",
-  "sections": { "users": "Người dùng" },
+  "sections": {
+    "users": "Người dùng"
+  },
   "users": {
     "title": "Người dùng",
     "back": "Quay lại",
@@ -19,7 +21,10 @@
       "DELETION_PENDING": "Chờ xóa",
       "DELETED": "Đã xóa"
     },
-    "role": { "admin": "Quản trị viên", "player": "Người chơi" }
+    "role": {
+      "admin": "Quản trị viên",
+      "player": "Người chơi"
+    }
   },
   "user": {
     "detailsTitle": "Tài khoản",
@@ -42,6 +47,31 @@
       "LAST_ADMIN": "Đây là quản trị viên hoạt động cuối cùng. Hãy cấp quyền cho người khác trước.",
       "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
       "failed": "Không đổi được vai trò. Vui lòng thử lại."
+    },
+    "account": {
+      "title": "Trạng thái tài khoản",
+      "suspend": "Tạm khóa tài khoản",
+      "reactivate": "Mở khóa tài khoản",
+      "suspendHelp": "Người chơi bị tạm khóa sẽ không đăng nhập được. Dữ liệu vẫn được giữ.",
+      "reactivateHelp": "Tài khoản này đang bị tạm khóa. Mở khóa để người chơi đăng nhập lại.",
+      "suspendConfirm": "Tạm khóa {name}? Họ sẽ bị đăng xuất và không đăng nhập được cho đến khi bạn mở khóa.",
+      "reactivateConfirm": "Mở khóa cho {name}? Họ có thể đăng nhập lại ngay.",
+      "reasonLabel": "Lý do",
+      "reasonHint": "Bắt buộc, tối đa {max} ký tự. Lý do được lưu vào nhật ký.",
+      "confirmYes": "Đồng ý",
+      "cancel": "Hủy",
+      "saving": "Đang lưu...",
+      "suspendDone": "Đã tạm khóa tài khoản.",
+      "reactivateDone": "Đã mở khóa tài khoản.",
+      "errors": {
+        "INVALID_REASON": "Hãy nhập lý do từ 1 đến 500 ký tự.",
+        "INVALID_STATE": "Tài khoản không ở trạng thái cho phép thay đổi này. Hãy tải lại trang và kiểm tra trạng thái.",
+        "CANNOT_SUSPEND_SELF": "Bạn không thể tự tạm khóa tài khoản của mình.",
+        "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+        "NOT_FOUND": "Người dùng này không còn tồn tại.",
+        "network": "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
+        "failed": "Không đổi được trạng thái tài khoản. Vui lòng thử lại."
+      }
     }
   }
 }

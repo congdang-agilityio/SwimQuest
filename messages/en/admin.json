@@ -1,6 +1,8 @@
 {
   "title": "Admin",
-  "sections": { "users": "Users" },
+  "sections": {
+    "users": "Users"
+  },
   "users": {
     "title": "Users",
     "back": "Back",
@@ -19,7 +21,10 @@
       "DELETION_PENDING": "Deletion pending",
       "DELETED": "Deleted"
     },
-    "role": { "admin": "Admin", "player": "Player" }
+    "role": {
+      "admin": "Admin",
+      "player": "Player"
+    }
   },
   "user": {
     "detailsTitle": "Account",
@@ -42,6 +47,31 @@
       "LAST_ADMIN": "This is the last active admin. Make someone else an admin first.",
       "network": "Could not reach the server. Check your connection and try again.",
       "failed": "Could not change the role. Please try again."
+    },
+    "account": {
+      "title": "Account status",
+      "suspend": "Suspend account",
+      "reactivate": "Reactivate account",
+      "suspendHelp": "A suspended player can no longer log in. Their data is kept.",
+      "reactivateHelp": "This account is suspended. Reactivate it to let the player log in again.",
+      "suspendConfirm": "Suspend {name}? They are logged out and cannot log in until you reactivate them.",
+      "reactivateConfirm": "Reactivate {name}? They can log in again right away.",
+      "reasonLabel": "Reason",
+      "reasonHint": "Required, up to {max} characters. It is saved in the audit log.",
+      "confirmYes": "Yes, confirm",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "suspendDone": "The account was suspended.",
+      "reactivateDone": "The account was reactivated.",
+      "errors": {
+        "INVALID_REASON": "Enter a reason of 1 to 500 characters.",
+        "INVALID_STATE": "This account is not in a state where that change is possible. Refresh the page and check its status.",
+        "CANNOT_SUSPEND_SELF": "You cannot suspend your own account.",
+        "FORBIDDEN": "You do not have permission to do this.",
+        "NOT_FOUND": "This user no longer exists.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "failed": "Could not change the account status. Please try again."
+      }
     }
   }
 }
