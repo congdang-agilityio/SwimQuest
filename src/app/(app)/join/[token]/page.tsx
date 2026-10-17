@@ -4,7 +4,7 @@ import { MockupPicture } from "@/components/art/mockup-picture";
 import { TeamPicker } from "@/components/join/team-picker";
 import styles from "@/components/join/join.module.css";
 import { TournamentSummary } from "@/components/tournaments/tournament-summary";
-import { Card, ScreenHeader } from "@/components/ui";
+import { ButtonLink, Card, ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { getJoinView } from "@/server/join/join-view";
@@ -68,6 +68,13 @@ export default async function JoinPage({
         // The picker below lists the same teams with their places; show them once.
         hideTeams={!closed}
       />
+      <ButtonLink
+        href={`/tournaments/${tournament.id}?token=${encodeURIComponent(token)}`}
+        variant="secondary"
+        block
+      >
+        {t("details")}
+      </ButtonLink>
       {closed ? (
         <Card role="status" className={styles.notice}>
           <MockupPicture artKey="map/buoy" alt="" className={styles.noticeArt} />

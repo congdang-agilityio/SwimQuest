@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { ButtonLink, Chip, ProgressBar, type ChipTone } from "@/components/ui";
@@ -50,7 +51,9 @@ export function TournamentCard({ tournament: x }: { tournament: MyTournament }) 
           </span>
           <div className={styles.info}>
             <h3 id={`tournament-${x.id}`} className={styles.name}>
-              {x.name}
+              <Link href={`/tournaments/${x.id}`} className={styles.nameLink}>
+                {x.name}
+              </Link>
             </h3>
             <p className={styles.dates}>
               {vnDate(x.seasonStartAt)} – {vnDate(x.seasonEndAt)}
