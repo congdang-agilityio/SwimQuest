@@ -23,6 +23,7 @@ describe("TeamRoster", () => {
               isCaptain: true,
               level: 2,
               badges: [],
+              energyOrb: false,
             },
             {
               id: "b",
@@ -34,6 +35,7 @@ describe("TeamRoster", () => {
               isCaptain: false,
               level: 1,
               badges: [],
+              energyOrb: false,
             },
           ]}
         />
