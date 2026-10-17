@@ -59,6 +59,30 @@
       "dismissed": "Notifications were not allowed. Try again and choose Allow.",
       "failed": "Could not change push on this device. Try again.",
       "loadFailed": "Could not check push on this device. Reload the page to try again."
+    },
+    "categories": {
+      "title": "Push by category",
+      "intro": "Choose which alerts reach your devices. This applies to your account on every device.",
+      "INVITATIONS": {
+        "label": "Tournament invitations",
+        "hint": "Invites to join a tournament."
+      },
+      "TEAM": {
+        "label": "Team updates",
+        "hint": "Joining, moves, captain and starting point."
+      },
+      "VERIFICATION": {
+        "label": "Verification results",
+        "hint": "When a swim is verified, flagged or rejected."
+      },
+      "MILESTONES": {
+        "label": "Milestones",
+        "hint": "Destinations passed, finishes, badges and levels."
+      },
+      "note": "Switched-off categories still appear in your in-app Notifications list.",
+      "saved": "Saved.",
+      "failed": "Could not save. Try again.",
+      "loadFailed": "Could not load your categories. Reload the page to try again."
     }
   }
 }

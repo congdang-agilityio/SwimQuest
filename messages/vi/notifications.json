@@ -59,6 +59,30 @@
       "dismissed": "Bạn chưa cho phép thông báo. Hãy thử lại và chọn Cho phép.",
       "failed": "Không đổi được thông báo đẩy trên thiết bị này. Hãy thử lại.",
       "loadFailed": "Không kiểm tra được thông báo đẩy trên thiết bị này. Hãy tải lại trang."
+    },
+    "categories": {
+      "title": "Thông báo đẩy theo loại",
+      "intro": "Chọn loại tin được gửi tới thiết bị của bạn. Cài đặt áp dụng cho tài khoản trên mọi thiết bị.",
+      "INVITATIONS": {
+        "label": "Lời mời giải đấu",
+        "hint": "Lời mời tham gia một giải đấu."
+      },
+      "TEAM": {
+        "label": "Cập nhật đội",
+        "hint": "Vào đội, chuyển đội, đội trưởng và điểm xuất phát."
+      },
+      "VERIFICATION": {
+        "label": "Kết quả xác minh",
+        "hint": "Khi lượt bơi được xác minh, cần xem lại hoặc bị từ chối."
+      },
+      "MILESTONES": {
+        "label": "Cột mốc",
+        "hint": "Qua điểm đến, về đích, huy hiệu và lên cấp."
+      },
+      "note": "Loại đã tắt vẫn hiện trong danh sách Thông báo trong ứng dụng.",
+      "saved": "Đã lưu.",
+      "failed": "Không lưu được. Hãy thử lại.",
+      "loadFailed": "Không tải được các loại thông báo. Hãy tải lại trang."
     }
   }
 }
