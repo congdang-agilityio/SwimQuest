@@ -174,6 +174,15 @@ export const zaloHandlers: Handlers = {
       dedupeKey: `finish-lost:${p.teamId}:${at}`,
     });
   },
+  /** The season end with the final leaderboard, once per tournament. */
+  SEASON_ENDED: async (tx, p) => {
+    await enqueueZalo(tx, {
+      tournamentId: p.tournamentId,
+      kind: "SEASON_END",
+      payload: {},
+      dedupeKey: `season-end:${p.tournamentId}`,
+    });
+  },
   SEASON_STARTED: async (tx, p) => {
     await enqueueZalo(tx, {
       tournamentId: p.tournamentId,
