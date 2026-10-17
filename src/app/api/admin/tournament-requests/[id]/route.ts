@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireApiUser } from "@/server/auth/current-user";
 import { roleErrorResponse } from "@/server/auth/roles";
-import { apiError, quotaErrorResponse } from "@/server/http/api-error";
+import { apiError } from "@/server/http/api-error";
+import { quotaErrorResponse } from "@/server/tournaments/quota-response";
 import { isSameOrigin, readJson } from "@/server/http/request";
 import { decideRequest } from "@/server/tournaments/quota";
 

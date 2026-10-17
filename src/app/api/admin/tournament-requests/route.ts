@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { QuotaRequestStatus } from "@prisma/client";
 import { requireApiUser } from "@/server/auth/current-user";
 import { roleErrorResponse } from "@/server/auth/roles";
-import { quotaErrorResponse } from "@/server/http/api-error";
+import { quotaErrorResponse } from "@/server/tournaments/quota-response";
 import { listRequests } from "@/server/tournaments/quota";
 
 export const dynamic = "force-dynamic";

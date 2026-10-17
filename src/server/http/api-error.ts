@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { QuotaError } from "@/server/tournaments/quota";
 
 /** Stable API error codes; clients branch on `code`, never on `message`. */
 export type ApiErrorCode =
@@ -96,9 +95,4 @@ export function apiError(
 ): NextResponse {
   const error = { code, message: messages[code], fields, issues }; // undefined keys are not serialized
   return NextResponse.json({ error }, { status, headers: { "cache-control": "no-store" } });
-}
-
-/** The response for a refused quota action (409 conflicts, 400 bad input), or null. */
-export function quotaErrorResponse(err: unknown): NextResponse | null {
-  return err instanceof QuotaError ? apiError(err.status, err.code) : null;
 }
