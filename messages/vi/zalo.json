@@ -112,5 +112,6 @@
       "other": "Zalo từ chối một tin nhắn. Hãy kiểm tra bot còn trong nhóm và khóa còn hiệu lực."
     }
   },
-  "consoleProblem": "Không gửi được tin nhắn Zalo. Mở Nhóm Zalo để xem lý do."
+  "consoleProblem": "Không gửi được tin nhắn Zalo. Mở Nhóm Zalo để xem lý do.",
+  "playerNotice": "Giải đấu này đăng tên thành viên và các lượt bơi được tính lên nhóm Zalo của giải."
 }

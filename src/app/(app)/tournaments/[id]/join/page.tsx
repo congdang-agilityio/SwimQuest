@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { TeamPicker } from "@/components/join/team-picker";
+import { ZaloNotice } from "@/components/zalo/zalo-notice";
 import styles from "@/components/join/join.module.css";
 import { TournamentSummary } from "@/components/tournaments/tournament-summary";
 import { ButtonLink, Card, ScreenHeader } from "@/components/ui";
@@ -48,6 +49,7 @@ export default async function PublicJoinPage({ params }: { params: Promise<{ id:
       <ButtonLink href={`/tournaments/${tournament.id}`} variant="secondary" block>
         {t("details")}
       </ButtonLink>
+      <ZaloNotice tournamentId={tournament.id} />
       {closed ? (
         <Card role="status" className={styles.notice}>
           <p>

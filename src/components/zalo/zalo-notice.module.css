@@ -1,0 +1,21 @@
+/* Player notice: a light card with the message bottle, as the join page's notices. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  background: var(--sq-blue-wash);
+}
+.notice p {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-navy-800);
+}
+.art {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}

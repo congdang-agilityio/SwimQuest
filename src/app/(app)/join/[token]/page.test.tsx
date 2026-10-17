@@ -26,6 +26,7 @@ vi.mock("@/components/join/team-picker", () => ({
     </div>
   ),
 }));
+vi.mock("@/components/zalo/zalo-notice", () => ({ ZaloNotice: () => null }));
 vi.mock("@/components/tournaments/tournament-summary", () => ({
   TournamentSummary: ({ name }: { name: string }) => <div>{name}</div>,
 }));

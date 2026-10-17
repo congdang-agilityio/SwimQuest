@@ -98,6 +98,18 @@ export async function getZaloSettings(
 }
 
 /**
+ * Whether the tournament posts to a linked Zalo group (S-89 AC 5). Public: a boolean only,
+ * nothing about the bot or the group.
+ */
+export async function isZaloGroupLinked(tournamentId: string): Promise<boolean> {
+  const row = await db.tournamentZalo.findUnique({
+    where: { tournamentId },
+    select: { zaloBot: { select: { chatId: true } } },
+  });
+  return Boolean(row?.zaloBot.chatId);
+}
+
+/**
  * Whether the tournament's bot has an open delivery problem, for the organizer console
  * (S-89 AC 3). Callers check the organizer role first.
  */

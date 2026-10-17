@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { StateCard } from "@/components/states/state-card";
 import { TeamPicker } from "@/components/join/team-picker";
+import { ZaloNotice } from "@/components/zalo/zalo-notice";
 import styles from "@/components/join/join.module.css";
 import { TournamentSummary } from "@/components/tournaments/tournament-summary";
 import { ButtonLink, Card, ScreenHeader } from "@/components/ui";
@@ -107,6 +108,7 @@ export default async function JoinPage({
       >
         {t("details")}
       </ButtonLink>
+      <ZaloNotice tournamentId={tournament.id} />
       {closed ? (
         <Card role="status" className={styles.notice}>
           <MockupPicture artKey="map/buoy" alt="" className={styles.noticeArt} />
