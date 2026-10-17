@@ -8,6 +8,7 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute, startDestinations } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
+import { recordFunnelEventSafe } from "@/server/funnel/safe";
 import { getSelectedMembershipFromCookie } from "@/server/home/selected-tournament";
 
 export default async function TeamStartPage() {
@@ -16,6 +17,12 @@ export default async function TeamStartPage() {
   const route = membership ? getRoute(membership.tournament.routeId) : null;
   if (!membership || !route) return <JoinGuidance />;
   const { team, tournament } = membership;
+  await recordFunnelEventSafe("route_start_options_viewed", {
+    userId: user.id,
+    tournamentId: tournament.id,
+    refId: team.id,
+    once: `${user.id}:${team.id}`,
+  });
   const finish = route.destinations.find((d) => d.isFinish);
   const locked = isStartLocked(tournament, new Date());
   const pick = (d: { slug: string; nameKey: string }) => ({ slug: d.slug, nameKey: d.nameKey });
