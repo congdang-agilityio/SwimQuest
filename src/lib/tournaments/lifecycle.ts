@@ -20,7 +20,9 @@ export function effectiveStatus(t: LifecycleTournament, now: Date): TournamentSt
 }
 
 /** End of the late-upload window: seasonEndAt + lateUploadDays. */
-export function uploadWindowEndsAt(t: LifecycleTournament): Date {
+export function uploadWindowEndsAt(
+  t: Pick<LifecycleTournament, "seasonEndAt" | "lateUploadDays">,
+): Date {
   return new Date(t.seasonEndAt.getTime() + (t.lateUploadDays ?? 3) * 86_400_000);
 }
 
