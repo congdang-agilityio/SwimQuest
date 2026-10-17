@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
 import { BadgesSection } from "@/components/profile/badges-section";
+import { InstallApp } from "@/components/pwa/install-app";
 import { ProfileSection } from "@/components/profile/profile-section";
 import { StatsSection } from "@/components/profile/stats-section";
 import { Card, ScreenHeader } from "@/components/ui";
@@ -108,6 +109,8 @@ export default async function ProfilePage() {
           </svg>
         </Link>
       </Card>
+
+      <InstallApp />
 
       <div className={styles.logout}>
         <LogoutButton block />
