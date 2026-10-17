@@ -1,0 +1,21 @@
+{
+  "special": {
+    "title": "Huy hiệu Đặc biệt",
+    "give": "Trao huy hiệu Đặc biệt",
+    "reasonLabel": "Vì sao người chơi nhận huy hiệu này?",
+    "reasonHint": "Một lý do ngắn, tối đa 200 ký tự. Người chơi sẽ thấy lý do này.",
+    "confirmTitle": "Trao huy hiệu Đặc biệt?",
+    "confirmText": "Chỉ trao được một lần và không thể hoàn tác tại đây.",
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "given": "Đã trao huy hiệu Đặc biệt",
+    "givenReason": "Lý do: {reason}",
+    "errors": {
+      "REASON_LENGTH": "Hãy viết lý do từ 1 đến 200 ký tự.",
+      "NOT_A_PLAYER": "Người này không phải người chơi trong giải đấu.",
+      "ALREADY_AWARDED": "Người chơi này đã có huy hiệu Đặc biệt.",
+      "ARCHIVED": "Giải đấu đã được lưu trữ.",
+      "GENERIC": "Không trao được huy hiệu. Hãy thử lại."
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { GiveSpecialBadge } from "@/components/badges/give-special-badge";
 import { MemberResults } from "@/components/review/member-results";
 import styles from "@/components/review/review.module.css";
 import { AccessDenied } from "@/components/states/access-denied";
@@ -8,7 +9,8 @@ import manage from "@/components/tournaments/manage.module.css";
 import { ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
-import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
+import { ForbiddenError, isOrganizer, NotFoundError } from "@/server/auth/roles";
+import { db } from "@/server/db";
 import { listMemberResults } from "@/server/review/member-results";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +29,13 @@ export default async function OrganizerMemberPage({
     throw err;
   });
   if (!data) return <AccessDenied />;
+  const organizer = await isOrganizer(user.id, id);
+  const special = organizer
+    ? await db.badge.findFirst({
+        where: { tournamentId: id, userId, kind: "SPECIAL", removedAt: null },
+        select: { reason: true },
+      })
+    : null;
   const t = await getTranslations("review");
   const tCommon = await getTranslations("common");
   return (
@@ -38,6 +47,13 @@ export default async function OrganizerMemberPage({
           backLabel={tCommon("back")}
         />
       </div>
+      {organizer && (
+        <GiveSpecialBadge
+          tournamentId={id}
+          userId={userId}
+          givenReason={special ? (special.reason ?? "") : null}
+        />
+      )}
       <h2 className={styles.sectionTitle}>{t("member.title")}</h2>
       <MemberResults
         results={data.results}
