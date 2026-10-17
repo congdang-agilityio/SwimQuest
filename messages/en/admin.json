@@ -315,7 +315,9 @@
       "REVIEW_HELPER_APPOINTED": "Review helper appointed",
       "REVIEW_HELPER_REMOVED": "Review helper removed",
       "SPECIAL_BADGE_GIVEN": "Special badge given",
-      "REPORT_CLOSED": "Report closed"
+      "REPORT_CLOSED": "Report closed",
+      "ZALO_BOT_SET": "Zalo bot set",
+      "ZALO_BOT_REMOVED": "Zalo bot removed"
     },
     "entities": {
       "TEAM": "Team",
