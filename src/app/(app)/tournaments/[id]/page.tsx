@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { DetailsHeader } from "@/components/tournaments/details/details-header";
 import { DetailsTeams } from "@/components/tournaments/details/details-teams";
+import { RulesSection } from "@/components/tournaments/details/rules-section";
 import styles from "@/components/tournaments/details/details.module.css";
 import { ButtonLink, Card, ScreenHeader, SectionHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
@@ -53,6 +54,12 @@ export default async function TournamentDetailsPage({
             routeDistanceM={details.routeDistanceM}
           />
           <DetailsTeams teams={details.teams} />
+          <RulesSection
+            rulesText={details.rulesText}
+            settings={details.settings}
+            seasonStartAt={details.seasonStartAt}
+            routeDistanceM={details.routeDistanceM}
+          />
           {(details.joinHref || showLeaderboard) && (
             <nav aria-label={t("actions")} className={styles.actions}>
               {details.joinHref && <ButtonLink href={details.joinHref}>{t("join")}</ButtonLink>}
