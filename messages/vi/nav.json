@@ -19,5 +19,8 @@
     "kicker": "Hành trình của đội",
     "label": "Chọn giải đấu",
     "error": "Không đổi được giải đấu. Hãy thử lại."
+  },
+  "account": {
+    "myProfile": "Hồ sơ của tôi"
   }
 }

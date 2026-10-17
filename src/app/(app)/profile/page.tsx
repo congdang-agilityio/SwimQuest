@@ -1,23 +1,27 @@
 import { headers } from "next/headers";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
-import { Avatar, Card, ScreenHeader } from "@/components/ui";
-import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
+import { ProfileSection } from "@/components/profile/profile-section";
+import { Card, ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
+import { getMyProfile } from "@/server/profile/my-profile";
 import { getPlayerStats } from "@/server/profile/stats";
 import styles from "./profile.module.css";
 
 export default async function ProfilePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/profile");
-  const [t, home, format, stats] = await Promise.all([
+  const [t, home, format, stats, profile] = await Promise.all([
     getTranslations("nav"),
     getTranslations("home"),
     getFormatter(),
     getPlayerStats(user.id),
+    getMyProfile(user.id),
   ]);
+  if (!profile) notFound();
   const km = format.number(stats.verifiedDistanceM / 1000, { maximumFractionDigits: 1 });
   return (
     <main className={styles.profile}>
@@ -25,10 +29,9 @@ export default async function ProfilePage() {
         <ScreenHeader title={t("profile.title")} />
       </div>
 
-      <Card tone="dark" as="section" className={styles.hero} aria-label={user.displayName}>
-        <Avatar name={user.displayName} src={mockupMemberAvatar(user.id)} size={72} decorative />
-        <span className={styles.name}>{user.displayName}</span>
-      </Card>
+      <ProfileSection profile={profile} />
+
+      {/* "Swimming profile" section (swim goals, #265) goes here. */}
 
       <Card as="section" className={styles.stats} aria-label={home("stats.label")}>
         <dl className={styles.statList}>

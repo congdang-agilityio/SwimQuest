@@ -1,0 +1,54 @@
+{
+  "view": {
+    "edit": "Sửa hồ sơ",
+    "noBio": "Chưa có giới thiệu.",
+    "coverAlt": "Ảnh bìa",
+    "avatarAlt": "Ảnh đại diện"
+  },
+  "edit": {
+    "title": "Sửa hồ sơ",
+    "displayName": "Tên hiển thị",
+    "displayNameHint": "Tối đa {max} ký tự.",
+    "bio": "Giới thiệu",
+    "bioHint": "Tối đa {max} ký tự.",
+    "bioCounter": "{count} / {max}",
+    "region": "Tỉnh / thành phố",
+    "regionHint": "Chỉ lưu tỉnh hoặc thành phố, không bao giờ lưu vị trí chính xác.",
+    "regionNone": "Chưa chọn",
+    "avatar": "Ảnh đại diện",
+    "avatarUpload": "Tải ảnh lên",
+    "avatarDefaults": "Hoặc chọn một hình",
+    "avatarRemove": "Bỏ ảnh",
+    "cover": "Ảnh bìa",
+    "coverUpload": "Tải ảnh bìa lên",
+    "coverRemove": "Bỏ ảnh bìa",
+    "uploadHint": "PNG, JPEG hoặc WebP, tối đa 2 MB.",
+    "uploading": "Đang tải lên…",
+    "uploaded": "Ảnh đã sẵn sàng. Bấm Lưu để giữ lại.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "cancel": "Hủy"
+  },
+  "defaults": {
+    "dolphin": "Cá heo",
+    "turtle": "Rùa biển",
+    "shell": "Vỏ sò",
+    "anchor": "Neo",
+    "wave": "Sóng",
+    "star": "Ngôi sao",
+    "fish": "Cá hề",
+    "ship": "Tàu"
+  },
+  "errors": {
+    "DISPLAY_NAME_REQUIRED": "Hãy nhập tên hiển thị.",
+    "DISPLAY_NAME_TOO_LONG": "Tên hiển thị tối đa {max} ký tự.",
+    "BIO_TOO_LONG": "Phần giới thiệu tối đa {max} ký tự.",
+    "REGION_UNKNOWN": "Hãy chọn tỉnh hoặc thành phố trong danh sách.",
+    "AVATAR_UNKNOWN": "Hãy chọn một trong các hình đang hiển thị.",
+    "IMAGE_INVALID": "Không dùng được ảnh này nữa. Hãy tải lên lại.",
+    "UNKNOWN_FIELD": "Biểu mẫu có phần không nhận ra được. Hãy tải lại trang.",
+    "IMAGE_TOO_LARGE": "Ảnh lớn hơn 2 MB.",
+    "IMAGE_TYPE_NOT_ALLOWED": "Hãy dùng ảnh PNG, JPEG hoặc WebP.",
+    "GENERIC": "Không lưu được hồ sơ. Hãy thử lại."
+  }
+}

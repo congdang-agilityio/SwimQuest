@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Avatar, Chip } from "@/components/ui";
-import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
+import { profileAvatarSrc } from "@/lib/profile-avatar";
 import type { MyTeamMember } from "@/server/teams/my-team-view";
 import { HandoverButton } from "./handover-button";
 import { RemoveMemberButton } from "./remove-member-button";
@@ -28,7 +28,7 @@ export function TeamRoster({
       <ul className={styles.list}>
         {members.map((m) => (
           <li key={m.id} className={styles.row}>
-            <Avatar name={m.displayName} src={mockupMemberAvatar(m.id)} size={44} decorative />
+            <Avatar name={m.displayName} src={profileAvatarSrc(m)} size={44} decorative />
             <span className={styles.who}>
               <Link href={`/players/${m.id}`} className={styles.name}>
                 {m.displayName}

@@ -36,6 +36,13 @@ export function AppNav({ displayName, isPlatformAdmin, switcher }: Props) {
             {displayName}
           </summary>
           <div className={styles.menu} data-surface="light">
+            <Link
+              href="/profile"
+              className={styles.menuLink}
+              onClick={(e) => e.currentTarget.closest("details")?.removeAttribute("open")}
+            >
+              {t("account.myProfile")}
+            </Link>
             <LogoutButton />
           </div>
         </details>

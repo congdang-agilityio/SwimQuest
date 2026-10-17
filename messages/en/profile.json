@@ -1,0 +1,54 @@
+{
+  "view": {
+    "edit": "Edit profile",
+    "noBio": "No bio yet.",
+    "coverAlt": "Cover image",
+    "avatarAlt": "Avatar"
+  },
+  "edit": {
+    "title": "Edit profile",
+    "displayName": "Display name",
+    "displayNameHint": "Up to {max} characters.",
+    "bio": "Bio",
+    "bioHint": "Up to {max} characters.",
+    "bioCounter": "{count} / {max}",
+    "region": "City or province",
+    "regionHint": "Only a province or city is stored, never a precise location.",
+    "regionNone": "Not set",
+    "avatar": "Avatar",
+    "avatarUpload": "Upload a photo",
+    "avatarDefaults": "Or pick a picture",
+    "avatarRemove": "Remove photo",
+    "cover": "Cover",
+    "coverUpload": "Upload a cover",
+    "coverRemove": "Remove cover",
+    "uploadHint": "PNG, JPEG or WebP, up to 2 MB.",
+    "uploading": "Uploading…",
+    "uploaded": "Photo ready. Save to keep it.",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel"
+  },
+  "defaults": {
+    "dolphin": "Dolphin",
+    "turtle": "Sea turtle",
+    "shell": "Seashell",
+    "anchor": "Anchor",
+    "wave": "Wave",
+    "star": "Star",
+    "fish": "Clownfish",
+    "ship": "Ship"
+  },
+  "errors": {
+    "DISPLAY_NAME_REQUIRED": "Enter a display name.",
+    "DISPLAY_NAME_TOO_LONG": "The display name must be at most {max} characters.",
+    "BIO_TOO_LONG": "The bio must be at most {max} characters.",
+    "REGION_UNKNOWN": "Pick a city or province from the list.",
+    "AVATAR_UNKNOWN": "Pick one of the pictures shown.",
+    "IMAGE_INVALID": "That image can no longer be used. Upload it again.",
+    "UNKNOWN_FIELD": "Something in the form was not recognised. Reload the page.",
+    "IMAGE_TOO_LARGE": "The image is larger than 2 MB.",
+    "IMAGE_TYPE_NOT_ALLOWED": "Use a PNG, JPEG or WebP image.",
+    "GENERIC": "Could not save your profile. Try again."
+  }
+}
