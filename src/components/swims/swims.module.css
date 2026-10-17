@@ -1,0 +1,292 @@
+/*
+ * Log swim, My swims and swim detail ("Ghi nhận hoạt động" phone screen of the mockup).
+ * Every value comes from src/styles/tokens.css.
+ */
+
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+/* The light sheet has no dark band, so the phone header gets its own navy strip. */
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Upload form */
+.form {
+  display: grid;
+  gap: var(--sq-space-4);
+}
+.fieldLabel {
+  display: block;
+  margin-bottom: var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-text);
+}
+.dropZone {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-5) var(--sq-space-4);
+  border: 2px dashed var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  text-align: center;
+}
+.dropZone:focus-within {
+  border-color: var(--sq-blue-500);
+}
+.uploadIcon {
+  color: var(--sq-blue-500);
+}
+.fileInput {
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--sq-tap);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+.fileInput::file-selector-button {
+  min-height: var(--sq-tap);
+  margin-right: var(--sq-space-3);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-white);
+  color: var(--sq-blue-600);
+  font: inherit;
+  font-weight: var(--sq-weight-bold);
+  cursor: pointer;
+}
+.hint {
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.status {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-blue-600);
+  text-align: center;
+}
+
+/* Error card */
+.alert {
+  border: 1px solid var(--sq-danger);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+}
+.alert p {
+  margin: 0;
+}
+.alert p + p {
+  margin-top: var(--sq-space-2);
+  color: var(--sq-text);
+  font-size: var(--sq-text-sm);
+}
+
+/* Saved swim / detail */
+.summary {
+  display: grid;
+  gap: var(--sq-space-4);
+}
+.cardTitle {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+}
+
+/* Result hero: big distance, duration, the mockup's wave band */
+.hero {
+  display: grid;
+  overflow: hidden;
+  padding-top: var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-white);
+  text-align: center;
+}
+.heroStats {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: 0;
+}
+.heroStats dd {
+  margin: 0;
+}
+.heroLabel {
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.heroDistance {
+  font-size: var(--sq-text-display);
+  font-weight: var(--sq-weight-black);
+  line-height: 1.1;
+  color: var(--sq-navy-700);
+}
+.heroDuration {
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-700);
+  font-variant-numeric: tabular-nums;
+}
+.wave {
+  display: block;
+  width: min(100%, 420px);
+  height: auto;
+  margin: var(--sq-space-2) auto 0;
+}
+
+/* Remaining facts: label / value rows on pale-blue fills */
+.rows {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+}
+.row dt {
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.row dd {
+  margin: 0;
+  font-weight: var(--sq-weight-bold);
+  text-align: right;
+}
+
+/* Tournament results */
+.results {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.result {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-white);
+}
+.resultHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-2);
+}
+.result ul {
+  margin: 0;
+  padding-left: var(--sq-space-5);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.muted {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+
+/* My swims list */
+.list {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.listRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: 64px;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+  color: var(--sq-text);
+  text-decoration: none;
+}
+[data-surface="light"] a.listRow {
+  color: var(--sq-text);
+}
+.listRow:hover {
+  box-shadow: var(--sq-shadow-glow);
+}
+.listMain {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.listDate {
+  font-weight: var(--sq-weight-semibold);
+}
+.listDuration {
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.listDistance {
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+  color: var(--sq-navy-700);
+}
+.chevron {
+  color: var(--sq-blue-500);
+}
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--sq-space-4);
+  text-align: center;
+}
+.empty h2 {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+}
+.listAlert {
+  margin: 0;
+  color: var(--sq-danger);
+  font-weight: var(--sq-weight-semibold);
+}
+
+@media (min-width: 768px) {
+  .screen {
+    max-width: 640px;
+  }
+}

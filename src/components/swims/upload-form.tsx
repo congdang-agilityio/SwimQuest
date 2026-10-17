@@ -3,9 +3,9 @@
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { OwnerSwimDto } from "@/server/swims/swim-dto";
+import { Button, Card } from "@/components/ui";
 import { SwimSummary } from "./swim-summary";
-
-const tap = { minHeight: 44, minWidth: 44 } as const;
+import styles from "./swims.module.css";
 
 type State = { busy?: boolean; swim?: OwnerSwimDto; code?: string };
 
@@ -33,35 +33,66 @@ export function UploadForm() {
 
   return (
     <>
-      <form onSubmit={onSubmit} aria-busy={!!state.busy}>
-        <p>
-          <label htmlFor="swim-file">{t("connect.upload")}</label>
-          <br />
-          <input
-            id="swim-file"
-            name="file"
-            type="file"
-            accept=".gpx,.fit"
-            style={tap}
-            disabled={state.busy}
-            aria-describedby="swim-file-hint"
-            aria-invalid={state.code ? true : undefined}
-          />
-          <br />
-          <small id="swim-file-hint">{t("connect.uploadHint")}</small>
-        </p>
-        <button type="submit" disabled={state.busy} style={tap}>
-          {t("connect.submit")}
-        </button>
-      </form>
-      <p role="status">{state.busy ? t("connect.busy") : ""}</p>
       {state.code && (
-        <div role="alert" style={{ color: "#b91c1c" }}>
+        <Card role="alert" className={styles.alert}>
           <p>{t(`errors.${state.code}`)}</p>
           <p>{t("connect.exportHint")}</p>
-        </div>
+        </Card>
       )}
       {state.swim && <SwimSummary swim={state.swim} />}
+      <Card>
+        <form onSubmit={onSubmit} aria-busy={!!state.busy} className={styles.form}>
+          <div>
+            <label htmlFor="swim-file" className={styles.fieldLabel}>
+              {t("connect.upload")}
+            </label>
+            <div className={styles.dropZone}>
+              <UploadIcon />
+              <input
+                id="swim-file"
+                name="file"
+                type="file"
+                accept=".gpx,.fit"
+                className={styles.fileInput}
+                disabled={state.busy}
+                aria-describedby="swim-file-hint"
+                aria-invalid={state.code ? true : undefined}
+              />
+              <small id="swim-file-hint" className={styles.hint}>
+                {t("connect.uploadHint")}
+              </small>
+            </div>
+          </div>
+          <Button type="submit" variant="primary" block disabled={state.busy}>
+            {t("connect.submit")}
+          </Button>
+          <p role="status" className={styles.status}>
+            {state.busy ? t("connect.busy") : ""}
+          </p>
+        </form>
+      </Card>
     </>
+  );
+}
+
+function UploadIcon() {
+  return (
+    <svg
+      className={styles.uploadIcon}
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
