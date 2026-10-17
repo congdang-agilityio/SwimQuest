@@ -86,7 +86,12 @@ describe("my team view", () => {
       description: "fast",
       memberLimit: 5,
     });
-    expect(view!.captain).toEqual({ id: cap.id, displayName: "cap" });
+    expect(view!.captain).toEqual({
+      id: cap.id,
+      displayName: "cap",
+      avatarImageId: null,
+      avatarDefaultKey: null,
+    });
     expect(view!.start).toBeNull();
     expect(view!.memberCount).toBe(3);
     expect(view!.roster).toEqual([

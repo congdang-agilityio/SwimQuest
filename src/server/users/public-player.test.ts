@@ -14,8 +14,18 @@ describe("toPublicPlayer", () => {
 
     const player = toPublicPlayer(user);
 
-    expect(player).toEqual({ id: "u1", displayName: "Lan" });
-    expect(Object.keys(player).sort()).toEqual(["displayName", "id"]);
+    expect(player).toEqual({
+      id: "u1",
+      displayName: "Lan",
+      avatarImageId: null,
+      avatarDefaultKey: null,
+    });
+    expect(Object.keys(player).sort()).toEqual([
+      "avatarDefaultKey",
+      "avatarImageId",
+      "displayName",
+      "id",
+    ]);
     expect(player).not.toHaveProperty("email");
     expect(player).not.toHaveProperty("passwordHash");
     expect(player).not.toHaveProperty("status");
@@ -30,13 +40,20 @@ describe("toPublicPlayer", () => {
 
 describe("PUBLIC_PLAYER_SELECT", () => {
   it("selects only id and displayName", () => {
-    expect(PUBLIC_PLAYER_SELECT).toEqual({ id: true, displayName: true });
+    expect(PUBLIC_PLAYER_SELECT).toEqual({
+      id: true,
+      displayName: true,
+      avatarImageId: true,
+      avatarDefaultKey: true,
+    });
   });
 });
 
 describe("PublicPlayer type", () => {
   it("has only id and displayName, so email cannot be included", () => {
-    expectTypeOf<keyof PublicPlayer>().toEqualTypeOf<"id" | "displayName">();
+    expectTypeOf<keyof PublicPlayer>().toEqualTypeOf<
+      "id" | "displayName" | "avatarImageId" | "avatarDefaultKey"
+    >();
     expectTypeOf<PublicPlayer>().not.toHaveProperty("email");
     expectTypeOf(toPublicPlayer).returns.toEqualTypeOf<PublicPlayer>();
   });
