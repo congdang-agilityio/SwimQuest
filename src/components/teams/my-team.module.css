@@ -69,6 +69,17 @@
   height: 88px;
   border-radius: 50%;
 }
+.shipRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sq-space-3);
+}
+.tierShip {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
 .teamName {
   margin: 0;
   font-size: var(--sq-text-xl);

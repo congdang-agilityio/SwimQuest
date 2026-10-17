@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { NavIcon } from "@/components/nav/nav-icon";
 import { Chip, ProgressBar } from "@/components/ui";
+import { TierShip } from "@/components/ship/tier-ship";
 import { MOCKUP_TEAM_EMBLEM } from "@/lib/art/mockup-avatars";
 import type { MyTeamView } from "@/server/teams/my-team-view";
 import styles from "./my-team.module.css";
@@ -58,11 +59,21 @@ export function TeamHeader({
           )}
         </div>
       </div>
-      {captainName && (
-        <p className={styles.muted}>
-          {t("captain")}: {captainName}
-        </p>
-      )}
+      <div className={styles.shipRow}>
+        {captainName ? (
+          <p className={styles.muted}>
+            {t("captain")}: {captainName}
+          </p>
+        ) : (
+          <span />
+        )}
+        <TierShip
+          progressBp={progressBp}
+          alt={(tier) => t("shipTier", { tier })}
+          size={64}
+          className={styles.tierShip}
+        />
+      </div>
       {team.description && <p className={styles.muted}>{team.description}</p>}
       <ProgressBar
         value={percent}

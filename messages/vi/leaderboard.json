@@ -25,5 +25,6 @@
   "totalKm": "Tổng km",
   "badges": "Huy hiệu",
   "pointsValue": "{count, plural, other {# điểm}}",
-  "badgesValue": "{count, plural, other {# huy hiệu}}"
+  "badgesValue": "{count, plural, other {# huy hiệu}}",
+  "shipTier": "Tàu cấp {tier}"
 }

@@ -25,5 +25,6 @@
   "totalKm": "Total km",
   "badges": "Badges",
   "pointsValue": "{count, plural, one {# point} other {# points}}",
-  "badgesValue": "{count, plural, one {# badge} other {# badges}}"
+  "badgesValue": "{count, plural, one {# badge} other {# badges}}",
+  "shipTier": "Tier {tier} ship"
 }

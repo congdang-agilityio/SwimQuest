@@ -20,5 +20,6 @@
     "swimRevoked": "Một buổi bơi được tính cho hải trình đã bị gỡ sau khi xét duyệt, nên đội lùi lại dưới vạch đích.",
     "playerMoved": "Một thành viên đã rời đội, nên quãng đường của đội thấp hơn vạch đích.",
     "close": "Đóng"
-  }
+  },
+  "shipTier": "Tàu cấp {tier}"
 }

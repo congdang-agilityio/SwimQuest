@@ -20,5 +20,6 @@
     "swimRevoked": "A swim that counted toward the route was removed after review, so the team dropped back below the finish.",
     "playerMoved": "A member left the team, so its distance fell below the finish.",
     "close": "Close"
-  }
+  },
+  "shipTier": "Tier {tier} ship"
 }

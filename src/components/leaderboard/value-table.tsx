@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { FinishedLabel } from "@/components/teams/finished-label";
+import { TierShip } from "@/components/ship/tier-ship";
 import { TeamEmblem } from "@/components/teams/team-emblem";
 import { Chip } from "@/components/ui";
 import { mockupArt } from "@/lib/art/mockup-art";
@@ -41,7 +42,11 @@ export function RankCell({ rank }: { rank: number }) {
 export function TeamCell({
   row,
 }: {
-  row: Pick<ValueTableRow, "name" | "emblemKey" | "isMyTeam"> & { finishedAt?: Date | null };
+  row: Pick<ValueTableRow, "name" | "emblemKey" | "isMyTeam"> & {
+    finishedAt?: Date | null;
+    /** When given, the row shows the ship for the team's current tier. */
+    progressBp?: number;
+  };
 }) {
   const t = useTranslations("leaderboard");
   return (
@@ -59,6 +64,15 @@ export function TeamCell({
           )}
           {row.finishedAt && <FinishedLabel finishedAt={row.finishedAt} />}
         </span>
+        {row.progressBp !== undefined && (
+          <TierShip
+            progressBp={row.progressBp}
+            alt={(tier) => t("shipTier", { tier })}
+            size={32}
+            small
+            className={styles.tierShip}
+          />
+        )}
       </span>
     </th>
   );
