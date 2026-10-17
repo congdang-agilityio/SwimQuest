@@ -1,0 +1,97 @@
+/* Profile: same visual language as Home. Colours, radii and spacing come from tokens.css. */
+.profile {
+  display: grid;
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+
+.profile .hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-5) var(--sq-space-4);
+  background: var(--sq-navy-800);
+  box-shadow: var(--sq-shadow-raised);
+}
+.name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile .stats {
+  padding: var(--sq-space-4) 0;
+  background: var(--sq-white);
+}
+.statList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+}
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--sq-space-1);
+  padding: 0 var(--sq-space-4);
+}
+.stat + .stat {
+  border-left: 1px solid var(--sq-sky-100);
+}
+.stat dt {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+}
+.stat dd {
+  margin: 0;
+  color: var(--sq-navy-700);
+  line-height: 1.1;
+}
+.statValue {
+  font-size: var(--sq-text-2xl);
+  font-weight: var(--sq-weight-bold);
+}
+.statUnit {
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+
+.profile .rows {
+  padding: 0;
+  background: var(--sq-white);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  color: var(--sq-navy-700);
+  text-decoration: none;
+}
+.rowIcon {
+  display: inline-flex;
+  color: var(--sq-blue-600);
+}
+.rowLabel {
+  flex: 1;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+
+.logout {
+  display: grid;
+}
+
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
