@@ -15,10 +15,16 @@ const KNOWN = [
   "ROUTE_MISSING",
   "ROUTE_DISTANCE_INVALID",
   "NO_TEAM",
+  "VISIBILITY_MISSING",
 ];
 
-/** Where on the organizer page an issue's field lives: the team list, else the season details. */
-export const issueHref = (field: string) => (field === "teams" ? "#teams-title" : "#season");
+/** Where an issue's field lives: the visibility field in settings, the team list, else the season details. */
+export const issueHref = (field: string, tournamentId?: string) =>
+  field === "visibility" && tournamentId
+    ? `/tournaments/${tournamentId}/manage/settings#visibility`
+    : field === "teams"
+      ? "#teams-title"
+      : "#season";
 
 /** Draft-only controls on the organizer page: Preview link and a confirmed, single-flight Publish. */
 export function PublishPanel({ tournamentId }: { tournamentId: string }) {
@@ -95,7 +101,7 @@ export function PublishPanel({ tournamentId }: { tournamentId: string }) {
             <ul>
               {issues.map((i, n) => (
                 <li key={`${i.code}-${i.field}-${n}`}>
-                  <a href={issueHref(i.field)}>
+                  <a href={issueHref(i.field, tournamentId)}>
                     {t(`issues.${KNOWN.includes(i.code) ? i.code : "UNKNOWN"}`)}
                   </a>
                 </li>

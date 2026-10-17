@@ -7,7 +7,8 @@ export type PublishIssueCode =
   | "REALISTIC_LIMITS_OUT_OF_BOUNDS"
   | "ROUTE_MISSING"
   | "ROUTE_DISTANCE_INVALID"
-  | "NO_TEAM";
+  | "NO_TEAM"
+  | "VISIBILITY_MISSING";
 
 /** One thing to fix before publishing; `field` names the form field the UI links to. */
 export type PublishIssue = { code: PublishIssueCode; field: string };
@@ -19,6 +20,8 @@ export type PublishCandidate = {
   routeDistanceM: number;
   /** Bounds snapshot taken at creation; null or broken uses the starting bounds. */
   swimLimitBounds?: unknown;
+  /** Null until the organizer chooses; publishing needs a choice (S-30). */
+  visibility?: string | null;
 } & Record<SwimLimitField, number>;
 
 /** Checked against the tournament's own bounds snapshot (S-64), so later admin changes never reach it. */
@@ -53,5 +56,8 @@ export function validateForPublish(t: PublishCandidate, teams: readonly unknown[
     issues.push({ code: "ROUTE_DISTANCE_INVALID", field: "routeDistanceKm" });
   }
   if (!Array.isArray(teams) || teams.length === 0) issues.push({ code: "NO_TEAM", field: "teams" });
+  if (t.visibility !== "PUBLIC" && t.visibility !== "INVITE_ONLY") {
+    issues.push({ code: "VISIBILITY_MISSING", field: "visibility" });
+  }
   return issues;
 }

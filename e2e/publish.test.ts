@@ -76,6 +76,16 @@ test("draft without teams lists the issue; with a team: preview, publish once, i
   await page.getByRole("link", { name: "Xem trước" }).click();
   await expect(page.getByText("Đội Rùa")).toBeVisible();
 
+  // Publishing needs a visibility choice: follow the issue link and pick it in the browser.
+  await page.goto(manage);
+  await page.getByRole("button", { name: "Công bố" }).click();
+  await page.getByRole("button", { name: "Đồng ý, công bố" }).click();
+  await page.getByRole("link", { name: "Chọn chế độ hiển thị của giải." }).click();
+  await expect(page).toHaveURL(/\/manage\/settings#visibility$/);
+  await page.getByRole("radio", { name: /Chỉ qua liên kết mời/ }).check();
+  await page.getByRole("button", { name: "Lưu hiển thị" }).click();
+  await expect(page.getByText("Đã lưu.").first()).toBeVisible();
+
   await page.goto(manage);
   await page.getByRole("button", { name: "Công bố" }).click();
   const publishRequests: string[] = [];

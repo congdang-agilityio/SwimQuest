@@ -180,5 +180,26 @@
       "EXTRA_DISTANCE_NOT_STRICTER": "Buổi bơi dài nhất phải dài hơn luật quãng đường tối thiểu, {minKm} km.",
       "UNKNOWN": "Giá trị này không hợp lệ."
     }
+  },
+  "visibility": {
+    "title": "Hiển thị",
+    "legend": "Ai có thể tìm thấy và tham gia giải",
+    "intro": "Bạn có thể đổi lựa chọn này bất cứ lúc nào.",
+    "unset": "Hãy chọn trước khi công bố giải.",
+    "options": {
+      "PUBLIC": {
+        "label": "Công khai",
+        "help": "Mọi người có thể tìm thấy giải và tham gia mà không cần liên kết mời."
+      },
+      "INVITE_ONLY": {
+        "label": "Chỉ qua liên kết mời",
+        "help": "Chỉ người có liên kết mời mới tham gia được."
+      }
+    },
+    "save": "Lưu hiển thị",
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu.",
+    "failed": "Không thể lưu. Vui lòng thử lại.",
+    "networkError": "Lỗi kết nối. Vui lòng thử lại."
   }
 }

@@ -8,6 +8,7 @@ const valid: PublishCandidate = {
   seasonEndAt: new Date("2026-11-30T23:59:00+07:00"),
   routeId: "route01",
   routeDistanceM: 100_000,
+  visibility: "INVITE_ONLY",
   ...DEFAULT_SWIM_LIMITS,
 };
 const teams = [{ id: "team-1" }];

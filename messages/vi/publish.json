@@ -30,6 +30,7 @@
       "ROUTE_MISSING": "Hãy chọn một lộ trình.",
       "ROUTE_DISTANCE_INVALID": "Nhập quãng đường lộ trình lớn hơn 0.",
       "NO_TEAM": "Hãy thêm ít nhất một đội.",
+      "VISIBILITY_MISSING": "Chọn chế độ hiển thị của giải.",
       "UNKNOWN": "Có mục cần sửa."
     }
   },

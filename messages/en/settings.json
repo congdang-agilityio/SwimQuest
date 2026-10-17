@@ -180,5 +180,26 @@
       "EXTRA_DISTANCE_NOT_STRICTER": "The longest swim must stay longer than the minimum swim distance rule, {minKm} km.",
       "UNKNOWN": "This value is not valid."
     }
+  },
+  "visibility": {
+    "title": "Visibility",
+    "legend": "Who can find and join the tournament",
+    "intro": "You can change this at any time.",
+    "unset": "Choose one before you publish.",
+    "options": {
+      "PUBLIC": {
+        "label": "Public",
+        "help": "Anyone can find the tournament and join without an invite link."
+      },
+      "INVITE_ONLY": {
+        "label": "Invite link only",
+        "help": "Only people with the invite link can join."
+      }
+    },
+    "save": "Save visibility",
+    "saving": "Saving...",
+    "saved": "Saved.",
+    "failed": "Could not save. Please try again.",
+    "networkError": "Connection error. Please try again."
   }
 }
