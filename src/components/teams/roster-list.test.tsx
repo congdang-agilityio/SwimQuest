@@ -38,7 +38,7 @@ describe("RosterList", () => {
   it("marks the captain with text and offers Make captain to the others only", () => {
     setup([{ ...members[0], isCaptain: true }, members[1]]);
     expect(screen.getByText("Đội trưởng").tagName).toBe("STRONG");
-    expect(screen.getAllByRole("button")).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: /làm đội trưởng/ })).toHaveLength(1);
     expect(screen.getByRole("button", { name: "Chọn Minh làm đội trưởng" })).toBeTruthy();
   });
 
