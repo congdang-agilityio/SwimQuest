@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
+import { recordFunnelEvent } from "@/server/funnel/record";
 import { validateForPublish, type PublishIssue } from "./validate-publish";
 
 export type PublishedTournament = {
@@ -57,9 +58,17 @@ export async function publishTournament(userId: string, id: string): Promise<Pub
   const issues = validateForPublish(tournament, teams);
   if (issues.length > 0) return { ok: false, reason: "PUBLISH_INVALID", issues };
 
-  await db.tournament.updateMany({
-    where: { id: tournament.id, status: "DRAFT" },
-    data: { status: "PUBLISHED", publishedAt: new Date(), inviteToken: newInviteToken() },
+  await db.$transaction(async (tx) => {
+    const { count } = await tx.tournament.updateMany({
+      where: { id: tournament.id, status: "DRAFT" },
+      data: { status: "PUBLISHED", publishedAt: new Date(), inviteToken: newInviteToken() },
+    });
+    if (count === 0) return;
+    await recordFunnelEvent(tx, "tournament_published", {
+      userId,
+      tournamentId: tournament.id,
+      once: tournament.id,
+    });
   });
   const stored = await db.tournament.findUnique({
     where: { id: tournament.id },

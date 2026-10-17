@@ -1,5 +1,6 @@
 import { parseTournamentDraft, type TournamentDraftErrors } from "@/lib/validation/tournament";
 import { db } from "@/server/db";
+import { recordFunnelEvent } from "@/server/funnel/record";
 import { getSwimLimitConfig } from "@/server/platform/swim-limits-config";
 import { assertCanCreateTournament } from "./quota";
 
@@ -32,7 +33,9 @@ export async function createDraft(
   };
   const { id } = await db.$transaction(async (tx) => {
     await assertCanCreateTournament(tx, userId);
-    return tx.tournament.create(args);
+    const created = await tx.tournament.create(args);
+    await recordFunnelEvent(tx, "tournament_created", { userId, tournamentId: created.id });
+    return created;
   });
   return { ok: true, id };
 }
