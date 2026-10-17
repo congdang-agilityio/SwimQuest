@@ -10,11 +10,16 @@
     grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
     gap: var(--sq-space-6);
   }
-  /* The team panel spans both rows, so the finish panel and start card stack on the right. */
+  /* The team panel on the left; the finish panel and the cards stack on the right. */
   .panel {
     grid-column: 1;
-    grid-row: 1 / span 2;
   }
+}
+.side {
+  display: grid;
+  gap: var(--sq-space-4);
+  align-content: start;
+  min-width: 0;
 }
 
 /* The phone panel: navy band and hero on top, white roster below. */
