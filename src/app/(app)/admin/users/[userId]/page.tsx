@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AdminRoleToggle } from "@/components/admin/admin-role-toggle";
+import { AccountStatusActions } from "@/components/admin/account-status-actions";
 import styles from "@/components/admin/admin.module.css";
 import { statusTone } from "@/components/admin/status-tone";
 import { Avatar, Chip, ScreenHeader, SectionHeader } from "@/components/ui";
@@ -61,6 +62,12 @@ export default async function AdminUserPage({ params }: { params: Promise<{ user
           </dl>
         </div>
       </section>
+      <AccountStatusActions
+        key={user.status}
+        userId={user.id}
+        displayName={user.displayName}
+        status={user.status}
+      />
       <AdminRoleToggle
         key={String(user.isPlatformAdmin)}
         userId={user.id}
