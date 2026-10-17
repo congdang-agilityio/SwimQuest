@@ -83,7 +83,7 @@ test("draft without teams lists the issue; with a team: preview, publish once, i
   await page.getByRole("link", { name: "Chọn chế độ hiển thị của giải." }).click();
   await expect(page).toHaveURL(/\/manage\/settings#visibility$/);
   await page.getByRole("radio", { name: /Chỉ qua liên kết mời/ }).check();
-  await page.getByRole("button", { name: "Lưu" }).first().click();
+  await page.getByRole("button", { name: "Lưu hiển thị" }).click();
   await expect(page.getByText("Đã lưu.").first()).toBeVisible();
 
   await page.goto(manage);

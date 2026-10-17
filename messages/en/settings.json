@@ -196,7 +196,7 @@
         "help": "Only people with the invite link can join."
       }
     },
-    "save": "Save",
+    "save": "Save visibility",
     "saving": "Saving...",
     "saved": "Saved.",
     "failed": "Could not save. Please try again.",
