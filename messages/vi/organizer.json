@@ -83,6 +83,11 @@
       "title": "Lối tắt ban tổ chức",
       "invite": "Liên kết mời"
     },
+    "export": {
+      "title": "Xuất dữ liệu",
+      "note": "Tệp gồm các đội, tên hiển thị của thành viên, km đã xác minh và điểm. Không có email hay dữ liệu GPS.",
+      "button": "Xuất tệp"
+    },
     "progress": {
       "title": "Tiến độ các đội",
       "empty": "Chưa có đội nào.",

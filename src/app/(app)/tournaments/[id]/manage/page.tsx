@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ArchiveButton } from "@/components/organizer/archive-button";
 import { ConsoleHeader } from "@/components/organizer/console-header";
+import { ExportButton } from "@/components/organizer/export-button";
 import { ConsoleLinks } from "@/components/organizer/console-links";
 import { ProgressSection } from "@/components/organizer/progress-section";
 import { StartsSection } from "@/components/organizer/starts-section";
@@ -87,6 +88,7 @@ export default async function ManageTournamentPage({
         hasInvite={Boolean(showInvite && origin)}
         canEdit={overview.status !== "ARCHIVED"}
       />
+      {user.id === tournament.organizerId && <ExportButton tournamentId={tournament.id} />}
       {(overview.status === "ACTIVE" || overview.status === "COMPLETED") && (
         <ProgressSection tournamentId={tournament.id} teams={consoleTeams.teams} />
       )}
