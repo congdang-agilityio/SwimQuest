@@ -14,5 +14,11 @@
     "done": "Your team has finished",
     "voyage": "The {place} voyage",
     "badgeAlt": "Finished badge: {place}"
+  },
+  "finishLost": {
+    "title": "Your team is no longer at {place}",
+    "swimRevoked": "A swim that counted toward the route was removed after review, so the team dropped back below the finish.",
+    "playerMoved": "A member left the team, so its distance fell below the finish.",
+    "close": "Close"
   }
 }

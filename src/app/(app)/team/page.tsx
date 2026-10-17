@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { JoinGuidance } from "@/components/empty-state/join-guidance";
 import { MyPointsCard } from "@/components/scoring/my-points-card";
+import { FinishLostNotice } from "@/components/finish/finish-lost-notice";
 import { TeamFinish } from "@/components/finish/team-finish";
 import { TeamStartCard } from "@/components/starts/team-start-card";
 import styles from "@/components/teams/my-team.module.css";
@@ -56,6 +57,7 @@ export default async function TeamPage() {
             </div>
           )}
         </div>
+        <FinishLostNotice userId={user.id} />
         {view?.finishedAt && <TeamFinish userId={user.id} />}
         {myPoints && <MyPointsCard points={myPoints} />}
         {membership && view && (
