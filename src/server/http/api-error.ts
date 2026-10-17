@@ -49,6 +49,7 @@ export type ApiErrorCode =
   | "NOT_REVOKABLE"
   | "NOT_A_PLAYER"
   | "ALREADY_HELPER"
+  | "ALREADY_AWARDED"
   | "NOT_A_HELPER"
   | "QUOTA_REACHED"
   | "QUOTA_NOT_REACHED"
@@ -109,6 +110,7 @@ const messages: Record<ApiErrorCode, string> = {
   NOT_REVOKABLE: "Only a verified swim can be revoked.",
   NOT_A_PLAYER: "Choose a player who is in a team of this tournament.",
   ALREADY_HELPER: "This player is already a review helper.",
+  ALREADY_AWARDED: "This player already has the Special badge in this tournament.",
   NOT_A_HELPER: "This player is not a review helper of this tournament.",
   QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
   QUOTA_NOT_REACHED: "You can request more tournaments only after reaching your limit.",
