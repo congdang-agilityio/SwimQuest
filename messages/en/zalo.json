@@ -112,5 +112,6 @@
       "other": "Zalo refused a message. Check that the bot is still in the group and its key is still valid."
     }
   },
-  "consoleProblem": "Zalo messages could not be delivered. Open Zalo group to see why."
+  "consoleProblem": "Zalo messages could not be delivered. Open Zalo group to see why.",
+  "playerNotice": "This tournament posts members' names and counted swims to its Zalo group."
 }

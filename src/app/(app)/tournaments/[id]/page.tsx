@@ -7,6 +7,7 @@ import { TournamentExtras } from "@/components/tournaments/tournament-extras";
 import { RulesSection } from "@/components/tournaments/details/rules-section";
 import styles from "@/components/tournaments/details/details.module.css";
 import { ButtonLink, Card, ScreenHeader, SectionHeader } from "@/components/ui";
+import { ZaloNotice } from "@/components/zalo/zalo-notice";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { recordFunnelEventSafe } from "@/server/funnel/safe";
@@ -75,6 +76,7 @@ export default async function TournamentDetailsPage({
             seasonStartAt={details.seasonStartAt}
             routeDistanceM={details.routeDistanceM}
           />
+          <ZaloNotice tournamentId={details.id} />
           {(details.joinHref || showLeaderboard) && (
             <nav aria-label={t("actions")} className={styles.actions}>
               {details.joinHref && <ButtonLink href={details.joinHref}>{t("join")}</ButtonLink>}
