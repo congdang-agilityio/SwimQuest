@@ -15,5 +15,6 @@
   "alreadyIn": "You are in {team}",
   "goToTeam": "Go to My Team",
   "failed": "Could not join. Please try again.",
-  "eligibility": "Who can join"
+  "eligibility": "Who can join",
+  "details": "Details and rules"
 }

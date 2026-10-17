@@ -89,11 +89,7 @@ export function TournamentList({ tournaments }: { tournaments: readonly MyTourna
                   <ButtonLink
                     size="sm"
                     variant={x.isOrganizer ? "primary" : "secondary"}
-                    href={
-                      x.isOrganizer
-                        ? `/tournaments/${x.id}/manage`
-                        : `/tournaments/${x.id}/leaderboard`
-                    }
+                    href={x.isOrganizer ? `/tournaments/${x.id}/manage` : `/tournaments/${x.id}`}
                     className={styles.action}
                   >
                     {x.isOrganizer ? t("manage") : t("details")}

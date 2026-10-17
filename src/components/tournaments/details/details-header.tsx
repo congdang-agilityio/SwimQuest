@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { MockupPicture } from "@/components/art/mockup-picture";
 import { Chip, type ChipTone } from "@/components/ui";
 import type { TournamentStatus } from "@/lib/tournaments/lifecycle";
-import { utcToVnParts } from "@/lib/time/vn";
+import { formatVnDateTime } from "@/lib/time/vn";
 import styles from "./details.module.css";
 
 const STATUS_TONE: Record<TournamentStatus, ChipTone> = {
@@ -28,10 +28,7 @@ type Props = {
 export function DetailsHeader(props: Props) {
   const t = useTranslations("details");
   const r = useTranslations("routes");
-  const when = (value: Date) => {
-    const { date, time } = utcToVnParts(new Date(value));
-    return `${time} ${date}`;
-  };
+  const when = (value: Date) => formatVnDateTime(new Date(value));
   const km = Number((props.routeDistanceM / 1000).toFixed(3));
   return (
     <>

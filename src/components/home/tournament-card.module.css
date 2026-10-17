@@ -67,3 +67,12 @@
   color: var(--sq-text-on-dark-muted);
   font-size: var(--sq-text-xs);
 }
+
+/* The name is the way in to the details page and keeps the heading look. */
+.nameLink {
+  color: inherit;
+  text-decoration: none;
+}
+.nameLink:hover {
+  text-decoration: underline;
+}

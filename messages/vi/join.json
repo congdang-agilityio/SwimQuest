@@ -15,5 +15,6 @@
   "alreadyIn": "Bạn đang ở đội {team}",
   "goToTeam": "Đến Đội của tôi",
   "failed": "Không thể tham gia. Vui lòng thử lại.",
-  "eligibility": "Ai có thể tham gia"
+  "eligibility": "Ai có thể tham gia",
+  "details": "Chi tiết và thể lệ"
 }
