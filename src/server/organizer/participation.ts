@@ -14,6 +14,23 @@ import {
 /** A verified swim of at least this many metres makes a member active for the week. */
 export const ACTIVE_SWIM_MIN_M = 500;
 
+/**
+ * Verified swims of at least ACTIVE_SWIM_MIN_M that started in [start, end), as distinct
+ * team/player pairs of teams that still have active members. The one "active member" rule.
+ */
+export function findActiveSwimmers(tournamentId: string, start: Date, end: Date) {
+  return db.swimResult.findMany({
+    where: {
+      tournamentId,
+      status: "VERIFIED",
+      swim: { distanceM: { gte: ACTIVE_SWIM_MIN_M }, startedAt: { gte: start, lt: end } },
+      team: { members: { some: { status: "ACTIVE" } } },
+    },
+    distinct: ["teamId", "userId"],
+    select: { teamId: true, userId: true },
+  });
+}
+
 export type ConsoleTeamMember = PublicPlayer & { isCaptain: boolean; joinedAt: Date };
 
 export type ConsoleTeam = {
@@ -69,16 +86,7 @@ export async function getConsoleTeams(
         },
       },
     }),
-    db.swimResult.findMany({
-      where: {
-        tournamentId,
-        status: "VERIFIED",
-        swim: { distanceM: { gte: ACTIVE_SWIM_MIN_M }, startedAt: { gte: start, lt: end } },
-        team: { members: { some: { status: "ACTIVE" } } },
-      },
-      distinct: ["teamId", "userId"],
-      select: { teamId: true, userId: true },
-    }),
+    findActiveSwimmers(tournamentId, start, end),
     listUnassignedPlayers(organizerId, tournamentId),
   ]);
 
