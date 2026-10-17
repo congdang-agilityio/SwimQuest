@@ -13,5 +13,10 @@
     "mySwims": "Các lần bơi của tôi",
     "safety": "Bơi an toàn",
     "security": "Bảo mật"
+  },
+  "switcher": {
+    "kicker": "Hành trình của đội",
+    "label": "Chọn giải đấu",
+    "error": "Không đổi được giải đấu. Hãy thử lại."
   }
 }

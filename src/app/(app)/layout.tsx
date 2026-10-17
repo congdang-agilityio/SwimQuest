@@ -4,6 +4,7 @@ import { AppNav } from "@/components/nav/app-nav";
 import styles from "@/components/nav/app-nav.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
+import { getTournamentSwitcher } from "@/server/home/selected-tournament";
 
 /** Session checks must run on every request; protected pages are never statically cached. */
 export const dynamic = "force-dynamic";
@@ -25,9 +26,14 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       </div>
     );
   }
+  const switcher = await getTournamentSwitcher(user.id);
   return (
     <>
-      <AppNav displayName={user.displayName} isPlatformAdmin={user.isPlatformAdmin} />
+      <AppNav
+        displayName={user.displayName}
+        isPlatformAdmin={user.isPlatformAdmin}
+        switcher={switcher}
+      />
       <div className={styles.content} data-surface="light">
         {children}
       </div>
