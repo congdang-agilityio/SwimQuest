@@ -17,7 +17,7 @@ export class InviteLinkError extends Error {
 const selectLink = { id: true, inviteEnabled: true, inviteToken: true } as const;
 
 async function organizerLink(userId: string, id: string) {
-  const t = await requireOrganizer(userId, id);
+  const t = await requireOrganizer(userId, id, { write: true });
   if (!t.inviteToken) throw new InviteLinkError("NO_INVITE_LINK");
   return t;
 }

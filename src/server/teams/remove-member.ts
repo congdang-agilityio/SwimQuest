@@ -1,6 +1,6 @@
 import { effectiveStatus, type LifecycleTournament } from "@/lib/tournaments/lifecycle";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
-import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
+import { ArchivedError, ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
 import { NotAMemberError } from "./captain";
@@ -8,7 +8,12 @@ import { NotAMemberError } from "./captain";
 export type RemoveEndReason = "REMOVED_BEFORE_START" | "REMOVED_AFTER_START";
 export type RemoveMemberResult = { endReason: RemoveEndReason; captainCleared: boolean };
 
-type LockedTeam = { tournamentId: string; captainUserId: string | null; organizerId: string };
+type LockedTeam = {
+  tournamentId: string;
+  captainUserId: string | null;
+  organizerId: string;
+  archived: boolean;
+};
 
 const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
 
@@ -35,7 +40,7 @@ export async function removeMember(
 
   return db.$transaction(async (tx) => {
     const [team] = await tx.$queryRaw<LockedTeam[]>`
-      SELECT t."tournamentId", t."captainUserId", o."organizerId"
+      SELECT t."tournamentId", t."captainUserId", o."organizerId", (o."status" = 'ARCHIVED') AS "archived"
       FROM "Team" t JOIN "Tournament" o ON o."id" = t."tournamentId"
       WHERE t."id" = ${teamId} FOR UPDATE OF t`;
     if (!team) throw new NotFoundError();
@@ -44,6 +49,7 @@ export async function removeMember(
       team.captainUserId === actorId &&
       (await tx.teamMember.count({ where: { teamId, userId: actorId, status: "ACTIVE" } })) > 0;
     if (team.organizerId !== actorId && !isCaptain) throw new ForbiddenError();
+    if (team.archived) throw new ArchivedError();
 
     const membership = await tx.teamMember.findFirst({
       where: { teamId, userId, status: "ACTIVE" },

@@ -33,7 +33,9 @@ export async function appointCaptain(
       ? await db.team.findUnique({ where: { id: teamId }, select: { tournamentId: true } })
       : null;
   if (!team) throw new NotFoundError();
-  const { id: tournamentId } = await requireOrganizer(organizerId, team.tournamentId);
+  const { id: tournamentId } = await requireOrganizer(organizerId, team.tournamentId, {
+    write: true,
+  });
   if (typeof memberUserId !== "string" || memberUserId.length === 0) throw new NotAMemberError();
 
   return db.$transaction(async (tx) => {

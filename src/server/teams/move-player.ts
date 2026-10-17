@@ -1,5 +1,5 @@
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
-import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
+import { ArchivedError, ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import { lockPlayerSwims } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
@@ -19,7 +19,13 @@ export class InvalidMoveError extends Error {
   readonly code = "VALIDATION_FAILED";
 }
 
-type LockedTeam = { id: string; captainUserId: string | null; memberLimit: number; org: string };
+type LockedTeam = {
+  id: string;
+  captainUserId: string | null;
+  memberLimit: number;
+  org: string;
+  archived: boolean;
+};
 const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
 
 /**
@@ -46,7 +52,7 @@ export async function movePlayer(
     await lockPlayerSwims(tx, userId);
     await lockPlayerPoints(tx, tournamentId, userId);
     const teams = await tx.$queryRaw<LockedTeam[]>`
-      SELECT t."id", t."captainUserId", t."memberLimit", o."organizerId" AS "org"
+      SELECT t."id", t."captainUserId", t."memberLimit", o."organizerId" AS "org", (o."status" = 'ARCHIVED') AS "archived"
       FROM "Team" t JOIN "Tournament" o ON o."id" = t."tournamentId"
       WHERE t."id" IN (${fromTeamId}, ${toTeamId}) AND t."tournamentId" = ${tournamentId}
       ORDER BY t."id" FOR NO KEY UPDATE OF t`;
@@ -54,6 +60,7 @@ export async function movePlayer(
     const target = teams.find((t) => t.id === toTeamId);
     if (!old) throw new NotFoundError();
     if (old.org !== organizerId) throw new ForbiddenError();
+    if (old.archived) throw new ArchivedError();
     if (!target) throw new NotFoundError();
     const member = await tx.teamMember.findFirst({
       where: { teamId: fromTeamId, userId, status: "ACTIVE" },

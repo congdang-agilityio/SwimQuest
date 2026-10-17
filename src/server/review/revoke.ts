@@ -86,7 +86,7 @@ export async function revokeResult(
   });
   if (!found) throw new NotFoundError();
   if (asAdmin) await requireAdmin(actorId);
-  else await requireReviewer(actorId, found.tournamentId);
+  else await requireReviewer(actorId, found.tournamentId, { write: true });
   const note = reasonSchema.safeParse(reason);
   if (!note.success) throw new ReasonRequiredError();
 

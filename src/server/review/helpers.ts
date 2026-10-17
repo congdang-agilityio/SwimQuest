@@ -39,7 +39,7 @@ export async function appointHelper(
   userId: string,
   now: Date = new Date(),
 ): Promise<{ helperId: string }> {
-  await requireOrganizer(organizerId, tournamentId);
+  await requireOrganizer(organizerId, tournamentId, { write: true });
   if (!isId(userId)) throw new NotAPlayerError();
   try {
     return await db.$transaction(async (tx) => {
@@ -83,7 +83,7 @@ export async function removeHelper(
   userId: string,
   now: Date = new Date(),
 ): Promise<void> {
-  await requireOrganizer(organizerId, tournamentId);
+  await requireOrganizer(organizerId, tournamentId, { write: true });
   if (!isId(userId)) throw new NotAHelperError();
   await db.$transaction(async (tx) => {
     // Conditional update: of two removals at once only one changes the row.

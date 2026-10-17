@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { AUDIT_ACTIONS, recordAudit } from "@/server/audit/record";
-import { ForbiddenError, NotFoundError } from "@/server/auth/roles";
+import { ArchivedError, ForbiddenError, NotFoundError } from "@/server/auth/roles";
 import { lockPlayerSwims } from "@/server/checks/run-checks";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
@@ -13,7 +13,12 @@ export class AlreadyMemberError extends Error {
   readonly code = "ALREADY_MEMBER";
 }
 
-type LockedTeam = { tournamentId: string; memberLimit: number; organizerId: string };
+type LockedTeam = {
+  tournamentId: string;
+  memberLimit: number;
+  organizerId: string;
+  archived: boolean;
+};
 const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
 const isUniqueViolation = (err: unknown) =>
   err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002";
@@ -45,11 +50,12 @@ export async function addPlayerToTeam(
     return await db.$transaction(async (tx) => {
       await lockPlayerSwims(tx, userId);
       const [team] = await tx.$queryRaw<LockedTeam[]>`
-        SELECT t."tournamentId", t."memberLimit", o."organizerId"
+        SELECT t."tournamentId", t."memberLimit", o."organizerId", (o."status" = 'ARCHIVED') AS "archived"
         FROM "Team" t JOIN "Tournament" o ON o."id" = t."tournamentId"
         WHERE t."id" = ${teamId} FOR UPDATE OF t`;
       if (!team) throw new NotFoundError();
       if (team.organizerId !== organizerId) throw new ForbiddenError();
+      if (team.archived) throw new ArchivedError();
       const { tournamentId } = team;
 
       const latest = await tx.teamMember.findFirst({

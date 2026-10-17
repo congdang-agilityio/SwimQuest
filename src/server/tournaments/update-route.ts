@@ -24,7 +24,7 @@ export async function updateRoute(
   input: unknown,
   now: Date,
 ): Promise<UpdateRouteResult> {
-  const tournament = await requireOrganizer(userId, id);
+  const tournament = await requireOrganizer(userId, id, { write: true });
   if (!isRouteEditable(tournament, now)) return { ok: false, reason: "ROUTE_LOCKED" };
 
   const isObject = typeof input === "object" && input !== null && !Array.isArray(input);
