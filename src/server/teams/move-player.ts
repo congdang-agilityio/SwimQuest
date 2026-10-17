@@ -32,7 +32,8 @@ const isId = (v: unknown): v is string => typeof v === "string" && v.length > 0;
  * The organizer moves an active player to a team of the same tournament with room, before or
  * during the season (S-39, FR-75, BR-31): the old membership ends (`LEFT`, `MOVED`), and the
  * points entries, swim results and weekly results the player has with the old team move along.
- * A moved captain is cleared; both teams' progress is refreshed; audited and evented together.
+ * A moved captain is cleared; the move is evented, then both teams' progress is refreshed
+ * (so move handlers run before any finish event of the new team); audited in the same tx.
  * Lock order as an upload: `swims:` and `points:` locks, then both team rows by ascending id.
  */
 export async function movePlayer(
@@ -90,6 +91,11 @@ export async function movePlayer(
     if (captainCleared) {
       await tx.team.update({ where: { id: fromTeamId }, data: { captainUserId: null } });
     }
+    // The move is evented before the progress refresh: its handlers (e.g. removing the old
+    // team's Lý Sơn badge) must run before a TEAM_FINISHED the refresh may emit for the new
+    // team, or the "one active badge" guard would skip the moved player (#842).
+    const payload = { tournamentId, teamId: toTeamId, userId, fromTeamId };
+    await emitEvent(tx, { type: "TEAM_MEMBER_MOVED", payload });
     for (const teamId of [fromTeamId, toTeamId].sort()) {
       await updateTeamProgress(tx, tournamentId, teamId, now, "PLAYER_MOVED");
     }
@@ -103,8 +109,6 @@ export async function movePlayer(
       before: { userId, teamId: fromTeamId, membershipId: member.id, wasCaptain: captainCleared },
       after: { userId, teamId: toTeamId, fromTeamId, movedAt: now.toISOString(), entriesMoved },
     });
-    const payload = { tournamentId, teamId: toTeamId, userId, fromTeamId };
-    await emitEvent(tx, { type: "TEAM_MEMBER_MOVED", payload });
     return { entriesMoved, captainCleared };
   });
 }
