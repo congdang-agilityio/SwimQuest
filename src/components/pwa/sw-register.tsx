@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Registers `public/sw.js` (offline page, static asset cache) in production builds. */
+/** Registers `public/sw.js` (offline page, static assets, opened pages) in production builds. */
 export function SwRegister() {
   useEffect(() => {
     if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
@@ -17,8 +17,9 @@ export function SwRegister() {
 }
 
 /**
- * Deletes every SwimQuest cache (called on logout), so the next person on this device starts
- * clean. The worker re-caches the public offline page on the next visit.
+ * Deletes every SwimQuest cache (called on logout), including the pages kept for offline use, so
+ * the next person on this device starts clean. The worker re-caches the public offline page on
+ * the next visit. A sign-in with another session also drops the kept pages (see `public/sw.js`).
  */
 export async function clearAppCaches(): Promise<void> {
   if (typeof caches === "undefined") return;
