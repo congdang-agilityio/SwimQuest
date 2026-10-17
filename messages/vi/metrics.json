@@ -3,7 +3,10 @@
   "back": "Quay lại",
   "intro": "Số liệu tổng hợp của giải. Chỉ có số lượng và tên đội: không có tên người chơi, email hay dữ liệu GPS.",
   "tabsLabel": "Các mục số liệu",
-  "tabs": { "overview": "Tổng quan", "fairness": "Công bằng" },
+  "tabs": {
+    "overview": "Tổng quan",
+    "fairness": "Công bằng"
+  },
   "empty": {
     "title": "Chưa có buổi bơi nào",
     "body": "Số liệu sẽ xuất hiện khi người chơi tải lên những buổi bơi đầu tiên."
@@ -46,6 +49,28 @@
       "minutes": "Một nửa số buổi bơi được quyết định trong vòng {minutes} phút sau khi tải lên.",
       "hours": "Một nửa số buổi bơi được quyết định trong vòng {hours} giờ {minutes} phút sau khi tải lên.",
       "none": "Chưa có buổi bơi nào được quyết định."
+    }
+  },
+  "fairness": {
+    "title": "Công bằng",
+    "hint": "Tiến độ và tỷ lệ về đích của các đội theo điểm xuất phát, quy mô đội và số thành viên hoạt động tuần này.",
+    "teams": "Số đội",
+    "progress": "Tiến độ TB",
+    "finish": "Về đích",
+    "progressValue": "{pct}%",
+    "byStart": "Theo điểm xuất phát",
+    "byTeamSize": "Theo quy mô đội",
+    "byActive": "Theo số thành viên hoạt động tuần này",
+    "start": "Xuất phát",
+    "size": "Quy mô đội",
+    "active": "Hoạt động tuần này",
+    "noStart": "Chưa có điểm xuất phát",
+    "sizeValue": "{count} thành viên",
+    "bands": {
+      "0": "0",
+      "1-2": "1 đến 2",
+      "3-5": "3 đến 5",
+      "6+": "6 trở lên"
     }
   }
 }

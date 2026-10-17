@@ -3,7 +3,10 @@
   "back": "Back",
   "intro": "Aggregated numbers for your tournament. They show counts and team names only: no player names, emails or GPS data.",
   "tabsLabel": "Metrics views",
-  "tabs": { "overview": "Overview", "fairness": "Fairness" },
+  "tabs": {
+    "overview": "Overview",
+    "fairness": "Fairness"
+  },
   "empty": {
     "title": "No swims yet",
     "body": "Figures appear here once players upload their first swims."
@@ -46,6 +49,28 @@
       "minutes": "Half of the swims were decided within {minutes} minutes of upload.",
       "hours": "Half of the swims were decided within {hours} h {minutes} min of upload.",
       "none": "No swim has been decided yet."
+    }
+  },
+  "fairness": {
+    "title": "Fairness",
+    "hint": "Progress and finish rate of teams grouped by start, team size and active members this week.",
+    "teams": "Teams",
+    "progress": "Avg. progress",
+    "finish": "Finished",
+    "progressValue": "{pct}%",
+    "byStart": "By start",
+    "byTeamSize": "By team size",
+    "byActive": "By active members this week",
+    "start": "Start",
+    "size": "Team size",
+    "active": "Active this week",
+    "noStart": "No start yet",
+    "sizeValue": "{count} members",
+    "bands": {
+      "0": "0",
+      "1-2": "1 to 2",
+      "3-5": "3 to 5",
+      "6+": "6 or more"
     }
   }
 }

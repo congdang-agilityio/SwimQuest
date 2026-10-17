@@ -63,6 +63,12 @@ test("the organizer opens Metrics from the console; a player gets access denied"
   await page.getByRole("link", { name: "Số liệu" }).click();
   await expect(page.getByRole("heading", { name: "Số liệu", level: 1 })).toBeVisible();
   await expect(page.getByText("Chưa có buổi bơi nào")).toBeVisible();
+  await page.getByRole("link", { name: "Công bằng" }).click();
+  await expect(page.getByRole("link", { name: "Công bằng" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(page.getByRole("heading", { name: "Theo điểm xuất phát" })).toBeVisible();
 
   const other = await browser.newContext({ baseURL: testInfo.project.use.baseURL });
   const otherPage = await other.newPage();
