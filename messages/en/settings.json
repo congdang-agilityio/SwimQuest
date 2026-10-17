@@ -143,5 +143,42 @@
       "EXTRA_PACE_NOT_STRICTER": "The pace must be faster than the tournament's slowest realistic pace, {pace} /100m.",
       "UNKNOWN": "This value is not valid."
     }
+  },
+  "realisticLimits": {
+    "title": "Realistic swim limits",
+    "intro": "A swim outside these limits is flagged for review. Pre-filled with this tournament's values.",
+    "legend": "Realistic limits",
+    "fields": {
+      "fastestPace": "Fastest realistic pace (m:ss per 100 m)",
+      "slowestPace": "Slowest realistic pace (m:ss per 100 m)",
+      "longestRealisticSwimKm": "Longest realistic swim (km)"
+    },
+    "hints": {
+      "range": "Allowed: {range}."
+    },
+    "rulesHeading": "What this means",
+    "rules": {
+      "unset": "-",
+      "fastest": "A swim faster than {pace} /100m is flagged for review.",
+      "slowest": "A swim slower than {pace} /100m is flagged for review.",
+      "longest": "A swim longer than {km} km is flagged for review.",
+      "flagged": "A flagged swim is not rejected: an organizer reviews it before it counts.",
+      "difference": "This is not the \"longest swim counted\" rule: that one caps how much of a swim counts, while the longest realistic swim only decides what gets flagged."
+    },
+    "save": "Save swim limits",
+    "saving": "Saving...",
+    "saved": "Swim limits saved.",
+    "locked": "Locked for the season: the swim limits cannot change once the season has started.",
+    "failed": "Could not save. Please try again later.",
+    "networkError": "The request did not go through. Check your connection and try again.",
+    "errors": {
+      "PACE_INVALID": "Enter a pace as m:ss, for example 1:05.",
+      "DISTANCE_INVALID": "Enter a distance in km, for example 30 or 7.5.",
+      "LIMIT_OUT_OF_BOUNDS": "Outside the allowed range: {range}.",
+      "FASTEST_NOT_FASTER_THAN_SLOWEST": "The fastest pace must be faster than the slowest pace.",
+      "EXTRA_PACE_NOT_STRICTER": "The slowest pace must stay slower than the extra pace rule, {extraPace} /100m.",
+      "EXTRA_DISTANCE_NOT_STRICTER": "The longest swim must stay longer than the minimum swim distance rule, {minKm} km.",
+      "UNKNOWN": "This value is not valid."
+    }
   }
 }
