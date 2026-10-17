@@ -37,6 +37,9 @@
   "profile": {
     "title": "Collectibles",
     "team": "Team {team}",
-    "collectOnly": "Collectibles are for collecting only and follow the team's current progress: if progress drops, that milestone's items go too."
+    "collectOnly": "Collectibles are for collecting only and can't be spent or traded. They follow current data: if team progress drops or a swim is revoked, the matching items go too.",
+    "mineTitle": "My collectibles",
+    "pearlWeeks": "Weeks that earned a pearl",
+    "pearlWeek": "Week of {date}"
   }
 }
