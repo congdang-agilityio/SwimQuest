@@ -62,6 +62,7 @@ export default async function TeamPage() {
                 teamPoints={view.teamPoints}
                 memberCount={view.memberCount}
                 finishedAt={view.finishedAt}
+                editHref={membership.team.captainUserId === user.id ? "/team/edit" : undefined}
               />
               <TeamRoster
                 members={view.roster}

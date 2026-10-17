@@ -77,5 +77,9 @@
     "copyFailed": "Could not copy. Select the link and copy it by hand.",
     "share": "Share",
     "shareText": "Join my team {team} on SwimQuest"
+  },
+  "edit": {
+    "link": "Edit team",
+    "title": "Edit team details"
   }
 }

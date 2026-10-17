@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { NavIcon } from "@/components/nav/nav-icon";
-import { Chip, ProgressBar } from "@/components/ui";
+import { ButtonLink, Chip, ProgressBar } from "@/components/ui";
 import { TierShip } from "@/components/ship/tier-ship";
 import { MOCKUP_TEAM_EMBLEM } from "@/lib/art/mockup-avatars";
 import type { MyTeamView } from "@/server/teams/my-team-view";
@@ -17,6 +17,8 @@ type Props = {
   memberCount: number;
   /** Set once the team has finished the route. */
   finishedAt?: Date | null;
+  /** Set for the captain only: the "Edit team" link. */
+  editHref?: string;
   /** Optional extra content, rendered after the progress. */
   children?: ReactNode;
 };
@@ -29,6 +31,7 @@ export function TeamHeader({
   teamPoints,
   memberCount,
   finishedAt,
+  editHref,
   children,
 }: Props) {
   const t = useTranslations("team");
@@ -87,6 +90,11 @@ export function TeamHeader({
           </>
         }
       />
+      {editHref && (
+        <ButtonLink href={editHref} variant="secondary" size="sm" className={styles.editLink}>
+          {t("edit.link")}
+        </ButtonLink>
+      )}
       {children}
     </header>
   );

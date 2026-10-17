@@ -20,6 +20,8 @@ type Props = {
   /** POST target for a new team, or PATCH target for an existing one. */
   action: { method: "POST" | "PATCH"; url: string };
   initial?: TeamFormValues;
+  /** "captain" edits name, emblem and description only: no member limit field or value. */
+  mode?: "organizer" | "captain";
   onSaved: () => void;
   onCancel: () => void;
 };
@@ -27,7 +29,7 @@ type Props = {
 type FieldError = TeamErrorCode | "LIMIT_BELOW_MEMBERS";
 type Errors = Partial<Record<TeamField, FieldError>>;
 
-export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
+export function TeamForm({ action, initial, mode = "organizer", onSaved, onCancel }: Props) {
   const t = useTranslations("teams");
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
@@ -37,13 +39,14 @@ export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
+    const captain = mode === "captain";
     const rawLimit = String(form.get("memberLimit") ?? "").trim();
     const parsed = parseTeamInput({
       name: form.get("name"),
       emblemKey: emblem,
       description: form.get("description"),
       // The API needs a JSON number, never the string from the input.
-      memberLimit: rawLimit === "" ? Number.NaN : Number(rawLimit),
+      memberLimit: captain ? 1 : rawLimit === "" ? Number.NaN : Number(rawLimit),
     });
     setFailed(false);
     setErrors(parsed.ok ? {} : parsed.errors);
@@ -53,7 +56,15 @@ export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
       const res = await clientFetch(action.url, {
         method: action.method,
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(
+          captain
+            ? {
+                name: parsed.data.name,
+                emblemKey: parsed.data.emblemKey,
+                description: parsed.data.description,
+              }
+            : parsed.data,
+        ),
       });
       if (res.ok) {
         onSaved();
@@ -130,16 +141,18 @@ export function TeamForm({ action, initial, onSaved, onCancel }: Props) {
           error={fieldError("description")}
           rows={3}
         />
-        <Field
-          id="team-memberLimit"
-          name="memberLimit"
-          type="number"
-          inputMode="numeric"
-          min={1}
-          label={t("form.memberLimit")}
-          defaultValue={initial?.memberLimit ?? ""}
-          error={fieldError("memberLimit")}
-        />
+        {mode === "organizer" && (
+          <Field
+            id="team-memberLimit"
+            name="memberLimit"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            label={t("form.memberLimit")}
+            defaultValue={initial?.memberLimit ?? ""}
+            error={fieldError("memberLimit")}
+          />
+        )}
         {failed && (
           <p role="alert" className={styles.error}>
             {t("errors.GENERIC")}
