@@ -65,7 +65,7 @@ describe("CheckReasons", () => {
     [
       { code: "UPLOADED_AFTER_DEADLINE", params: { days: 7, swimDate: "2026-11-01" } },
       "en",
-      /uploaded after the deadline: .* within 7 days of the swim date \(2026-11-01\)/,
+      /uploaded after the deadline: .* within 7 days of the swim date \(01\/11\/2026\)/,
     ],
     [
       { code: "UPLOAD_WINDOW_CLOSED", params: { days: 3 } },
@@ -75,7 +75,7 @@ describe("CheckReasons", () => {
     [
       { code: "UPLOADED_AFTER_DEADLINE", params: { days: 7, swimDate: "2026-11-01" } },
       "vi",
-      /tải lên sau hạn: .* trong vòng 7 ngày kể từ ngày bơi \(2026-11-01\)/,
+      /tải lên sau hạn: .* trong vòng 7 ngày kể từ ngày bơi \(01\/11\/2026\)/,
     ],
     [{ code: "UPLOAD_WINDOW_CLOSED", params: { days: 3 } }, "vi", /tải lên sau hạn: .* 3 ngày/],
   ] as const)(

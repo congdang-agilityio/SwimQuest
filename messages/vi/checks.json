@@ -21,7 +21,7 @@
     "SWIM_TYPE_NOT_ACCEPTED": "Không được tính: loại bơi: giải đấu này chỉ tính {allowed, select, POOL_ONLY {bơi hồ} OPEN_WATER_ONLY {bơi ngoài trời} other {mọi loại bơi}} (lần bơi này: {value, select, POOL {bơi hồ} OPEN_WATER {bơi ngoài trời} other {không rõ}})",
     "UPLOADED_AFTER_DEADLINE": "Không được tính: tải lên sau hạn: giải đấu này chỉ tính lần bơi được tải lên trong vòng {days} ngày kể từ ngày bơi ({swimDate})",
     "UPLOAD_WINDOW_CLOSED": "Không được tính: tải lên sau hạn: giải đấu ngừng nhận lần bơi {days} ngày sau khi mùa giải kết thúc ({end})",
-    "MIN_DISTANCE_MISSED": "Không được tính: quãng đường tối thiểu {limitM} m (lần bơi này: {valueM} m)",
-    "EXTRA_PACE_MISSED": "Không được tính: tốc độ chậm nhất {limitSec} giây / 100 m (lần bơi này: {valueSec} giây / 100 m)"
+    "MIN_DISTANCE_MISSED": "Không được tính: không đạt luật: quãng đường tối thiểu {limit} (lần bơi này: {value})",
+    "EXTRA_PACE_MISSED": "Không được tính: không đạt luật: tốc độ chậm nhất {limit} (lần bơi này: {value})"
   }
 }

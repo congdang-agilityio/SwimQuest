@@ -21,7 +21,7 @@
     "SWIM_TYPE_NOT_ACCEPTED": "Did not count: swim type: this tournament counts {allowed, select, POOL_ONLY {pool swims} OPEN_WATER_ONLY {open-water swims} other {all swims}} only (this swim: {value, select, POOL {pool} OPEN_WATER {open water} other {unknown}})",
     "UPLOADED_AFTER_DEADLINE": "Did not count: uploaded after the deadline: this tournament counts swims uploaded within {days} days of the swim date ({swimDate})",
     "UPLOAD_WINDOW_CLOSED": "Did not count: uploaded after the deadline: uploads closed {days} days after the season end ({end})",
-    "MIN_DISTANCE_MISSED": "Did not count: minimum distance {limitM} m (this swim: {valueM} m)",
-    "EXTRA_PACE_MISSED": "Did not count: slowest pace {limitSec} s / 100 m (this swim: {valueSec} s / 100 m)"
+    "MIN_DISTANCE_MISSED": "Did not count: rule missed: minimum distance {limit} (this swim: {value})",
+    "EXTRA_PACE_MISSED": "Did not count: rule missed: slowest pace {limit} (this swim: {value})"
   }
 }
