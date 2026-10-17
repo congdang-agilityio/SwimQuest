@@ -37,6 +37,8 @@ const swim: MySwimDto = {
       displayStatus: "verified",
       reasons: [],
       rules,
+      decisionNote: null,
+      decidedAt: null,
       points: { distance: 12, firstSwimBonus: 0, longSwimBonus: 0, reversal: 0, total: 12 },
     },
     {
@@ -46,6 +48,8 @@ const swim: MySwimDto = {
       displayStatus: "waitingForReview",
       reasons: ["PACE_TOO_FAST"],
       rules,
+      decisionNote: null,
+      decidedAt: null,
       points: { distance: 0, firstSwimBonus: 0, longSwimBonus: 0, reversal: 0, total: 0 },
     },
   ],

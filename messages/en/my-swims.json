@@ -11,6 +11,10 @@
     "firstSwimBonus": "First-swim bonus: +{points}",
     "longSwimBonus": "Long-swim bonus: +{points}",
     "reversal": "Reversed: {points}",
-    "points": "Points earned here: {points}"
+    "points": "Points earned here: {points}",
+    "decision": {
+      "title": "Reviewer's reason",
+      "decidedAt": "Decided {date}"
+    }
   }
 }

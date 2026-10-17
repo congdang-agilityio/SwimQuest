@@ -11,6 +11,10 @@
     "firstSwimBonus": "Thưởng buổi bơi đầu tiên: +{points}",
     "longSwimBonus": "Thưởng buổi bơi dài: +{points}",
     "reversal": "Đã thu hồi: {points}",
-    "points": "Điểm nhận được ở đây: {points}"
+    "points": "Điểm nhận được ở đây: {points}",
+    "decision": {
+      "title": "Lý do của người duyệt",
+      "decidedAt": "Quyết định lúc {date}"
+    }
   }
 }

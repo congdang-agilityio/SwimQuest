@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import * as f from "@/lib/format/swim";
 import { Card, Chip } from "@/components/ui";
+import { DecisionNote } from "./decision-note";
 import { CheckReasons } from "./check-reasons";
 import { PointsBreakdown } from "./points-breakdown";
 import { SwimFactRows, SwimHero, resultTone } from "./swim-facts";
@@ -41,6 +42,7 @@ export function SwimDetail({ swim }: { swim: MySwimDto }) {
                   <Chip tone={resultTone(r.status)}>{tc(`status.${r.status}`)}</Chip>
                 </div>
                 <PointsBreakdown points={r.points} />
+                <DecisionNote status={r.status} note={r.decisionNote} decidedAt={r.decidedAt} />
                 <CheckReasons reasons={r.reasons} rules={r.rules} />
               </li>
             ))}
