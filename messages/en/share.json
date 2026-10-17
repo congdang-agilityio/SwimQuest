@@ -24,6 +24,7 @@
   "cta": "Discover SwimQuest",
   "share": {
     "button": "Share achievement",
+    "save": "Save picture",
     "text": "Team {team} landed at {place} on SwimQuest!",
     "copied": "Link copied",
     "failed": "Could not share. Please try again."

@@ -24,6 +24,7 @@
   "cta": "Khám phá SwimQuest",
   "share": {
     "button": "Chia sẻ thành tích",
+    "save": "Lưu ảnh",
     "text": "Đội {team} đã cập bến {place} trên SwimQuest!",
     "copied": "Đã chép liên kết",
     "failed": "Không chia sẻ được. Hãy thử lại."
