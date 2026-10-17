@@ -1,7 +1,7 @@
 import { routeProgress, type RouteProgress } from "@/lib/scoring/progress";
 import { db } from "@/server/db";
 import { getCurrentMembership } from "@/server/home/my-tournaments";
-import { getPlayerTotals } from "@/server/scoring/team-points";
+import { getPlayerTotals, getTeamPoints } from "@/server/scoring/team-points";
 import { getLevels } from "@/server/xp/level";
 import {
   PUBLIC_PLAYER_SELECT,
@@ -63,7 +63,8 @@ export async function getMyTeamView(userId: string): Promise<MyTeamView | null> 
       level: levels.get(user.id)?.level ?? 1,
     };
   });
-  const teamPoints = roster.reduce((sum, m) => sum + m.points, 0);
+  // By PointsEntry.teamId (#206): a removed member's swims stay with the team.
+  const teamPoints = await getTeamPoints(tournament.id, team.id);
   const captain = roster.find((m) => m.isCaptain);
 
   return {
