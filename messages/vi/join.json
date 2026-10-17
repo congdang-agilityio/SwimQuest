@@ -16,5 +16,7 @@
   "goToTeam": "Đến Đội của tôi",
   "failed": "Không thể tham gia. Vui lòng thử lại.",
   "eligibility": "Ai có thể tham gia",
-  "details": "Chi tiết và thể lệ"
+  "details": "Chi tiết và thể lệ",
+  "offTitle": "Liên kết này không còn dùng được",
+  "offBody": "Ban tổ chức đã tắt liên kết mời này. Hãy xin liên kết mới."
 }

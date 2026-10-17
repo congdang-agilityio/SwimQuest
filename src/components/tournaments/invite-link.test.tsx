@@ -15,7 +15,7 @@ afterEach(() => {
 function tree() {
   return (
     <NextIntlClientProvider locale="vi" messages={{ publish: vi_ }}>
-      <InviteLink url="https://x.test/join/abc" tournamentName="Giải" />
+      <InviteLink tournamentId="t1" enabled url="https://x.test/join/abc" tournamentName="Giải" />
     </NextIntlClientProvider>
   );
 }
