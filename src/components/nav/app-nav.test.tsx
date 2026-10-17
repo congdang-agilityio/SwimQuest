@@ -5,9 +5,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../../../messages/en/nav.json";
 import vi_ from "../../../messages/vi/nav.json";
 import auth from "../../../messages/vi/auth.json";
+import common from "../../../messages/vi/common.json";
 
 const state = vi.hoisted(() => ({ pathname: "/" }));
-vi.mock("next/navigation", () => ({ usePathname: () => state.pathname }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => state.pathname,
+  useRouter: () => ({ refresh: () => {} }),
+}));
 
 import { AppNav } from "./app-nav";
 
@@ -16,7 +20,7 @@ afterEach(cleanup);
 function setup(pathname: string, isPlatformAdmin = false) {
   state.pathname = pathname;
   render(
-    <NextIntlClientProvider locale="vi" messages={{ nav: vi_, auth }}>
+    <NextIntlClientProvider locale="vi" messages={{ nav: vi_, auth, common }}>
       <AppNav displayName="Lan" isPlatformAdmin={isPlatformAdmin} />
     </NextIntlClientProvider>,
   );
