@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { NotificationBell } from "@/components/notifications/bell";
 import { AppNav } from "@/components/nav/app-nav";
 import styles from "@/components/nav/app-nav.module.css";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
@@ -33,6 +34,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         displayName={user.displayName}
         isPlatformAdmin={user.isPlatformAdmin}
         switcher={switcher}
+        bell={<NotificationBell userId={user.id} />}
       />
       <div className={styles.content} data-surface="light">
         {children}
