@@ -1,10 +1,20 @@
 import { useTranslations } from "next-intl";
 import { MakeCaptainButton } from "./make-captain-button";
+import { MoveMemberDialog, type MoveTarget } from "./move-member-dialog";
 
 export type RosterRow = { id: string; displayName: string; isCaptain: boolean };
 
 /** Organizer roster: display names, a captain mark (icon + text) and Make captain on the rest. */
-export function RosterList({ teamId, members }: { teamId: string; members: readonly RosterRow[] }) {
+export function RosterList({
+  teamId,
+  members,
+  moveTargets,
+}: {
+  teamId: string;
+  members: readonly RosterRow[];
+  /** Other teams of the tournament with their free places; omit to hide Move. */
+  moveTargets?: readonly MoveTarget[];
+}) {
   const t = useTranslations("captain");
   return (
     <section aria-labelledby="roster-title">
@@ -20,6 +30,14 @@ export function RosterList({ teamId, members }: { teamId: string; members: reado
               </strong>
             ) : (
               <MakeCaptainButton teamId={teamId} userId={m.id} name={m.displayName} />
+            )}
+            {moveTargets && (
+              <MoveMemberDialog
+                teamId={teamId}
+                userId={m.id}
+                name={m.displayName}
+                targets={moveTargets}
+              />
             )}
           </li>
         ))}

@@ -1,0 +1,21 @@
+{
+  "move": "Move",
+  "moveFor": "Move {name} to another team",
+  "title": "Move {name}",
+  "target": "Move to team",
+  "choose": "Choose a team",
+  "free": "{count, plural, one {# place left} other {# places left}}",
+  "full": "full",
+  "noRoom": "No other team has room for this player.",
+  "next": "Continue",
+  "cancel": "Cancel",
+  "confirmTitle": "Move {name} to {team}?",
+  "confirmBody": "Points follow the player: all of {name}'s swims and points move to {team}, and the progress of both teams changes.",
+  "confirm": "Yes, move",
+  "done": "{name} is now in {team}.",
+  "errors": {
+    "TEAM_FULL": "That team is full now. Pick another team.",
+    "FORBIDDEN": "Only the organizer can move players.",
+    "GENERIC": "Could not move the player. Try again."
+  }
+}

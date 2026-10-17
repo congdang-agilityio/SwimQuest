@@ -1,0 +1,21 @@
+{
+  "move": "Chuyển đội",
+  "moveFor": "Chuyển {name} sang đội khác",
+  "title": "Chuyển {name}",
+  "target": "Chuyển sang đội",
+  "choose": "Chọn một đội",
+  "free": "Còn {count} chỗ",
+  "full": "đã đầy",
+  "noRoom": "Không còn đội nào có chỗ cho người chơi này.",
+  "next": "Tiếp tục",
+  "cancel": "Hủy",
+  "confirmTitle": "Chuyển {name} sang {team}?",
+  "confirmBody": "Điểm đi theo người chơi: toàn bộ lượt bơi và điểm của {name} chuyển sang {team}, tiến độ của cả hai đội sẽ thay đổi.",
+  "confirm": "Đồng ý chuyển",
+  "done": "{name} đã sang {team}.",
+  "errors": {
+    "TEAM_FULL": "Đội đó vừa đầy. Hãy chọn đội khác.",
+    "FORBIDDEN": "Chỉ ban tổ chức mới chuyển được người chơi.",
+    "GENERIC": "Không thể chuyển người chơi. Hãy thử lại."
+  }
+}

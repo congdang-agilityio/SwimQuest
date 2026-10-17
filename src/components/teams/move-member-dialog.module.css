@@ -1,0 +1,47 @@
+/* Organizer's Move action on a roster row. Every value comes from src/styles/tokens.css. */
+
+.panel {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin-top: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
+.title {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.note {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+.actions > * {
+  flex: 1;
+}
+.confirm {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  font-size: var(--sq-text-sm);
+}
+.confirmTitle {
+  margin: 0;
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.confirmBody {
+  margin: 0;
+}

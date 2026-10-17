@@ -49,6 +49,16 @@ export default async function OrganizerTeamPage({
   if (!team) notFound();
   const route = getRoute(team.tournament.routeId);
   const members = await getTeamRoster(team.id);
+  const others = await db.team.findMany({
+    where: { tournamentId: id, id: { not: team.id } },
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      name: true,
+      memberLimit: true,
+      _count: { select: { members: { where: { status: "ACTIVE" } } } },
+    },
+  });
   const t = await getTranslations("captain");
   return (
     <main>
@@ -69,6 +79,11 @@ export default async function OrganizerTeamPage({
       )}
       <RosterList
         teamId={team.id}
+        moveTargets={others.map((o) => ({
+          id: o.id,
+          name: o.name,
+          free: Math.max(0, o.memberLimit - o._count.members),
+        }))}
         members={members.map((m) => ({
           id: m.id,
           displayName: m.displayName,
