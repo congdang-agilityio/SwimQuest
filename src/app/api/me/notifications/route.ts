@@ -18,5 +18,8 @@ export async function GET(request: Request) {
     listNotifications(auth.user.id, cursor),
     unreadCount(auth.user.id),
   ]);
-  return NextResponse.json({ ...page, unreadCount: unread }, { headers: { "cache-control": "no-store" } });
+  return NextResponse.json(
+    { ...page, unreadCount: unread },
+    { headers: { "cache-control": "no-store" } },
+  );
 }
