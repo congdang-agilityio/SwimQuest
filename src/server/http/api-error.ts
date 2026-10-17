@@ -39,6 +39,8 @@ export type ApiErrorCode =
   | "LAST_ADMIN"
   | "REASON_REQUIRED"
   | "ALREADY_DECIDED"
+  | "DISPUTE_OPEN"
+  | "NOT_DISPUTABLE"
   | "QUOTA_REACHED"
   | "QUOTA_NOT_REACHED"
   | "REQUEST_PENDING"
@@ -87,6 +89,8 @@ const messages: Record<ApiErrorCode, string> = {
   LAST_ADMIN: "The last platform admin role cannot be removed.",
   REASON_REQUIRED: "Give a short reason (at most 300 characters) to reject this swim.",
   ALREADY_DECIDED: "This swim has already been decided.",
+  DISPUTE_OPEN: "This swim already has an open dispute.",
+  NOT_DISPUTABLE: "Only a rejected, duplicate or rule-missed swim can be disputed.",
   QUOTA_REACHED: "You have reached your tournament limit. Request more to create another.",
   QUOTA_NOT_REACHED: "You can request more tournaments only after reaching your limit.",
   REQUEST_PENDING: "You already have a pending request.",
