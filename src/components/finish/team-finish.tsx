@@ -65,6 +65,7 @@ export async function TeamFinish({
             text={ts("share.text", { team: team.name, place })}
             labels={{
               button: ts("share.button"),
+              save: ts("share.save"),
               copied: ts("share.copied"),
               failed: ts("share.failed"),
             }}
