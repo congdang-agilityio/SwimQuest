@@ -111,6 +111,9 @@
   color: var(--sq-text-on-dark-muted);
   font-size: var(--sq-text-sm);
 }
+.editLink {
+  justify-self: start;
+}
 .pointsChip {
   padding: 2px var(--sq-space-3);
   border-radius: var(--sq-radius-pill);

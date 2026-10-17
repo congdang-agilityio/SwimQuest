@@ -77,5 +77,9 @@
     "copyFailed": "Không sao chép được. Hãy chọn liên kết và sao chép thủ công.",
     "share": "Chia sẻ",
     "shareText": "Tham gia đội {team} của mình trên SwimQuest"
+  },
+  "edit": {
+    "link": "Sửa đội",
+    "title": "Sửa thông tin đội"
   }
 }
