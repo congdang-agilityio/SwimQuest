@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { MockupPicture } from "@/components/art/mockup-picture";
+import { StateCard } from "@/components/states/state-card";
 import { TeamPicker } from "@/components/join/team-picker";
 import styles from "@/components/join/join.module.css";
 import { TournamentSummary } from "@/components/tournaments/tournament-summary";
@@ -43,6 +44,22 @@ export default async function JoinPage({
     );
   }
   const { tournament, myTeam, joiningOpen } = view;
+  if (view.blockedReason === "REMOVED_FROM_TOURNAMENT" && !myTeam) {
+    return (
+      <main className={styles.screen}>
+        <div className={styles.headerBand}>
+          <ScreenHeader title={t("removedTitle")} backHref="/" backLabel={tCommon("back")} />
+        </div>
+        <StateCard
+          art="items/message-bottle"
+          role="status"
+          titleId="join-removed-title"
+          title={t("removedTitle")}
+          body={t("removedBody", { tournament: tournament.name })}
+        />
+      </main>
+    );
+  }
   if (view.linkState === "OFF" && !myTeam) {
     return (
       <main className={styles.screen}>

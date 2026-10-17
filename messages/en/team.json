@@ -61,5 +61,10 @@
       "notMember": "That player is no longer an active member of the team.",
       "failed": "Something went wrong. Please try again."
     }
+  },
+  "removed": {
+    "title": "You were removed from {team}",
+    "beforeStart": "The organizer removed you from {team} in {tournament}. You can choose another team with room.",
+    "afterStart": "The organizer removed you from {team} in {tournament}. You have left the tournament and cannot join it again through a link."
   }
 }

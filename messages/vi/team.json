@@ -61,5 +61,10 @@
       "notMember": "Người chơi này không còn là thành viên đang hoạt động của đội.",
       "failed": "Có lỗi xảy ra. Vui lòng thử lại."
     }
+  },
+  "removed": {
+    "title": "Bạn đã bị gỡ khỏi {team}",
+    "beforeStart": "Ban tổ chức đã gỡ bạn khỏi {team} trong {tournament}. Bạn có thể chọn đội khác còn chỗ.",
+    "afterStart": "Ban tổ chức đã gỡ bạn khỏi {team} trong {tournament}. Bạn đã rời giải đấu và không thể tham gia lại bằng liên kết."
   }
 }
