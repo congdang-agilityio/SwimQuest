@@ -17,5 +17,19 @@
     "TEAM_FULL": "Đội đó vừa đầy. Hãy chọn đội khác.",
     "FORBIDDEN": "Chỉ ban tổ chức mới chuyển được người chơi.",
     "GENERIC": "Không thể chuyển người chơi. Hãy thử lại."
+  },
+  "remove": {
+    "action": "Xóa",
+    "for": "Xóa {name} khỏi đội",
+    "title": "Xóa {name} khỏi đội?",
+    "bodyBeforeStart": "{name} rời đội và có thể tham gia đội khác trước khi giải đấu bắt đầu.",
+    "bodyAfterStart": "{name} rời đội và rời giải đấu, không thể vào lại bằng đường dẫn. Các lượt bơi và điểm của bạn ấy vẫn thuộc về đội.",
+    "confirm": "Có, xóa",
+    "cancel": "Hủy",
+    "error": {
+      "forbidden": "Chỉ đội trưởng hoặc ban tổ chức mới được xóa người chơi.",
+      "notMember": "Người chơi này không còn là thành viên của đội.",
+      "failed": "Không thể xóa người chơi. Hãy thử lại."
+    }
   }
 }

@@ -3,16 +3,20 @@ import { Avatar, Chip } from "@/components/ui";
 import { mockupMemberAvatar } from "@/lib/art/mockup-avatars";
 import type { MyTeamMember } from "@/server/teams/my-team-view";
 import { HandoverButton } from "./handover-button";
+import { RemoveMemberButton } from "./remove-member-button";
 import styles from "./my-team.module.css";
 
 /** Every member with verified km and points; the captain is marked by icon plus text. */
 export function TeamRoster({
   members,
   handoverTeamId,
+  afterStart = false,
 }: {
   members: readonly MyTeamMember[];
   /** Set for the captain only: each other member then gets a "Make captain" action. */
   handoverTeamId?: string;
+  /** The tournament has started: Remove then warns that the swims stay with the team. */
+  afterStart?: boolean;
 }) {
   const t = useTranslations("team");
   return (
@@ -41,6 +45,15 @@ export function TeamRoster({
             </span>
             {handoverTeamId && !m.isCaptain && (
               <HandoverButton teamId={handoverTeamId} userId={m.id} name={m.displayName} />
+            )}
+            {handoverTeamId && !m.isCaptain && (
+              <RemoveMemberButton
+                teamId={handoverTeamId}
+                userId={m.id}
+                name={m.displayName}
+                afterStart={afterStart}
+                className={styles.handover}
+              />
             )}
           </li>
         ))}
