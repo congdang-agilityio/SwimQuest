@@ -1,0 +1,282 @@
+/* Shared primitives. Every value comes from src/styles/tokens.css. */
+
+/* Button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sq-space-2);
+  min-height: var(--sq-tap);
+  min-width: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-6);
+  border: 1px solid transparent;
+  border-radius: var(--sq-radius-pill);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+}
+.button:hover {
+  filter: brightness(1.06);
+}
+.button:active {
+  transform: translateY(1px);
+}
+.button:disabled,
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: none;
+  transform: none;
+}
+.primary {
+  color: var(--sq-white);
+  background: var(--sq-gradient-primary);
+  box-shadow: var(--sq-shadow-button);
+}
+.secondary {
+  color: var(--sq-blue-600);
+  background: var(--sq-white);
+  border-color: var(--sq-sky-100);
+  box-shadow: var(--sq-shadow-card);
+}
+.ghost {
+  color: inherit;
+  background: transparent;
+  border-color: currentColor;
+}
+.dark {
+  color: var(--sq-white);
+  background: #000;
+}
+.block {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+}
+.small {
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-1) var(--sq-space-4);
+  font-size: var(--sq-text-sm);
+}
+
+/* Card */
+.card {
+  padding: var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  color: var(--sq-text);
+  box-shadow: var(--sq-shadow-card);
+}
+.cardDark {
+  padding: var(--sq-space-4);
+  border-radius: var(--sq-radius-lg);
+  background: rgb(6 52 92 / 0.85);
+  border: 1px solid var(--sq-navy-600);
+  color: var(--sq-text-on-dark);
+}
+
+/* Section header: uppercase navy band on top of a desktop panel */
+.sectionHeader {
+  margin: 0;
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border-radius: var(--sq-radius-lg) var(--sq-radius-lg) 0 0;
+  background: var(--sq-navy-800);
+  color: var(--sq-white);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Field */
+.field {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: 0 0 var(--sq-space-4);
+}
+.label {
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-text-muted);
+}
+.onDark .label {
+  color: var(--sq-text-on-dark-muted);
+}
+.control {
+  width: 100%;
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  color: var(--sq-text);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-medium);
+}
+.control::placeholder {
+  color: var(--sq-text-muted);
+}
+.control[aria-invalid="true"] {
+  border-color: var(--sq-danger);
+}
+.error {
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}
+.onDark .error {
+  color: #ffb4b4;
+}
+
+/* Tabs / segmented control */
+.tabs {
+  display: flex;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+.tabs > li {
+  flex: 1 0 auto;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--sq-tap);
+  padding: var(--sq-space-2) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-pill);
+  background: var(--sq-white);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.tab[aria-current="page"],
+.tab[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--sq-gradient-primary);
+  color: var(--sq-white);
+  box-shadow: var(--sq-shadow-button);
+}
+
+/* Screen header: back chevron + title on the dark band */
+.screenHeader {
+  display: grid;
+  grid-template-columns: var(--sq-tap) 1fr var(--sq-tap);
+  align-items: center;
+  min-height: 56px;
+  color: var(--sq-text-on-dark);
+}
+.screenTitle {
+  margin: 0;
+  font-size: var(--sq-text-xl);
+  font-weight: var(--sq-weight-bold);
+  text-align: center;
+}
+.back {
+  display: inline-grid;
+  place-items: center;
+  width: var(--sq-tap);
+  height: var(--sq-tap);
+  border-radius: var(--sq-radius-pill);
+  color: var(--sq-text-on-dark);
+}
+.headerAction {
+  justify-self: end;
+}
+
+/* Avatar */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid var(--sq-white);
+  background: var(--sq-gradient-primary);
+  color: var(--sq-white);
+  font-weight: var(--sq-weight-bold);
+  box-shadow: var(--sq-shadow-card);
+}
+.avatar[data-initials]::before {
+  content: attr(data-initials);
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Chip / badge */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-1);
+  padding: 2px var(--sq-space-2);
+  border-radius: var(--sq-radius-sm);
+  background: var(--sq-sky-50);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+  font-weight: var(--sq-weight-semibold);
+}
+.chipInfo {
+  background: #d9efff;
+  color: var(--sq-blue-600);
+}
+.chipSuccess {
+  background: #d5f5ec;
+  color: var(--sq-success);
+}
+.chipWarning {
+  background: #fff1cc;
+  color: #8a5a00;
+}
+.chipDanger {
+  background: #ffe1e1;
+  color: var(--sq-danger);
+}
+.chipGold {
+  background: var(--sq-gradient-gold);
+  color: var(--sq-navy-800);
+}
+
+/* Progress bar */
+.progress {
+  display: grid;
+  gap: var(--sq-space-1);
+}
+.progressTrack {
+  height: 12px;
+  overflow: hidden;
+  border-radius: var(--sq-radius-pill);
+  background: rgb(255 255 255 / 0.18);
+  box-shadow: inset 0 1px 2px rgb(1 26 49 / 0.4);
+}
+.progressLight .progressTrack {
+  background: var(--sq-sky-100);
+}
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sq-gradient-progress);
+}
+.progressGold .progressFill {
+  background: var(--sq-gradient-gold);
+}
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-bold);
+}

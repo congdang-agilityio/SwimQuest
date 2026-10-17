@@ -1,0 +1,29 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 400 / 260;
+  border-radius: var(--sq-radius-xl);
+  background: var(--sq-gradient-sky);
+  box-shadow: var(--sq-shadow-raised);
+}
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ship {
+  position: absolute;
+  left: 34%;
+  bottom: 14%;
+  width: 22%;
+  height: auto;
+  filter: drop-shadow(0 4px 4px rgb(1 26 49 / 0.35));
+}
+/* Fade the art into the navy page, so the brand text below sits on it as in the mockup. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 32%;
+  background: linear-gradient(180deg, transparent, var(--sq-navy-900));
+}

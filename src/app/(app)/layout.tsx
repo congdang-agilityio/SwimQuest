@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 /**
  * Every signed-in page lives under this layout. Middleware only checks that a cookie exists;
  * here the session is validated in the database, so an expired or deleted session lands on login.
+ * Pages render on a light rounded sheet over the deep-blue ocean background (mockup shell).
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const nextPath = (await headers()).get(NEXT_PATH_HEADER) ?? "/";
@@ -18,7 +19,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <AppNav displayName={user.displayName} isPlatformAdmin={user.isPlatformAdmin} />
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content} data-surface="light">
+        {children}
+      </div>
     </>
   );
 }

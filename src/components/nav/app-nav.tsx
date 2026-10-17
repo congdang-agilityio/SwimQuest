@@ -4,21 +4,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { Avatar } from "@/components/ui";
+import { NavIcon } from "./nav-icon";
 import { isActive, navItems } from "./nav-items";
 import styles from "./app-nav.module.css";
 
-/** Bottom bar below 768 px, left navigation from 768 px; the current tab has aria-current. */
+/**
+ * App shell chrome: a top bar with the brand and the account menu, and the main navigation
+ * (bottom bar below 768 px, left rail from 768 px). The current tab has aria-current.
+ */
 type Props = { displayName: string; isPlatformAdmin: boolean };
 
 export function AppNav({ displayName, isPlatformAdmin }: Props) {
   const t = useTranslations("nav");
+  const tc = useTranslations("common");
   const pathname = usePathname();
   return (
     <>
-      <div className={styles.account}>
-        <details>
-          <summary className={styles.tap}>{displayName}</summary>
-          <LogoutButton />
+      <div className={styles.topBar}>
+        <span className={styles.brand}>{tc("appName")}</span>
+        <details className={styles.account}>
+          <summary className={styles.accountSummary}>
+            <Avatar name={displayName} size={32} decorative />
+            {displayName}
+          </summary>
+          <div className={styles.menu} data-surface="light">
+            <LogoutButton />
+          </div>
         </details>
       </div>
       <nav className={styles.nav} aria-label={t("label")}>
@@ -30,7 +42,8 @@ export function AppNav({ displayName, isPlatformAdmin }: Props) {
                 className={styles.link}
                 aria-current={isActive(href, pathname) ? "page" : undefined}
               >
-                {t(`items.${key}`)}
+                <NavIcon name={key} />
+                <span>{t(`items.${key}`)}</span>
               </Link>
             </li>
           ))}
