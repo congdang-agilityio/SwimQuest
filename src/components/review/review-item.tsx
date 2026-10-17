@@ -71,27 +71,38 @@ export function ReviewItem({ item }: { item: Item }) {
         <h2 id={titleId} className={styles.player}>
           {name}
         </h2>
-        <Chip tone="warning">{t("item.flagged")}</Chip>
+        <Chip tone="warning">{item.dispute ? t("item.disputed") : t("item.flagged")}</Chip>
       </div>
       <div className={styles.body}>
         <TrackShape track={item.track} label={t("item.shape")} emptyLabel={t("item.noShape")} />
         <SwimFactRows rows={rows} />
       </div>
-      <div className={styles.reasons}>
-        <h3 className={styles.reasonsTitle}>{t("item.failed")}</h3>
-        <ul>
-          {item.reasons.map((r) => (
-            <li key={r.code}>
-              <Chip tone="danger" className={styles.reasonChip}>
-                {KNOWN.includes(r.code)
-                  ? t(`reasons.${r.code}`, reasonValues(r, locale))
-                  : t("reasons.UNKNOWN", { code: r.code })}
-              </Chip>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <DecisionDialog resultId={item.resultId} playerName={name} />
+      {item.dispute && (
+        <div className={styles.dispute}>
+          <h3 className={styles.reasonsTitle}>{t("item.disputeReason")}</h3>
+          <p className={styles.disputeText}>{item.dispute.reason}</p>
+          <p className={styles.disputeBefore}>
+            {t("item.earlier", { status: t(`item.status.${item.dispute.previousStatus}`) })}
+          </p>
+        </div>
+      )}
+      {item.reasons.length > 0 && (
+        <div className={styles.reasons}>
+          <h3 className={styles.reasonsTitle}>{t("item.failed")}</h3>
+          <ul>
+            {item.reasons.map((r) => (
+              <li key={r.code}>
+                <Chip tone="danger" className={styles.reasonChip}>
+                  {KNOWN.includes(r.code)
+                    ? t(`reasons.${r.code}`, reasonValues(r, locale))
+                    : t("reasons.UNKNOWN", { code: r.code })}
+                </Chip>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <DecisionDialog resultId={item.resultId} playerName={name} disputeId={item.dispute?.id} />
     </Card>
   );
 }

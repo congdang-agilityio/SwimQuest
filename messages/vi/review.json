@@ -15,7 +15,15 @@
     "type": "Loại bơi",
     "failed": "Kiểm tra không đạt",
     "shape": "Hình dạng lượt bơi",
-    "noShape": "Không có đường bơi"
+    "noShape": "Không có đường bơi",
+    "disputed": "Khiếu nại",
+    "disputeReason": "Lý do khiếu nại của người chơi",
+    "earlier": "Trạng thái trước đó: {status}",
+    "status": {
+      "REJECTED": "Bị từ chối",
+      "DUPLICATE": "Trùng lặp",
+      "RULE_MISSED": "Không đạt luật"
+    }
   },
   "reasons": {
     "PACE_TOO_FAST": "Tốc độ nhanh nhất {limit} mỗi 100 m, lượt này {value}",
@@ -43,6 +51,12 @@
       "already": "Lượt bơi này đã được quyết định. Đang cập nhật hàng chờ...",
       "failed": "Không lưu được quyết định. Thử lại.",
       "network": "Không có kết nối. Thử lại."
-    }
+    },
+    "accept": "Chấp nhận khiếu nại",
+    "acceptFor": "Chấp nhận khiếu nại của {name}",
+    "confirmAccept": "Chấp nhận khiếu nại"
+  },
+  "disputes": {
+    "title": "{count, plural, other {# khiếu nại}} cần quyết định"
   }
 }

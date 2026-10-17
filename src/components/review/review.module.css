@@ -153,3 +153,34 @@
   font-weight: var(--sq-weight-medium);
   color: var(--sq-danger);
 }
+
+/* Disputes (S-44): a section after the flagged swims; the player's reason in a sky panel. */
+.disputes {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+.sectionTitle {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-800);
+}
+.dispute {
+  display: grid;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-sky);
+}
+.disputeText {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  color: var(--sq-navy-800);
+}
+.disputeBefore {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
