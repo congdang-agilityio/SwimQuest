@@ -1,0 +1,452 @@
+[
+  {
+    "key": "scenes/hero-swimmers-16x9",
+    "file": "/art/mockup/scenes/hero-swimmers-16x9.png",
+    "webp": "/art/mockup/scenes/hero-swimmers-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      152,
+      345,
+      327,
+      184
+    ],
+    "alt": {
+      "vi": "Hai vận động viên bơi sải trên biển xanh",
+      "en": "Two swimmers doing front crawl in a blue sea"
+    }
+  },
+  {
+    "key": "scenes/hero-swimmers-4x3",
+    "file": "/art/mockup/scenes/hero-swimmers-4x3.png",
+    "webp": "/art/mockup/scenes/hero-swimmers-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      193,
+      345,
+      245,
+      184
+    ],
+    "alt": {
+      "vi": "Hai vận động viên bơi sải trên biển xanh",
+      "en": "Two swimmers doing front crawl in a blue sea"
+    }
+  },
+  {
+    "key": "scenes/sea-sunset-16x9",
+    "file": "/art/mockup/scenes/sea-sunset-16x9.png",
+    "webp": "/art/mockup/scenes/sea-sunset-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-a-large",
+    "box": [
+      588,
+      1266,
+      325,
+      183
+    ],
+    "alt": {
+      "vi": "Biển lúc hoàng hôn",
+      "en": "The sea at sunset"
+    }
+  },
+  {
+    "key": "scenes/sea-sunset-4x3",
+    "file": "/art/mockup/scenes/sea-sunset-4x3.png",
+    "webp": "/art/mockup/scenes/sea-sunset-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-a-large",
+    "box": [
+      629,
+      1266,
+      244,
+      183
+    ],
+    "alt": {
+      "vi": "Biển lúc hoàng hôn",
+      "en": "The sea at sunset"
+    }
+  },
+  {
+    "key": "scenes/sea-island-day-16x9",
+    "file": "/art/mockup/scenes/sea-island-day-16x9.png",
+    "webp": "/art/mockup/scenes/sea-island-day-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-a-large",
+    "box": [
+      1091,
+      1266,
+      325,
+      183
+    ],
+    "alt": {
+      "vi": "Đảo nhỏ giữa biển ngày nắng",
+      "en": "A small island in a sunny sea"
+    }
+  },
+  {
+    "key": "scenes/sea-island-day-4x3",
+    "file": "/art/mockup/scenes/sea-island-day-4x3.png",
+    "webp": "/art/mockup/scenes/sea-island-day-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-a-large",
+    "box": [
+      1131,
+      1266,
+      244,
+      183
+    ],
+    "alt": {
+      "vi": "Đảo nhỏ giữa biển ngày nắng",
+      "en": "A small island in a sunny sea"
+    }
+  },
+  {
+    "key": "scenes/underwater-reef-16x9",
+    "file": "/art/mockup/scenes/underwater-reef-16x9.png",
+    "webp": "/art/mockup/scenes/underwater-reef-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-a-large",
+    "box": [
+      1644,
+      1266,
+      325,
+      183
+    ],
+    "alt": {
+      "vi": "Rạn san hô dưới nước",
+      "en": "An underwater coral reef"
+    }
+  },
+  {
+    "key": "scenes/underwater-reef-4x3",
+    "file": "/art/mockup/scenes/underwater-reef-4x3.png",
+    "webp": "/art/mockup/scenes/underwater-reef-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-a-large",
+    "box": [
+      1684,
+      1266,
+      244,
+      183
+    ],
+    "alt": {
+      "vi": "Rạn san hô dưới nước",
+      "en": "An underwater coral reef"
+    }
+  },
+  {
+    "key": "scenes/sea-night-16x9",
+    "file": "/art/mockup/scenes/sea-night-16x9.png",
+    "webp": "/art/mockup/scenes/sea-night-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-a-large",
+    "box": [
+      2143,
+      1266,
+      325,
+      183
+    ],
+    "alt": {
+      "vi": "Biển đêm trăng",
+      "en": "The sea on a moonlit night"
+    }
+  },
+  {
+    "key": "scenes/sea-night-4x3",
+    "file": "/art/mockup/scenes/sea-night-4x3.png",
+    "webp": "/art/mockup/scenes/sea-night-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-a-large",
+    "box": [
+      2183,
+      1266,
+      244,
+      183
+    ],
+    "alt": {
+      "vi": "Biển đêm trăng",
+      "en": "The sea on a moonlit night"
+    }
+  },
+  {
+    "key": "scenes/beach-da-nang-16x9",
+    "file": "/art/mockup/scenes/beach-da-nang-16x9.png",
+    "webp": "/art/mockup/scenes/beach-da-nang-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      15,
+      1424,
+      310,
+      174
+    ],
+    "alt": {
+      "vi": "Biển Đà Nẵng, bãi Non Nước",
+      "en": "Da Nang beach at Non Nuoc"
+    }
+  },
+  {
+    "key": "scenes/beach-da-nang-4x3",
+    "file": "/art/mockup/scenes/beach-da-nang-4x3.png",
+    "webp": "/art/mockup/scenes/beach-da-nang-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      15,
+      1395,
+      310,
+      232
+    ],
+    "alt": {
+      "vi": "Biển Đà Nẵng, bãi Non Nước",
+      "en": "Da Nang beach at Non Nuoc"
+    }
+  },
+  {
+    "key": "scenes/beach-da-nang-9x16",
+    "file": "/art/mockup/scenes/beach-da-nang-9x16.png",
+    "webp": "/art/mockup/scenes/beach-da-nang-9x16.webp",
+    "width": 432,
+    "height": 768,
+    "source": "sheet-b-large",
+    "box": [
+      116,
+      1388,
+      138,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Đà Nẵng, bãi Non Nước",
+      "en": "Da Nang beach at Non Nuoc"
+    }
+  },
+  {
+    "key": "scenes/sunset-coast-16x9",
+    "file": "/art/mockup/scenes/sunset-coast-16x9.png",
+    "webp": "/art/mockup/scenes/sunset-coast-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      337,
+      1434,
+      273,
+      154
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc hoàng hôn",
+      "en": "The coast at sunset"
+    }
+  },
+  {
+    "key": "scenes/sunset-coast-4x3",
+    "file": "/art/mockup/scenes/sunset-coast-4x3.png",
+    "webp": "/art/mockup/scenes/sunset-coast-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      337,
+      1408,
+      273,
+      205
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc hoàng hôn",
+      "en": "The coast at sunset"
+    }
+  },
+  {
+    "key": "scenes/sunset-coast-9x16",
+    "file": "/art/mockup/scenes/sunset-coast-9x16.png",
+    "webp": "/art/mockup/scenes/sunset-coast-9x16.webp",
+    "width": 432,
+    "height": 768,
+    "source": "sheet-b-large",
+    "box": [
+      431,
+      1388,
+      138,
+      246
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc hoàng hôn",
+      "en": "The coast at sunset"
+    }
+  },
+  {
+    "key": "scenes/sunrise-coast-16x9",
+    "file": "/art/mockup/scenes/sunrise-coast-16x9.png",
+    "webp": "/art/mockup/scenes/sunrise-coast-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      621,
+      1426,
+      302,
+      170
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc bình minh",
+      "en": "The coast at sunrise"
+    }
+  },
+  {
+    "key": "scenes/sunrise-coast-4x3",
+    "file": "/art/mockup/scenes/sunrise-coast-4x3.png",
+    "webp": "/art/mockup/scenes/sunrise-coast-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      621,
+      1398,
+      302,
+      226
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc bình minh",
+      "en": "The coast at sunrise"
+    }
+  },
+  {
+    "key": "scenes/sunrise-coast-9x16",
+    "file": "/art/mockup/scenes/sunrise-coast-9x16.png",
+    "webp": "/art/mockup/scenes/sunrise-coast-9x16.webp",
+    "width": 432,
+    "height": 768,
+    "source": "sheet-b-large",
+    "box": [
+      687,
+      1388,
+      138,
+      246
+    ],
+    "alt": {
+      "vi": "Bờ biển lúc bình minh",
+      "en": "The coast at sunrise"
+    }
+  },
+  {
+    "key": "scenes/sea-cu-lao-cham-16x9",
+    "file": "/art/mockup/scenes/sea-cu-lao-cham-16x9.png",
+    "webp": "/art/mockup/scenes/sea-cu-lao-cham-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      936,
+      1399,
+      396,
+      223
+    ],
+    "alt": {
+      "vi": "Biển Cù Lao Chàm",
+      "en": "The sea at Cu Lao Cham"
+    }
+  },
+  {
+    "key": "scenes/sea-cu-lao-cham-4x3",
+    "file": "/art/mockup/scenes/sea-cu-lao-cham-4x3.png",
+    "webp": "/art/mockup/scenes/sea-cu-lao-cham-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      970,
+      1388,
+      328,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Cù Lao Chàm",
+      "en": "The sea at Cu Lao Cham"
+    }
+  },
+  {
+    "key": "scenes/sea-cu-lao-cham-9x16",
+    "file": "/art/mockup/scenes/sea-cu-lao-cham-9x16.png",
+    "webp": "/art/mockup/scenes/sea-cu-lao-cham-9x16.webp",
+    "width": 432,
+    "height": 768,
+    "source": "sheet-b-large",
+    "box": [
+      1065,
+      1388,
+      138,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Cù Lao Chàm",
+      "en": "The sea at Cu Lao Cham"
+    }
+  },
+  {
+    "key": "scenes/sea-ly-son-16x9",
+    "file": "/art/mockup/scenes/sea-ly-son-16x9.png",
+    "webp": "/art/mockup/scenes/sea-ly-son-16x9.webp",
+    "width": 768,
+    "height": 432,
+    "source": "sheet-b-large",
+    "box": [
+      1453,
+      1388,
+      437,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Lý Sơn",
+      "en": "The sea at Ly Son"
+    }
+  },
+  {
+    "key": "scenes/sea-ly-son-4x3",
+    "file": "/art/mockup/scenes/sea-ly-son-4x3.png",
+    "webp": "/art/mockup/scenes/sea-ly-son-4x3.webp",
+    "width": 640,
+    "height": 480,
+    "source": "sheet-b-large",
+    "box": [
+      1534,
+      1388,
+      328,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Lý Sơn",
+      "en": "The sea at Ly Son"
+    }
+  },
+  {
+    "key": "scenes/sea-ly-son-9x16",
+    "file": "/art/mockup/scenes/sea-ly-son-9x16.png",
+    "webp": "/art/mockup/scenes/sea-ly-son-9x16.webp",
+    "width": 432,
+    "height": 768,
+    "source": "sheet-b-large",
+    "box": [
+      1629,
+      1388,
+      138,
+      246
+    ],
+    "alt": {
+      "vi": "Biển Lý Sơn",
+      "en": "The sea at Ly Son"
+    }
+  }
+]

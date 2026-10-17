@@ -13,24 +13,27 @@ type ArtImageProps = {
 };
 
 export function ArtImage({ art, alt, fallback, className }: ArtImageProps) {
-  const [failed, setFailed] = useState(false);
+  // 0: art.path, 1: art.fallbackPath (the earlier vector art), 2: the caller's fallback.
+  const [stage, setStage] = useState(0);
+  const fail = useCallback(
+    () => setStage((s) => (s === 0 && art?.fallbackPath ? 1 : 2)),
+    [art?.fallbackPath],
+  );
 
   // The browser can fire `error` before React attaches onError (server-rendered <img>),
   // so a completed image with no pixels is treated as failed once it mounts.
-  const checkLoaded = useCallback((img: HTMLImageElement | null) => {
-    if (img && img.complete && img.naturalWidth === 0) setFailed(true);
-  }, []);
+  const checkLoaded = useCallback(
+    (img: HTMLImageElement | null) => {
+      if (img && img.complete && img.naturalWidth === 0) fail();
+    },
+    [fail],
+  );
 
-  if (!art || failed) return <>{fallback}</>;
+  if (!art || stage === 2) return <>{fallback}</>;
+  const src = stage === 1 && art.fallbackPath ? art.fallbackPath : art.path;
 
   return (
     // eslint-disable-next-line @next/next/no-img-element -- static art, no optimisation needed
-    <img
-      ref={checkLoaded}
-      src={art.path}
-      alt={alt}
-      className={className}
-      onError={() => setFailed(true)}
-    />
+    <img key={src} ref={checkLoaded} src={src} alt={alt} className={className} onError={fail} />
   );
 }

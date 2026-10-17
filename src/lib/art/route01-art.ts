@@ -4,6 +4,8 @@ export type ArtAsset = {
   key: string;
   /** Public URL path, served from `public/`. */
   path: string;
+  /** Tried when `path` fails to load, before the caller's fallback (the earlier vector art). */
+  fallbackPath?: string;
   source: ArtSource;
   /** What a replacement image must provide. */
   replacementNeed: string;
@@ -19,6 +21,17 @@ const LANDMARK_SLUGS = [
   "ly_son",
 ] as const;
 
+// Landmark islands cut from asset sheet B (public/art/mockup/landmarks, scripts/art/cut_g1.py).
+const LANDMARK_MOCKUP: Record<(typeof LANDMARK_SLUGS)[number], string> = {
+  non_nuoc: "landmark-01-non-nuoc",
+  son_thuy: "landmark-02-son-thuy",
+  pham_van_dong: "landmark-03-pham-van-dong",
+  man_thai: "landmark-04-man-thai",
+  hon_sup: "landmark-05-hon-sup",
+  cu_lao_cham: "landmark-06-cu-lao-cham",
+  ly_son: "landmark-07-ly-son",
+};
+
 const LANDMARK_NEED = "Transparent square cut-out or art, no text";
 const SHIP_NEED = "Transparent 128x96 (4:3) image, bow facing right, readable at 48 px, no text";
 
@@ -31,8 +44,9 @@ export const ROUTE01_ART: readonly ArtAsset[] = [
   },
   ...LANDMARK_SLUGS.map((slug): ArtAsset => ({
     key: `landmark-${slug}`,
-    path: `/art/route01/landmarks/${slug}.svg`,
-    source: "vector",
+    path: `/art/mockup/landmarks/${LANDMARK_MOCKUP[slug]}.png`,
+    fallbackPath: `/art/route01/landmarks/${slug}.svg`,
+    source: "cut-out",
     replacementNeed: LANDMARK_NEED,
   })),
   ...([1, 2, 3] as const).map((tier): ArtAsset => ({
