@@ -1,0 +1,28 @@
+{
+  "title": "Swim safely",
+  "intro": "SwimQuest is a game. Your safety always comes first.",
+  "heroAlt": "Swimmers at sunrise on a calm coast",
+  "tips": {
+    "night": {
+      "title": "No night swimming",
+      "body": "Only swim in daylight, when others can see you and you can see the water."
+    },
+    "alone": {
+      "title": "Never swim alone in open water",
+      "body": "Swim with a buddy or where a lifeguard is watching, and tell someone where you are."
+    },
+    "limits": {
+      "title": "Swim within your limits",
+      "body": "Stop and rest when you are tired or cold. No distance is worth a risk."
+    },
+    "map": {
+      "title": "The map is only an illustration",
+      "body": "The voyage map is a game picture, not a real route. Do not use it to navigate the water."
+    }
+  },
+  "reminder": {
+    "text": "Swim in daylight, never alone in open water, and within your limits.",
+    "link": "Read the safety advice"
+  },
+  "back": "Back"
+}

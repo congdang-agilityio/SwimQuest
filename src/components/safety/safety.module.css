@@ -1,0 +1,111 @@
+.screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sq-space-4);
+  max-width: var(--sq-content-max);
+  margin: 0 auto;
+}
+.headerBand {
+  padding: 0 var(--sq-space-2);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-gradient-nav);
+  box-shadow: var(--sq-shadow-card);
+}
+.hero {
+  overflow: hidden;
+  padding: 0;
+  background: var(--sq-white);
+}
+.heroImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  object-fit: cover;
+}
+.intro {
+  margin: 0;
+  padding: var(--sq-space-4);
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+.tips {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tip {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  background: var(--sq-white);
+}
+.tipArt {
+  display: block;
+  flex: none;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-100);
+}
+.tipItem,
+.tipScene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.tipScene {
+  object-fit: cover;
+}
+.tipTitle {
+  margin: 0 0 var(--sq-space-1);
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+}
+.tipBody {
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.reminder {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  background: var(--sq-white);
+}
+.reminderArt {
+  display: block;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-100);
+}
+.reminderIcon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.reminderText {
+  margin: 0;
+  color: var(--sq-navy-700);
+  font-size: var(--sq-text-sm);
+}
+.link {
+  color: var(--sq-blue-600);
+  font-weight: var(--sq-weight-semibold);
+}
+@media (min-width: 640px) {
+  .screen {
+    max-width: 640px;
+  }
+}
