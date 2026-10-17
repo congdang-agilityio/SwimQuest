@@ -1,6 +1,7 @@
 import { teamBadgeHandlers } from "../badges/team-badges";
 import { funnelHandlers } from "../funnel/handlers";
 import { notificationHandlers } from "../notifications/handlers";
+import { zaloHandlers } from "../zalo/handlers";
 import type { db } from "../db";
 import type { DomainEventMap, DomainEventType } from "./types";
 
@@ -67,3 +68,14 @@ export function registerFunnelHandlers(): void {
   }
 }
 registerFunnelHandlers();
+
+/** Zalo group messages (S-86..S-88): queued in the game transaction, sent after it commits. */
+export function registerZaloHandlers(): void {
+  for (const [type, fn] of Object.entries(zaloHandlers)) {
+    registry.set(type as DomainEventType, [
+      ...(registry.get(type as DomainEventType) ?? []),
+      fn as EventHandler<never>,
+    ]);
+  }
+}
+registerZaloHandlers();
