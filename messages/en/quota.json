@@ -1,0 +1,19 @@
+{
+  "title": "Tournaments you can create",
+  "used": "{used} of {allowed} used",
+  "requestMore": "Request more",
+  "limitText": "You have reached your tournament limit. Tell an admin why you need one more.",
+  "reasonLabel": "Reason",
+  "reasonHint": "Up to {max} characters.",
+  "send": "Send request",
+  "pending": "Request pending",
+  "pendingText": "An admin will review your request.",
+  "approved": "Request approved",
+  "approvedText": "You can create one more tournament.",
+  "rejected": "Request declined",
+  "rejectedReason": "Reason: {reason}",
+  "errors": {
+    "INVALID_REASON": "Write a reason of up to 500 characters.",
+    "generic": "Could not send the request. Try again."
+  }
+}
