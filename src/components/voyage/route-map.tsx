@@ -2,12 +2,13 @@ import { useTranslations } from "next-intl";
 import { ArtImage } from "@/components/art/art-image";
 import { StartOriginLabel } from "@/components/starts/team-start-card";
 import { ProgressBar } from "@/components/ui";
-import { landmarkArt } from "@/lib/art/route01-art";
+import { landmarkArt, shipArt } from "@/lib/art/route01-art";
 import { MAP_ASPECT } from "@/lib/routes/destinations-passed";
 import { formatProgressPct } from "@/lib/scoring/progress";
+import { shipTier } from "@/lib/scoring/ship-tier";
 import { ScrollToShip } from "./scroll-to-ship";
 import { ShipMarker } from "./ship-marker";
-import { compassArt, VOYAGE_MAP_ART, VOYAGE_SHIP_ART } from "./voyage-art";
+import { compassArt, VOYAGE_MAP_ART } from "./voyage-art";
 import styles from "./voyage.module.css";
 
 export type RouteMapProps = {
@@ -56,6 +57,7 @@ export function RouteMap({
   });
   const pct = Math.min(100, Math.max(0, progress.progressBp / 100));
   const finish = destinations.find((d) => d.isFinish);
+  const tier = shipTier(progress.progressBp);
   return (
     <section aria-label={t("voyage.mapLabel")} className={styles.section}>
       <div className={styles.frame}>
@@ -126,7 +128,12 @@ export function RouteMap({
               </div>
             ))}
             {ship && (
-              <ShipMarker x={ship.x} y={ship.y} alt={t("voyage.ship", { team: teamName })} />
+              <ShipMarker
+                x={ship.x}
+                y={ship.y}
+                alt={t("voyage.ship", { team: teamName })}
+                tier={tier}
+              />
             )}
           </div>
         </div>
@@ -145,7 +152,7 @@ export function RouteMap({
               ))}
               <span className={styles.bandShip} style={{ left: `${pct}%` }}>
                 <ArtImage
-                  art={VOYAGE_SHIP_ART}
+                  art={shipArt(tier)}
                   alt=""
                   fallback={<span aria-hidden="true">⛵</span>}
                 />

@@ -1,7 +1,7 @@
 """Temporary voyage-screen art cut from the stakeholder mockup (#693).
 
 Usage: python3 scripts/art/cut_screen_voyage.py
-Needs Pillow, numpy, scipy and opencv-python-headless.
+Needs Pillow, numpy and opencv-python-headless.
 
 Writes public/art/mockup/screen-voyage/:
 - map-route01.webp: the Route 01 map scene of the "BẢN ĐỒ HẢI TRÌNH ROUTE 01" panel, 2x LANCZOS,
@@ -10,8 +10,7 @@ Writes public/art/mockup/screen-voyage/:
   counterpart is removed: the team card corner, the duplicate "3 Bãi Sơn Thủy" pill, the
   painted compass (the page draws map/compass-rose) and the painted ship (the app draws the
   team's ship).
-- ship-map.png: the painted ship from the same map, sea keyed out.
-Swap both for the shared group assets (map: G3, ships: G2) once they are on main.
+Swap it for a shared group asset once one exists (no group owns a top-down Route 01 map).
 """
 
 from pathlib import Path
@@ -19,7 +18,6 @@ from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image, ImageFilter
-from scipy import ndimage
 
 ROOT = Path(__file__).resolve().parents[2]
 MOCKUP = ROOT / "requirement/assets/reference/swimquest_full_platform_ui_concept.png"
@@ -27,7 +25,6 @@ OUT = ROOT / "public/art/mockup/screen-voyage"
 
 # Crop boxes in mockup pixels (1536 x 1024).
 MAP_BOX = (612, 432, 1286, 694)  # map scene: below the title row, above the progress band
-SHIP_BOX = (834, 576, 894, 648)  # painted ship on that map
 
 
 def cut_map(im: Image.Image) -> Image.Image:
@@ -63,34 +60,11 @@ def cut_map(im: Image.Image) -> Image.Image:
     return scene
 
 
-def cut_ship(im: Image.Image) -> Image.Image:
-    ship = im.crop(SHIP_BOX).resize((120, 144), Image.LANCZOS)
-    a = np.array(ship).astype(int)
-    r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    water = ((b > r + 40) & (b > 110)) | ((r > 150) & (g > 190) & (b > 210) & (b - r > 10))
-    # Only water connected to the border goes, so the navy hull keeps its pixels.
-    labels, _ = ndimage.label(water)
-    edge = set(np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]])))
-    solid = ~np.isin(labels, list(edge - {0}))
-    # Keep only the ship (largest piece), dropping stray bits of wake.
-    parts, n = ndimage.label(solid)
-    if n > 1:
-        sizes = ndimage.sum(solid, parts, range(1, n + 1))
-        solid = parts == int(np.argmax(sizes)) + 1
-    solid = ndimage.binary_fill_holes(solid)
-    alpha = Image.fromarray(np.where(solid, 255, 0).astype(np.uint8))
-    alpha = alpha.filter(ImageFilter.MedianFilter(3)).filter(ImageFilter.GaussianBlur(0.7))
-    out = ship.convert("RGBA")
-    out.putalpha(alpha)
-    return out.crop(out.getbbox())
-
-
 def main() -> None:
     im = Image.open(MOCKUP).convert("RGB")
     OUT.mkdir(parents=True, exist_ok=True)
     scene = cut_map(im)
     scene.save(OUT / "map-route01.webp", quality=90)
-    cut_ship(im).save(OUT / "ship-map.png", optimize=True)
 
 
 if __name__ == "__main__":

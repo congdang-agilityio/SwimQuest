@@ -265,8 +265,12 @@
 }
 
 .ship {
+  /* 4:3 footprint (as the earlier vector ship), so the marker stays inside the map near its
+     edges; the square G2 ship art is fitted inside it. */
   width: 100%;
+  aspect-ratio: 4 / 3;
   height: auto;
+  object-fit: contain;
   filter: var(--sq-shadow-drop);
 }
 

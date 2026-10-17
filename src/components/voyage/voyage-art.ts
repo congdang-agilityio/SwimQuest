@@ -15,14 +15,6 @@ export const VOYAGE_MAP_ART: ArtAsset = {
   replacementNeed: "18:7 Route 01 map scene, destinations at the anchors in map-anchors.json",
 };
 
-/** The team's ship on the map and on the route bar. */
-export const VOYAGE_SHIP_ART: ArtAsset = {
-  key: "voyage-ship",
-  path: "/art/mockup/screen-voyage/ship-map.png",
-  source: "cut-out",
-  replacementNeed: "Transparent ship, bow facing right, readable at 32 px, no text",
-};
-
 /** Compass rose from the G3 map elements (WebP, PNG fallback); undefined until it is registered. */
 export function compassArt(): ArtAsset | undefined {
   const art = mockupArt("compass-rose") ?? mockupArt("map/compass-rose");
