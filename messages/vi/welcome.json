@@ -1,0 +1,49 @@
+{
+  "tagline": "Bơi thật · Khám phá · Cùng nhau tiến xa",
+  "lead": "SwimQuest là hải trình bơi lội theo đội: mỗi buổi bơi thật của bạn đẩy con tàu của cả đội tiến thêm trên bản đồ, từ bờ biển Đà Nẵng ra tới đảo Lý Sơn.",
+  "signUp": "Đăng ký",
+  "logIn": "Đăng nhập",
+  "haveAccount": "Đã có tài khoản?",
+  "how": {
+    "title": "Hải trình diễn ra thế nào",
+    "intro": "Bảy chặng từ lúc đăng ký đến khi cả đội cập bến Lý Sơn."
+  },
+  "steps": {
+    "signup": {
+      "title": "Đăng ký tài khoản",
+      "body": "Tạo tài khoản bằng email trong vài giây."
+    },
+    "tournament": {
+      "title": "Tạo giải đấu",
+      "body": "Ban tổ chức mở giải, chọn thời gian và số đội."
+    },
+    "team": {
+      "title": "Tạo đội / Tham gia",
+      "body": "Lập đội của bạn hoặc vào đội bằng đường dẫn mời."
+    },
+    "start": {
+      "title": "Chọn điểm xuất phát",
+      "body": "Cả đội chọn một bãi biển để bắt đầu hải trình."
+    },
+    "swim": {
+      "title": "Bơi & Ghi nhận",
+      "body": "Bơi thật, rồi gửi buổi bơi để được ghi nhận."
+    },
+    "progress": {
+      "title": "Theo dõi tiến độ",
+      "body": "Xem con tàu của đội tiến lên trên bản đồ."
+    },
+    "finish": {
+      "title": "Cập bến Lý Sơn",
+      "body": "Về đích cùng nhau và nhận huy hiệu."
+    }
+  },
+  "cta": {
+    "title": "Sẵn sàng ra khơi?",
+    "body": "Tham gia cùng đội của bạn và bắt đầu hải trình mùa đông."
+  },
+  "safety": {
+    "title": "Bơi an toàn",
+    "body": "Bản đồ chỉ là tranh trong trò chơi, không phải tuyến đường bơi thật. Hãy bơi ở nơi an toàn, trong khả năng của bạn và không bơi một mình."
+  }
+}

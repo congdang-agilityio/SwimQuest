@@ -1,0 +1,49 @@
+{
+  "tagline": "Swim for real · Explore · Go further together",
+  "lead": "SwimQuest is a team swimming voyage: every real swim you log moves your team's ship further across the map, from the Da Nang coast out to Ly Son island.",
+  "signUp": "Sign up",
+  "logIn": "Log in",
+  "haveAccount": "Already have an account?",
+  "how": {
+    "title": "How the voyage works",
+    "intro": "Seven legs, from signing up to your team landing on Ly Son."
+  },
+  "steps": {
+    "signup": {
+      "title": "Create an account",
+      "body": "Sign up with your email in seconds."
+    },
+    "tournament": {
+      "title": "Create a tournament",
+      "body": "Organisers open a tournament and set its dates and teams."
+    },
+    "team": {
+      "title": "Create or join a team",
+      "body": "Start your own team or join one through an invite link."
+    },
+    "start": {
+      "title": "Pick a starting point",
+      "body": "Your team picks a beach to start the voyage from."
+    },
+    "swim": {
+      "title": "Swim & log it",
+      "body": "Swim for real, then send your swim to have it counted."
+    },
+    "progress": {
+      "title": "Track progress",
+      "body": "Watch your team's ship move along the map."
+    },
+    "finish": {
+      "title": "Land on Ly Son",
+      "body": "Reach the finish together and earn your badges."
+    }
+  },
+  "cta": {
+    "title": "Ready to set sail?",
+    "body": "Join your team and start the winter voyage."
+  },
+  "safety": {
+    "title": "Swim safely",
+    "body": "The map is game art, not a real swimming route. Swim somewhere safe, within your limits, and never alone."
+  }
+}

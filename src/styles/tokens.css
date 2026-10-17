@@ -25,6 +25,8 @@
   --sq-sky-100: #d7ebfb; /* input border, dividers */
   --sq-white: #ffffff;
   --sq-blue-wash: rgb(10 148 254 / 0.08); /* pale fill: selected row (chosen start, chosen team) */
+  --sq-glass: rgb(1 33 61 / 0.72); /* translucent dark panel over art (welcome steps) */
+  --sq-glass-edge: rgb(127 211 240 / 0.35); /* light rim of the mockup's phone panels */
 
   /* Text */
   --sq-text: #0b2a4a; /* navy body text on light surfaces */
