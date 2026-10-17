@@ -76,6 +76,7 @@ describe("POST /api/jobs/tick", () => {
     expect(await res.json()).toEqual({
       startAssignments: { tournaments: 1, assigned: 1, failed: 0 },
       weekSettlements: { weeks: 0, failed: 0 },
+      seasonEnds: { tournaments: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
       pushes: { sent: 0, removed: 0, failed: 0 },
     });
@@ -92,6 +93,7 @@ describe("POST /api/jobs/tick", () => {
     expect(await res.json()).toEqual({
       startAssignments: { tournaments: 0, assigned: 0, failed: 0 },
       weekSettlements: { weeks: 0, failed: 0 },
+      seasonEnds: { tournaments: 0, failed: 0 },
       xpWeekSettlements: { players: 0, failed: 0 },
       pushes: { sent: 0, removed: 0, failed: 0 },
     });

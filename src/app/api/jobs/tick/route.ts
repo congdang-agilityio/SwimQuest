@@ -2,6 +2,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { apiError } from "@/server/http/api-error";
 import {
+  runDueSeasonEnds,
   runDueStartAssignments,
   runDueWeekSettlements,
   runDueXpWeekSettlements,
@@ -30,10 +31,11 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const startAssignments = await runDueStartAssignments(new Date());
   const weekSettlements = await runDueWeekSettlements(new Date());
+  const seasonEnds = await runDueSeasonEnds(new Date());
   const xpWeekSettlements = await runDueXpWeekSettlements(new Date());
   const pushes = await runPendingPushes();
   return NextResponse.json(
-    { startAssignments, weekSettlements, xpWeekSettlements, pushes },
+    { startAssignments, weekSettlements, seasonEnds, xpWeekSettlements, pushes },
     { headers: { "cache-control": "no-store" } },
   );
 }
