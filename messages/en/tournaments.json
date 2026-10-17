@@ -13,6 +13,21 @@
       "timeVn": "Time (Vietnam time, UTC+7)"
     }
   },
+  "edit": {
+    "title": "Edit tournament",
+    "submit": "Save changes",
+    "archived": "This tournament is archived and can no longer be edited.",
+    "locked": {
+      "seasonStart": "Locked for the season: the start cannot change once the season has begun.",
+      "seasonEnd": "Locked: the season has ended, so the end cannot change."
+    },
+    "conflicts": {
+      "SEASON_LOCKED": "The season has already started, so the start can no longer change. Reload the page.",
+      "SEASON_ENDED": "The season has ended, so the end can no longer change. Reload the page.",
+      "ARCHIVED": "This tournament is archived and can no longer be edited.",
+      "CONFLICT": "Someone changed this tournament meanwhile. Reload the page and try again."
+    }
+  },
   "errors": {
     "NAME_REQUIRED": "Enter a tournament name.",
     "NAME_TOO_LONG": "The name is too long (80 characters at most).",
@@ -27,6 +42,7 @@
     "ROUTE_DISTANCE_NOT_POSITIVE": "The distance must be greater than 0.",
     "ROUTE_DISTANCE_TOO_PRECISE": "The distance can have at most 2 decimals.",
     "ROUTE_DISTANCE_TOO_LARGE": "The distance is too large (10,000 km at most).",
-    "GENERIC": "Something went wrong. Please try again."
+    "GENERIC": "Something went wrong. Please try again.",
+    "SEASON_END_NOT_AFTER_NOW": "The season end must be in the future."
   }
 }

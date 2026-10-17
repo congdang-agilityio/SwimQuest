@@ -159,3 +159,14 @@
     padding: var(--sq-space-6) var(--sq-space-6) var(--sq-space-3);
   }
 }
+
+/* Why a season field is read-only (edit mode) */
+.locked {
+  grid-column: 1 / -1;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.card .group input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
