@@ -8,7 +8,8 @@ export default defineConfig({
   testDir: "e2e",
   testMatch: "**/*.test.ts",
   reporter: process.env.CI ? "html" : "list",
-  use: { baseURL: `http://localhost:${port}` },
+  // The service worker would hide its requests from page.route(); offline specs opt back in.
+  use: { baseURL: `http://localhost:${port}`, serviceWorkers: "block" },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] } },

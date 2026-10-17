@@ -19,5 +19,10 @@
     "title": "Page not found",
     "body": "We could not find that page. It may have moved.",
     "home": "Back to Home"
+  },
+  "offline": {
+    "title": "You are offline",
+    "body": "There is no connection, so this page could not open. Check your connection and try again.",
+    "retry": "Try again"
   }
 }

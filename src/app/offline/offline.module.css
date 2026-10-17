@@ -1,0 +1,30 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--sq-space-2);
+  padding: var(--sq-space-4);
+}
+.page > section {
+  width: 100%;
+  margin: 0;
+}
+.brandRow {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+.logo {
+  display: block;
+  margin: 0 auto;
+  width: min(70%, 240px);
+  height: auto;
+  filter: var(--sq-shadow-drop);
+}
+.brand {
+  color: var(--sq-text-on-dark);
+  font-size: var(--sq-text-display);
+  font-weight: var(--sq-weight-black);
+  font-style: italic;
+}
