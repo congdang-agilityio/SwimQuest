@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireApiUser } from "@/server/auth/current-user";
 import { apiError } from "@/server/http/api-error";
 import { isSameOrigin, readJson } from "@/server/http/request";
+import { recordFunnelEventSafe } from "@/server/funnel/safe";
 import { getJoinView } from "@/server/join/join-view";
 import { JoinError, joinTeam } from "@/server/join/join-team";
 
@@ -26,8 +27,15 @@ export async function POST(request: Request, { params }: Ctx) {
 
   const { token } = await params;
   try {
-    const { teamId } = json.body as { teamId?: unknown };
-    const { team } = await joinTeam(auth.user.id, token, teamId);
+    const { teamId, fromTeamLink } = json.body as { teamId?: unknown; fromTeamLink?: unknown };
+    const { tournamentId, team } = await joinTeam(auth.user.id, token, teamId);
+    if (fromTeamLink === true)
+      await recordFunnelEventSafe("team_invite_accepted", {
+        userId: auth.user.id,
+        tournamentId,
+        refId: team.id,
+        once: `${auth.user.id}:${team.id}`,
+      });
     return NextResponse.json({ teamId: team.id }, { headers: noStore });
   } catch (err) {
     if (!(err instanceof JoinError)) throw err;

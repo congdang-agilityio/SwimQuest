@@ -9,6 +9,7 @@ import styles from "@/components/tournaments/details/details.module.css";
 import { ButtonLink, Card, ScreenHeader, SectionHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
+import { recordFunnelEventSafe } from "@/server/funnel/safe";
 import { findMyTeam } from "@/server/join/join-view";
 import { getTournamentDetails } from "@/server/tournaments/details";
 
@@ -27,6 +28,11 @@ export default async function TournamentDetailsPage({
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? `/tournaments/${id}`);
   const details = await getTournamentDetails(user.id, id, { token });
   if (!details) notFound();
+  await recordFunnelEventSafe("tournament_viewed", {
+    userId: user.id,
+    tournamentId: details.id,
+    once: `${user.id}:${details.id}`,
+  });
   const [t, tCommon, myTeam] = await Promise.all([
     getTranslations("details"),
     getTranslations("common"),

@@ -5,6 +5,7 @@ import { CreateTournamentForm } from "@/components/tournaments/create-tournament
 import { QuotaRequest } from "@/components/tournaments/quota-request";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
+import { recordFunnelEventSafe } from "@/server/funnel/safe";
 import { getQuota } from "@/server/tournaments/quota";
 import styles from "@/components/tournaments/create-tournament.module.css";
 
@@ -13,6 +14,7 @@ export default async function NewTournamentPage() {
   const tCommon = await getTranslations("common");
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/tournaments/new");
   const quota = await getQuota(user.id);
+  await recordFunnelEventSafe("tournament_create_started", { userId: user.id });
   return (
     <main className={styles.screen}>
       <div className={styles.headerBand}>

@@ -54,7 +54,7 @@ export function TeamPicker({ submitUrl, teams, myTeam, preselectedId = null }: P
     const res = await clientFetch(submitUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ teamId }),
+      body: JSON.stringify({ teamId, ...(teamId === preselectedId ? { fromTeamLink: true } : {}) }),
     }).catch(() => null);
     if (res?.ok) return router.push("/team");
     setBusy(false);
