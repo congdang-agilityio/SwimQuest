@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { SwimFactRows } from "@/components/swims/swim-facts";
 import { Avatar, Card, Chip } from "@/components/ui";
@@ -51,7 +53,7 @@ function reasonValues(r: ReviewReason, locale: "vi" | "en"): Record<string, stri
 }
 
 /** One flagged swim for a reviewer: player, facts, failed checks, its shape and the decision. */
-export function ReviewItem({ item }: { item: Item }) {
+export function ReviewItem({ item, action }: { item: Item; action?: ReactNode }) {
   const t = useTranslations("review");
   const ts = useTranslations("swims.summary");
   const locale = useLocale() === "en" ? "en" : "vi";
@@ -69,9 +71,21 @@ export function ReviewItem({ item }: { item: Item }) {
       <div className={styles.itemHead}>
         <Avatar name={name} decorative />
         <h2 id={titleId} className={styles.player}>
-          {name}
+          {action ? (
+            name
+          ) : (
+            <Link href={`/tournaments/${item.tournamentId}/manage/review/results/${item.resultId}`}>
+              {name}
+            </Link>
+          )}
         </h2>
-        <Chip tone="warning">{item.dispute ? t("item.disputed") : t("item.flagged")}</Chip>
+        {action ? (
+          <Chip tone={item.status === "VERIFIED" ? "success" : "neutral"}>
+            {t(`status.${item.status}`)}
+          </Chip>
+        ) : (
+          <Chip tone="warning">{item.dispute ? t("item.disputed") : t("item.flagged")}</Chip>
+        )}
       </div>
       <div className={styles.body}>
         <TrackShape track={item.track} label={t("item.shape")} emptyLabel={t("item.noShape")} />
@@ -102,7 +116,9 @@ export function ReviewItem({ item }: { item: Item }) {
           </ul>
         </div>
       )}
-      <DecisionDialog resultId={item.resultId} playerName={name} disputeId={item.dispute?.id} />
+      {action ?? (
+        <DecisionDialog resultId={item.resultId} playerName={name} disputeId={item.dispute?.id} />
+      )}
     </Card>
   );
 }
