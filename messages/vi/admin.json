@@ -4,7 +4,8 @@
     "users": "Người dùng",
     "swimLimits": "Giới hạn bơi",
     "reports": "Báo cáo",
-    "tournamentRequests": "Yêu cầu thêm giải đấu"
+    "tournamentRequests": "Yêu cầu thêm giải đấu",
+    "audit": "Nhật ký kiểm toán"
   },
   "users": {
     "title": "Người dùng",
@@ -259,6 +260,69 @@
       "forbidden": "Chỉ quản trị viên nền tảng mới có thể điều chỉnh.",
       "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
       "failed": "Không thể đổi điểm xuất phát. Vui lòng thử lại."
+    }
+  },
+  "audit": {
+    "title": "Nhật ký kiểm toán",
+    "back": "Quay lại",
+    "empty": "Không có sự kiện nào khớp bộ lọc.",
+    "older": "Sự kiện cũ hơn",
+    "system": "Hệ thống",
+    "filters": {
+      "title": "Bộ lọc",
+      "any": "Tất cả",
+      "tournament": "Giải đấu",
+      "action": "Hành động",
+      "user": "Mã người dùng",
+      "userHint": "Khớp người thực hiện hoặc người bị tác động. Xem mã ở trang Người dùng.",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "apply": "Áp dụng",
+      "clear": "Xóa bộ lọc"
+    },
+    "cols": {
+      "time": "Thời gian (VN)",
+      "actor": "Người thực hiện",
+      "action": "Hành động",
+      "target": "Đối tượng",
+      "reason": "Lý do"
+    },
+    "actions": {
+      "TEAM_CAPTAIN_SET": "Chỉ định đội trưởng",
+      "TEAM_CAPTAIN_HANDOVER": "Bàn giao đội trưởng",
+      "TEAM_DETAILS_UPDATED": "Cập nhật thông tin đội",
+      "TEAM_START_AUTO_ASSIGNED": "Tự động gán điểm xuất phát",
+      "TEAM_START_SET_BY_ORGANIZER": "BTC đặt điểm xuất phát",
+      "TEAM_MEMBER_REMOVED": "Xóa thành viên khỏi đội",
+      "PLAYER_MOVED": "Chuyển người chơi sang đội khác",
+      "PLAYER_ADDED_BY_ORGANIZER": "BTC thêm người chơi",
+      "INVITE_LINK_SWITCHED": "Bật/tắt link mời",
+      "INVITE_LINK_REPLACED": "Đổi link mời",
+      "ADMIN_ROLE_CHANGED": "Đổi vai trò quản trị",
+      "TOURNAMENT_UPDATED": "Cập nhật giải đấu",
+      "TOURNAMENT_ARCHIVED": "Lưu trữ giải đấu",
+      "PASSWORD_CHANGED": "Đổi mật khẩu",
+      "SWIM_LIMITS_CHANGED": "Đổi giới hạn bơi",
+      "ACCOUNT_SUSPENDED": "Tạm khóa tài khoản",
+      "ACCOUNT_REACTIVATED": "Mở lại tài khoản",
+      "PASSWORD_RESET_BY_ADMIN": "Quản trị đặt lại mật khẩu",
+      "ADMIN_CONTACT_CHANGED": "Đổi liên hệ quản trị",
+      "SWIM_REVIEWED": "Duyệt lượt bơi",
+      "DISPUTE_DECIDED": "Quyết định khiếu nại",
+      "SWIM_REVOKED": "Thu hồi lượt bơi",
+      "QUOTA_REQUEST_DECIDED": "Quyết định yêu cầu thêm giải đấu",
+      "REVIEW_HELPER_APPOINTED": "Chỉ định người hỗ trợ duyệt",
+      "REVIEW_HELPER_REMOVED": "Gỡ người hỗ trợ duyệt",
+      "SPECIAL_BADGE_GIVEN": "Trao huy hiệu đặc biệt",
+      "REPORT_CLOSED": "Đóng báo cáo"
+    },
+    "entities": {
+      "TEAM": "Đội",
+      "TOURNAMENT": "Giải đấu",
+      "USER": "Người dùng",
+      "SWIM": "Lượt bơi",
+      "SWIM_RESULT": "Kết quả bơi",
+      "REPORT": "Báo cáo"
     }
   }
 }
