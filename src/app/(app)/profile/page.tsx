@@ -6,6 +6,7 @@ import { LanguageSwitch } from "@/components/i18n/language-switch";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NavIcon } from "@/components/nav/nav-icon";
 import { BadgesSection } from "@/components/profile/badges-section";
+import { CollectiblesSection } from "@/components/profile/collectibles-section";
 import { InstallApp } from "@/components/pwa/install-app";
 import { ProfileSection } from "@/components/profile/profile-section";
 import { StatsSection } from "@/components/profile/stats-section";
@@ -14,6 +15,7 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { db } from "@/server/db";
 import { listUserBadges } from "@/server/badges/list";
+import { getMyCollectibles } from "@/server/collectibles/my-collectibles";
 import { getMyProfile } from "@/server/profile/my-profile";
 import { getLevels } from "@/server/xp/level";
 import { getPlayerStats } from "@/server/profile/stats";
@@ -21,13 +23,14 @@ import styles from "./profile.module.css";
 
 export default async function ProfilePage() {
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/profile");
-  const [t, tc, stats, profile, badges, levels] = await Promise.all([
+  const [t, tc, stats, profile, badges, levels, collectibles] = await Promise.all([
     getTranslations("nav"),
     getTranslations("common"),
     getPlayerStats(user.id),
     getMyProfile(user.id),
     listUserBadges(user.id),
     getLevels([user.id]),
+    getMyCollectibles(user.id),
   ]);
   // The account vanished after the session check: sign in again. Never notFound() here, because
   // loading.tsx streams a 200 first and a 404 could no longer be sent.
@@ -51,6 +54,8 @@ export default async function ProfilePage() {
       <StatsSection stats={stats} teamNames={teamNames} />
 
       <BadgesSection badges={badges} />
+
+      <CollectiblesSection items={collectibles} />
 
       <Card className={styles.rows}>
         <Link href="/swims" className={styles.row}>

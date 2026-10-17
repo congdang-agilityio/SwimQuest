@@ -1,0 +1,60 @@
+/* My Profile collectibles: one block per tournament inside the white profile card. */
+.block {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: 0 0 var(--sq-space-4);
+  background: var(--sq-white);
+}
+.list {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0 var(--sq-space-4);
+  list-style: none;
+}
+.tournament {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) 0 var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+}
+.head {
+  display: grid;
+  gap: 2px;
+  padding: 0 var(--sq-space-4);
+}
+.name {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  overflow-wrap: anywhere;
+}
+.team {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+.note {
+  margin: 0;
+  padding: 0 var(--sq-space-4);
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+}
+.weeks {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-xs);
+}
+.weeks summary {
+  min-height: 24px;
+  cursor: pointer;
+  color: var(--sq-navy-700);
+  font-weight: var(--sq-weight-bold);
+}
+.weeks ul {
+  display: grid;
+  gap: var(--sq-space-1);
+  margin: var(--sq-space-2) 0 0;
+  padding-left: var(--sq-space-4);
+}

@@ -113,6 +113,7 @@ export default async function VoyagePage() {
               }
             : null
         }
+        energyOrb={voyage.energyOrb}
         progress={voyage.progress}
         ship={voyage.ship}
       />
