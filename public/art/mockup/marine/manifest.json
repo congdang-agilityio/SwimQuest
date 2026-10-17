@@ -1,0 +1,106 @@
+[
+  {
+    "key": "dolphin",
+    "file": "/art/mockup/marine/dolphin.png",
+    "webp": "/art/mockup/marine/dolphin.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [15, 598, 179, 125],
+    "alt": {
+      "vi": "Cá heo",
+      "en": "Dolphin"
+    }
+  },
+  {
+    "key": "sea-turtle",
+    "file": "/art/mockup/marine/sea-turtle.png",
+    "webp": "/art/mockup/marine/sea-turtle.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [207, 599, 166, 117],
+    "alt": {
+      "vi": "Rùa biển",
+      "en": "Sea turtle"
+    }
+  },
+  {
+    "key": "ray",
+    "file": "/art/mockup/marine/ray.png",
+    "webp": "/art/mockup/marine/ray.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [384, 571, 217, 145],
+    "alt": {
+      "vi": "Cá đuối",
+      "en": "Ray"
+    }
+  },
+  {
+    "key": "whale-shark",
+    "file": "/art/mockup/marine/whale-shark.png",
+    "webp": "/art/mockup/marine/whale-shark.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [612, 560, 214, 160],
+    "alt": {
+      "vi": "Cá mập voi",
+      "en": "Whale shark"
+    }
+  },
+  {
+    "key": "jellyfish",
+    "file": "/art/mockup/marine/jellyfish.png",
+    "webp": "/art/mockup/marine/jellyfish.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [46, 759, 134, 150],
+    "alt": {
+      "vi": "Sứa",
+      "en": "Jellyfish"
+    }
+  },
+  {
+    "key": "fish-school",
+    "file": "/art/mockup/marine/fish-school.png",
+    "webp": "/art/mockup/marine/fish-school.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [208, 778, 175, 121],
+    "alt": {
+      "vi": "Đàn cá",
+      "en": "School of fish"
+    }
+  },
+  {
+    "key": "clownfish",
+    "file": "/art/mockup/marine/clownfish.png",
+    "webp": "/art/mockup/marine/clownfish.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [411, 779, 171, 119],
+    "alt": {
+      "vi": "Cá hề",
+      "en": "Clownfish"
+    }
+  },
+  {
+    "key": "tuna",
+    "file": "/art/mockup/marine/tuna.png",
+    "webp": "/art/mockup/marine/tuna.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [614, 769, 174, 129],
+    "alt": {
+      "vi": "Cá ngừ",
+      "en": "Tuna"
+    }
+  }
+]

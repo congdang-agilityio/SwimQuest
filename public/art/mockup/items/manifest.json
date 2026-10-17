@@ -1,0 +1,171 @@
+[
+  {
+    "key": "coin",
+    "file": "/art/mockup/items/coin.png",
+    "webp": "/art/mockup/items/coin.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [872, 597, 83, 85],
+    "alt": {
+      "vi": "Xu",
+      "en": "Coin"
+    }
+  },
+  {
+    "key": "treasure-chest",
+    "file": "/art/mockup/items/treasure-chest.png",
+    "webp": "/art/mockup/items/treasure-chest.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [994, 597, 89, 82],
+    "alt": {
+      "vi": "Rương báu",
+      "en": "Treasure chest"
+    }
+  },
+  {
+    "key": "pearl",
+    "file": "/art/mockup/items/pearl.png",
+    "webp": "/art/mockup/items/pearl.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1120, 596, 80, 81],
+    "alt": {
+      "vi": "Ngọc trai",
+      "en": "Pearl"
+    }
+  },
+  {
+    "key": "treasure-map",
+    "file": "/art/mockup/items/treasure-map.png",
+    "webp": "/art/mockup/items/treasure-map.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [2389, 1553, 154, 126],
+    "alt": {
+      "vi": "Bản đồ kho báu",
+      "en": "Treasure map"
+    }
+  },
+  {
+    "key": "star",
+    "file": "/art/mockup/items/star.png",
+    "webp": "/art/mockup/items/star.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1358, 597, 84, 83],
+    "alt": {
+      "vi": "Ngôi sao",
+      "en": "Star"
+    }
+  },
+  {
+    "key": "seashell",
+    "file": "/art/mockup/items/seashell.png",
+    "webp": "/art/mockup/items/seashell.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [885, 736, 78, 84],
+    "alt": {
+      "vi": "Vỏ sò",
+      "en": "Seashell"
+    }
+  },
+  {
+    "key": "message-bottle",
+    "file": "/art/mockup/items/message-bottle.png",
+    "webp": "/art/mockup/items/message-bottle.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1013, 728, 79, 94],
+    "alt": {
+      "vi": "Chai thư",
+      "en": "Message in a bottle"
+    }
+  },
+  {
+    "key": "energy-drink",
+    "file": "/art/mockup/items/energy-drink.png",
+    "webp": "/art/mockup/items/energy-drink.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1282, 1028, 98, 131],
+    "alt": {
+      "vi": "Nước tăng lực",
+      "en": "Energy drink"
+    }
+  },
+  {
+    "key": "med-kit",
+    "file": "/art/mockup/items/med-kit.png",
+    "webp": "/art/mockup/items/med-kit.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1412, 1020, 105, 133],
+    "alt": {
+      "vi": "Hộp cứu thương",
+      "en": "Med kit"
+    }
+  },
+  {
+    "key": "fins",
+    "file": "/art/mockup/items/fins.png",
+    "webp": "/art/mockup/items/fins.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1533, 1023, 148, 117],
+    "alt": {
+      "vi": "Chân vịt",
+      "en": "Swim fins"
+    }
+  },
+  {
+    "key": "goggles",
+    "file": "/art/mockup/items/goggles.png",
+    "webp": "/art/mockup/items/goggles.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a",
+    "box": [1014, 616, 101, 53],
+    "alt": {
+      "vi": "Kính bơi",
+      "en": "Goggles"
+    }
+  },
+  {
+    "key": "rescue-buoy",
+    "file": "/art/mockup/items/rescue-buoy.png",
+    "webp": "/art/mockup/items/rescue-buoy.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1882, 1037, 135, 99],
+    "alt": {
+      "vi": "Phao cứu sinh",
+      "en": "Rescue buoy"
+    }
+  },
+  {
+    "key": "swim-cap",
+    "file": "/art/mockup/items/swim-cap.png",
+    "webp": "/art/mockup/items/swim-cap.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2028, 1000, 142, 108],
+    "alt": {
+      "vi": "Mũ bơi",
+      "en": "Swim cap"
+    }
+  }
+]

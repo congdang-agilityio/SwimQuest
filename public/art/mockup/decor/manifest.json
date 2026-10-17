@@ -1,0 +1,67 @@
+[
+  {
+    "key": "coral",
+    "file": "/art/mockup/decor/coral.png",
+    "webp": "/art/mockup/decor/coral.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2007, 1536, 173, 107],
+    "alt": {
+      "vi": "San hô",
+      "en": "Coral"
+    }
+  },
+  {
+    "key": "starfish",
+    "file": "/art/mockup/decor/starfish.png",
+    "webp": "/art/mockup/decor/starfish.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a",
+    "box": [1295, 963, 58, 47],
+    "alt": {
+      "vi": "Sao biển",
+      "en": "Starfish"
+    }
+  },
+  {
+    "key": "seaweed",
+    "file": "/art/mockup/decor/seaweed.png",
+    "webp": "/art/mockup/decor/seaweed.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2241, 1513, 132, 154],
+    "alt": {
+      "vi": "Rong biển",
+      "en": "Seaweed"
+    }
+  },
+  {
+    "key": "sea-turtle",
+    "file": "/art/mockup/decor/sea-turtle.png",
+    "webp": "/art/mockup/decor/sea-turtle.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2366, 1493, 207, 122],
+    "alt": {
+      "vi": "Rùa biển",
+      "en": "Sea turtle"
+    }
+  },
+  {
+    "key": "scallop-shell",
+    "file": "/art/mockup/decor/scallop-shell.png",
+    "webp": "/art/mockup/decor/scallop-shell.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [2474, 1618, 78, 64],
+    "alt": {
+      "vi": "Vỏ sò điệp",
+      "en": "Scallop shell"
+    }
+  }
+]

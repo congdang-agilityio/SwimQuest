@@ -1,0 +1,210 @@
+[
+  {
+    "key": "location-pin",
+    "file": "/art/mockup/map/location-pin.png",
+    "webp": "/art/mockup/map/location-pin.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [535, 1034, 59, 85],
+    "alt": {
+      "vi": "Ghim vị trí",
+      "en": "Location pin"
+    }
+  },
+  {
+    "key": "route-pin-1",
+    "file": "/art/mockup/map/route-pin-1.png",
+    "webp": "/art/mockup/map/route-pin-1.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1503, 1198, 52, 83],
+    "alt": {
+      "vi": "Ghim chặng 1",
+      "en": "Route pin 1"
+    }
+  },
+  {
+    "key": "route-pin-2",
+    "file": "/art/mockup/map/route-pin-2.png",
+    "webp": "/art/mockup/map/route-pin-2.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1646, 1175, 53, 72],
+    "alt": {
+      "vi": "Ghim chặng 2",
+      "en": "Route pin 2"
+    }
+  },
+  {
+    "key": "route-pin-3",
+    "file": "/art/mockup/map/route-pin-3.png",
+    "webp": "/art/mockup/map/route-pin-3.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1578, 1232, 53, 74],
+    "alt": {
+      "vi": "Ghim chặng 3",
+      "en": "Route pin 3"
+    }
+  },
+  {
+    "key": "route-pin-4",
+    "file": "/art/mockup/map/route-pin-4.png",
+    "webp": "/art/mockup/map/route-pin-4.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1733, 1164, 51, 67],
+    "alt": {
+      "vi": "Ghim chặng 4",
+      "en": "Route pin 4"
+    }
+  },
+  {
+    "key": "route-dot",
+    "file": "/art/mockup/map/route-dot.png",
+    "webp": "/art/mockup/map/route-dot.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [664, 1058, 37, 38],
+    "alt": {
+      "vi": "Điểm lộ trình",
+      "en": "Route dot"
+    }
+  },
+  {
+    "key": "route-dash",
+    "file": "/art/mockup/map/route-dash.png",
+    "webp": "/art/mockup/map/route-dash.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [714, 1051, 165, 48],
+    "alt": {
+      "vi": "Đường lộ trình nét đứt",
+      "en": "Dashed route line"
+    }
+  },
+  {
+    "key": "flag",
+    "file": "/art/mockup/map/flag.png",
+    "webp": "/art/mockup/map/flag.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [902, 1028, 60, 59],
+    "alt": {
+      "vi": "Cờ",
+      "en": "Flag"
+    }
+  },
+  {
+    "key": "checkered-flag",
+    "file": "/art/mockup/map/checkered-flag.png",
+    "webp": "/art/mockup/map/checkered-flag.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1000, 1027, 81, 71],
+    "alt": {
+      "vi": "Cờ đích",
+      "en": "Checkered flag"
+    }
+  },
+  {
+    "key": "compass-rose",
+    "file": "/art/mockup/map/compass-rose.png",
+    "webp": "/art/mockup/map/compass-rose.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1944, 1060, 84, 92],
+    "alt": {
+      "vi": "La bàn",
+      "en": "Compass rose"
+    }
+  },
+  {
+    "key": "compass-gold",
+    "file": "/art/mockup/map/compass-gold.png",
+    "webp": "/art/mockup/map/compass-gold.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [2257, 1553, 120, 128],
+    "alt": {
+      "vi": "La bàn vàng",
+      "en": "Gold compass"
+    }
+  },
+  {
+    "key": "buoy",
+    "file": "/art/mockup/map/buoy.png",
+    "webp": "/art/mockup/map/buoy.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a-large",
+    "box": [1068, 1103, 86, 86],
+    "alt": {
+      "vi": "Phao tiêu",
+      "en": "Buoy"
+    }
+  },
+  {
+    "key": "ship-helm",
+    "file": "/art/mockup/map/ship-helm.png",
+    "webp": "/art/mockup/map/ship-helm.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-a",
+    "box": [566, 657, 51, 47],
+    "alt": {
+      "vi": "Bánh lái tàu",
+      "en": "Ship's helm"
+    }
+  },
+  {
+    "key": "treasure-chest",
+    "file": "/art/mockup/map/treasure-chest.png",
+    "webp": "/art/mockup/map/treasure-chest.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [1798, 1234, 72, 72],
+    "alt": {
+      "vi": "Rương báu",
+      "en": "Treasure chest"
+    }
+  },
+  {
+    "key": "cloud",
+    "file": "/art/mockup/map/cloud.png",
+    "webp": "/art/mockup/map/cloud.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [2075, 1047, 104, 88],
+    "alt": {
+      "vi": "Mây",
+      "en": "Cloud"
+    }
+  },
+  {
+    "key": "arrow",
+    "file": "/art/mockup/map/arrow.png",
+    "webp": "/art/mockup/map/arrow.webp",
+    "width": 256,
+    "height": 256,
+    "source": "sheet-b-large",
+    "box": [2082, 1162, 85, 51],
+    "alt": {
+      "vi": "Mũi tên",
+      "en": "Arrow"
+    }
+  }
+]
