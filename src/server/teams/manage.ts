@@ -1,6 +1,7 @@
 import { parseTeamInput, type TeamErrors } from "@/lib/validation/team";
 import { NotFoundError, requireOrganizer } from "@/server/auth/roles";
 import { db } from "@/server/db";
+import { emitEvent } from "@/server/events/emit";
 import { recordTeamDetailsAudit } from "./team-details";
 
 /**
@@ -46,7 +47,15 @@ export async function createTeam(
   await requireOrganizer(userId, tournamentId, { write: true });
   const parsed = parseTeamInput(input);
   if (!parsed.ok) return parsed;
-  return { ok: true, team: await db.team.create({ data: { ...parsed.data, tournamentId } }) };
+  const team = await db.$transaction(async (tx) => {
+    const created = await tx.team.create({ data: { ...parsed.data, tournamentId } });
+    await emitEvent(tx, {
+      type: "TEAM_CREATED",
+      payload: { tournamentId, teamId: created.id, createdBy: userId },
+    });
+    return created;
+  });
+  return { ok: true, team };
 }
 
 /** Updates the form fields; the limit may not drop below the team's active members. */

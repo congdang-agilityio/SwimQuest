@@ -1,6 +1,7 @@
 import { processSeasonEnd } from "@/server/badges/season-badge";
 import { db } from "@/server/db";
 import { emitEvent } from "@/server/events/emit";
+import { processSeasonStarts, type SeasonStartCounts } from "@/server/jobs/season-start";
 import { sendPendingPushes, type PushRunCounts } from "@/server/push/send";
 import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
@@ -97,6 +98,12 @@ export async function runDueStartAssignments(now: Date): Promise<StartAssignment
   }
   await emitDueStartLocks(now);
   return counts;
+}
+
+/** Emits `SEASON_STARTED` once for every tournament whose season has started (S-86). */
+export async function runDueSeasonStarts(now: Date): Promise<SeasonStartCounts> {
+  assertValidDate(now);
+  return processSeasonStarts(now);
 }
 
 export type WeekSettlementCounts = { weeks: number; failed: number };
