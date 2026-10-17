@@ -12,6 +12,7 @@ import {
   ZaloSettingsError,
   type ZaloSettings,
 } from "@/server/zalo/settings";
+import { setZaloSwitches, ZaloSwitchesPatch } from "@/server/zalo/switches";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,8 @@ function failure(err: unknown) {
         return apiError(502, "ZALO_UNREACHABLE");
       case "TOURNAMENT_CLOSED":
         return apiError(409, "TOURNAMENT_CLOSED");
+      case "NO_BOT":
+        return apiError(404, "NOT_FOUND");
       case "INVALID_KEY":
         return apiError(400, "VALIDATION_FAILED", { key: "This is not a Zalo bot key." });
       case "INVALID_ORIGIN":
@@ -82,6 +85,30 @@ export async function PUT(request: Request, { params }: Ctx) {
   }
   try {
     return view(await saveZaloBotKey(auth.user.id, (await params).id, parsed.data.key, origin));
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+const SwitchesBody = z.object({ switches: ZaloSwitchesPatch }).strict();
+
+/**
+ * PATCH /api/tournaments/:id/zalo `{ switches: { countedSwims: false, … } }`: turns message
+ * kinds on or off for this tournament (S-89); answers with all seven switches.
+ */
+export async function PATCH(request: Request, { params }: Ctx) {
+  if (!isSameOrigin(request)) return apiError(403, "FORBIDDEN_ORIGIN");
+  const auth = await requireApiUser();
+  if (!auth.ok) return auth.response;
+  const json = await readJson(request);
+  if (!json.ok) return apiError(400, "INVALID_BODY");
+  const parsed = SwitchesBody.safeParse(json.body);
+  if (!parsed.success) {
+    return apiError(400, "VALIDATION_FAILED", { switches: "Send at least one known switch." });
+  }
+  try {
+    const switches = await setZaloSwitches(auth.user.id, (await params).id, parsed.data.switches);
+    return NextResponse.json({ switches }, { headers: { "cache-control": "no-store" } });
   } catch (err) {
     return failure(err);
   }
