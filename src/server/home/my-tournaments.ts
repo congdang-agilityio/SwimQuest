@@ -3,6 +3,14 @@ import { routeProgress } from "@/lib/scoring/progress";
 import { effectiveStatus, type TournamentStatus } from "@/lib/tournaments/lifecycle";
 import { getTeamsPoints } from "@/server/scoring/team-points";
 
+/** Split of my tournaments: archived ones go to the history list (newest first order is kept). */
+export function splitTournaments<T extends { effectiveStatus: TournamentStatus }>(list: T[]) {
+  return {
+    active: list.filter((x) => x.effectiveStatus !== "ARCHIVED"),
+    past: list.filter((x) => x.effectiveStatus === "ARCHIVED"),
+  };
+}
+
 export type MyTournament = {
   id: string;
   name: string;
@@ -94,10 +102,10 @@ export async function listMyTournaments(userId: string, now: Date): Promise<MyTo
   );
 }
 
-/** The most recently joined ACTIVE membership, or null (My Team and Voyage until S-69). */
+/** The most recently joined ACTIVE membership in a non-archived tournament, or null (My Team and Voyage until S-69). */
 export async function getCurrentMembership(userId: string) {
   const m = await db.teamMember.findFirst({
-    where: { userId, status: "ACTIVE" },
+    where: { userId, status: "ACTIVE", tournament: { status: { not: "ARCHIVED" } } },
     orderBy: [{ joinedAt: "desc" }, { id: "desc" }],
     include: { team: true, tournament: true },
   });
