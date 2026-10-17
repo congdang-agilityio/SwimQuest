@@ -1,11 +1,16 @@
 import { getTranslations } from "next-intl/server";
+import { ScreenHeader } from "@/components/ui";
 import { UploadForm } from "@/components/swims/upload-form";
+import styles from "@/components/swims/swims.module.css";
 
 export default async function ConnectPage() {
   const t = await getTranslations("swims.connect");
+  const tCommon = await getTranslations("common");
   return (
-    <main>
-      <h1>{t("title")}</h1>
+    <main className={styles.screen}>
+      <div className={styles.headerBand}>
+        <ScreenHeader title={t("title")} backHref="/team" backLabel={tCommon("back")} />
+      </div>
       <UploadForm />
     </main>
   );

@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { EmptyState } from "@/components/states/empty-state";
+import { Button, ButtonLink, Card } from "@/components/ui";
 import { clientFetch } from "@/lib/http/client-fetch";
 import * as f from "@/lib/format/swim";
 import { utcToVnParts } from "@/lib/time/vn";
 import type { MySwimListItem, MySwimsPage } from "@/server/swims/my-swims";
+import styles from "./swims.module.css";
 
 type Props = { initialItems: MySwimListItem[]; initialCursor: string | null };
 
@@ -37,28 +38,61 @@ export function SwimList({ initialItems, initialCursor }: Props) {
   }
 
   if (items.length === 0) {
-    return <EmptyState message={t("empty")} action={{ label: t("add"), href: "/connect" }} />;
+    return (
+      <Card as="section" className={styles.empty}>
+        <h2>{t("empty")}</h2>
+        <ButtonLink href="/connect" variant="primary">
+          {t("add")}
+        </ButtonLink>
+      </Card>
+    );
   }
   return (
     <>
-      <ul>
+      <ul className={styles.list}>
         {items.map((s) => {
           const { date, time } = utcToVnParts(new Date(s.startedAt));
           return (
             <li key={s.id}>
-              <Link href={`/swims/${s.id}`}>
-                {f.formatVnDateTime(date, time)} · {f.formatDistance(s.distanceM, locale)} ·{" "}
-                {f.formatDuration(s.durationS)}
+              <Link href={`/swims/${s.id}`} className={styles.listRow}>
+                <span className={styles.listMain}>
+                  <span className={styles.listDate}>{f.formatVnDateTime(date, time)}</span>
+                  <span className={styles.listDuration}>{f.formatDuration(s.durationS)}</span>
+                </span>
+                <strong className={styles.listDistance}>
+                  {f.formatDistance(s.distanceM, locale)}
+                </strong>
+                <svg
+                  className={styles.chevron}
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M9 5l7 7-7 7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
             </li>
           );
         })}
       </ul>
-      {failed && <p role="alert">{t("error")}</p>}
+      {failed && (
+        <p role="alert" className={styles.listAlert}>
+          {t("error")}
+        </p>
+      )}
       {cursor && (
-        <button type="button" onClick={loadMore} disabled={busy}>
+        <Button variant="secondary" block onClick={loadMore} disabled={busy}>
           {busy ? t("loading") : t("more")}
-        </button>
+        </Button>
       )}
     </>
   );

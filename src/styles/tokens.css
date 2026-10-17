@@ -32,6 +32,7 @@
   --sq-text-on-dark-muted: #b8cfe6;
   --sq-danger: #c62f3a;
   --sq-success: #13896f;
+  --sq-danger-wash: #ffe1e1; /* pale red fill: error cards */
 
   /* Gradients */
   --sq-gradient-primary: linear-gradient(180deg, #22a2f9 0%, #0a94fe 50%, #007ff0 100%);
