@@ -32,8 +32,14 @@ async function targetExists(type: ReportTargetType, id: string): Promise<boolean
  * can read reports (S-72); the caller gets a bare confirmation so nothing about the report,
  * and nothing the reported person could see, ever exposes the reporter (NFR-07).
  */
-export async function createReport(reporterId: string, input: unknown): Promise<CreateReportResult> {
-  const body = (typeof input === "object" && input !== null ? input : {}) as Record<string, unknown>;
+export async function createReport(
+  reporterId: string,
+  input: unknown,
+): Promise<CreateReportResult> {
+  const body = (typeof input === "object" && input !== null ? input : {}) as Record<
+    string,
+    unknown
+  >;
   const errors: Record<string, string> = {};
   const targetType = body.targetType;
   const targetId = body.targetId;
