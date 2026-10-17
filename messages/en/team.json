@@ -7,5 +7,12 @@
   "rosterTitle": "Members",
   "km": "{km} km",
   "level": "Lv {level}",
-  "progressLabel": "Team progress"
+  "progressLabel": "Team progress",
+  "finish": {
+    "title": "Landed at {place}",
+    "congrats": "Congratulations!",
+    "done": "Your team has finished",
+    "voyage": "The {place} voyage",
+    "badgeAlt": "Finished badge: {place}"
+  }
 }

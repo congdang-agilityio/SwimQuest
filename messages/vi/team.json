@@ -7,5 +7,12 @@
   "rosterTitle": "Thành viên",
   "km": "{km} km",
   "level": "Lv {level}",
-  "progressLabel": "Tiến độ của đội"
+  "progressLabel": "Tiến độ của đội",
+  "finish": {
+    "title": "Cập bến {place}",
+    "congrats": "Chúc mừng!",
+    "done": "Đội đã hoàn thành",
+    "voyage": "Hải trình {place}",
+    "badgeAlt": "Huy hiệu Hoàn thành: {place}"
+  }
 }
