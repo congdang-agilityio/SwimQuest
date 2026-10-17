@@ -54,6 +54,7 @@ export type ApiErrorCode =
   | "REQUEST_DECIDED"
   | "INVALID_REASON"
   | "INVALID_STATUS"
+  | "INVALID_ADMIN_CONTACT"
   | "RATE_LIMITED"
   | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
@@ -111,6 +112,7 @@ const messages: Record<ApiErrorCode, string> = {
   REQUEST_DECIDED: "This request has already been decided.",
   INVALID_REASON: "Give a short reason (1 to 500 characters).",
   INVALID_STATUS: "The status filter is not valid.",
+  INVALID_ADMIN_CONTACT: "Enter the contact as plain text of at most 200 characters.",
   RATE_LIMITED: "You have reached the daily limit. Please try again tomorrow.",
   SERVICE_UNAVAILABLE: "This service is not available right now.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again later.",
