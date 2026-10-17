@@ -8,6 +8,7 @@ import {
   runDueWeekSettlements,
   runDueXpWeekSettlements,
   runPendingPushes,
+  runPendingZalo,
 } from "@/server/jobs/tick";
 
 export const dynamic = "force-dynamic";
@@ -36,8 +37,17 @@ export async function POST(request: Request): Promise<NextResponse> {
   const seasonEnds = await runDueSeasonEnds(new Date());
   const xpWeekSettlements = await runDueXpWeekSettlements(new Date());
   const pushes = await runPendingPushes();
+  const zalo = await runPendingZalo(new Date());
   return NextResponse.json(
-    { startAssignments, seasonStarts, weekSettlements, seasonEnds, xpWeekSettlements, pushes },
+    {
+      startAssignments,
+      seasonStarts,
+      weekSettlements,
+      seasonEnds,
+      xpWeekSettlements,
+      pushes,
+      zalo,
+    },
     { headers: { "cache-control": "no-store" } },
   );
 }

@@ -5,6 +5,7 @@ import { processSeasonStarts, type SeasonStartCounts } from "@/server/jobs/seaso
 import { sendPendingPushes, type PushRunCounts } from "@/server/push/send";
 import { endedSeasonWeeks, settleWeek } from "@/server/scoring/settle-week";
 import { assignMissingStarts } from "@/server/starts/auto-assign";
+import { deliverPendingZalo, type ZaloRunCounts } from "@/server/zalo/deliver";
 import { dueXpWeeks, settleXpWeek } from "@/server/xp/settle-xp-week";
 
 export type StartAssignmentCounts = { tournaments: number; assigned: number; failed: number };
@@ -199,4 +200,10 @@ export async function ensureStartsAssigned(tournamentId: string, now: Date): Pro
 /** Retries notifications not pushed yet (e.g. the server stopped before `after()` ran). */
 export async function runPendingPushes(): Promise<PushRunCounts> {
   return sendPendingPushes(500);
+}
+
+/** Delivers queued Zalo messages and retries failed sends (#433); never throws. */
+export async function runPendingZalo(now: Date): Promise<ZaloRunCounts> {
+  assertValidDate(now);
+  return deliverPendingZalo({ limit: 200, now });
 }
