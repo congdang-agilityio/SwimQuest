@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Button, Field } from "@/components/ui";
 import { safeNextPath } from "@/lib/auth/public-paths";
+import { ComingSoonProviders } from "@/components/auth/coming-soon-providers";
 import styles from "../auth.module.css";
 
 /** NFR-10: links are touch targets too, at least 44x44 CSS px. */
@@ -51,6 +52,7 @@ export function SignUpForm({ next }: { next?: string }) {
       <h1 id="signup-title" className={styles.title}>
         {t("signup.title")}
       </h1>
+      <ComingSoonProviders />
       {FIELDS.map(({ name, type, autoComplete }) => {
         const code = errors[name];
         return (
