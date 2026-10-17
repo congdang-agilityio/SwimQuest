@@ -42,7 +42,10 @@ export function registerNotificationHandlers(): void {
 }
 registerNotificationHandlers();
 
-/** Team badges (S-49): Explorer at 50%, Lý Sơn on the finish and its withdrawal. */
+/**
+ * Team badges (S-49): Explorer at 50%, Lý Sơn on the finish, removed on its withdrawal and from
+ * a player moved off the team.
+ */
 export function registerTeamBadgeHandlers(): void {
   for (const [type, fn] of Object.entries(teamBadgeHandlers)) {
     registry.set(type as DomainEventType, [
