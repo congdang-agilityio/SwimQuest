@@ -15,6 +15,27 @@
     "decision": {
       "title": "Lý do của người duyệt",
       "decidedAt": "Quyết định lúc {date}"
+    },
+    "dispute": {
+      "open": "Khiếu nại",
+      "reasonLabel": "Lý do khiếu nại",
+      "count": "{count}/{max} ký tự",
+      "send": "Gửi khiếu nại",
+      "sending": "Đang gửi…",
+      "cancel": "Hủy",
+      "errors": {
+        "network": "Không gửi được. Kiểm tra kết nối rồi thử lại.",
+        "failed": "Không gửi được khiếu nại. Vui lòng thử lại.",
+        "DISPUTE_OPEN": "Kết quả này đã có khiếu nại đang chờ xử lý.",
+        "NOT_DISPUTABLE": "Kết quả này hiện không thể khiếu nại."
+      },
+      "openTitle": "Khiếu nại đang chờ xử lý",
+      "openText": "Kết quả chưa được tính cho đến khi người duyệt quyết định.",
+      "yourReason": "Lý do của bạn: {reason}",
+      "sentAt": "Gửi lúc {date}",
+      "acceptedTitle": "Khiếu nại được chấp nhận",
+      "keptTitle": "Khiếu nại bị từ chối",
+      "decidedAt": "Quyết định lúc {date}"
     }
   }
 }

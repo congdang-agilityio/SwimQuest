@@ -55,6 +55,18 @@ export type MySwimResultDto = Omit<SwimResultDto, "reasons"> & {
   decisionNote: string | null;
   /** UTC instant (ISO 8601) of the decision. */
   decidedAt: string | null;
+  /** The result id the dispute API takes. */
+  resultId: string;
+  /** Rejected, duplicate or rule-missed, with no dispute open. */
+  canDispute: boolean;
+  openDispute: { reason: string; createdAt: string } | null;
+  /** The latest decided dispute; `accepted` false means the reviewer kept the earlier status. */
+  lastDispute: {
+    accepted: boolean;
+    reason: string;
+    note: string | null;
+    decidedAt: string | null;
+  } | null;
 };
 /** `total` is the net of all ledger entries (reversals included); the rest are per kind. */
 export type SwimPointsBreakdown = {
@@ -148,8 +160,19 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
         select: {
           ...swimDtoInclude.results.select,
           pointsEntries: { select: { kind: true, points: true } },
+          id: true,
           decisionNote: true,
           decidedAt: true,
+          disputes: {
+            orderBy: { createdAt: "desc" },
+            select: {
+              status: true,
+              reason: true,
+              decisionNote: true,
+              decidedAt: true,
+              createdAt: true,
+            },
+          },
         },
       },
     },
@@ -159,13 +182,33 @@ export async function getMySwim(userId: string, swimId: string): Promise<MySwimD
   const dto = toOwnerSwimDto(swim);
   return {
     ...dto,
-    results: dto.results.map((r, i) => ({
-      ...r,
-      displayStatus: DISPLAY_STATUS[r.status],
-      reasons: r.reasons.filter(isKnownReason),
-      points: breakdown(swim.results[i].pointsEntries),
-      decisionNote: swim.results[i].decisionNote,
-      decidedAt: swim.results[i].decidedAt?.toISOString() ?? null,
-    })),
+    results: dto.results.map((r, i) => {
+      const row = swim.results[i];
+      const open = row.disputes.find((d) => d.status === "OPEN");
+      const decided = row.disputes.find((d) => d.status !== "OPEN");
+      // The reviewer's reason only applies while the result is rejected or revoked.
+      const showsNote = r.status === "REJECTED" || r.status === "REVOKED";
+      return {
+        ...r,
+        displayStatus: DISPLAY_STATUS[r.status],
+        reasons: r.reasons.filter(isKnownReason),
+        points: breakdown(swim.results[i].pointsEntries),
+        decisionNote: showsNote ? row.decisionNote : null,
+        decidedAt: showsNote ? (row.decidedAt?.toISOString() ?? null) : null,
+        resultId: row.id,
+        canDispute:
+          !open &&
+          (r.status === "REJECTED" || r.status === "DUPLICATE" || r.status === "RULE_MISSED"),
+        openDispute: open ? { reason: open.reason, createdAt: open.createdAt.toISOString() } : null,
+        lastDispute: decided
+          ? {
+              accepted: decided.status === "ACCEPTED",
+              reason: decided.reason,
+              note: decided.decisionNote,
+              decidedAt: decided.decidedAt?.toISOString() ?? null,
+            }
+          : null,
+      };
+    }),
   };
 }
