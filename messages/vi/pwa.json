@@ -1,0 +1,19 @@
+{
+  "install": {
+    "title": "Cài đặt SwimQuest",
+    "subtitle": "Thêm ứng dụng vào màn hình chính để mở nhanh bằng một chạm.",
+    "button": "Cài đặt ứng dụng",
+    "showSteps": "Cách cài đặt",
+    "hideSteps": "Ẩn hướng dẫn",
+    "installedNote": "SwimQuest đã được cài đặt.",
+    "zalo": "Bạn đang mở SwimQuest trong Zalo. Hãy bấm menu ... và chọn Mở bằng trình duyệt trước, rồi làm theo các bước cho điện thoại của bạn.",
+    "iosTitle": "iPhone hoặc iPad (Safari)",
+    "ios1": "Bấm nút Chia sẻ ở cuối màn hình Safari.",
+    "ios2": "Kéo xuống và bấm Thêm vào Màn hình chính.",
+    "ios3": "Bấm Thêm ở góc trên bên phải.",
+    "otherTitle": "Android và trình duyệt khác",
+    "other1": "Mở menu của trình duyệt (ba chấm).",
+    "other2": "Bấm Cài đặt ứng dụng hoặc Thêm vào Màn hình chính.",
+    "other3": "Xác nhận để đặt SwimQuest lên màn hình chính."
+  }
+}

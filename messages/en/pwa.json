@@ -1,0 +1,19 @@
+{
+  "install": {
+    "title": "Install SwimQuest",
+    "subtitle": "Add the app to your home screen for one-tap access.",
+    "button": "Install app",
+    "showSteps": "How to install",
+    "hideSteps": "Hide steps",
+    "installedNote": "SwimQuest is installed.",
+    "zalo": "You opened SwimQuest inside Zalo. Tap the ... menu and choose Open in browser first, then follow the steps for your phone.",
+    "iosTitle": "iPhone or iPad (Safari)",
+    "ios1": "Tap the Share button at the bottom of Safari.",
+    "ios2": "Scroll down and tap Add to Home Screen.",
+    "ios3": "Tap Add in the top right corner.",
+    "otherTitle": "Android and other browsers",
+    "other1": "Open the browser menu (three dots).",
+    "other2": "Tap Install app or Add to Home screen.",
+    "other3": "Confirm to place SwimQuest on your home screen."
+  }
+}
