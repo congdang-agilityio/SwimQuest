@@ -10,7 +10,8 @@
       "COMPLETED": "Đã kết thúc",
       "ARCHIVED": "Đã lưu trữ"
     },
-    "settingsLink": "Luật và cài đặt"
+    "settingsLink": "Luật và cài đặt",
+    "reviewLink": "Hàng chờ duyệt"
   },
   "players": {
     "title": "Người chơi chưa có đội",

@@ -10,7 +10,8 @@
       "COMPLETED": "Completed",
       "ARCHIVED": "Archived"
     },
-    "settingsLink": "Rules and settings"
+    "settingsLink": "Rules and settings",
+    "reviewLink": "Review queue"
   },
   "players": {
     "title": "Players without a team",

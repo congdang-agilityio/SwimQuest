@@ -1,0 +1,48 @@
+{
+  "title": "Hàng chờ duyệt",
+  "intro": "Các lượt bơi bị gắn cờ của giải. Duyệt lượt bơi hợp lệ; từ chối lượt bơi đáng ngờ kèm lý do ngắn mà người chơi sẽ thấy.",
+  "count": "{count, plural, other {# lượt bơi cần duyệt}}",
+  "empty": {
+    "title": "Không có lượt bơi cần duyệt",
+    "body": "Các lượt bơi bị gắn cờ của giải sẽ hiện ở đây."
+  },
+  "item": {
+    "flagged": "Bị gắn cờ",
+    "date": "Ngày",
+    "distance": "Quãng đường",
+    "duration": "Thời gian",
+    "pace": "Tốc độ",
+    "type": "Loại bơi",
+    "failed": "Kiểm tra không đạt",
+    "shape": "Hình dạng lượt bơi",
+    "noShape": "Không có đường bơi"
+  },
+  "reasons": {
+    "PACE_TOO_FAST": "Tốc độ nhanh nhất {limit} mỗi 100 m, lượt này {value}",
+    "PACE_TOO_SLOW": "Tốc độ chậm nhất {limit} mỗi 100 m, lượt này {value}",
+    "DISTANCE_TOO_LONG": "Quãng đường dài nhất {limit}, lượt này {value}",
+    "OUTSIDE_SEASON": "Mùa giải {start} đến {end}, lượt này bắt đầu {value}",
+    "NO_DISTANCE": "Không có quãng đường hợp lệ, lượt này {value}",
+    "NOT_A_SWIM": "Không phải hoạt động bơi, tệp này: {value}",
+    "UNKNOWN": "Kiểm tra không đạt: {code}"
+  },
+  "decision": {
+    "approve": "Duyệt",
+    "approveFor": "Duyệt lượt bơi của {name}",
+    "reject": "Từ chối",
+    "rejectFor": "Từ chối lượt bơi của {name}",
+    "reason": "Lý do gửi người chơi",
+    "reasonHint": "Người chơi sẽ thấy lý do này. Tối đa 300 ký tự.",
+    "reasonRequired": "Nhập lý do để từ chối lượt bơi này.",
+    "confirmReject": "Từ chối lượt bơi",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "approved": "Đã duyệt. Đang cập nhật hàng chờ...",
+    "rejected": "Đã từ chối. Đang cập nhật hàng chờ...",
+    "errors": {
+      "already": "Lượt bơi này đã được quyết định. Đang cập nhật hàng chờ...",
+      "failed": "Không lưu được quyết định. Thử lại.",
+      "network": "Không có kết nối. Thử lại."
+    }
+  }
+}
