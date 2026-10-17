@@ -1,0 +1,42 @@
+/* Tournament quota card on the Tournaments tab. Every value comes from src/styles/tokens.css. */
+
+.card {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+  scroll-margin-top: var(--sq-space-8);
+}
+
+.title {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-black);
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-2);
+  margin: 0;
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+
+.quote {
+  flex-basis: 100%;
+  color: var(--sq-navy-800);
+  font-style: italic;
+}
+
+.form {
+  display: grid;
+  gap: var(--sq-space-3);
+}
+
+.text {
+  margin: 0;
+  color: var(--sq-navy-800);
+  font-size: var(--sq-text-sm);
+}

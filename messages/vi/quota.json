@@ -1,0 +1,19 @@
+{
+  "title": "Số giải đấu bạn được tạo",
+  "used": "Đã dùng {used}/{allowed}",
+  "requestMore": "Xin thêm lượt",
+  "limitText": "Bạn đã dùng hết lượt tạo giải đấu. Hãy cho quản trị viên biết vì sao bạn cần thêm một giải.",
+  "reasonLabel": "Lý do",
+  "reasonHint": "Tối đa {max} ký tự.",
+  "send": "Gửi yêu cầu",
+  "pending": "Đang chờ duyệt",
+  "pendingText": "Quản trị viên sẽ xem xét yêu cầu của bạn.",
+  "approved": "Đã được duyệt",
+  "approvedText": "Bạn có thể tạo thêm một giải đấu.",
+  "rejected": "Bị từ chối",
+  "rejectedReason": "Lý do: {reason}",
+  "errors": {
+    "INVALID_REASON": "Hãy nhập lý do, tối đa 500 ký tự.",
+    "generic": "Không gửi được yêu cầu. Hãy thử lại."
+  }
+}
