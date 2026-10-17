@@ -48,5 +48,18 @@
       "notMember": "Bạn không còn là thành viên của đội này.",
       "failed": "Có lỗi xảy ra. Vui lòng thử lại."
     }
+  },
+  "handover": {
+    "make": "Chọn làm đội trưởng",
+    "makeFor": "Chọn {name} làm đội trưởng",
+    "title": "Chọn {name} làm đội trưởng?",
+    "body": "{name} sẽ có công cụ của đội trưởng và bạn sẽ không còn. Chỉ đội trưởng mới có thể trao lại.",
+    "confirm": "Đồng ý",
+    "cancel": "Hủy",
+    "error": {
+      "forbidden": "Chỉ đội trưởng mới làm được việc này.",
+      "notMember": "Người chơi này không còn là thành viên đang hoạt động của đội.",
+      "failed": "Có lỗi xảy ra. Vui lòng thử lại."
+    }
   }
 }

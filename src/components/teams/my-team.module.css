@@ -294,3 +294,11 @@
   padding: 0 var(--sq-space-4) var(--sq-space-5);
   background: var(--sq-white);
 }
+
+/* Per-member "Make captain" action, on its own line under the member */
+.handover {
+  grid-column: 2 / -1;
+}
+.handover > p {
+  margin: var(--sq-space-2) 0 0;
+}
