@@ -1,0 +1,194 @@
+/*
+ * Organizer team setup: team list rows and the team form ("Tạo đội" phone screen of the mockup).
+ * Every value comes from src/styles/tokens.css.
+ */
+
+/* Team list */
+.manage {
+  overflow: hidden;
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-foam);
+  box-shadow: var(--sq-shadow-card);
+}
+.manageBody {
+  display: grid;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-4);
+}
+.capacity,
+.empty {
+  margin: 0;
+}
+.empty {
+  color: var(--sq-text-muted);
+  font-size: var(--sq-text-sm);
+}
+
+.rows {
+  display: grid;
+  gap: var(--sq-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One team as a card row */
+.row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-3) var(--sq-space-4);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-lg);
+  background: var(--sq-white);
+  box-shadow: var(--sq-shadow-card);
+}
+.rowInfo {
+  display: grid;
+  gap: var(--sq-space-1);
+  min-width: 0;
+}
+.rowName {
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-md);
+}
+.rowName a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--sq-tap);
+  color: var(--sq-text);
+  text-decoration: none;
+}
+.rowName a:hover {
+  color: var(--sq-blue-600);
+  text-decoration: underline;
+}
+.rowMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-space-1) var(--sq-space-2);
+  font-size: var(--sq-text-xs);
+  color: var(--sq-text-muted);
+}
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sq-space-2);
+}
+.confirm {
+  display: grid;
+  gap: var(--sq-space-2);
+  grid-column: 1 / -1;
+  padding: var(--sq-space-3);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-danger-wash);
+  color: var(--sq-danger);
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+}
+.confirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+}
+
+@media (max-width: 479px) {
+  .row {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+  .rowActions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+  .rowActions > * {
+    flex: 1;
+  }
+}
+
+/* Team form */
+.form {
+  display: grid;
+  gap: var(--sq-space-4);
+}
+.formTitle {
+  margin: 0;
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+}
+
+.form .emblems {
+  display: grid;
+  gap: var(--sq-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.form .legend {
+  margin-bottom: var(--sq-space-2);
+  padding: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-semibold);
+  color: var(--sq-text);
+}
+
+/* "Logo đội" tile grid: 80 px tiles, the chosen one on navy with a glow. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  gap: var(--sq-space-3);
+}
+.tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-sky-50);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+.tile:hover {
+  border-color: var(--sq-blue-400);
+}
+.tile:has(.tileRadio:checked) {
+  border-color: var(--sq-navy-600);
+  background: var(--sq-navy-700);
+  box-shadow: var(--sq-shadow-glow);
+}
+.tile:has(.tileRadio:focus-visible) {
+  box-shadow: var(--sq-focus-ring);
+}
+/* The native radio stays focusable and clickable, covering the tile without being seen. */
+.tileRadio {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.tile img,
+.tile svg {
+  pointer-events: none;
+}
+
+.error {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  font-weight: var(--sq-weight-medium);
+  color: var(--sq-danger);
+}
+
+.actions {
+  display: grid;
+  gap: var(--sq-space-2);
+}

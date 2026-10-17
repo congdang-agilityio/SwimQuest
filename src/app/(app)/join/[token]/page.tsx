@@ -1,7 +1,10 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
+import { MockupPicture } from "@/components/art/mockup-picture";
 import { TeamPicker } from "@/components/join/team-picker";
+import styles from "@/components/join/join.module.css";
 import { TournamentSummary } from "@/components/tournaments/tournament-summary";
+import { Card, ScreenHeader } from "@/components/ui";
 import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { requireUser } from "@/server/auth/current-user";
 import { getJoinView } from "@/server/join/join-view";
@@ -20,13 +23,22 @@ export default async function JoinPage({
   const user = await requireUser(
     (await headers()).get(NEXT_PATH_HEADER) ?? `/join/${encodeURIComponent(token)}`,
   );
-  const [t, view] = await Promise.all([getTranslations("join"), getJoinView(user.id, token)]);
+  const [t, tCommon, view] = await Promise.all([
+    getTranslations("join"),
+    getTranslations("common"),
+    getJoinView(user.id, token),
+  ]);
 
   if (!view) {
     return (
-      <main>
-        <h1>{t("invalidTitle")}</h1>
-        <p>{t("invalidBody")}</p>
+      <main className={styles.screen}>
+        <div className={styles.headerBand}>
+          <ScreenHeader title={t("invalidTitle")} backHref="/" backLabel={tCommon("back")} />
+        </div>
+        <Card className={styles.notice}>
+          <MockupPicture artKey="message-bottle" alt="" className={styles.noticeArt} />
+          <p>{t("invalidBody")}</p>
+        </Card>
       </main>
     );
   }
@@ -39,16 +51,12 @@ export default async function JoinPage({
   }));
   // Only a team of this tournament can be preselected; anything else is ignored.
   const preselectedId = freeTeams.find((x) => x.id === requestedTeam)?.id ?? null;
+  const closed = !joiningOpen && !myTeam;
   return (
-    <main>
-      <h1>{t("title")}</h1>
-      {!joiningOpen && !myTeam ? (
-        <p role="status">
-          <strong>{t("closedTitle")}.</strong> {t("closedBody")}
-        </p>
-      ) : (
-        <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} preselectedId={preselectedId} />
-      )}
+    <main className={styles.screen}>
+      <div className={styles.headerBand}>
+        <ScreenHeader title={t("title")} backHref="/" backLabel={tCommon("back")} />
+      </div>
       <TournamentSummary
         name={tournament.name}
         description={tournament.description}
@@ -57,12 +65,24 @@ export default async function JoinPage({
         routeId={tournament.routeId}
         routeDistanceM={tournament.routeDistanceM}
         teams={freeTeams}
+        // The picker below lists the same teams with their places; show them once.
+        hideTeams={!closed}
       />
+      {closed ? (
+        <Card role="status" className={styles.notice}>
+          <MockupPicture artKey="buoy" alt="" className={styles.noticeArt} />
+          <p>
+            <strong>{t("closedTitle")}.</strong> {t("closedBody")}
+          </p>
+        </Card>
+      ) : (
+        <TeamPicker token={token} teams={freeTeams} myTeam={myTeam} preselectedId={preselectedId} />
+      )}
       {tournament.eligibilityNotes && (
-        <section>
+        <Card as="section" className={styles.eligibility}>
           <h3>{t("eligibility")}</h3>
           <p>{tournament.eligibilityNotes}</p>
-        </section>
+        </Card>
       )}
     </main>
   );

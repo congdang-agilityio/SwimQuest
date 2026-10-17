@@ -1,0 +1,78 @@
+/* Tournament summary card (join page and organizer preview). Every value comes from tokens.css. */
+
+.summary {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  height: 176px;
+  overflow: hidden;
+}
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sceneFallback {
+  height: 100%;
+  background: var(--sq-gradient-sea);
+}
+
+.body {
+  display: grid;
+  gap: var(--sq-space-1);
+  padding: var(--sq-space-4);
+}
+
+.name {
+  margin: 0 0 var(--sq-space-1);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-text);
+}
+
+.description {
+  margin: 0 0 var(--sq-space-2);
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text);
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+
+.teamsTitle {
+  margin: var(--sq-space-3) 0 var(--sq-space-1);
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-semibold);
+}
+
+.teams {
+  display: grid;
+  gap: var(--sq-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sq-space-3);
+  padding: var(--sq-space-2) var(--sq-space-3);
+  border: 1px solid var(--sq-sky-100);
+  border-radius: var(--sq-radius-md);
+  background: var(--sq-white);
+}
+
+.teamName {
+  overflow-wrap: anywhere;
+  font-size: var(--sq-text-sm);
+}
