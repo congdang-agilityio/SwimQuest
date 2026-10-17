@@ -227,5 +227,31 @@
       "network": "Could not reach the server. Check your connection and try again.",
       "failed": "Could not save the decision. Please try again."
     }
+  },
+  "startCorrection": {
+    "title": "Exceptional correction",
+    "help": "The start is locked. As a platform admin you can still change it as an exceptional correction; the change is recorded with your reason.",
+    "open": "Correct the start",
+    "startLabel": "New start",
+    "reason": "Reason",
+    "reasonHint": "Recorded in the audit trail with the old and new start. Up to 300 characters.",
+    "reasonRequired": "Enter a reason for the correction.",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "back": "Back",
+    "confirmTitle": "Confirm the correction",
+    "confirmBody": "Change this team's start from {from} to {to}? The change is recorded with your reason.",
+    "confirmYes": "Yes, change it",
+    "saving": "Saving...",
+    "done": "The start was changed to {name}. The change is recorded.",
+    "errors": {
+      "sameStart": "This is already the team's start. Pick another start.",
+      "START_NOT_LOCKED": "The start is not locked yet. Change it with the organizer's start choice instead.",
+      "ARCHIVED": "This tournament is archived and can no longer change.",
+      "INVALID_START": "This start is not on the route. Pick another start.",
+      "forbidden": "Only a platform admin can make this correction.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "failed": "Could not change the start. Please try again."
+    }
   }
 }

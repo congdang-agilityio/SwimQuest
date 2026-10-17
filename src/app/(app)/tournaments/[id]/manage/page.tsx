@@ -16,13 +16,16 @@ import { NEXT_PATH_HEADER } from "@/lib/auth/public-paths";
 import { getRoute } from "@/lib/routes";
 import { isStartLocked, startLockAt } from "@/lib/tournaments/lifecycle";
 import { requireUser } from "@/server/auth/current-user";
-import { ForbiddenError, NotFoundError, requireOrganizer } from "@/server/auth/roles";
+import { ForbiddenError, NotFoundError, requireOrganizerOrAdmin } from "@/server/auth/roles";
 import { pageOrigin } from "@/server/http/request";
 import { getConsoleOverview } from "@/server/organizer/console";
 import { getConsoleTeams } from "@/server/organizer/participation";
 import { listTeamsWithCounts } from "@/server/teams/manage";
 
-/** Organizer page: only the organizer sees it; anyone else gets the not-found page (S-04 AC 5). */
+/**
+ * Organizer page: only the organizer (or a platform admin, S-72) sees it; anyone else gets the
+ * not-found page (S-04 AC 5).
+ */
 export default async function ManageTournamentPage({
   params,
 }: {
@@ -30,16 +33,18 @@ export default async function ManageTournamentPage({
 }) {
   const { id } = await params;
   const user = await requireUser((await headers()).get(NEXT_PATH_HEADER) ?? "/tournaments");
-  const tournament = await requireOrganizer(user.id, id).catch((err: unknown) => {
+  const tournament = await requireOrganizerOrAdmin(user, id).catch((err: unknown) => {
     if (err instanceof ForbiddenError || err instanceof NotFoundError) notFound();
     throw err;
   });
   const now = new Date();
+  // The console reads are organizer-scoped; an admin reads them as the tournament's organizer.
+  const organizerId = tournament.organizerId;
   // Assigns starts due at the lock first, so the team list below shows them.
-  const overview = await getConsoleOverview(user.id, tournament.id, now);
+  const overview = await getConsoleOverview(organizerId, tournament.id, now);
   const [{ teams, capacity }, consoleTeams] = await Promise.all([
     listTeamsWithCounts(tournament.id),
-    getConsoleTeams(user.id, tournament.id, now),
+    getConsoleTeams(organizerId, tournament.id, now),
   ]);
   const unassigned = tournament.status === "DRAFT" ? [] : consoleTeams.unassignedPlayers;
   const destinations = getRoute(tournament.routeId)?.destinations ?? [];

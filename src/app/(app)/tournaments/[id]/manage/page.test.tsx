@@ -35,6 +35,7 @@ vi.mock("@/server/auth/roles", () => ({
   ForbiddenError: class extends Error {},
   NotFoundError: class extends Error {},
   requireOrganizer: async () => state.tournament,
+  requireOrganizerOrAdmin: async () => state.tournament,
 }));
 vi.mock("@/server/organizer/console", async () => {
   const { effectiveStatus } = await import("@/lib/tournaments/lifecycle");
