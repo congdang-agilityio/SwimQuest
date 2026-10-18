@@ -24,10 +24,8 @@
 }
 .brandBlock {
   position: relative;
-  margin-top: calc(-1 * var(--sq-space-10));
   text-align: center;
 }
-.welcome,
 .brand,
 .language {
   display: flex;
@@ -36,10 +34,6 @@
 }
 .tagline {
   margin: 0;
-}
-.welcome {
-  font-size: var(--sq-text-lg);
-  font-weight: var(--sq-weight-semibold);
 }
 .brand {
   font-size: var(--sq-text-display);

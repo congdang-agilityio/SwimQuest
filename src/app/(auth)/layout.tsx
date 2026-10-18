@@ -2,13 +2,12 @@ import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitch } from "@/components/i18n/language-switch";
 import { MockupPicture } from "@/components/art/mockup-picture";
-import { OceanHero } from "@/components/art/ocean-hero";
 import styles from "./auth.module.css";
 
 /**
- * Welcome screen shared by login and sign-up, after the mockup's first phone screen: the sea
- * hero, the SwimQuest logo (cut art, alt = app name) with the tagline, then the form on the
- * deep-blue page.
+ * Welcome screen shared by login and sign-up: the SwimQuest logo (cut art, alt = app name) with
+ * the tagline, then the form on the deep-blue page. The stakeholder removed the sea hero and the
+ * "Chào mừng đến với" line on 2026-10-18.
  * The brand is not a heading: each page's own h1 ("Đăng nhập", "Tạo tài khoản") names it.
  */
 export default async function AuthLayout({ children }: { children: ReactNode }) {
@@ -19,9 +18,7 @@ export default async function AuthLayout({ children }: { children: ReactNode }) 
         <div className={styles.language}>
           <LanguageSwitch tone="dark" />
         </div>
-        <OceanHero />
         <div className={styles.brandBlock}>
-          <p className={styles.welcome}>{t("hero.welcome")}</p>
           <p className={styles.brand}>
             <MockupPicture
               artKey="brand/logo"
