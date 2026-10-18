@@ -206,5 +206,31 @@
       "vi": "Mũi tên",
       "en": "Arrow"
     }
+  },
+  {
+    "key": "map/route01-landscape",
+    "file": "/art/mockup/map/route01-landscape.png",
+    "webp": "/art/mockup/map/route01-landscape.webp",
+    "width": 1920,
+    "height": 819,
+    "source": "stakeholder-2026-10-18",
+    "box": [0, 0, 1920, 819],
+    "alt": {
+      "vi": "Bản đồ hải trình Route 01 (ngang)",
+      "en": "Route 01 voyage map (landscape)"
+    }
+  },
+  {
+    "key": "map/route01-portrait",
+    "file": "/art/mockup/map/route01-portrait.png",
+    "webp": "/art/mockup/map/route01-portrait.webp",
+    "width": 941,
+    "height": 1672,
+    "source": "stakeholder-2026-10-18",
+    "box": [0, 0, 941, 1672],
+    "alt": {
+      "vi": "Bản đồ hải trình Route 01 (dọc)",
+      "en": "Route 01 voyage map (portrait)"
+    }
   }
 ]

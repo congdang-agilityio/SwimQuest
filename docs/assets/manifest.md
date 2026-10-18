@@ -11,7 +11,7 @@ replace it, see [replacement-list.md](replacement-list.md).
 
 Regenerate with `node scripts/art/generate-asset-manifest.mjs`.
 
-Files: 346. Total bytes: 15937285. Warnings: 0.
+Files: 349. Total bytes: 23097208. Warnings: 0.
 
 ## Warnings
 
@@ -121,8 +121,8 @@ None.
 | `decor/sea-turtle` | `public/art/mockup/decor/sea-turtle.webp` | 13804 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `decor/seaweed` | `public/art/mockup/decor/seaweed.png` | 61357 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `decor/seaweed` | `public/art/mockup/decor/seaweed.webp` | 21758 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
-| `decor/starfish` | `public/art/mockup/decor/starfish.png` | 49543 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | voyage |
-| `decor/starfish` | `public/art/mockup/decor/starfish.webp` | 15206 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | voyage |
+| `decor/starfish` | `public/art/mockup/decor/starfish.png` | 49543 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | collectibles, voyage |
+| `decor/starfish` | `public/art/mockup/decor/starfish.webp` | 15206 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | collectibles, voyage |
 
 ## effects
 
@@ -130,12 +130,12 @@ None.
 |---|---|---|---|---|---|---|---|---|---|
 | `effects/bubble` | `public/art/mockup/effects/bubble.png` | 44072 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | voyage |
 | `effects/bubble` | `public/art/mockup/effects/bubble.webp` | 25870 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | voyage |
-| `effects/completion-burst` | `public/art/mockup/effects/completion-burst.png` | 42040 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | finish |
-| `effects/completion-burst` | `public/art/mockup/effects/completion-burst.webp` | 16892 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | finish |
+| `effects/completion-burst` | `public/art/mockup/effects/completion-burst.png` | 42040 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles, finish |
+| `effects/completion-burst` | `public/art/mockup/effects/completion-burst.webp` | 16892 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles, finish |
 | `effects/foam-burst` | `public/art/mockup/effects/foam-burst.png` | 50400 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
 | `effects/foam-burst` | `public/art/mockup/effects/foam-burst.webp` | 24336 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
-| `effects/glow` | `public/art/mockup/effects/glow.png` | 56783 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | finish, voyage |
-| `effects/glow` | `public/art/mockup/effects/glow.webp` | 16696 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | finish, voyage |
+| `effects/glow` | `public/art/mockup/effects/glow.png` | 56783 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | collectibles, finish, voyage |
+| `effects/glow` | `public/art/mockup/effects/glow.webp` | 16696 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | collectibles, finish, voyage |
 | `effects/splash-burst` | `public/art/mockup/effects/splash-burst.png` | 54051 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `effects/splash-burst` | `public/art/mockup/effects/splash-burst.webp` | 31242 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `effects/splash-medium` | `public/art/mockup/effects/splash-medium.png` | 33543 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
@@ -159,8 +159,8 @@ None.
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
 |---|---|---|---|---|---|---|---|---|---|
-| `items/coin` | `public/art/mockup/items/coin.png` | 71311 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
-| `items/coin` | `public/art/mockup/items/coin.webp` | 13774 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
+| `items/coin` | `public/art/mockup/items/coin.png` | 71311 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
+| `items/coin` | `public/art/mockup/items/coin.webp` | 13774 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
 | `items/energy-drink` | `public/art/mockup/items/energy-drink.png` | 52670 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `items/energy-drink` | `public/art/mockup/items/energy-drink.webp` | 13406 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `items/fins` | `public/art/mockup/items/fins.png` | 49627 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
@@ -169,10 +169,10 @@ None.
 | `items/goggles` | `public/art/mockup/items/goggles.webp` | 12474 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | safety, swims |
 | `items/med-kit` | `public/art/mockup/items/med-kit.png` | 60721 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `items/med-kit` | `public/art/mockup/items/med-kit.webp` | 13808 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
-| `items/message-bottle` | `public/art/mockup/items/message-bottle.png` | 52339 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | join, notifications, profile, states, team, voyage |
-| `items/message-bottle` | `public/art/mockup/items/message-bottle.webp` | 11786 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | join, notifications, profile, states, team, voyage |
-| `items/pearl` | `public/art/mockup/items/pearl.png` | 72730 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
-| `items/pearl` | `public/art/mockup/items/pearl.webp` | 14948 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
+| `items/message-bottle` | `public/art/mockup/items/message-bottle.png` | 52339 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | join, notifications, profile, states, team, voyage, zalo |
+| `items/message-bottle` | `public/art/mockup/items/message-bottle.webp` | 11786 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | join, notifications, profile, states, team, voyage, zalo |
+| `items/pearl` | `public/art/mockup/items/pearl.png` | 72730 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
+| `items/pearl` | `public/art/mockup/items/pearl.webp` | 14948 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
 | `items/rescue-buoy` | `public/art/mockup/items/rescue-buoy.png` | 45595 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | offline, safety |
 | `items/rescue-buoy` | `public/art/mockup/items/rescue-buoy.webp` | 10386 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | offline, safety |
 | `items/seashell` | `public/art/mockup/items/seashell.png` | 67955 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | emblems, profile-avatar |
@@ -181,10 +181,10 @@ None.
 | `items/star` | `public/art/mockup/items/star.webp` | 12996 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | emblems, profile-avatar |
 | `items/swim-cap` | `public/art/mockup/items/swim-cap.png` | 58390 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
 | `items/swim-cap` | `public/art/mockup/items/swim-cap.webp` | 12378 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A large) | not used yet |
-| `items/treasure-chest` | `public/art/mockup/items/treasure-chest.png` | 67245 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
-| `items/treasure-chest` | `public/art/mockup/items/treasure-chest.webp` | 13626 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
-| `items/treasure-map` | `public/art/mockup/items/treasure-map.png` | 62782 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | safety, states |
-| `items/treasure-map` | `public/art/mockup/items/treasure-map.webp` | 13350 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | safety, states |
+| `items/treasure-chest` | `public/art/mockup/items/treasure-chest.png` | 67245 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
+| `items/treasure-chest` | `public/art/mockup/items/treasure-chest.webp` | 13626 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles |
+| `items/treasure-map` | `public/art/mockup/items/treasure-map.png` | 62782 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles, safety, states |
+| `items/treasure-map` | `public/art/mockup/items/treasure-map.webp` | 13350 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | collectibles, safety, states |
 
 ## landmarks
 
@@ -237,6 +237,10 @@ None.
 | `map/route-pin-3` | `public/art/mockup/map/route-pin-3.webp` | 9376 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
 | `map/route-pin-4` | `public/art/mockup/map/route-pin-4.png` | 47381 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
 | `map/route-pin-4` | `public/art/mockup/map/route-pin-4.webp` | 10038 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
+| `map/route01-landscape` | `public/art/mockup/map/route01-landscape.png` | 3011545 | PNG | 1920x819 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (2026-10-18) | map-layout |
+| `map/route01-landscape` | `public/art/mockup/map/route01-landscape.webp` | 514318 | WebP | 1920x819 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (2026-10-18) | map-layout |
+| `map/route01-portrait` | `public/art/mockup/map/route01-portrait.png` | 3224240 | PNG | 941x1672 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (2026-10-18) | map-layout |
+| `map/route01-portrait` | `public/art/mockup/map/route01-portrait.webp` | 583968 | WebP | 941x1672 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (2026-10-18) | map-layout |
 | `map/ship-helm` | `public/art/mockup/map/ship-helm.png` | 70206 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | not used yet |
 | `map/ship-helm` | `public/art/mockup/map/ship-helm.webp` | 16652 | WebP | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet A) | not used yet |
 | `map/treasure-chest` | `public/art/mockup/map/treasure-chest.png` | 68079 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (sheet B large) | not used yet |
@@ -409,12 +413,6 @@ None.
 | `screen-team/member-5` | `public/art/mockup/screen-team/member-5.png` | 7574 | PNG | 56x56 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
 | `screen-team/team-emblem-swirl` | `public/art/mockup/screen-team/team-emblem-swirl.png` | 18919 | PNG | 96x96 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
 
-## screen-voyage
-
-| Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
-|---|---|---|---|---|---|---|---|---|---|
-| `screen-voyage/map-route01` | `public/art/mockup/screen-voyage/map-route01.webp` | 174148 | WebP | 1348x524 | no | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | voyage |
-
 ## ships
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
@@ -455,7 +453,7 @@ None.
 | `landmark-non_nuoc` | `public/art/route01/landmarks/non_nuoc.svg` | 324 | SVG | 128x128 | yes | 1 | centre (0.5, 0.5) | stand-in (hand-drawn vector) | not used yet |
 | `landmark-pham_van_dong` | `public/art/route01/landmarks/pham_van_dong.svg` | 339 | SVG | 128x128 | yes | 1 | centre (0.5, 0.5) | stand-in (hand-drawn vector) | not used yet |
 | `landmark-son_thuy` | `public/art/route01/landmarks/son_thuy.svg` | 476 | SVG | 128x128 | yes | 1 | centre (0.5, 0.5) | stand-in (hand-drawn vector) | not used yet |
-| `map` | `public/art/route01/map.svg` | 1684 | SVG | 1600x1000 | yes | 1 | centre (0.5, 0.5) | stand-in (hand-drawn vector) | route01-art, safety |
+| `map` | `public/art/route01/map.svg` | 1684 | SVG | 1600x1000 | yes | 1 | centre (0.5, 0.5) | stand-in (hand-drawn vector) | asset-status, route01-art, safety |
 
 ## art/ships
 

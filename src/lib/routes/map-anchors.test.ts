@@ -28,8 +28,12 @@ describe("route01 map anchors", () => {
     }
   });
 
-  it("documents the aspect ratio", () => {
-    expect(anchors.aspectRatio).toBe("18:7");
+  it("documents the aspect ratio of each map variant", () => {
+    expect(anchors.aspectRatio).toBe("1920:819");
+    expect(anchors.portrait.aspectRatio).toBe("941:1672");
+    expect(Object.keys(anchors.portrait.anchors).sort()).toEqual(
+      Object.keys(anchors.anchors).sort(),
+    );
   });
 
   it("ships a small map without text", () => {

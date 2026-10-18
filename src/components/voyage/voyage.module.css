@@ -130,17 +130,15 @@
   box-shadow: var(--sq-shadow-raised);
 }
 
-.mapScroll {
+.mapBox {
   grid-area: map;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
 }
 
-/* Wide enough on a phone for the names to stay readable; the scroller shows the rest. */
+/* The whole map fits the width at every viewport: wide art from 768 px, tall art on phones. */
 .map {
-  min-width: 720px;
-  /* Pins and pills scale with the map (cqw), so they stay on the painted ones at every width. */
+  /* Pins and pills scale with the map (cqw), so they stay on the painted islands at every width. */
   container-type: inline-size;
+  --pin: max(22px, 2.6cqw);
 }
 
 .background {
@@ -157,12 +155,14 @@
   background: var(--sq-gradient-sea);
 }
 
+/* In open water below the islands, clear of the route and the names. */
 .compass {
   position: absolute;
-  left: 1%;
-  top: 2.5%;
-  width: 10%;
+  left: 41%;
+  top: 66%;
+  width: 7%;
   height: auto;
+  opacity: 0.9;
 }
 
 .path {
@@ -174,28 +174,34 @@
 
 .path polyline {
   stroke: var(--sq-foam);
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* Landmark island (G1, 4:3) centred a little below the pin, like the islands under the
-   mockup's pins. */
-.landmark {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 9cqw;
-  max-width: none;
-  height: auto;
-  transform: translate(-50%, -38%);
-  filter: var(--sq-shadow-drop);
+.pathPortrait {
+  display: none;
 }
 
 /* Zero-size anchor: the numbered pin is centred on the anchor, the name pill sits beside it. */
 .destination {
-  --pin: max(22px, 3.7cqw);
+  --gap-pin: calc(var(--pin) / 2 + 3px);
+  --gap-r: var(--gap-pin);
+  --gap-l: var(--gap-pin);
+  --gap-u: var(--gap-pin);
+  --gap-d: var(--gap-pin);
   position: absolute;
   width: 0;
   height: 0;
+}
+
+/* The team's ship sits on this destination (ship box 11cqw wide, 3:4, swimmer trailing left): the
+   name keeps clear of it. */
+@media (min-width: 1024px) {
+  .destination[data-ship-l] {
+    --gap-r: calc(5.5cqw + 3px);
+    --gap-l: calc(11.5cqw + 3px);
+    --gap-u: calc(4.2cqw + 3px);
+    --gap-d: calc(4.6cqw + 3px);
+  }
 }
 
 .pin {
@@ -218,39 +224,25 @@
   transform: translate(-50%, -50%);
 }
 
-.nameRight,
-.nameAbove {
+/* Name pill on the side the anchor file picks (map-anchors.json "labels"): --?ax/--?ay is the
+   pill's own anchor point in percent of its size, --?ox/--?oy its offset from the pin centre in
+   pin gaps. The l* set is the wide map's, the p* set the phone map's. */
+.label {
   position: absolute;
+  left: 0;
   top: 0;
   z-index: 1;
   display: grid;
-  align-content: center;
-  /* Size and place of the pills painted on the mockup map (162 x 75 at 1348 px wide). */
-  min-width: 12cqw;
-  min-height: 6.8cqw;
-  padding: 0.4cqw 1cqw;
+  padding: 0.3cqw 0.8cqw;
   border: 1px solid var(--sq-navy-600);
-  border-radius: 1.1cqw;
-  /* Opaque, so it fully covers the pill painted in the map art underneath. */
+  border-radius: 0.9cqw;
   background: var(--sq-navy-800);
   color: var(--sq-white);
-  font-size: max(10px, 1.45cqw);
+  font-size: max(10px, 1.2cqw);
   line-height: 1.25;
   white-space: nowrap;
   box-shadow: var(--sq-shadow-card);
-}
-
-.nameRight {
-  top: -1.4cqw;
-  /* Clear of the pin, over the pill painted beside it. */
-  left: calc(var(--pin) / 2 + 2px);
-}
-
-/* Near the right edge (Lý Sơn) the pill sits above the pin, over open sea. */
-.nameAbove {
-  top: auto;
-  right: calc(var(--pin) / -2);
-  bottom: calc(var(--pin) / 2 + 4px);
+  transform: translate(calc(var(--lax) * -1% + var(--ldx)), calc(var(--lay) * -1% + var(--ldy)));
 }
 
 .name {
@@ -261,10 +253,8 @@
   color: var(--sq-text-on-dark-muted);
 }
 
-.destination[data-start] .nameRight,
-.destination[data-start] .nameAbove,
-.destination[data-finish] .nameRight,
-.destination[data-finish] .nameAbove {
+.destination[data-start] .label,
+.destination[data-finish] .label {
   border-color: var(--sq-gold);
 }
 
@@ -367,6 +357,54 @@
   font-size: var(--sq-text-xs);
 }
 
+/* Phones and portrait tablets (below 1024 px): the tall map art, its own anchors (custom properties set inline by RouteMap) and pins
+   and names sized to the narrow map. Inline left/top are the wide map's, hence !important. */
+@media (max-width: 1023px) {
+  .map {
+    aspect-ratio: var(--ratio-p) !important;
+    --pin: max(22px, 6.6cqw);
+  }
+
+  .destination,
+  .shipMarker {
+    left: var(--px) !important;
+    top: var(--py) !important;
+  }
+
+  /* Same on the tall map, where the ship box is 21cqw wide. */
+  .destination[data-ship-p] {
+    --gap-r: calc(10.5cqw + 3px);
+    --gap-l: calc(22cqw + 3px);
+    --gap-u: calc(8cqw + 3px);
+    --gap-d: calc(8.8cqw + 3px);
+  }
+
+  .shipMarker {
+    width: 21% !important;
+  }
+
+  .pathLandscape {
+    display: none;
+  }
+
+  .pathPortrait {
+    display: inline;
+  }
+
+  .compass {
+    left: 82%;
+    top: 62%;
+    width: 15%;
+  }
+
+  .label {
+    padding: 0.6cqw 1.8cqw;
+    border-radius: 2cqw;
+    font-size: max(10px, 3.1cqw);
+    transform: translate(calc(var(--pax) * -1% + var(--pdx)), calc(var(--pay) * -1% + var(--pdy)));
+  }
+}
+
 @media (min-width: 768px) {
   .panel {
     min-height: 0;
@@ -398,7 +436,10 @@
     background: transparent;
     padding-left: 0;
   }
+}
 
+/* Wide map (1024 px and up): start, label and finish share one row of the band. */
+@media (min-width: 1024px) {
   .frame {
     grid-template-columns: auto 1fr auto;
     grid-template-areas:

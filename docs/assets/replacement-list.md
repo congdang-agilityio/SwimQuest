@@ -34,7 +34,7 @@ The app picks the new file up with no code change, because it uses keys, not fil
 | [medals](#medals)         | G2 #704 | Ranking medals and trophies       | 6     | 256x256                                                |
 | [marine](#marine)         | G3 #706 | Sea creatures                     | 8     | 256x256                                                |
 | [items](#items)           | G3 #706 | Items, power-ups and collectibles | 13    | 256x256                                                |
-| [map](#map)               | G3 #706 | Route map elements                | 16    | 256x256                                                |
+| [map](#map)               | G3 #706 | Route map elements                | 18    | 256x256                                                |
 | [effects](#effects)       | G3 #706 | Effects                           | 13    | 256x256, glow kept                                     |
 | [decor](#decor)           | G3 #706 | Decoration                        | 5     | 256x256                                                |
 
@@ -42,11 +42,11 @@ The app picks the new file up with no code change, because it uses keys, not fil
 
 Logo and app icon. Owner: G1 #703. Canvas: logo: natural aspect, 1024 px wide; icon: 512x512.
 
-| Name        | What it shows                                              | Used in                     | Source                | Size     | File (PNG; WebP next to it)             | Status              |
-| ----------- | ---------------------------------------------------------- | --------------------------- | --------------------- | -------- | --------------------------------------- | ------------------- |
-| `logo`      | SwimQuest – Winter Voyage (SwimQuest – Hải trình mùa đông) | app shell, offline, welcome | asset sheet A (large) | 1024x707 | `public/art/mockup/brand/logo.png`      | cut from the sheets |
-| `logo-mark` | SwimQuest wave mark (Biểu tượng sóng SwimQuest)            | nav                         | asset sheet B (large) | 512x512  | `public/art/mockup/brand/logo-mark.png` | cut from the sheets |
-| `app-icon`  | SwimQuest app icon (Biểu tượng ứng dụng SwimQuest)         | pwa                         | asset sheet A (large) | 512x512  | `public/art/mockup/brand/app-icon.png`  | cut from the sheets |
+| Name        | What it shows                                              | Used in                             | Source                | Size     | File (PNG; WebP next to it)             | Status              |
+| ----------- | ---------------------------------------------------------- | ----------------------------------- | --------------------- | -------- | --------------------------------------- | ------------------- |
+| `logo`      | SwimQuest – Winter Voyage (SwimQuest – Hải trình mùa đông) | app shell, finish, offline, welcome | asset sheet A (large) | 1024x707 | `public/art/mockup/brand/logo.png`      | cut from the sheets |
+| `logo-mark` | SwimQuest wave mark (Biểu tượng sóng SwimQuest)            | nav                                 | asset sheet B (large) | 512x512  | `public/art/mockup/brand/logo-mark.png` | cut from the sheets |
+| `app-icon`  | SwimQuest app icon (Biểu tượng ứng dụng SwimQuest)         | pwa                                 | asset sheet A (large) | 512x512  | `public/art/mockup/brand/app-icon.png`  | cut from the sheets |
 
 ## scenes
 
@@ -215,76 +215,78 @@ Sea creatures. Owner: G3 #706. Canvas: 256x256.
 
 Items, power-ups and collectibles. Owner: G3 #706. Canvas: 256x256.
 
-| Name             | What it shows                  | Used in                                            | Source                | Size    | File (PNG; WebP next to it)                  | Status              |
-| ---------------- | ------------------------------ | -------------------------------------------------- | --------------------- | ------- | -------------------------------------------- | ------------------- |
-| `coin`           | Coin (Xu)                      | not used yet                                       | asset sheet B (large) | 256x256 | `public/art/mockup/items/coin.png`           | cut from the sheets |
-| `treasure-chest` | Treasure chest (Rương báu)     | not used yet                                       | asset sheet B (large) | 256x256 | `public/art/mockup/items/treasure-chest.png` | cut from the sheets |
-| `pearl`          | Pearl (Ngọc trai)              | not used yet                                       | asset sheet B (large) | 256x256 | `public/art/mockup/items/pearl.png`          | cut from the sheets |
-| `treasure-map`   | Treasure map (Bản đồ kho báu)  | safety, states                                     | asset sheet B (large) | 256x256 | `public/art/mockup/items/treasure-map.png`   | cut from the sheets |
-| `star`           | Star (Ngôi sao)                | emblems, profile-avatar                            | asset sheet B (large) | 256x256 | `public/art/mockup/items/star.png`           | cut from the sheets |
-| `seashell`       | Seashell (Vỏ sò)               | emblems, profile-avatar                            | asset sheet B (large) | 256x256 | `public/art/mockup/items/seashell.png`       | cut from the sheets |
-| `message-bottle` | Message in a bottle (Chai thư) | join, notifications, profile, states, team, voyage | asset sheet B (large) | 256x256 | `public/art/mockup/items/message-bottle.png` | cut from the sheets |
-| `energy-drink`   | Energy drink (Nước tăng lực)   | not used yet                                       | asset sheet A (large) | 256x256 | `public/art/mockup/items/energy-drink.png`   | cut from the sheets |
-| `med-kit`        | Med kit (Hộp cứu thương)       | not used yet                                       | asset sheet A (large) | 256x256 | `public/art/mockup/items/med-kit.png`        | cut from the sheets |
-| `fins`           | Swim fins (Chân vịt)           | not used yet                                       | asset sheet A (large) | 256x256 | `public/art/mockup/items/fins.png`           | cut from the sheets |
-| `goggles`        | Goggles (Kính bơi)             | safety, swims                                      | asset sheet A         | 256x256 | `public/art/mockup/items/goggles.png`        | cut from the sheets |
-| `rescue-buoy`    | Rescue buoy (Phao cứu sinh)    | offline, safety                                    | asset sheet A (large) | 256x256 | `public/art/mockup/items/rescue-buoy.png`    | cut from the sheets |
-| `swim-cap`       | Swim cap (Mũ bơi)              | not used yet                                       | asset sheet A (large) | 256x256 | `public/art/mockup/items/swim-cap.png`       | cut from the sheets |
+| Name             | What it shows                  | Used in                                                  | Source                | Size    | File (PNG; WebP next to it)                  | Status              |
+| ---------------- | ------------------------------ | -------------------------------------------------------- | --------------------- | ------- | -------------------------------------------- | ------------------- |
+| `coin`           | Coin (Xu)                      | collectibles                                             | asset sheet B (large) | 256x256 | `public/art/mockup/items/coin.png`           | cut from the sheets |
+| `treasure-chest` | Treasure chest (Rương báu)     | collectibles                                             | asset sheet B (large) | 256x256 | `public/art/mockup/items/treasure-chest.png` | cut from the sheets |
+| `pearl`          | Pearl (Ngọc trai)              | collectibles                                             | asset sheet B (large) | 256x256 | `public/art/mockup/items/pearl.png`          | cut from the sheets |
+| `treasure-map`   | Treasure map (Bản đồ kho báu)  | collectibles, safety, states                             | asset sheet B (large) | 256x256 | `public/art/mockup/items/treasure-map.png`   | cut from the sheets |
+| `star`           | Star (Ngôi sao)                | emblems, profile-avatar                                  | asset sheet B (large) | 256x256 | `public/art/mockup/items/star.png`           | cut from the sheets |
+| `seashell`       | Seashell (Vỏ sò)               | emblems, profile-avatar                                  | asset sheet B (large) | 256x256 | `public/art/mockup/items/seashell.png`       | cut from the sheets |
+| `message-bottle` | Message in a bottle (Chai thư) | join, notifications, profile, states, team, voyage, zalo | asset sheet B (large) | 256x256 | `public/art/mockup/items/message-bottle.png` | cut from the sheets |
+| `energy-drink`   | Energy drink (Nước tăng lực)   | not used yet                                             | asset sheet A (large) | 256x256 | `public/art/mockup/items/energy-drink.png`   | cut from the sheets |
+| `med-kit`        | Med kit (Hộp cứu thương)       | not used yet                                             | asset sheet A (large) | 256x256 | `public/art/mockup/items/med-kit.png`        | cut from the sheets |
+| `fins`           | Swim fins (Chân vịt)           | not used yet                                             | asset sheet A (large) | 256x256 | `public/art/mockup/items/fins.png`           | cut from the sheets |
+| `goggles`        | Goggles (Kính bơi)             | safety, swims                                            | asset sheet A         | 256x256 | `public/art/mockup/items/goggles.png`        | cut from the sheets |
+| `rescue-buoy`    | Rescue buoy (Phao cứu sinh)    | offline, safety                                          | asset sheet A (large) | 256x256 | `public/art/mockup/items/rescue-buoy.png`    | cut from the sheets |
+| `swim-cap`       | Swim cap (Mũ bơi)              | not used yet                                             | asset sheet A (large) | 256x256 | `public/art/mockup/items/swim-cap.png`       | cut from the sheets |
 
 ## map
 
 Route map elements. Owner: G3 #706. Canvas: 256x256.
 
-| Name             | What it shows                              | Used in      | Source                | Size    | File (PNG; WebP next to it)                | Status              |
-| ---------------- | ------------------------------------------ | ------------ | --------------------- | ------- | ------------------------------------------ | ------------------- |
-| `location-pin`   | Location pin (Ghim vị trí)                 | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/map/location-pin.png`   | cut from the sheets |
-| `route-pin-1`    | Route pin 1 (Ghim chặng 1)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/route-pin-1.png`    | cut from the sheets |
-| `route-pin-2`    | Route pin 2 (Ghim chặng 2)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/route-pin-2.png`    | cut from the sheets |
-| `route-pin-3`    | Route pin 3 (Ghim chặng 3)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/route-pin-3.png`    | cut from the sheets |
-| `route-pin-4`    | Route pin 4 (Ghim chặng 4)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/route-pin-4.png`    | cut from the sheets |
-| `route-dot`      | Route dot (Điểm lộ trình)                  | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/map/route-dot.png`      | cut from the sheets |
-| `route-dash`     | Dashed route line (Đường lộ trình nét đứt) | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/map/route-dash.png`     | cut from the sheets |
-| `flag`           | Flag (Cờ)                                  | join         | asset sheet A (large) | 256x256 | `public/art/mockup/map/flag.png`           | cut from the sheets |
-| `checkered-flag` | Checkered flag (Cờ đích)                   | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/map/checkered-flag.png` | cut from the sheets |
-| `compass-rose`   | Compass rose (La bàn)                      | voyage       | asset sheet B (large) | 256x256 | `public/art/mockup/map/compass-rose.png`   | cut from the sheets |
-| `compass-gold`   | Gold compass (La bàn vàng)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/compass-gold.png`   | cut from the sheets |
-| `buoy`           | Buoy (Phao tiêu)                           | join         | asset sheet A (large) | 256x256 | `public/art/mockup/map/buoy.png`           | cut from the sheets |
-| `ship-helm`      | Ship's helm (Bánh lái tàu)                 | not used yet | asset sheet A         | 256x256 | `public/art/mockup/map/ship-helm.png`      | cut from the sheets |
-| `treasure-chest` | Treasure chest (Rương báu)                 | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/treasure-chest.png` | cut from the sheets |
-| `cloud`          | Cloud (Mây)                                | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/cloud.png`          | cut from the sheets |
-| `arrow`          | Arrow (Mũi tên)                            | not used yet | asset sheet B (large) | 256x256 | `public/art/mockup/map/arrow.png`          | cut from the sheets |
+| Name                | What it shows                                                       | Used in      | Source                                    | Size     | File (PNG; WebP next to it)                   | Status              |
+| ------------------- | ------------------------------------------------------------------- | ------------ | ----------------------------------------- | -------- | --------------------------------------------- | ------------------- |
+| `location-pin`      | Location pin (Ghim vị trí)                                          | not used yet | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/location-pin.png`      | cut from the sheets |
+| `route-pin-1`       | Route pin 1 (Ghim chặng 1)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/route-pin-1.png`       | cut from the sheets |
+| `route-pin-2`       | Route pin 2 (Ghim chặng 2)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/route-pin-2.png`       | cut from the sheets |
+| `route-pin-3`       | Route pin 3 (Ghim chặng 3)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/route-pin-3.png`       | cut from the sheets |
+| `route-pin-4`       | Route pin 4 (Ghim chặng 4)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/route-pin-4.png`       | cut from the sheets |
+| `route-dot`         | Route dot (Điểm lộ trình)                                           | not used yet | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/route-dot.png`         | cut from the sheets |
+| `route-dash`        | Dashed route line (Đường lộ trình nét đứt)                          | not used yet | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/route-dash.png`        | cut from the sheets |
+| `flag`              | Flag (Cờ)                                                           | join         | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/flag.png`              | cut from the sheets |
+| `checkered-flag`    | Checkered flag (Cờ đích)                                            | not used yet | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/checkered-flag.png`    | cut from the sheets |
+| `compass-rose`      | Compass rose (La bàn)                                               | voyage       | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/compass-rose.png`      | cut from the sheets |
+| `compass-gold`      | Gold compass (La bàn vàng)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/compass-gold.png`      | cut from the sheets |
+| `buoy`              | Buoy (Phao tiêu)                                                    | join         | asset sheet A (large)                     | 256x256  | `public/art/mockup/map/buoy.png`              | cut from the sheets |
+| `ship-helm`         | Ship's helm (Bánh lái tàu)                                          | not used yet | asset sheet A                             | 256x256  | `public/art/mockup/map/ship-helm.png`         | cut from the sheets |
+| `treasure-chest`    | Treasure chest (Rương báu)                                          | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/treasure-chest.png`    | cut from the sheets |
+| `cloud`             | Cloud (Mây)                                                         | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/cloud.png`             | cut from the sheets |
+| `arrow`             | Arrow (Mũi tên)                                                     | not used yet | asset sheet B (large)                     | 256x256  | `public/art/mockup/map/arrow.png`             | cut from the sheets |
+| `route01-landscape` | Route 01 voyage map (landscape) (Bản đồ hải trình Route 01 (ngang)) | map-layout   | delivered by the stakeholder (2026-10-18) | 1920x819 | `public/art/mockup/map/route01-landscape.png` | final art           |
+| `route01-portrait`  | Route 01 voyage map (portrait) (Bản đồ hải trình Route 01 (dọc))    | map-layout   | delivered by the stakeholder (2026-10-18) | 941x1672 | `public/art/mockup/map/route01-portrait.png`  | final art           |
 
 ## effects
 
 Effects. Owner: G3 #706. Canvas: 256x256, glow kept.
 
-| Name               | What it shows                          | Used in                     | Source                | Size    | File (PNG; WebP next to it)                      | Status              |
-| ------------------ | -------------------------------------- | --------------------------- | --------------------- | ------- | ------------------------------------------------ | ------------------- |
-| `splash-small`     | Small splash (Bọt nhỏ)                 | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-small.png`     | cut from the sheets |
-| `splash-small-2`   | Small splash 2 (Bọt nhỏ 2)             | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-small-2.png`   | cut from the sheets |
-| `splash-medium`    | Medium splash (Bọt vừa)                | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-medium.png`    | cut from the sheets |
-| `wave`             | Wave (Sóng)                            | states, tournaments, voyage | asset sheet A (large) | 256x256 | `public/art/mockup/effects/wave.png`             | cut from the sheets |
-| `wave-curl`        | Curling wave (Sóng cuộn)               | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/wave-curl.png`        | cut from the sheets |
-| `bubble`           | Bubbles (Bong bóng)                    | voyage                      | asset sheet A (large) | 256x256 | `public/art/mockup/effects/bubble.png`           | cut from the sheets |
-| `glow`             | Glow (Ánh sáng)                        | finish, voyage              | asset sheet A (large) | 256x256 | `public/art/mockup/effects/glow.png`             | cut from the sheets |
-| `splash-burst`     | Water burst (Tia nước)                 | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-burst.png`     | cut from the sheets |
-| `splash-ring`      | Water ring (Vòng tia nước)             | not used yet                | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-ring.png`      | cut from the sheets |
-| `wave-trail`       | Wave trail (Vệt sóng)                  | not used yet                | asset sheet B (large) | 256x256 | `public/art/mockup/effects/wave-trail.png`       | cut from the sheets |
-| `water-spark`      | Water spark (Tia sóng)                 | not used yet                | asset sheet B (large) | 256x256 | `public/art/mockup/effects/water-spark.png`      | cut from the sheets |
-| `foam-burst`       | Foam burst (Bọt nước)                  | not used yet                | asset sheet B (large) | 256x256 | `public/art/mockup/effects/foam-burst.png`       | cut from the sheets |
-| `completion-burst` | Completion burst (Hiệu ứng hoàn thành) | finish                      | asset sheet B (large) | 256x256 | `public/art/mockup/effects/completion-burst.png` | cut from the sheets |
+| Name               | What it shows                          | Used in                      | Source                | Size    | File (PNG; WebP next to it)                      | Status              |
+| ------------------ | -------------------------------------- | ---------------------------- | --------------------- | ------- | ------------------------------------------------ | ------------------- |
+| `splash-small`     | Small splash (Bọt nhỏ)                 | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-small.png`     | cut from the sheets |
+| `splash-small-2`   | Small splash 2 (Bọt nhỏ 2)             | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-small-2.png`   | cut from the sheets |
+| `splash-medium`    | Medium splash (Bọt vừa)                | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-medium.png`    | cut from the sheets |
+| `wave`             | Wave (Sóng)                            | states, tournaments, voyage  | asset sheet A (large) | 256x256 | `public/art/mockup/effects/wave.png`             | cut from the sheets |
+| `wave-curl`        | Curling wave (Sóng cuộn)               | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/wave-curl.png`        | cut from the sheets |
+| `bubble`           | Bubbles (Bong bóng)                    | voyage                       | asset sheet A (large) | 256x256 | `public/art/mockup/effects/bubble.png`           | cut from the sheets |
+| `glow`             | Glow (Ánh sáng)                        | collectibles, finish, voyage | asset sheet A (large) | 256x256 | `public/art/mockup/effects/glow.png`             | cut from the sheets |
+| `splash-burst`     | Water burst (Tia nước)                 | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-burst.png`     | cut from the sheets |
+| `splash-ring`      | Water ring (Vòng tia nước)             | not used yet                 | asset sheet A (large) | 256x256 | `public/art/mockup/effects/splash-ring.png`      | cut from the sheets |
+| `wave-trail`       | Wave trail (Vệt sóng)                  | not used yet                 | asset sheet B (large) | 256x256 | `public/art/mockup/effects/wave-trail.png`       | cut from the sheets |
+| `water-spark`      | Water spark (Tia sóng)                 | not used yet                 | asset sheet B (large) | 256x256 | `public/art/mockup/effects/water-spark.png`      | cut from the sheets |
+| `foam-burst`       | Foam burst (Bọt nước)                  | not used yet                 | asset sheet B (large) | 256x256 | `public/art/mockup/effects/foam-burst.png`       | cut from the sheets |
+| `completion-burst` | Completion burst (Hiệu ứng hoàn thành) | collectibles, finish         | asset sheet B (large) | 256x256 | `public/art/mockup/effects/completion-burst.png` | cut from the sheets |
 
 ## decor
 
 Decoration. Owner: G3 #706. Canvas: 256x256.
 
-| Name            | What it shows              | Used in      | Source                | Size    | File (PNG; WebP next to it)                 | Status              |
-| --------------- | -------------------------- | ------------ | --------------------- | ------- | ------------------------------------------- | ------------------- |
-| `coral`         | Coral (San hô)             | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/decor/coral.png`         | cut from the sheets |
-| `starfish`      | Starfish (Sao biển)        | voyage       | asset sheet A         | 256x256 | `public/art/mockup/decor/starfish.png`      | cut from the sheets |
-| `seaweed`       | Seaweed (Rong biển)        | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/decor/seaweed.png`       | cut from the sheets |
-| `sea-turtle`    | Sea turtle (Rùa biển)      | not used yet | asset sheet A (large) | 256x256 | `public/art/mockup/decor/sea-turtle.png`    | cut from the sheets |
-| `scallop-shell` | Scallop shell (Vỏ sò điệp) | voyage       | asset sheet A (large) | 256x256 | `public/art/mockup/decor/scallop-shell.png` | cut from the sheets |
+| Name            | What it shows              | Used in              | Source                | Size    | File (PNG; WebP next to it)                 | Status              |
+| --------------- | -------------------------- | -------------------- | --------------------- | ------- | ------------------------------------------- | ------------------- |
+| `coral`         | Coral (San hô)             | not used yet         | asset sheet A (large) | 256x256 | `public/art/mockup/decor/coral.png`         | cut from the sheets |
+| `starfish`      | Starfish (Sao biển)        | collectibles, voyage | asset sheet A         | 256x256 | `public/art/mockup/decor/starfish.png`      | cut from the sheets |
+| `seaweed`       | Seaweed (Rong biển)        | not used yet         | asset sheet A (large) | 256x256 | `public/art/mockup/decor/seaweed.png`       | cut from the sheets |
+| `sea-turtle`    | Sea turtle (Rùa biển)      | not used yet         | asset sheet A (large) | 256x256 | `public/art/mockup/decor/sea-turtle.png`    | cut from the sheets |
+| `scallop-shell` | Scallop shell (Vỏ sò điệp) | voyage               | asset sheet A (large) | 256x256 | `public/art/mockup/decor/scallop-shell.png` | cut from the sheets |
 
 ## Temporary screen crops
 
@@ -303,7 +305,6 @@ with a group asset (or a new cut from the sheets) and point the code at the regi
 | `public/art/mockup/screen-team/member-4.png`          | mockup-avatars | temporary mockup crop |
 | `public/art/mockup/screen-team/member-5.png`          | mockup-avatars | temporary mockup crop |
 | `public/art/mockup/screen-team/team-emblem-swirl.png` | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-voyage/map-route01.webp`    | voyage         | temporary mockup crop |
 
 ## Vector fallbacks
 

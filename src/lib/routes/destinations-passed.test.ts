@@ -8,15 +8,15 @@ const slugs = (from: number, to: number, start = "hon_sup") =>
 
 describe("destinationsPassed", () => {
   it("crosses Cu Lao Cham only once its anchor share of the path from Hon Sup is passed", () => {
-    // Hon Sup -> Cu Lao Cham is about 35.6% of the path to Ly Son.
+    // Hon Sup -> Cu Lao Cham is about 48.3% of the path to Ly Son.
     expect(slugs(0, 2000)).toEqual([]);
-    expect(slugs(0, 3500)).toEqual([]);
-    expect(slugs(0, 3600)).toEqual(["cu_lao_cham"]);
+    expect(slugs(0, 4800)).toEqual([]);
+    expect(slugs(0, 4900)).toEqual(["cu_lao_cham"]);
     expect(slugs(3000, 9000)).toEqual(["cu_lao_cham"]);
   });
 
   it("does not cross it again after it was passed", () => {
-    expect(slugs(3600, 9000)).toEqual([]);
+    expect(slugs(4900, 9000)).toEqual([]);
   });
 
   it("never counts the start or the finish", () => {
