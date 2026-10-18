@@ -186,6 +186,7 @@ const SOURCE_TEXT = {
   "sheet-a-large": "cut from the concept image (sheet A large)",
   "sheet-b-large": "cut from the concept image (sheet B large)",
   vector: "stand-in (hand-drawn vector)",
+  "stakeholder-2026-10-18": "delivered by the stakeholder (2026-10-18)",
 };
 
 const files = ["art", "brand", "icons"]
@@ -217,9 +218,10 @@ for (const f of files) {
     licence = "unknown";
     warnings.push(`\`${url}\` has no registry entry`);
   }
-  // Backgrounds, rectangular screen crops and the PWA icons are opaque on purpose.
+  // Backgrounds, rectangular screen crops, the route map art and the PWA icons are opaque on purpose.
   const opaque =
     group === "scenes" ||
+    (group === "map" && /^route\d+-/.test(parts[4] ?? "")) ||
     url.startsWith("/icons/") ||
     (group.startsWith("screen-") && /hero|thumb|map/.test(parts[4] ?? ""));
   if (info.alpha !== null && url !== "/art/route01/map.svg" && info.alpha === opaque) {

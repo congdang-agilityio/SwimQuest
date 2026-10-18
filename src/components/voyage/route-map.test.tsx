@@ -65,7 +65,7 @@ describe("RouteMap", () => {
     const label = screen.getByTestId("progress-label");
     expect(screen.getByTestId("ship").contains(label)).toBe(false);
     expect(screen.getByTestId("route-map").contains(label)).toBe(false);
-    // In the band of the same frame as the map (the map sits in a sideways scroller on phones).
+    // In the band of the same frame as the map (the map sits in its own box).
     expect(label.parentElement!.contains(screen.getByTestId("route-map"))).toBe(true);
   });
 
@@ -85,9 +85,9 @@ describe("RouteMap", () => {
     expect(screen.getAllByTestId("finish-marker")).toHaveLength(1);
   });
 
-  it("renders an 18:7 box, the aspect of the map art", () => {
+  it("renders a box with the aspect of the wide map art", () => {
     setup({});
-    expect(screen.getByTestId("route-map").style.aspectRatio).toBe("18 / 7");
+    expect(screen.getByTestId("route-map").style.aspectRatio).toBe("1920 / 819");
   });
 
   it("uses the current language", () => {

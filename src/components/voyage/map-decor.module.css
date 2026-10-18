@@ -41,6 +41,19 @@
   }
 }
 
+/* Phones: the tall map's spots (set inline as custom properties over the wide map's). */
+@media (max-width: 1023px) {
+  .item {
+    left: var(--px) !important;
+    top: var(--py) !important;
+    width: var(--pw) !important;
+  }
+
+  .item[data-wide-only] {
+    display: none;
+  }
+}
+
 .image {
   display: block;
   width: 100%;

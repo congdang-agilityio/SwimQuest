@@ -1,36 +1,47 @@
 {
-  "aspectRatio": "18:7",
-  "width": 1348,
-  "height": 524,
+  "aspectRatio": "1920:819",
+  "width": 1920,
+  "height": 819,
   "unit": "percent of map width (x) and height (y)",
   "anchors": {
-    "non_nuoc": {
-      "x": 10.9,
-      "y": 85.5
+    "non_nuoc": { "x": 8.5, "y": 77 },
+    "son_thuy": { "x": 25.5, "y": 51 },
+    "pham_van_dong": { "x": 39, "y": 38 },
+    "man_thai": { "x": 55.5, "y": 29 },
+    "hon_sup": { "x": 61.5, "y": 43 },
+    "cu_lao_cham": { "x": 77.5, "y": 40 },
+    "ly_son": { "x": 89, "y": 70 }
+  },
+  "labels": {
+    "non_nuoc": "right",
+    "son_thuy": "above-left",
+    "pham_van_dong": "above",
+    "man_thai": "right",
+    "hon_sup": "below",
+    "cu_lao_cham": "right",
+    "ly_son": "below"
+  },
+  "portrait": {
+    "aspectRatio": "941:1672",
+    "width": 941,
+    "height": 1672,
+    "anchors": {
+      "non_nuoc": { "x": 16, "y": 73 },
+      "son_thuy": { "x": 15, "y": 57 },
+      "pham_van_dong": { "x": 42, "y": 41 },
+      "man_thai": { "x": 79, "y": 48 },
+      "hon_sup": { "x": 79, "y": 27 },
+      "cu_lao_cham": { "x": 25, "y": 17 },
+      "ly_son": { "x": 73, "y": 9 }
     },
-    "son_thuy": {
-      "x": 16.8,
-      "y": 48.1
-    },
-    "pham_van_dong": {
-      "x": 38,
-      "y": 14.9
-    },
-    "man_thai": {
-      "x": 59.1,
-      "y": 20.6
-    },
-    "hon_sup": {
-      "x": 74.2,
-      "y": 38.2
-    },
-    "cu_lao_cham": {
-      "x": 53.6,
-      "y": 54.2
-    },
-    "ly_son": {
-      "x": 92.2,
-      "y": 40.5
+    "labels": {
+      "non_nuoc": "right",
+      "son_thuy": "right",
+      "pham_van_dong": "above-right",
+      "man_thai": "below",
+      "hon_sup": "left",
+      "cu_lao_cham": "right",
+      "ly_son": "below"
     }
   }
 }

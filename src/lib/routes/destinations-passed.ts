@@ -1,8 +1,8 @@
 import { getRoute, type Destination } from "./index";
+import { MAP_ASPECT } from "./map-layout";
 import type { MapPoint } from "./path-position";
 
-/** Map aspect ratio (18:7, map-anchors.json): anchors are percent of the map box, so x counts 18/7x for lengths. */
-export const MAP_ASPECT = 18 / 7;
+export { MAP_ASPECT };
 
 /**
  * Destinations a team crosses when its progress moves from `fromBp` to `toBp` (basis points of

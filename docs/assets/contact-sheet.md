@@ -6,7 +6,7 @@ Every delivered image as a 96 px thumbnail, grouped by folder, with its registry
 name. A file without a registry id shows "no id". Regenerate with
 `node scripts/art/generate-contact-sheet.mjs`.
 
-Images: 187 in 22 folders.
+Images: 189 in 22 folders.
 
 ## art/emblems
 
@@ -143,7 +143,7 @@ Images: 187 in 22 folders.
 
 ## art/mockup/map
 
-16 images.
+18 images.
 
 | Thumbnail | Id | File |
 |---|---|---|
@@ -161,6 +161,8 @@ Images: 187 in 22 folders.
 | <img src="../../public/art/mockup/map/route-pin-2.png" width="96" alt="route-pin-2.png"> | map/route-pin-2 | `route-pin-2.png` |
 | <img src="../../public/art/mockup/map/route-pin-3.png" width="96" alt="route-pin-3.png"> | map/route-pin-3 | `route-pin-3.png` |
 | <img src="../../public/art/mockup/map/route-pin-4.png" width="96" alt="route-pin-4.png"> | map/route-pin-4 | `route-pin-4.png` |
+| <img src="../../public/art/mockup/map/route01-landscape.png" width="96" alt="route01-landscape.png"> | map/route01-landscape | `route01-landscape.png` |
+| <img src="../../public/art/mockup/map/route01-portrait.png" width="96" alt="route01-portrait.png"> | map/route01-portrait | `route01-portrait.png` |
 | <img src="../../public/art/mockup/map/ship-helm.png" width="96" alt="ship-helm.png"> | map/ship-helm | `ship-helm.png` |
 | <img src="../../public/art/mockup/map/treasure-chest.png" width="96" alt="treasure-chest.png"> | map/treasure-chest | `treasure-chest.png` |
 

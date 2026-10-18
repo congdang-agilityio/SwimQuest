@@ -42,6 +42,7 @@ const SOURCE_TEXT = {
   "sheet-b": "asset sheet B",
   "sheet-a-large": "asset sheet A (large)",
   "sheet-b-large": "asset sheet B (large)",
+  "stakeholder-2026-10-18": "delivered by the stakeholder (2026-10-18)",
 };
 
 function walk(dir, filter, out = []) {
@@ -108,7 +109,9 @@ function groupTable(group, assets) {
     const name = a.key.split("/")[1];
     return `| \`${name}\` | ${cell(a.alt.en)} (${cell(a.alt.vi)}) | ${usedIn(a.key)} | ${
       SOURCE_TEXT[a.source] ?? a.source
-    } | ${a.width}x${a.height} | \`public${a.file}\` | cut from the sheets |`;
+    } | ${a.width}x${a.height} | \`public${a.file}\` | ${
+      a.source.startsWith("stakeholder-") ? "final art" : "cut from the sheets"
+    } |`;
   });
   return [
     "| Name | What it shows | Used in | Source | Size | File (PNG; WebP next to it) | Status |",
