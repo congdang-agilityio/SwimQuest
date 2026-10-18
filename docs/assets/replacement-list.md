@@ -293,18 +293,8 @@ Decoration. Owner: G3 #706. Canvas: 256x256.
 Cut straight from the UI mockup for one screen, before the group assets existed. Replace each
 with a group asset (or a new cut from the sheets) and point the code at the registry key.
 
-| File                                                  | Used in        | Status                |
-| ----------------------------------------------------- | -------------- | --------------------- |
-| `public/art/mockup/screen-finish/finish-emblem.png`   | finish         | temporary mockup crop |
-| `public/art/mockup/screen-home/home-hero.png`         | app shell      | temporary mockup crop |
-| `public/art/mockup/screen-home/tournament-thumb.png`  | home           | temporary mockup crop |
-| `public/art/mockup/screen-swims/wave-band.png`        | swims          | temporary mockup crop |
-| `public/art/mockup/screen-team/member-1.png`          | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-team/member-2.png`          | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-team/member-3.png`          | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-team/member-4.png`          | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-team/member-5.png`          | mockup-avatars | temporary mockup crop |
-| `public/art/mockup/screen-team/team-emblem-swirl.png` | mockup-avatars | temporary mockup crop |
+| File | Used in | Status |
+| ---- | ------- | ------ |
 
 ## Vector fallbacks
 

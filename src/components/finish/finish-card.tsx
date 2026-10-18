@@ -67,7 +67,7 @@ export async function FinishCard({ finish }: { finish: PublicFinish }) {
           <span className={scene.gold}>{t("voyage", { place })}</span>
         </p>
       </div>
-      <FinishCrest play alt={t("badgeAlt", { place })} />
+      <FinishCrest play alt={t("badgeAlt", { place })} label={t("ribbon")} />
 
       <div className={styles.facts}>
         <div className={styles.team}>

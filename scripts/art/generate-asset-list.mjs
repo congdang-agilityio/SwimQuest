@@ -175,13 +175,29 @@ for (const g of groups) {
   lines.push(groupTable(g, manifests[g]));
 }
 
+// Screen art the stakeholder has already replaced (#920 section A); no longer a temporary crop.
+const DELIVERED = [
+  "screen-finish/finish-emblem",
+  "screen-home/home-hero",
+  "screen-home/tournament-thumb",
+  "screen-swims/wave-band",
+  "screen-team/member-1",
+  "screen-team/member-2",
+  "screen-team/member-3",
+  "screen-team/member-4",
+  "screen-team/member-5",
+  "screen-team/team-emblem-swirl",
+];
+
 // Screen-local crops from the UI mockup, waiting for a group asset to replace them.
 const screenFiles = readdirSync(MOCKUP)
   .filter((g) => g.startsWith("screen-"))
   .sort()
   .flatMap((g) =>
     walk(join(MOCKUP, g), (p) => /\.(png|webp)$/.test(p)).filter(
-      (p) => !(p.endsWith(".webp") && existsSync(p.replace(/\.webp$/, ".png"))),
+      (p) =>
+        !(p.endsWith(".webp") && existsSync(p.replace(/\.webp$/, ".png"))) &&
+        !DELIVERED.some((d) => posix(relative(MOCKUP, p)).startsWith(`${d}.`)),
     ),
   );
 lines.push(

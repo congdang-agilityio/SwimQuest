@@ -43,8 +43,8 @@ export function TournamentCard({
               className={styles.thumbArt}
               src="/art/mockup/screen-home/tournament-thumb.png"
               alt=""
-              width={62}
-              height={62}
+              width={512}
+              height={512}
             />
             {x.team && (
               <span className={styles.emblem}>
