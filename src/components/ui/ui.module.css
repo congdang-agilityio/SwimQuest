@@ -53,10 +53,14 @@
   color: var(--sq-white);
   background: #000;
 }
-/* Beat the light-surface link colour (`[data-surface="light"] a`) on ButtonLink. */
-a.primary,
-a.dark {
+/* Beat the light-surface link colour (`[data-surface="light"] a`, specificity 0,1,1) on ButtonLink.
+   a.primary alone only tied with it, so the winner depended on stylesheet order. */
+a.button.primary,
+a.button.dark {
   color: var(--sq-white);
+}
+a.button.ghost {
+  color: inherit;
 }
 .block {
   display: flex;
