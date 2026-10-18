@@ -16,7 +16,9 @@ const NAVY_900 = "#01213d";
 const GOLD = "#f5ca30";
 const WHITE = "#ffffff";
 const MUTED = "#b8cfe6";
-// Temporary cut from the mockup until the G2 badge set (#704) has the HOÀN THÀNH emblem.
+const RIBBON_TOP = "#ff6b6b";
+const RIBBON_BOTTOM = "#c62f3a";
+// Lighthouse emblem without text; the HOÀN THÀNH ribbon is drawn here over its foot.
 const FINISH_EMBLEM = "/art/mockup/screen-finish/finish-emblem.png";
 
 const MIME: Record<string, string> = { ".png": "image/png", ".svg": "image/svg+xml" };
@@ -120,16 +122,31 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tok
         <img
           src={logo}
           alt=""
-          width={300}
-          height={207}
+          width={240}
+          height={166}
           style={{ marginTop: 28, objectFit: "contain" }}
         />
       )}
       {badge && (
         // eslint-disable-next-line @next/next/no-img-element -- rendered to PNG by next/og
-        <img src={badge} alt="" width={387} height={331} style={{ marginTop: 40 }} />
+        <img src={badge} alt="" width={340} height={340} style={{ marginTop: 20 }} />
       )}
-      <div style={{ display: "flex", marginTop: 20, fontSize: 64, fontWeight: 800, color: GOLD }}>
+      <div
+        style={{
+          display: "flex",
+          marginTop: -52,
+          padding: "6px 44px",
+          borderRadius: 12,
+          backgroundImage: `linear-gradient(180deg, ${RIBBON_TOP} 0%, ${RIBBON_BOTTOM} 100%)`,
+          color: WHITE,
+          fontSize: 46,
+          fontWeight: 800,
+          letterSpacing: 2,
+        }}
+      >
+        {t("ribbon")}
+      </div>
+      <div style={{ display: "flex", marginTop: 16, fontSize: 64, fontWeight: 800, color: GOLD }}>
         {t("title", { place })}
       </div>
       <div style={{ display: "flex", alignItems: "center", marginTop: 20, gap: 24 }}>

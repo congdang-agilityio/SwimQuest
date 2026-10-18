@@ -22,7 +22,7 @@ export function SwimHero({ distance, duration }: { distance: string; duration: s
           <dd className={styles.heroDuration}>{duration}</dd>
         </div>
       </dl>
-      <SafeImg className={styles.wave} src={WAVE_BAND} alt="" width={244} height={70} />
+      <SafeImg className={styles.wave} src={WAVE_BAND} alt="" width={1600} height={640} />
     </div>
   );
 }

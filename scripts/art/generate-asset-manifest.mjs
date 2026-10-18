@@ -192,6 +192,8 @@ const SOURCE_TEXT = {
 const files = ["art", "brand", "icons"]
   .flatMap((d) => walk(join(PUBLIC, d)))
   .filter((p) => /\.(png|webp|svg)$/.test(p));
+const DELIVERED_SCREEN_ART =
+  /\/screen-(finish\/finish-emblem|home\/(home-hero|tournament-thumb)|swims\/wave-band|team\/(member-[1-5]|team-emblem-swirl))\./;
 const rows = [];
 const warnings = [];
 const seenUrls = new Set();
@@ -208,7 +210,9 @@ for (const f of files) {
   if (reg) licence = SOURCE_TEXT[reg.source] ?? reg.source;
   else if (inMockup && group.startsWith("screen-")) {
     id = `${group}/${parts[4].replace(/\.[a-z]+$/, "")}`;
-    licence = "cut from the concept image (temporary screen crop)";
+    licence = DELIVERED_SCREEN_ART.test(url)
+      ? "delivered by the stakeholder (#920 section A)"
+      : "cut from the concept image (temporary screen crop)";
   } else if (url.startsWith("/icons/") || url.startsWith("/art/mockup/brand/")) {
     id = `icons/${parts[2].replace(/\.[a-z]+$/, "")}`;
     licence = "made otherwise (PWA icon made from the app icon)";

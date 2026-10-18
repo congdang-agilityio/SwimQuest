@@ -11,7 +11,7 @@ replace it, see [replacement-list.md](replacement-list.md).
 
 Regenerate with `node scripts/art/generate-asset-manifest.mjs`.
 
-Files: 349. Total bytes: 23097208. Warnings: 0.
+Files: 349. Total bytes: 24036014. Warnings: 0.
 
 ## Warnings
 
@@ -386,32 +386,32 @@ None.
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
 |---|---|---|---|---|---|---|---|---|---|
-| `screen-finish/finish-emblem` | `public/art/mockup/screen-finish/finish-emblem.png` | 196709 | PNG | 387x331 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | finish |
-| `screen-finish/finish-emblem` | `public/art/mockup/screen-finish/finish-emblem.webp` | 28518 | WebP | 387x331 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | finish |
+| `screen-finish/finish-emblem` | `public/art/mockup/screen-finish/finish-emblem.png` | 259117 | PNG | 1024x1024 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | finish |
+| `screen-finish/finish-emblem` | `public/art/mockup/screen-finish/finish-emblem.webp` | 278736 | WebP | 1024x1024 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | finish |
 
 ## screen-home
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
 |---|---|---|---|---|---|---|---|---|---|
-| `screen-home/home-hero` | `public/art/mockup/screen-home/home-hero.png` | 65017 | PNG | 330x114 | no | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | app shell |
-| `screen-home/tournament-thumb` | `public/art/mockup/screen-home/tournament-thumb.png` | 7830 | PNG | 62x62 | no | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | home |
+| `screen-home/home-hero` | `public/art/mockup/screen-home/home-hero.png` | 395375 | PNG | 1600x560 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | app shell |
+| `screen-home/tournament-thumb` | `public/art/mockup/screen-home/tournament-thumb.png` | 96969 | PNG | 512x512 | no | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | home |
 
 ## screen-swims
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
 |---|---|---|---|---|---|---|---|---|---|
-| `screen-swims/wave-band` | `public/art/mockup/screen-swims/wave-band.png` | 22159 | PNG | 244x70 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | swims |
+| `screen-swims/wave-band` | `public/art/mockup/screen-swims/wave-band.png` | 135449 | PNG | 1600x640 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | swims |
 
 ## screen-team
 
 | Id | Path | Bytes | Format | Size | Transparency | Frames | Pivot | Source / licence | Usage |
 |---|---|---|---|---|---|---|---|---|---|
-| `screen-team/member-1` | `public/art/mockup/screen-team/member-1.png` | 6927 | PNG | 54x56 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
-| `screen-team/member-2` | `public/art/mockup/screen-team/member-2.png` | 6874 | PNG | 54x54 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
-| `screen-team/member-3` | `public/art/mockup/screen-team/member-3.png` | 7676 | PNG | 54x56 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
-| `screen-team/member-4` | `public/art/mockup/screen-team/member-4.png` | 7085 | PNG | 54x56 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
-| `screen-team/member-5` | `public/art/mockup/screen-team/member-5.png` | 7574 | PNG | 56x56 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
-| `screen-team/team-emblem-swirl` | `public/art/mockup/screen-team/team-emblem-swirl.png` | 18919 | PNG | 96x96 | yes | 1 | centre (0.5, 0.5) | cut from the concept image (temporary screen crop) | mockup-avatars |
+| `screen-team/member-1` | `public/art/mockup/screen-team/member-1.png` | 20666 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
+| `screen-team/member-2` | `public/art/mockup/screen-team/member-2.png` | 20535 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
+| `screen-team/member-3` | `public/art/mockup/screen-team/member-3.png` | 20956 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
+| `screen-team/member-4` | `public/art/mockup/screen-team/member-4.png` | 19036 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
+| `screen-team/member-5` | `public/art/mockup/screen-team/member-5.png` | 19761 | PNG | 256x256 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
+| `screen-team/team-emblem-swirl` | `public/art/mockup/screen-team/team-emblem-swirl.png` | 47494 | PNG | 512x512 | yes | 1 | centre (0.5, 0.5) | delivered by the stakeholder (#920 section A) | mockup-avatars |
 
 ## ships
 

@@ -5,7 +5,7 @@ import { Sparkle } from "@/components/effects/sparkle";
 import { clientFetch } from "@/lib/http/client-fetch";
 import styles from "./finish.module.css";
 
-// Temporary cut from the mockup until the G2 badge set (#704) has the HOÀN THÀNH emblem.
+// Lighthouse emblem without text; the HOÀN THÀNH ribbon is rendered in HTML below it.
 const EMBLEM = "/art/mockup/screen-finish/finish-emblem";
 
 type Props = {
@@ -14,10 +14,12 @@ type Props = {
   /** Play the sparkle (the player has not seen this finish yet). */
   play: boolean;
   alt: string;
+  /** The ribbon text ("HOÀN THÀNH" / "FINISHED"). */
+  label: string;
 };
 
 /** The HOÀN THÀNH lighthouse emblem on a gold glow; sparkles once per finish. */
-export function FinishCrest({ momentKey, play, alt }: Props) {
+export function FinishCrest({ momentKey, play, alt, label }: Props) {
   // Start after mount, so the server and client render the same idle state.
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
@@ -50,9 +52,18 @@ export function FinishCrest({ momentKey, play, alt }: Props) {
       <Sparkle play={playing} onDone={onDone}>
         <picture>
           <source type="image/webp" srcSet={`${EMBLEM}.webp`} />
-          <img src={`${EMBLEM}.png`} alt={alt} width={387} height={331} className={styles.emblem} />
+          <img
+            src={`${EMBLEM}.png`}
+            alt={alt}
+            width={1024}
+            height={1024}
+            className={styles.emblem}
+          />
         </picture>
       </Sparkle>
+      <span className={styles.ribbon} aria-hidden="true">
+        {label}
+      </span>
     </div>
   );
 }

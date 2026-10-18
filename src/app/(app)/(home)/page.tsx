@@ -49,8 +49,8 @@ export default async function HomePage() {
             className={styles.scene}
             src="/art/mockup/screen-home/home-hero.png"
             alt=""
-            width={330}
-            height={114}
+            width={1600}
+            height={560}
           />
           <div className={styles.heroText}>
             <h1 id="home-title" className={styles.brand}>

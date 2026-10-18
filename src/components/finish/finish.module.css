@@ -13,8 +13,6 @@
   /* Desktop: right column of the My Team layout, above the start card. */
   .finish {
     order: 0;
-    grid-column: 2;
-    grid-row: 1;
     max-width: 480px;
   }
 }
@@ -88,6 +86,21 @@
   display: block;
   width: 100%;
   height: auto;
+}
+.crest > .ribbon {
+  position: relative;
+  z-index: 2;
+  width: auto;
+  margin-top: calc(-1 * var(--sq-space-6));
+  padding: var(--sq-space-1) var(--sq-space-6);
+  border-radius: var(--sq-radius-sm);
+  background: linear-gradient(180deg, var(--sq-coral) 0%, var(--sq-danger) 100%);
+  box-shadow: var(--sq-shadow-card);
+  color: var(--sq-white);
+  font-size: var(--sq-text-lg);
+  font-weight: var(--sq-weight-black);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 .glow {
   position: absolute;

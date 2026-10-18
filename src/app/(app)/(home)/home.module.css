@@ -55,7 +55,7 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 330 / 114;
+  aspect-ratio: 1600 / 560;
   object-fit: cover;
 }
 /* The sea of the picture runs on under the title, as in the mockup. */

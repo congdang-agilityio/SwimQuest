@@ -56,7 +56,12 @@ export async function TeamFinish({
           <span className={styles.gold}>{t("voyage", { place })}</span>
         </p>
       </div>
-      <FinishCrest momentKey={momentKey} play={!seen} alt={t("badgeAlt", { place })} />
+      <FinishCrest
+        momentKey={momentKey}
+        play={!seen}
+        alt={t("badgeAlt", { place })}
+        label={ts("ribbon")}
+      />
       <div className={styles.action}>
         {share.ok && (
           <ShareFinishButton
