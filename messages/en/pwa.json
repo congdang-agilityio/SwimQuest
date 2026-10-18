@@ -15,5 +15,12 @@
     "other1": "Open the browser menu (three dots).",
     "other2": "Tap Install app or Add to Home screen.",
     "other3": "Confirm to place SwimQuest on your home screen."
+  },
+  "update": {
+    "title": "A new version is available",
+    "body": "Update to get the latest SwimQuest. Your swims and progress are kept.",
+    "update": "Update",
+    "updating": "Updating…",
+    "later": "Later"
   }
 }

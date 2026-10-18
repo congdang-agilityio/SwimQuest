@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   "/offline",
   "/api/health",
   "/api/locale",
+  "/api/version",
 ];
 /** Exact paths without a session; the tick job checks its own `CRON_SECRET`. */
 const PUBLIC_EXACT = new Set(["/api/jobs/tick"]);

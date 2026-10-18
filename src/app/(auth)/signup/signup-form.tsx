@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Button, Field } from "@/components/ui";
 import { safeNextPath } from "@/lib/auth/public-paths";
+import { trackBusy } from "@/lib/pwa/busy";
 import { ComingSoonProviders } from "@/components/auth/coming-soon-providers";
 import styles from "../auth.module.css";
 
@@ -31,11 +32,13 @@ export function SignUpForm({ next }: { next?: string }) {
     if (!parsed.ok) return;
     setBusy(true);
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      });
+      const res = await trackBusy(
+        fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(parsed.data),
+        }),
+      );
       if (res.status === 201) {
         window.location.assign(safeNextPath(next));
         return;
