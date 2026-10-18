@@ -7,8 +7,15 @@
  * was rendered for (x-sq-owner, set by middleware); a different tag, a redirect to /login or a
  * logout (clearAppCaches) drops every kept page, so one user's pages are never shown to another.
  * /api responses and RSC payloads always go to the network and are never stored.
+ *
+ * Updates (#922): this file is served by `src/app/sw.js/route.ts`, which writes the build id
+ * into BUILD, so every deploy ships a byte-different worker and the browser installs it. Caches
+ * are named after the build. A new worker installs and then waits; it takes over only when the
+ * page posts SKIP_WAITING (the "Update" card), and on activation it deletes the previous build's
+ * caches, so no stale HTML or offline page survives an update.
  */
-const VERSION = "v1";
+const BUILD = "__SQ_BUILD__";
+const VERSION = BUILD;
 const STATIC_CACHE = `sq-static-${VERSION}`;
 const OFFLINE_CACHE = `sq-offline-${VERSION}`;
 const PAGE_CACHE = `sq-pages-${VERSION}`;
@@ -39,13 +46,13 @@ async function cacheOfflinePage() {
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    cacheOfflinePage()
-      .catch(() => undefined)
-      .then(() => self.skipWaiting()),
+    // No skipWaiting(): the new version waits for the player's "Update" (SKIP_WAITING below).
+    cacheOfflinePage().catch(() => undefined),
   );
 });
 
 self.addEventListener("activate", (event) => {
+  // Drops every cache of an older build, including pages kept for offline use.
   const keep = new Set([STATIC_CACHE, OFFLINE_CACHE, PAGE_CACHE, META_CACHE]);
   event.waitUntil(
     caches
@@ -55,10 +62,16 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-/** The page asks for a fresh offline page (e.g. after a language change or a logout). */
+/**
+ * The page asks for a fresh offline page (e.g. after a language change or a logout), or tells a
+ * waiting new version to take over (SKIP_WAITING, from the "Update" card).
+ */
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "sq:refresh-offline") {
+  const type = event.data && event.data.type;
+  if (type === "sq:refresh-offline") {
     event.waitUntil(cacheOfflinePage().catch(() => undefined));
+  } else if (type === "SKIP_WAITING") {
+    event.waitUntil(self.skipWaiting());
   }
 });
 

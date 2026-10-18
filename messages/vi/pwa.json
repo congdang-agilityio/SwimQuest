@@ -15,5 +15,12 @@
     "other1": "Mở menu của trình duyệt (ba chấm).",
     "other2": "Bấm Cài đặt ứng dụng hoặc Thêm vào Màn hình chính.",
     "other3": "Xác nhận để đặt SwimQuest lên màn hình chính."
+  },
+  "update": {
+    "title": "Đã có phiên bản mới",
+    "body": "Cập nhật để dùng SwimQuest mới nhất. Bài bơi và tiến độ của bạn vẫn được giữ nguyên.",
+    "update": "Cập nhật",
+    "updating": "Đang cập nhật…",
+    "later": "Để sau"
   }
 }

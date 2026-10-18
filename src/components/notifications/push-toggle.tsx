@@ -33,7 +33,7 @@ function unsupportedReason(): Unsupported | null {
   return supported ? null : "browser";
 }
 
-/** The worker registration that receives pushes (`public/sw.js`), registering it if needed. */
+/** The worker registration that receives pushes (`src/pwa/service-worker.js`), registering it if needed. */
 async function workerRegistration(): Promise<ServiceWorkerRegistration> {
   const existing = await navigator.serviceWorker.getRegistration();
   if (existing) return existing;

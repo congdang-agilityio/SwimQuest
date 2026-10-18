@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { OwnerSwimDto } from "@/server/swims/swim-dto";
 import { Button, Card } from "@/components/ui";
+import { trackBusy } from "@/lib/pwa/busy";
 import { SwimSummary } from "./swim-summary";
 import styles from "./swims.module.css";
 
@@ -21,8 +22,13 @@ export function UploadForm() {
     if (!(file instanceof File) || !file.size) return setState({ code: "FILE_REQUIRED" });
     setState({ busy: true });
     try {
-      const res = await fetch("/api/swims", { method: "POST", body: data });
-      const body = await res.json().catch(() => null);
+      // The update card waits until the upload and its answer are done.
+      const { res, body } = await trackBusy(
+        fetch("/api/swims", { method: "POST", body: data }).then(async (res) => ({
+          res,
+          body: await res.json().catch(() => null),
+        })),
+      );
       if (res.ok && body?.swim) return setState({ swim: body.swim });
       const code = body?.error?.code;
       setState({ code: t.has(`errors.${code}`) ? code : "GENERIC" });

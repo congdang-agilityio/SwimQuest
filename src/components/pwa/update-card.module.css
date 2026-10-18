@@ -1,0 +1,55 @@
+/* Top-centre, clear of the notch (safe-area inset) and of the bottom nav. */
+.wrap {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 90; /* above the page and nav, below in-page dialogs (100) */
+  display: flex;
+  justify-content: center;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--sq-space-3)) var(--sq-space-4) 0;
+  pointer-events: none;
+}
+.card {
+  display: flex;
+  gap: var(--sq-space-3);
+  width: 100%;
+  max-width: var(--sq-content-max);
+  box-shadow: var(--sq-shadow-raised);
+  pointer-events: auto;
+  animation: drop 220ms ease-out;
+}
+.icon {
+  flex: none;
+  border-radius: var(--sq-radius-md);
+}
+.text {
+  min-width: 0;
+  flex: 1;
+}
+.title {
+  margin: 0;
+  font-size: var(--sq-text-md);
+  font-weight: var(--sq-weight-bold);
+  color: var(--sq-navy-700);
+}
+.body {
+  margin: var(--sq-space-1) 0 0;
+  font-size: var(--sq-text-sm);
+  color: var(--sq-text-muted);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2);
+  margin-top: var(--sq-space-3);
+}
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+}

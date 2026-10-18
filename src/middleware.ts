@@ -14,7 +14,7 @@ import { apiError } from "./server/http/api-error";
 const SESSION_COOKIE = "sq_session";
 
 /**
- * Response header (same name in `public/sw.js`) naming the session a page belongs to. The service worker keeps opened pages
+ * Response header (same name in `src/pwa/service-worker.js`) naming the session a page belongs to. The service worker keeps opened pages
  * for offline use only under this tag and drops them all when it changes (another sign-in).
  */
 const OWNER_HEADER = "x-sq-owner";
